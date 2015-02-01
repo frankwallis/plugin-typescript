@@ -2,7 +2,11 @@
   "name": "plugin-typescript",
   "version": "0.4.4",
   "description": "TypeScript compiler for systemjs",
-  "directories": {},
+  "directories": {
+    "baseURL": "",
+    "lib": "lib",
+    "packages": "jspm_packages"
+  },
   "main": "lib/plugin.js",
   "homepage": "https://github.com/frankwallis/plugin-typescript",
   "authors": [
@@ -20,8 +24,10 @@
     "url": "https://github.com/frankwallis/plugin-typescript.git"
   },
   "dependencies": {
+    "bluebird": "^2.9.4",
     "convert-source-map": "^0.4.1",
     "lodash": "^2.4.1",
+    "object-assign": "^2.0.0",
     "requires": "^1.0.2",
     "typescript": "^1.4.1"
   },
@@ -40,5 +46,13 @@
     "test": "gulp test"
   },
   "bin": {},
-  "license": "MIT"
+  "license": "MIT",
+  "jspm": {
+    "dependencies": {
+      "bluebird": "npm:bluebird@^2.9.4",
+      "convert-source-map": "npm:convert-source-map@^0.4.1",
+      "object-assign": "npm:object-assign@^2.0.0",
+      "typescript": "npm:typescript@^1.4.1"
+    }
+  }
 }

@@ -8,7 +8,7 @@ gulp.task('test', function(cb) {
     gulp.src('lib/**/*.js')
         .pipe(istanbul())                   // instrument the files
         .on('finish', function () {
-            gulp.src('test/*-spec.js')
+            gulp.src('test/ser*-spec.js')
                 .pipe(mocha({reporter: 'nyan'}))
                 .pipe(istanbul.writeReports())      // write coverage reports
                 .on('end', cb)
