@@ -2,7 +2,7 @@
 declare var angular: any;
 declare var require: any;
 
-require("angular.js");
+require("angular");
 
 export var Module = angular.module("example", [ 
     

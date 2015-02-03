@@ -4,10 +4,17 @@ class ExampleController {
     
     public static $inject = [ 'exampleService' ];
 
-    constructor(exampleService: example.IExampleService) {
-        this.greeting = exampleService.greet('you');
+    constructor(private exampleService: example.IExampleService) {
+        console.log('contstructing ExampleController')
     }
+
+    public name: string;
+    public greeting: string;
     
+    public greet() {
+    	console.log('greeting');
+		this.greeting = this.exampleService.greet(this.name);
+    }
 }
 
 export = ExampleController;

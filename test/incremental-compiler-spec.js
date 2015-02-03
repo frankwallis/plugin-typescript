@@ -10,8 +10,9 @@ Traceur.require.makeDefault(function(filename) {
   return !(/node_modules/.test(filename));
 });
 
-var Compiler = require('../lib/incremental-compiler');
+var Compiler = require('../lib/incremental-compiler').IncrementalCompiler;
 
+var missingFile = '/somefolder/fixtures/program1/missing-file.ts';
 var missingImport = require.resolve('./fixtures/program1/missing-import.ts');
 var syntaxError = require.resolve('./fixtures/program1/syntax-error.ts');
 var typeError = require.resolve('./fixtures/program1/type-error.ts');
@@ -50,9 +51,9 @@ function resolve(parent, dep) {
     return result;
 }
 
-describe('Host', function () {
+describe('Incremental Compiler', function () {
 
-    var host;
+    var compiler;
 
     describe('load', function () {
 
@@ -75,9 +76,8 @@ describe('Host', function () {
                 
                 compiler.compile(noImports).then(function(output) {
                     filelist.length.should.be.equal(2);
+                    done();
                 }).catch(done);
-
-                done();
             }).catch(done);
         });
 
@@ -109,7 +109,7 @@ describe('Host', function () {
         });
 
         it('errors if a file is missing', function (done) {
-            compiler.load(missingImport).then(function(txt) {
+            compiler.load(missingFile).then(function(txt) {
                 txt.should.be.equal(42);
                 done();
             }, function(err) {
@@ -157,6 +157,18 @@ describe('Host', function () {
                     //output.should.have.property('js').with.lengthOf(0);
                     done();
                 }).catch(done);
+            }).catch(done);
+        });
+
+        it('errors if an import is missing', function (done) {
+            compiler.load(missingImport).then(function(txt) {
+                compiler.compile(missingImport).then(function(output) {
+                    output.should.have.property('failure', 42);
+                    done();
+                }, function(err) {
+                    err.toString().should.be.containEql('ENOENT');
+                    done();
+                });
             }).catch(done);
         });
 

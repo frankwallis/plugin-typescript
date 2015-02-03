@@ -1,20 +1,20 @@
 System.config({
   "paths": {
-    "*": "plugin/lib/*.js",
     "ts": "plugin/lib/plugin.js",
-    "path": "plugin/node_modules/path",
-    "typescript": "plugin/node_modules/typescript",
-    "convert-source-map": "plugin/node_modules/convert-source-map",
+    "typescript/*": "plugin/node_modules/typescript/*",
     "npm:*": "jspm_packages/npm/*.js",
     "github:*": "jspm_packages/github/*.js",
-    "example/*": "lib/*.js"
+    "example/*": "/*",
+    "*": "plugin/lib/*.js"
   }
 });
 
 System.config({
   "map": {
+    "angular": "github:angular/bower-angular@1.3.12",
     "convert-source-map": "npm:convert-source-map@0.4.1",
     "path": "github:jspm/nodelibs-path@0.1.0",
+    "requires": "npm:requires@1.0.2",
     "typescript": "npm:typescript@1.4.1",
     "github:jspm/nodelibs-buffer@0.1.0": {
       "buffer": "npm:buffer@3.0.1"

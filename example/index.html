@@ -14,15 +14,20 @@
     <script src="jspm_packages/system.js"></script>
     <script src="config.js"></script>
     <script>
-      System.import('src/index!ts').then(function() {
+      System.import('example/index.ts!').then(function() {
         angular.bootstrap(document, ['example']);
       });
     </script>
 
 </head>
 
-<body>
-    <ui-view></ui-view>
+<body ng-cloak>
+    <div ng-controller="exampleController as cx">
+        <label>Enter your name</label>
+        <input type="text" ng-model="cx.name"></input>
+        <button ng-click="cx.greet()">Press Me</button>
+        <p>{{cx.greeting}}</p>
+    </div>
 </body>
 
 </html>
