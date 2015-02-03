@@ -1,0 +1,10 @@
+{
+  "jspm": {
+    "name": "example",
+    "dependencies": {
+      "convert-source-map": "npm:convert-source-map@^0.4.1",
+      "path": "^0.1.0",
+      "typescript": "npm:typescript@^1.4.1"
+    }
+  }
+}

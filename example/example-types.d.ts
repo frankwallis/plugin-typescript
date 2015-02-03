@@ -1,5 +1,7 @@
+declare var require: any;
+
 declare module example {
-	interface IGreeterService {
+	interface IExampleService {
 		greet(name: string);
 	}
 }

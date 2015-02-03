@@ -8,13 +8,6 @@ typescript compiler plugin for systemjs
 
 plugin-typescript uses version 1.4 of the typescript compiler
 
-# API #
+# Overview #
 
-pluginTypescript(options);
-
-options can be any of the usual TypeScript compiler options, plus:
-
-Name       		   | Description											| Default
--------------------|--------------------------------------------------------|-----------
-gulpMode           | use gulp-style logging									| false
-
+This plugin is under active-development

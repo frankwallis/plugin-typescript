@@ -75,7 +75,7 @@ describe('Host', function () {
                 
                 compiler.compile(noImports).then(function(output) {
                     filelist.length.should.be.equal(2);
-                });
+                }).catch(done);
 
                 done();
             }).catch(done);
@@ -86,7 +86,7 @@ describe('Host', function () {
                 compiler.compile(oneImport).then(function(output) {
                     filelist.length.should.be.equal(3);
                     done();
-                });
+                }).catch(done);
             }).catch(done);
         });
 
@@ -95,7 +95,7 @@ describe('Host', function () {
                 compiler.compile(refImport).then(function(output) {
                     filelist.length.should.be.equal(4);
                     done();
-                });
+                }).catch(done);
             }).catch(done);
         });
 
@@ -104,7 +104,7 @@ describe('Host', function () {
                 compiler.compile(externalImport).then(function(output) {
                     filelist.length.should.be.equal(4);
                     done();
-                });
+                }).catch(done);
             }).catch(done);
         });
 
@@ -115,7 +115,7 @@ describe('Host', function () {
             }, function(err) {
                 err.should.have.property("code", "ENOENT");
                 done();
-            });
+            }).catch(done);
         });
 
         it('only fetches each file once', function (done) {
@@ -126,7 +126,7 @@ describe('Host', function () {
                 compiler.load(noImports, resolve, fetch).then(function(txt) {
                     filelist.length.should.be.equal(0);
                     done();    
-                });            
+                }).catch(done);          
             }).catch(done);
         });
 
@@ -145,7 +145,7 @@ describe('Host', function () {
                     output.should.have.property('errors').with.lengthOf(0);
                     //output.should.have.property('js').with.lengthOf(0);
                     done();                    
-                });
+                }).catch(done);
             }).catch(done);
         });
 
@@ -156,7 +156,7 @@ describe('Host', function () {
                     output.should.have.property('errors').with.lengthOf(0);
                     //output.should.have.property('js').with.lengthOf(0);
                     done();
-                });
+                }).catch(done);
             }).catch(done);
         });
 
@@ -166,7 +166,7 @@ describe('Host', function () {
                     output.should.have.property('failure', true);
                     output.should.have.property('errors').with.lengthOf(1);
                     done();
-                });
+                }).catch(done);
             }).catch(done);
         });
 
@@ -176,7 +176,7 @@ describe('Host', function () {
                     output.should.have.property('failure', true);
                     output.should.have.property('errors').with.lengthOf(3);
                     done();
-                });
+                }).catch(done);
             }).catch(done);
         });
         
@@ -187,7 +187,7 @@ describe('Host', function () {
                     output.should.have.property('errors').with.lengthOf(0);
                     output.js.should.containEql("return 1 /* Yes */;");
                     done();
-                });
+                }).catch(done);
             }).catch(done);
         });
     });

@@ -1,19 +1,14 @@
 /// <reference path="./_references.d.ts" />
 
-//declare module example {
-//	interface IExampleGreeter {
-//		greet(name: string);
-//	}
-//}
-
-class Greeter implements example.IGreeterService {
-    greeting: string;
-    constructor(message: string) {
-        this.greeting = message;
+class ExampleService implements example.IExampleService {
+    
+    constructor() {
+        
     }
+
     greet(name: string) {
-        return this.greeting + " " + name;
+        return "Hello " + name;
     }
 }
 
-export = Greeter;
+export = ExampleService;
