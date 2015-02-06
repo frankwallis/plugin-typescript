@@ -28,9 +28,7 @@ function fetch(filename) {
     //console.log("fetching " + filename);
     filelist.push(filename);
     var readFile = Promise.promisify(fs.readFile.bind(fs));
-    return readFile(filename).then(function(buf) {
-        return buf.toString('utf8');
-    });
+    return readFile(filename, 'utf8');
 }
 
 function resolve(parent, dep) {
