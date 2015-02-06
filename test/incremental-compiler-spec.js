@@ -46,7 +46,7 @@ function resolve(parent, dep) {
         result = result + ".ts";
 
     //console.log("resolved " + parent + " -> " + result);
-    return result;
+    return Promise.resolve(result);
 }
 
 describe('Incremental Compiler', function () {
@@ -56,8 +56,8 @@ describe('Incremental Compiler', function () {
     describe('load', function () {
 
         beforeEach(function() {
-            compiler = new Compiler(fetch, resolve);
             filelist = [];
+            compiler = new Compiler(fetch, resolve);
         });
 
         it('loads the correct file', function (done) {
@@ -132,8 +132,8 @@ describe('Incremental Compiler', function () {
 
     describe('compile', function () {
         beforeEach(function() {
-            compiler = new Compiler(fetch, resolve);
             filelist = [];
+            compiler = new Compiler(fetch, resolve);
         });
 
         it('compiles successfully', function (done) {

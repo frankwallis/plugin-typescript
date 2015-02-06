@@ -1,7 +1,6 @@
 System.config({
   "paths": {
     "ts": "plugin/lib/plugin.js",
-    "typescript/*": "plugin/node_modules/typescript/*",
     "npm:*": "jspm_packages/npm/*.js",
     "github:*": "jspm_packages/github/*.js",
     "example/*": "/*",
