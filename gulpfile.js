@@ -9,13 +9,9 @@ gulp.task('test', function(cb) {
 });
 
 gulp.task('example', function(cb) {
-  var fs = require('fs');
   var hs = require("http-server");
 
-  fs.symlink("./", "./example/plugin", function(err) {
-      if (err && (err.code != "EEXIST")) throw err;
-      var server = hs.createServer({"root": "./example"});
-      server.listen(8080);
-      cb();
-  });
+  var server = hs.createServer({"root": "./example"});
+  server.listen(8080);
+  cb();
 });
