@@ -1,7 +1,7 @@
 /// <reference path="./_references.d.ts" />
 
 class ExampleController {
-    
+
     public static $inject = [ 'exampleService' ];
 
     constructor(private exampleService: example.IExampleService) {
@@ -10,7 +10,7 @@ class ExampleController {
 
     public name: string;
     public greeting: string;
-    
+
     public greet() {
     	console.log('greeting');
 		this.greeting = this.exampleService.greet(this.name);

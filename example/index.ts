@@ -1,11 +1,8 @@
 /// <reference path="./_references.d.ts" />
-declare var angular: any;
-declare var require: any;
+import angular = require("angular");
 
-require("angular");
+export var Module = angular.module("example", [
 
-export var Module = angular.module("example", [ 
-    
 ]);
 
 import ExampleService = require('./example-service');
