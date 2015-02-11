@@ -1,6 +1,6 @@
 {
   "name": "plugin-typescript",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "TypeScript compiler for systemjs",
   "main": "lib/plugin.js",
   "homepage": "https://github.com/frankwallis/plugin-typescript",
@@ -32,17 +32,11 @@
     "traceur": "0.0.84"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "start": "gulp example"
   },
   "bin": {},
   "license": "MIT",
   "jspm": {
-    "registry": "npm",
-    "dependencies": {
-      "convert-source-map": "^0.4.1",
-      "path": "^0.11.14",
-      "requires": "^1.0.2",
-      "typescript": "^1.4.1"
-    }
   }
 }
