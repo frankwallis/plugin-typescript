@@ -12,7 +12,7 @@ var typeError = path.join(__dirname, './fixtures/program1/type-error.ts');
 describe( 'Incremental Compiler', function () {
 
     describe( 'load', function () {
-        // it('loads the file successfully', function (done) { 
+        // it('loads the file successfully', function (done) {
         //     var compiler = new Compiler();
         //     compiler.load(noImports).then(function(res) {
         //         console.log('here');

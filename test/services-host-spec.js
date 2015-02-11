@@ -4,7 +4,7 @@ var should  = require('should');
 var Traceur = require('traceur');
 
 // Traceur will compile all JS aside from node modules
-Traceur.require.makeDefault(function(filename) {  
+Traceur.require.makeDefault(function(filename) {
   return !(/node_modules/.test(filename));
 });
 
@@ -19,14 +19,14 @@ describe( 'Language Service Host', function () {
             host = new Host();
         });
 
-        it('adds files', function () { 
+        it('adds files', function () {
             var filename = 'filea.ts';
             host.addFile(filename, 'sometext');
             host.getScriptSnapshot(filename).should.have.property('text', 'sometext');
             host.getScriptFileNames().should.have.property('0', 'filea.ts');
         });
 
-        it('increments version if files are different', function () { 
+        it('increments version if files are different', function () {
             var filename = 'filea.ts';
             host.addFile(filename, 'sometext');
             var version1 = host.getScriptVersion(filename);
@@ -36,7 +36,7 @@ describe( 'Language Service Host', function () {
             version2.should.be.equal('1');
         });
 
-        it('does not increment version if they are the same', function () { 
+        it('does not increment version if they are the same', function () {
             var filename = 'filea.ts';
             host.addFile(filename, 'sometext');
             var version1 = host.getScriptVersion(filename);

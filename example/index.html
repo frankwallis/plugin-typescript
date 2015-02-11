@@ -10,11 +10,11 @@
 
     <title>tower</title>
     <base href="/"></base>
-    
+
     <script src="jspm_packages/system.js"></script>
     <script src="config.js"></script>
     <script>
-      System.import('example/index.ts!').then(function() {
+      System.import('./index.ts!').then(function() {
         angular.bootstrap(document, ['example']);
       });
     </script>
