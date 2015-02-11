@@ -24,14 +24,12 @@
     "typescript": "^1.4.1"
   },
   "devDependencies": {
+    "bluebird": "^2.9.8",
     "gulp": "^3.8.10",
-    "gulp-hub": "^0.7.0",
-    "gulp-istanbul": "^0.4.0",
     "gulp-mocha": "^2.0.0",
-    "gulp-util": "^3.0.1",
     "live-server": "^0.6.3",
-    "mkdirp": "^0.5.0",
-    "should": "^4.6.1"
+    "should": "^4.6.1",
+    "traceur": "0.0.84"
   },
   "scripts": {
     "test": "gulp test"

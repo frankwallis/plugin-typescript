@@ -31,7 +31,7 @@ function fetch(filename) {
     return readFile(filename, 'utf8');
 }
 
-function resolve(parent, dep) {
+function resolve(dep, parent) {
     //console.log("resolving " + parent + " -> " + dep);
     var result = "";
 
