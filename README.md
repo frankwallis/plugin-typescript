@@ -39,4 +39,6 @@ For a more complex example see https://github.com/frankwallis/tower/tree/systemj
 
 # Caveats #
 
-This plugin uses the TypeScript LanguageServices API. Unfortunately there is an issue in TypeScript 1.4.1 where const enums are not correctly output in the generated js. 
+This plugin uses the TypeScript LanguageServices API. Unfortunately there is an issue in TypeScript 1.4.1 where const enums are not correctly output in the generated js. I'm hopeful that a fix will be released soon, meanwhile you can track the issue [here](https://github.com/frankwallis/plugin-typescript/issues/4).
+
+
