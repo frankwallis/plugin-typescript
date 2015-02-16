@@ -28,6 +28,7 @@
     "gulp": "^3.8.10",
     "gulp-mocha": "^2.0.0",
     "http-server": "^0.7.4",
+    "open": "0.0.5",
     "should": "^4.6.1",
     "traceur": "0.0.84"
   },
