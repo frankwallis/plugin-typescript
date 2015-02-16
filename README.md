@@ -31,11 +31,10 @@ To run the example project:
 npm install
 cd example
 jspm install
-cd ..
-npm start
+gulp example
 ```
 
-For a more complex example see https://github.com/frankwallis/tower/tree/systemjs
+For a more complex example see [here](https://github.com/frankwallis/tower/tree/systemjs)
 
 # Caveats #
 
