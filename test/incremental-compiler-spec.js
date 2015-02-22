@@ -172,7 +172,7 @@ describe('Incremental Compiler', function () {
             }).catch(done);
         });
 
-        it('returns type-checker errors', function (done) {
+        it('catches type-checker errors', function (done) {
             compiler.load(typeError).then(function(txt) {
                 compiler.compile(typeError).then(function(output) {
                     //formatErrors(output.errors, console);
@@ -184,12 +184,10 @@ describe('Incremental Compiler', function () {
             }).catch(done);
         });
 
-        it('returns nested type-checker errors', function (done) {
+        it('catches nested type-checker errors', function (done) {
             compiler.load(nestedTypeError).then(function(txt) {
-                console.log(JSON.stringify(filelist));
                 compiler.compile(nestedTypeError).then(function(output) {
-                    formatErrors(output.errors, console);
-                    console.log(JSON.stringify(filelist));
+                    //formatErrors(output.errors, console);
                     output.should.have.property('failure', true);
                     output.should.have.property('errors').with.lengthOf(1);
                     output.errors[0].code.should.be.equal(2339);
@@ -198,19 +196,17 @@ describe('Incremental Compiler', function () {
             }).catch(done);
         });
 
-        it('only fetches files needed for compilation', function (done) {
+        it('fetches all the files needed for compilation', function (done) {
             compiler.load(nestedTypeError).then(function(txt) {
-                console.log(JSON.stringify(filelist));
                 compiler.compile(nestedTypeError).then(function(output) {
-                    formatErrors(output.errors, console);
-                    console.log(JSON.stringify(filelist));
-                    filelist.length.should.be.equal(3);
+                    //formatErrors(output.errors, console);
+                    filelist.length.should.be.equal(4);
                     done();
                 }).catch(done);
             }).catch(done);
         });
 
-        it('returns syntax errors', function (done) {
+        it('catches syntax errors', function (done) {
             compiler.load(syntaxError).then(function(txt) {
                 compiler.compile(syntaxError).then(function(output) {
                     //formatErrors(output.errors, console);

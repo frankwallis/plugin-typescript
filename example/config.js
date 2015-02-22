@@ -9,8 +9,8 @@ System.config({
 System.config({
   "map": {
     "angular": "github:angular/bower-angular@1.3.13",
-    "ts": "github:frankwallis/plugin-typescript@0.5.9",
-    "github:frankwallis/plugin-typescript@0.5.9": {
+    "ts": "github:frankwallis/plugin-typescript@0.5.10",
+    "github:frankwallis/plugin-typescript@0.5.10": {
       "convert-source-map": "npm:convert-source-map@0.4.1",
       "path": "npm:path@0.11.14",
       "requires": "npm:requires@1.0.2",
@@ -67,4 +67,3 @@ System.config({
     }
   }
 });
-
