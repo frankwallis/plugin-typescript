@@ -1,2 +1,2 @@
-import a = require("./no-imports");
-export = a;
+import mod = require("./no-imports");
+export = mod;

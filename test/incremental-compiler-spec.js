@@ -11,11 +11,13 @@ Traceur.require.makeDefault(function(filename) {
 });
 
 var Compiler = require('../lib/incremental-compiler').IncrementalCompiler;
+var formatErrors = require('../lib/format-errors').formatErrors;
 
 var missingFile = '/somefolder/fixtures/program1/missing-file.ts';
 var missingImport = require.resolve('./fixtures/program1/missing-import.ts');
 var syntaxError = require.resolve('./fixtures/program1/syntax-error.ts');
 var typeError = require.resolve('./fixtures/program1/type-error.ts');
+var nestedTypeError = require.resolve('./fixtures/program1/nested-type-error.ts');
 var noImports = require.resolve('./fixtures/program1/no-imports.ts');
 var oneImport = require.resolve('./fixtures/program1/one-import.ts');
 var externalImport = require.resolve('./fixtures/program1/external-import.ts');
@@ -62,7 +64,7 @@ describe('Incremental Compiler', function () {
 
         it('loads the correct file', function (done) {
             compiler.load(noImports).then(function(txt) {
-                txt.should.be.equal("var a = 1;\nexport = a;");
+                txt.should.be.equal("export var a = 1;\n");
                 filelist.length.should.be.equal(2);
                 done();
             }).catch(done);
@@ -70,7 +72,7 @@ describe('Incremental Compiler', function () {
 
         it('loads lib.d.ts', function (done) {
             compiler.load(noImports).then(function(txt) {
-                txt.should.be.equal("var a = 1;\nexport = a;");
+                txt.should.be.equal("export var a = 1;\n");
 
                 compiler.compile(noImports).then(function(output) {
                     filelist.length.should.be.equal(2);
@@ -173,8 +175,36 @@ describe('Incremental Compiler', function () {
         it('returns type-checker errors', function (done) {
             compiler.load(typeError).then(function(txt) {
                 compiler.compile(typeError).then(function(output) {
+                    //formatErrors(output.errors, console);
                     output.should.have.property('failure', true);
                     output.should.have.property('errors').with.lengthOf(1);
+                    output.errors[0].code.should.be.equal(2322);
+                    done();
+                }).catch(done);
+            }).catch(done);
+        });
+
+        it('returns nested type-checker errors', function (done) {
+            compiler.load(nestedTypeError).then(function(txt) {
+                console.log(JSON.stringify(filelist));
+                compiler.compile(nestedTypeError).then(function(output) {
+                    formatErrors(output.errors, console);
+                    console.log(JSON.stringify(filelist));
+                    output.should.have.property('failure', true);
+                    output.should.have.property('errors').with.lengthOf(1);
+                    output.errors[0].code.should.be.equal(2339);
+                    done();
+                }).catch(done);
+            }).catch(done);
+        });
+
+        it('only fetches files needed for compilation', function (done) {
+            compiler.load(nestedTypeError).then(function(txt) {
+                console.log(JSON.stringify(filelist));
+                compiler.compile(nestedTypeError).then(function(output) {
+                    formatErrors(output.errors, console);
+                    console.log(JSON.stringify(filelist));
+                    filelist.length.should.be.equal(3);
                     done();
                 }).catch(done);
             }).catch(done);
@@ -183,6 +213,7 @@ describe('Incremental Compiler', function () {
         it('returns syntax errors', function (done) {
             compiler.load(syntaxError).then(function(txt) {
                 compiler.compile(syntaxError).then(function(output) {
+                    //formatErrors(output.errors, console);
                     output.should.have.property('failure', true);
                     output.should.have.property('errors').with.lengthOf(3);
                     done();
@@ -193,6 +224,7 @@ describe('Incremental Compiler', function () {
         xit('handles const enums', function (done) {
             compiler.load(constEnums).then(function(txt) {
                 compiler.compile(constEnums).then(function(output) {
+                    //formatErrors(output.errors, console);
                     output.should.have.property('failure', false);
                     output.should.have.property('errors').with.lengthOf(0);
                     output.js.should.containEql("return 1 /* Yes */;");

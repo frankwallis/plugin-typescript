@@ -1,2 +1,1 @@
-var a = 1;
-export = a;
+export var a = 1;
