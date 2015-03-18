@@ -15,13 +15,28 @@ plugin-typescript uses version 1.4 of the typescript compiler
 Install plugin-typescript like this:
 
 ```
-jspm install ts=github:frankwallis/plugin-typescript
+jspm install ts
 ```
 You will then be able to import TypeScript source files like this:
 
 ```
 System.import("./index.ts!");
 ```
+
+# Declaration files #
+
+plugin-typescript uses SystemJS to resolve files from their require paths. This means it is also able to resolve declaration files in the same way. For example:
+
+```
+/// <reference path="./common/angular.d.ts" />
+```
+will resolve relative to the current directory, but
+```
+/// <reference path="common/angular.d.ts" />
+```
+will resolve to ```jspm_packages/github/frankwallis/common@1.0.0/angular.d.ts``` (or wherever 'common' is mapped to)
+
+This is extremely useful when compiling over multiple projects as all the projects can easily reference the same declaration files, and they will be automatically updated with new versions etc.
 
 # Examples #
 
