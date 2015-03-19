@@ -39,6 +39,7 @@
   "bin": {},
   "license": "MIT",
   "jspm": {
+    "format": "es6",
     "registry": "npm",
     "dependencies": {
       "convert-source-map": "^0.4.1",
