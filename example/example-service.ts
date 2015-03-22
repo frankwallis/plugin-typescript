@@ -7,7 +7,10 @@ class ExampleService implements example.IExampleService {
     }
 
     greet(name: string) {
-        return "Hello " + name;
+      if (!name)
+         name = "clint";
+
+      return "Hello " + name;
     }
 }
 
