@@ -7,7 +7,7 @@ var Traceur = require('traceur');
 
 // Traceur will compile all JS aside from node modules
 Traceur.require.makeDefault(function(filename) {
-  return !(/node_modules/.test(filename));
+   return !(/node_modules/.test(filename));
 });
 
 var Compiler = require('../lib/incremental-compiler').IncrementalCompiler;
@@ -28,125 +28,132 @@ var constEnums = require.resolve('./fixtures/program1/const-enums.ts');
 var filelist = [];
 
 function fetch(filename) {
-    //console.log("fetching " + filename);
-    filelist.push(filename);
-    var readFile = Promise.promisify(fs.readFile.bind(fs));
-    return readFile(filename, 'utf8');
+   //console.log("fetching " + filename);
+   filelist.push(filename);
+   var readFile = Promise.promisify(fs.readFile.bind(fs));
+   return readFile(filename, 'utf8');
 }
 
 function resolve(dep, parent) {
-    //console.log("resolving " + parent + " -> " + dep);
-    var result = "";
+   //console.log("resolving " + parent + " -> " + dep);
+   var result = "";
 
-    if (dep[0] == '/')
-        result = dep;
-    else if (dep[0] == '.')
-        result = path.join(path.dirname(parent), dep);
-    else
-        result = require.resolve(dep);
+   if (dep[0] == '/')
+      result = dep;
+   else if (dep[0] == '.')
+      result = path.join(path.dirname(parent), dep);
+   else
+      result = require.resolve(dep);
 
-    if (path.extname(result) != '.ts')
-        result = result + ".ts";
+   if (path.extname(result) != '.ts')
+      result = result + ".ts";
 
-    //console.log("resolved " + parent + " -> " + result);
-    return Promise.resolve(result);
+   //console.log("resolved " + parent + " -> " + result);
+   return Promise.resolve(result);
 }
 
 describe('Incremental Compiler', function () {
 
-    var compiler;
+   var compiler;
 
-    describe('load', function () {
+   describe('load', function () {
 
-        beforeEach(function() {
-            filelist = [];
-            compiler = new Compiler(fetch, resolve);
-        });
+      beforeEach(function() {
+         filelist = [];
+         compiler = new Compiler(fetch, resolve);
+      });
 
-        it('loads the correct file', function (done) {
-            compiler.load(noImports).then(function(txt) {
-                txt.should.be.equal("export var a = 1;\n");
-                filelist.length.should.be.equal(2);
-                done();
+      it('loads the correct file', function (done) {
+         compiler.load(noImports)
+            .then(function(file) {
+               console.log('loaded');
+               file.text.should.be.equal("export var a = 1;\n");
+               filelist.length.should.be.equal(2);
             })
-            .catch(done);
-        });
+            .then(done, done)
+      });
 
-        it('loads lib.d.ts', function (done) {
-            compiler.load(noImports).then(function(txt) {
-                txt.should.be.equal("export var a = 1;\n");
-
-                return compiler.compile(noImports).then(function(output) {
-                    filelist.length.should.be.equal(2);
-                    done();
-                });
+      it('loads lib.d.ts', function (done) {
+         compiler.load(noImports)
+            .then(function(file) {
+               file.text.should.be.equal("export var a = 1;\n");
+               return compiler.compile(noImports);
             })
-            .catch(done);
-        });
-
-        it('resolves imported dependencies', function (done) {
-            compiler.load(oneImport).then(function(txt) {
-                return compiler.compile(oneImport).then(function(output) {
-                    filelist.length.should.be.equal(3);
-                    done();
-                });
+            .then(function(output) {
+               filelist.length.should.be.equal(2);
             })
-            .catch(done);
-        });
+            .then(done, done)
+      });
 
-        it('resolves referenced dependencies', function (done) {
-            compiler.load(refImport).then(function(txt) {
-                compiler.compile(refImport).then(function(output) {
-                    filelist.length.should.be.equal(4);
-                    done();
-                });
+      it('resolves imported dependencies', function (done) {
+         compiler.load(oneImport)
+            .then(function(file) {
+               return compiler.compile(oneImport);
             })
-            .catch(done);
-        });
-
-        it('ignores ambient imports', function (done) {
-            compiler.load(ambientImport).then(function(txt) {
-                compiler.compile(ambientImport).then(function(output) {
-                    filelist.length.should.be.equal(4);
-                    done();
-                });
+            .then(function(output) {
+               filelist.length.should.be.equal(3);
             })
-            .catch(done);
-        });
+            .then(done, done)
+      });
 
-        it('errors if a file is missing', function (done) {
-            compiler.load(missingFile).then(function(txt) {
-                txt.should.be.equal(42);
-                done();
+      it('resolves referenced dependencies', function (done) {
+         compiler.load(refImport)
+            .then(function(file) {
+               return compiler.compile(refImport);
+            })
+            .then(function(output) {
+               filelist.length.should.be.equal(4);
+            })
+            .then(done, done)
+      });
+
+      it('ignores ambient imports', function (done) {
+         compiler.load(ambientImport)
+            .then(function(file) {
+               return compiler.compile(ambientImport);
+            })
+            .then(function(output) {
+               filelist.length.should.be.equal(4);
+            })
+            .then(done, done)
+      });
+
+      it('errors if a file is missing', function (done) {
+         compiler.load(missingFile)
+            .then(function(file) {
+               txt.should.be.equal(42);
+               done();
             }, function(err) {
-                err.should.have.property("code", "ENOENT");
-                done();
+               err.should.have.property("code", "ENOENT");
             })
-            .catch(done);
-        });
+            .then(done, done)
+      });
 
-        xit('handles circular references', function (done) {
-            compiler.load(circularFile).then(function(txt) {
-                return compiler.compile(circularFile).then(function(output) {
-                    filelist.length.should.be.equal(3);
-                    done();
-                });
+      it('handles circular references', function (done) {
+         compiler.load(circularFile)
+            .then(function(file) {
+               return compiler.compile(circularFile);
             })
-            .catch(done);
-        });
-
-        it('only fetches each file once', function (done) {
-            compiler.load(oneImport).then(function(txt) {
-                filelist.length.should.be.equal(3);
-                filelist = [];
-
-                return compiler.load(noImports, resolve, fetch).then(function(txt) {
-                    filelist.length.should.be.equal(0);
-                    done();
-                });
+            .then(function(output) {
+               filelist.length.should.be.equal(4);
             })
-            .catch(done);
-        });
+            .then(done, done)
+      });
 
-    });
+      it('only fetches each file once', function (done) {
+         compiler.load(oneImport)
+            .then(function(file) {
+               return compiler.compile(oneImport);
+            })
+            .then(function() {
+               filelist.length.should.be.equal(3);
+               filelist = [];
+               return compiler.load(noImports, resolve, fetch);
+            })
+            .then(function() {
+               filelist.length.should.be.equal(0);
+            })
+            .then(done, done)
+      });
+   });
 });

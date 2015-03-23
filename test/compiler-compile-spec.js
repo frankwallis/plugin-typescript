@@ -72,116 +72,136 @@ describe('Incremental Compiler', function () {
       });
 
       it('compiles successfully', function (done) {
-         compiler.load(oneImport).then(function(txt) {
-            return compiler.compile(oneImport).then(function(output) {
+         compiler.load(oneImport)
+            .then(function(txt) {
+               return compiler.compile(oneImport);
+            })
+            .then(function(output) {
                output.should.have.property('failure', false);
                output.should.have.property('errors').with.lengthOf(0);
                //output.should.have.property('js').with.lengthOf(0);
-               done();
-            });
-         }).catch(done);
+            })
+            .finally(done);
       });
 
       it('compiles ambient imports', function (done) {
-         compiler.load(ambientImport).then(function(txt) {
-            return compiler.compile(ambientImport).then(function(output) {
+         compiler.load(ambientImport)
+            .then(function(txt) {
+               return compiler.compile(ambientImport);
+            })
+            .then(function(output) {
                output.should.have.property('failure', false);
                output.should.have.property('errors').with.lengthOf(0);
                //output.should.have.property('js').with.lengthOf(0);
-               done();
-            });
-         }).catch(done);
+            })
+            .finally(done);
       });
 
       it('errors if an import is missing', function (done) {
-         compiler.load(missingImport).then(function(txt) {
-            return compiler.compile(missingImport).then(function(output) {
+         compiler.load(missingImport)
+            .then(function(txt) {
+               return compiler.compile(missingImport);
+            })
+            .then(function(output) {
                output.should.have.property('failure', 42);
-               done();
-            }, function(err) {
+            })
+            .catch(function(err) {
                err.toString().should.be.containEql('ENOENT');
-               done();
-            });
-         }).catch(done);
+            })
+            .finally(done);
       });
 
       it('catches type-checker errors', function (done) {
-         compiler.load(typeError).then(function(txt) {
-            return compiler.compile(typeError).then(function(output) {
+         compiler.load(typeError)
+            .then(function(txt) {
+               return compiler.compile(typeError);
+            })
+            .then(function(output) {
                //formatErrors(output.errors, console);
                output.should.have.property('failure', true);
                output.should.have.property('errors').with.lengthOf(1);
                output.errors[0].code.should.be.equal(2322);
-               done();
-            });
-         }).catch(done);
+            })
+            .finally(done);
       });
 
       it('catches nested type-checker errors', function (done) {
-         compiler.load(nestedTypeError).then(function(txt) {
-            compiler.compile(nestedTypeError).then(function(output) {
+         compiler.load(nestedTypeError)
+            .then(function(txt) {
+               return compiler.compile(nestedTypeError);
+            })
+            .then(function(output) {
                //formatErrors(output.errors, console);
                output.should.have.property('failure', true);
                output.should.have.property('errors').with.lengthOf(1);
                output.errors[0].code.should.be.equal(2339);
-               done();
-            }).catch(done);
-         }).catch(done);
+            })
+            .finally(done);
       });
 
       it('fetches all the files needed for compilation', function (done) {
-         compiler.load(nestedTypeError).then(function(txt) {
-            return compiler.compile(nestedTypeError).then(function(output) {
+         compiler.load(nestedTypeError)
+            .then(function(txt) {
+               return compiler.compile(nestedTypeError);
+            })
+            .then(function(output) {
                //formatErrors(output.errors, console);
                filelist.length.should.be.equal(4);
-               done();
-            });
-         }).catch(done);
+            })
+            .finally(done);
       });
 
       it('catches syntax errors', function (done) {
-         compiler.load(syntaxError).then(function(txt) {
-            return compiler.compile(syntaxError).then(function(output) {
+         compiler.load(syntaxError)
+            .then(function(txt) {
+               return compiler.compile(syntaxError);
+            })
+            .then(function(output) {
                //formatErrors(output.errors, console);
                output.should.have.property('failure', true);
                output.should.have.property('errors').with.lengthOf(3);
-               done();
-            });
-         }).catch(done);
+            })
+            .finally(done);
       });
 
       xit('catches syntax errors in references files', function (done) {
-         compiler.load(referenceSyntaxError).then(function(txt) {
-            return compiler.compile(referenceSyntaxError).then(function(output) {
+         compiler.load(referenceSyntaxError)
+            .then(function(txt) {
+               return compiler.compile(referenceSyntaxError);
+            })
+            .then(function(output) {
                //formatErrors(output.errors, console);
                output.should.have.property('failure', true);
                output.should.have.property('errors').with.lengthOf(3);
-               done();
-            });
-         }).catch(done);
+            })
+            .finally(done);
       });
 
       xit('handles ambient references', function (done) {
-         compiler.load(ambientReference).then(function(txt) {
-            return compiler.compile(ambientReference).then(function(output) {
+         compiler.load(ambientReference)
+            .then(function(txt) {
+               return compiler.compile(ambientReference);
+            })
+            .then(function(output) {
                formatErrors(output.errors, console);
                output.should.have.property('failure', false);
                output.should.have.property('errors').with.lengthOf(0);
-               done();
-            });
-         }).catch(done);
+            })
+            .finally(done);
       });
 
       xit('handles const enums', function (done) {
-         compiler.load(constEnums).then(function(txt) {
-            return compiler.compile(constEnums).then(function(output) {
+         compiler.load(constEnums)
+            .then(function(txt) {
+               return compiler.compile(constEnums);
+            })
+            .then(function(output) {
                //formatErrors(output.errors, console);
                output.should.have.property('failure', false);
                output.should.have.property('errors').with.lengthOf(0);
                output.js.should.containEql("return 1 /* Yes */;");
-               done();
-            });
-         }).catch(done);
+            })
+            .finally(done);
       });
    });
 });
