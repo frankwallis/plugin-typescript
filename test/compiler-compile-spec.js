@@ -16,11 +16,12 @@ var formatErrors = require('../lib/format-errors').formatErrors;
 var missingFile = '/somefolder/fixtures/program1/missing-file.ts';
 var missingImport = require.resolve('./fixtures/program1/missing-import.ts');
 var syntaxError = require.resolve('./fixtures/program1/syntax-error.ts');
+var referenceSyntaxError = require.resolve('./fixtures/program1/ref-syntax-error.ts');
 var typeError = require.resolve('./fixtures/program1/type-error.ts');
 var nestedTypeError = require.resolve('./fixtures/program1/nested-type-error.ts');
 var noImports = require.resolve('./fixtures/program1/no-imports.ts');
 var oneImport = require.resolve('./fixtures/program1/one-import.ts');
-var externalImport = require.resolve('./fixtures/program1/external-import.ts');
+var ambientImport = require.resolve('./fixtures/program1/ambient-import.ts');
 var refImport = require.resolve('./fixtures/program1/ref-import.ts');
 var constEnums = require.resolve('./fixtures/program1/const-enums.ts');
 
@@ -55,83 +56,6 @@ describe('Incremental Compiler', function () {
 
     var compiler;
 
-    describe('load', function () {
-
-        beforeEach(function() {
-            filelist = [];
-            compiler = new Compiler(fetch, resolve);
-        });
-
-        it('loads the correct file', function (done) {
-            compiler.load(noImports).then(function(txt) {
-                txt.should.be.equal("export var a = 1;\n");
-                filelist.length.should.be.equal(2);
-                done();
-            }).catch(done);
-        });
-
-        it('loads lib.d.ts', function (done) {
-            compiler.load(noImports).then(function(txt) {
-                txt.should.be.equal("export var a = 1;\n");
-
-                compiler.compile(noImports).then(function(output) {
-                    filelist.length.should.be.equal(2);
-                    done();
-                }).catch(done);
-            }).catch(done);
-        });
-
-        it('resolves imported dependencies', function (done) {
-            compiler.load(oneImport).then(function(txt) {
-                compiler.compile(oneImport).then(function(output) {
-                    filelist.length.should.be.equal(3);
-                    done();
-                }).catch(done);
-            }).catch(done);
-        });
-
-        it('resolves referenced dependencies', function (done) {
-            compiler.load(refImport).then(function(txt) {
-                compiler.compile(refImport).then(function(output) {
-                    filelist.length.should.be.equal(4);
-                    done();
-                }).catch(done);
-            }).catch(done);
-        });
-
-        it('ignores external dependencies', function (done) {
-            compiler.load(externalImport).then(function(txt) {
-                compiler.compile(externalImport).then(function(output) {
-                    filelist.length.should.be.equal(4);
-                    done();
-                }).catch(done);
-            }).catch(done);
-        });
-
-        it('errors if a file is missing', function (done) {
-            compiler.load(missingFile).then(function(txt) {
-                txt.should.be.equal(42);
-                done();
-            }, function(err) {
-                err.should.have.property("code", "ENOENT");
-                done();
-            }).catch(done);
-        });
-
-        it('only fetches each file once', function (done) {
-            compiler.load(oneImport).then(function(txt) {
-                filelist.length.should.be.equal(3);
-                filelist = [];
-
-                compiler.load(noImports, resolve, fetch).then(function(txt) {
-                    filelist.length.should.be.equal(0);
-                    done();
-                }).catch(done);
-            }).catch(done);
-        });
-
-    });
-
     describe('compile', function () {
         beforeEach(function() {
             filelist = [];
@@ -140,29 +64,29 @@ describe('Incremental Compiler', function () {
 
         it('compiles successfully', function (done) {
             compiler.load(oneImport).then(function(txt) {
-                compiler.compile(oneImport).then(function(output) {
+                return compiler.compile(oneImport).then(function(output) {
                     output.should.have.property('failure', false);
                     output.should.have.property('errors').with.lengthOf(0);
                     //output.should.have.property('js').with.lengthOf(0);
                     done();
-                }).catch(done);
+                });
             }).catch(done);
         });
 
-        it('compiles external modules', function (done) {
-            compiler.load(externalImport).then(function(txt) {
-                compiler.compile(externalImport).then(function(output) {
+        it('compiles ambient imports', function (done) {
+            compiler.load(ambientImport).then(function(txt) {
+                return compiler.compile(ambientImport).then(function(output) {
                     output.should.have.property('failure', false);
                     output.should.have.property('errors').with.lengthOf(0);
                     //output.should.have.property('js').with.lengthOf(0);
                     done();
-                }).catch(done);
+                });
             }).catch(done);
         });
 
         it('errors if an import is missing', function (done) {
             compiler.load(missingImport).then(function(txt) {
-                compiler.compile(missingImport).then(function(output) {
+                return compiler.compile(missingImport).then(function(output) {
                     output.should.have.property('failure', 42);
                     done();
                 }, function(err) {
@@ -174,13 +98,13 @@ describe('Incremental Compiler', function () {
 
         it('catches type-checker errors', function (done) {
             compiler.load(typeError).then(function(txt) {
-                compiler.compile(typeError).then(function(output) {
+                return compiler.compile(typeError).then(function(output) {
                     //formatErrors(output.errors, console);
                     output.should.have.property('failure', true);
                     output.should.have.property('errors').with.lengthOf(1);
                     output.errors[0].code.should.be.equal(2322);
                     done();
-                }).catch(done);
+                });
             }).catch(done);
         });
 
@@ -198,34 +122,45 @@ describe('Incremental Compiler', function () {
 
         it('fetches all the files needed for compilation', function (done) {
             compiler.load(nestedTypeError).then(function(txt) {
-                compiler.compile(nestedTypeError).then(function(output) {
+                return compiler.compile(nestedTypeError).then(function(output) {
                     //formatErrors(output.errors, console);
                     filelist.length.should.be.equal(4);
                     done();
-                }).catch(done);
+                });
             }).catch(done);
         });
 
         it('catches syntax errors', function (done) {
             compiler.load(syntaxError).then(function(txt) {
-                compiler.compile(syntaxError).then(function(output) {
+                return compiler.compile(syntaxError).then(function(output) {
                     //formatErrors(output.errors, console);
                     output.should.have.property('failure', true);
                     output.should.have.property('errors').with.lengthOf(3);
                     done();
-                }).catch(done);
+                });
+            }).catch(done);
+        });
+
+        it('catches syntax errors in references files', function (done) {
+            compiler.load(referenceSyntaxError).then(function(txt) {
+                return compiler.compile(referenceSyntaxError).then(function(output) {
+                    formatErrors(output.errors, console);
+                    //output.should.have.property('failure', true);
+                    //output.should.have.property('errors').with.lengthOf(3);
+                    done();
+                });
             }).catch(done);
         });
 
         xit('handles const enums', function (done) {
             compiler.load(constEnums).then(function(txt) {
-                compiler.compile(constEnums).then(function(output) {
+                return compiler.compile(constEnums).then(function(output) {
                     //formatErrors(output.errors, console);
                     output.should.have.property('failure', false);
                     output.should.have.property('errors').with.lengthOf(0);
                     output.js.should.containEql("return 1 /* Yes */;");
                     done();
-                }).catch(done);
+                });
             }).catch(done);
         });
     });
