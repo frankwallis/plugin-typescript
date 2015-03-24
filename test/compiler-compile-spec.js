@@ -30,7 +30,6 @@ var filelist = [];
 
 function fetch(filename) {
    if (filename == "ambient/ambient.d.ts") {
-      console.log('ambient');
       return Promise.resolve("interface IAmbient { hum(); }");
    }
 
@@ -177,13 +176,13 @@ describe('Incremental Compiler', function () {
             .then(done, done);
       });
 
-      xit('handles ambient references', function (done) {
+      it('handles ambient references', function (done) {
          compiler.load(ambientReference)
             .then(function(txt) {
                return compiler.compile(ambientReference);
             })
             .then(function(output) {
-               //formatErrors(output.errors, console);
+               formatErrors(output.errors, console);
                output.should.have.property('failure', false);
                output.should.have.property('errors').with.lengthOf(0);
             })
@@ -201,7 +200,7 @@ describe('Incremental Compiler', function () {
                output.should.have.property('errors').with.lengthOf(0);
                output.js.should.containEql("return 1 /* Yes */;");
             })
-            .finally(done);
+            .then(done, done);
       });
    });
 });
