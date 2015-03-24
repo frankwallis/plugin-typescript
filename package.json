@@ -41,12 +41,11 @@
   "license": "MIT",
   "jspm": {
     "format": "es6",
-    "registry": "npm",
     "dependencies": {
-      "convert-source-map": "^0.4.1",
-      "path": "^0.11.14",
-      "requires": "^1.0.2",
-      "typescript": "^1.4.1"
+      "convert-source-map": "npm:convert-source-map@^0.4.1",
+      "path": "npm:path@^0.11.14",
+      "requires": "npm:requires@^1.0.2",
+      "typescript": "npm:typescript@^1.4.1"
     }
   }
 }
