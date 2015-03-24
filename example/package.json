@@ -2,8 +2,8 @@
   "jspm": {
     "registry": "github",
     "dependencies": {
-      "angular": "github:angular/bower-angular@^1.3.13",
-      "ts": "github:frankwallis/plugin-typescript@0.5.10"
+      "angular": "angular/bower-angular@^1.3.13",
+      "ts": "frankwallis/plugin-typescript@0.5.10"
     }
   }
 }
