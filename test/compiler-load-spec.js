@@ -66,7 +66,6 @@ describe('Incremental Compiler', function () {
       it('loads the correct file', function (done) {
          compiler.load(noImports)
             .then(function(file) {
-               console.log('loaded');
                file.text.should.be.equal("export var a = 1;\n");
                filelist.length.should.be.equal(2);
             })

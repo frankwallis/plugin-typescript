@@ -81,7 +81,7 @@ describe('Incremental Compiler', function () {
                output.should.have.property('errors').with.lengthOf(0);
                //output.should.have.property('js').with.lengthOf(0);
             })
-            .finally(done);
+            .then(done, done);
       });
 
       it('compiles ambient imports', function (done) {
@@ -94,7 +94,7 @@ describe('Incremental Compiler', function () {
                output.should.have.property('errors').with.lengthOf(0);
                //output.should.have.property('js').with.lengthOf(0);
             })
-            .finally(done);
+            .then(done, done);
       });
 
       it('errors if an import is missing', function (done) {
@@ -108,7 +108,7 @@ describe('Incremental Compiler', function () {
             .catch(function(err) {
                err.toString().should.be.containEql('ENOENT');
             })
-            .finally(done);
+            .then(done, done);
       });
 
       it('catches type-checker errors', function (done) {
@@ -122,7 +122,7 @@ describe('Incremental Compiler', function () {
                output.should.have.property('errors').with.lengthOf(1);
                output.errors[0].code.should.be.equal(2322);
             })
-            .finally(done);
+            .then(done, done);
       });
 
       it('catches nested type-checker errors', function (done) {
@@ -136,7 +136,7 @@ describe('Incremental Compiler', function () {
                output.should.have.property('errors').with.lengthOf(1);
                output.errors[0].code.should.be.equal(2339);
             })
-            .finally(done);
+            .then(done, done);
       });
 
       it('fetches all the files needed for compilation', function (done) {
@@ -148,7 +148,7 @@ describe('Incremental Compiler', function () {
                //formatErrors(output.errors, console);
                filelist.length.should.be.equal(4);
             })
-            .finally(done);
+            .then(done, done);
       });
 
       it('catches syntax errors', function (done) {
@@ -161,10 +161,10 @@ describe('Incremental Compiler', function () {
                output.should.have.property('failure', true);
                output.should.have.property('errors').with.lengthOf(3);
             })
-            .finally(done);
+            .then(done, done);
       });
 
-      xit('catches syntax errors in references files', function (done) {
+      it('catches syntax errors in references files', function (done) {
          compiler.load(referenceSyntaxError)
             .then(function(txt) {
                return compiler.compile(referenceSyntaxError);
@@ -172,9 +172,9 @@ describe('Incremental Compiler', function () {
             .then(function(output) {
                //formatErrors(output.errors, console);
                output.should.have.property('failure', true);
-               output.should.have.property('errors').with.lengthOf(3);
+               output.should.have.property('errors').with.lengthOf(8);
             })
-            .finally(done);
+            .then(done, done);
       });
 
       xit('handles ambient references', function (done) {
@@ -183,11 +183,11 @@ describe('Incremental Compiler', function () {
                return compiler.compile(ambientReference);
             })
             .then(function(output) {
-               formatErrors(output.errors, console);
+               //formatErrors(output.errors, console);
                output.should.have.property('failure', false);
                output.should.have.property('errors').with.lengthOf(0);
             })
-            .finally(done);
+            .then(done, done);
       });
 
       xit('handles const enums', function (done) {
