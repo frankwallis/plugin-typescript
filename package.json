@@ -30,6 +30,7 @@
     "http-server": "^0.7.4",
     "open": "0.0.5",
     "should": "^4.6.1",
+    "systemjs-builder": "^0.9.1",
     "traceur": "0.0.84"
   },
   "scripts": {
