@@ -19,30 +19,14 @@ gulp.task('example', function(cb) {
 
 gulp.task('bundle', function(cb) {
    var Builder = require('systemjs-builder');
-   var System = global.System;
-
-   /* So we don't have to put '!' characters in our html imports */
-   /* This won't be needed once SystemJs enables registering plugins
-      for extensions in the next version */
-   var systemNormalize = System.normalize;
-   System.normalize = function(arg1, arg2) {
-      var System = this;
-      return systemNormalize.call(this, arg1, arg2).then(function(normed) {
-         if (normed.slice(-5) == '.html') {
-            normed = normed + '!github:systemjs/plugin-text@0.0.2';
-         }
-         return normed;
-      });
-   }
-
    var builder = new Builder();
    builder.reset();
+
    builder.loadConfig("example/config.js")
       .then(function() {
          builder.config({
             baseURL: "./example"
          })
-         //console.log("here " + options.entryJs +  ' ' +  options.outputJs)
          return builder.buildSFX("index.ts!github:frankwallis/plugin-typescript@0.6.1", "example/build/build.js");
       })
       .then(function() {
