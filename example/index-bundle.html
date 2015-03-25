@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" ng-strict-di>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="apple-mobile-web-app-capable" content="YES"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="fragment" content="!" />
+
+    <title>tower</title>
+    <base href="/"></base>
+    <script src="build/build.js"></script>
+</head>
+
+<body ng-cloak ng-app="example">
+    <div ng-controller="exampleController as cx">
+        <label>Enter your name</label>
+        <input type="text" ng-model="cx.name"></input>
+        <button ng-click="cx.greet()">Press Me</button>
+        <p>{{cx.greeting}}</p>
+    </div>
+</body>
+
+</html>

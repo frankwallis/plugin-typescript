@@ -43,7 +43,7 @@ gulp.task('bundle', function(cb) {
             baseURL: "./example"
          })
          //console.log("here " + options.entryJs +  ' ' +  options.outputJs)
-         return builder.buildSFX("example/index.ts!", "example/build/build.js");
+         return builder.buildSFX("index.ts!github:frankwallis/plugin-typescript@0.6.1", "example/build/build.js");
       })
       .then(function() {
          console.log('Build complete');
