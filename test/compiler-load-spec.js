@@ -1,4 +1,5 @@
 var fs = require('fs');
+var os = require('os');
 var path = require('path');
 var should  = require('should');
 var Promise = require('bluebird');
@@ -52,6 +53,10 @@ function resolve(dep, parent) {
    return Promise.resolve(result);
 }
 
+function strip(str) {
+   return str.replace("\r\n", "\n");
+}
+
 describe('Incremental Compiler', function () {
 
    var compiler;
@@ -66,7 +71,7 @@ describe('Incremental Compiler', function () {
       it('loads the correct file', function (done) {
          compiler.load(noImports)
             .then(function(file) {
-               file.text.should.be.equal("export var a = 1;\n");
+               file.text.should.be.equal("export var a = 1;" + os.EOL);
                filelist.length.should.be.equal(2);
             })
             .then(done, done)
@@ -75,7 +80,7 @@ describe('Incremental Compiler', function () {
       it('loads lib.d.ts', function (done) {
          compiler.load(noImports)
             .then(function(file) {
-               file.text.should.be.equal("export var a = 1;\n");
+               file.text.should.be.equal("export var a = 1;" + os.EOL);
                return compiler.compile(noImports);
             })
             .then(function(output) {
