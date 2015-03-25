@@ -39,6 +39,9 @@ gulp.task('bundle', function(cb) {
    builder.reset();
    builder.loadConfig("example/config.js")
       .then(function() {
+         builder.config({
+            baseURL: "./example"
+         })
          //console.log("here " + options.entryJs +  ' ' +  options.outputJs)
          return builder.buildSFX("example/index.ts!", "example/build/build.js");
       })
