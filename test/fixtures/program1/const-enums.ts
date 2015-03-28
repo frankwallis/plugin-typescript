@@ -1,4 +1,4 @@
-/// <reference path="./_references.d.ts" />
+/// <reference path="../_references.d.ts" />
 
 function decide() {
 	var today = new Date();

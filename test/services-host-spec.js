@@ -46,37 +46,5 @@ describe( 'Language Service Host', function () {
          version2.should.be.equal('0');
       });
 
-      // it('adds overrides', function () {
-      //    var overrides = {
-      //       "filea": "fileb",
-      //       "filec": "filed"
-      //    };
-      //    host.addFile("filee", 'sometext');
-      //    host.addOverrides(overrides);
-      //    host.getScriptFileNames().should.have.length(3);
-      // });
-      //
-      // it('uses override for version check', function () {
-      //    var overrides = {
-      //       "filea": "fileb",
-      //       "filec": "filed"
-      //    };
-      //    host.addFile("fileb", 'sometext');
-      //    host.addFile("fileb", 'someothertext');
-      //    host.addFile("fileb", 'someothertextagain');
-      //    host.addOverrides(overrides);
-      //    host.getScriptVersion('filea').should.be.equal('2');
-      // });
-      //
-      // it('uses override for snapshot', function () {
-      //    var overrides = {
-      //       "filea": "fileb",
-      //       "filec": "filed"
-      //    };
-      //    host.addFile("fileb", 'sometext');
-      //    host.addOverrides(overrides);
-      //    host.getScriptSnapshot('filea').text.should.be.equal('sometext');
-      // });
-
    });
 });

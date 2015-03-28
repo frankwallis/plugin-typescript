@@ -1,4 +1,4 @@
-/// <reference path="ambient/ambient.d.ts" />
+/// <reference path="ambient.d.ts" />
 
 import Enigma = require("./module1/ambient-references2");
 

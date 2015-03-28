@@ -9,8 +9,10 @@ Traceur.require.makeDefault(function(filename) {
 var isRelative = require('../lib/utils').isRelative;
 var isAbsolute = require('../lib/utils').isAbsolute;
 var isAmbientImport = require('../lib/utils').isAmbientImport;
-var isTypeScript = require('../lib/utils').isTypeScript;
-var isTypeScriptDeclaration = require('../lib/utils').isTypeScriptDeclaration;
+var isTypescript = require('../lib/utils').isTypescript;
+var isTypescriptDeclaration = require('../lib/utils').isTypescriptDeclaration;
+var tsToJs = require('../lib/utils').tsToJs;
+var tsToJsMap = require('../lib/utils').tsToJsMap;
 
 describe( 'Utils', function () {
 
@@ -64,4 +66,53 @@ describe( 'Utils', function () {
          isAmbientImport("a/b.c").should.be.true;
       });
    });
+
+   describe( 'tsToJs', function () {
+      it('changes the file extension', function () {
+         tsToJs('a.ts').should.be.equal('a.js');
+         tsToJs('a.ts.ts').should.be.equal('a.ts.js');
+      });
+
+      it('ignores files with wrong extension', function () {
+         tsToJs('a.jts').should.be.equal('a.jts');
+      });
+   });
+
+   describe( 'tsToJsMap', function () {
+      it('changes the file extension', function () {
+         tsToJsMap('a.ts').should.be.equal('a.js.map');
+         tsToJsMap('a.ts.ts').should.be.equal('a.ts.js.map');
+      });
+
+      it('ignores files with wrong extension', function () {
+         tsToJsMap('a.jts').should.be.equal('a.jts');
+      });
+   });
+
+   describe( 'isTypescript', function () {
+      it('detects source files', function () {
+         isTypescript('a.ts').should.be.true;
+         isTypescript('a.js').should.be.false;
+         isTypescript('a.ts.js').should.be.false;
+         isTypescript('a.ts.ats').should.be.false;
+      });
+
+      it('detects declaration files', function () {
+         isTypescript('a.d.ts').should.be.true;
+      });
+   });
+
+   describe( 'isTypescriptDeclaration', function () {
+      it('detects declaration files', function () {
+         isTypescriptDeclaration('a.d.ts').should.be.true;
+         isTypescriptDeclaration('a.js').should.be.false;
+         isTypescriptDeclaration('a.d.ts.js').should.be.false;
+         isTypescriptDeclaration('a.ts.ats').should.be.false;
+      });
+
+      it('ignores source files', function () {
+         isTypescriptDeclaration('a.ts').should.be.false;
+      });
+   });
+
 });

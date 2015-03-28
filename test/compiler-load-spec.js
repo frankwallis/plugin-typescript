@@ -15,14 +15,16 @@ var Compiler = require('../lib/incremental-compiler').IncrementalCompiler;
 var formatErrors = require('../lib/format-errors').formatErrors;
 
 var missingFile = '/somefolder/fixtures/program1/missing-file.ts';
-var circularFile = require.resolve('./fixtures/program1/circular.ts');
+var circularFile = require.resolve('./fixtures/circular/circular.ts');
 var missingImport = require.resolve('./fixtures/program1/missing-import.ts');
 var syntaxError = require.resolve('./fixtures/program1/syntax-error.ts');
 var typeError = require.resolve('./fixtures/program1/type-error.ts');
 var nestedTypeError = require.resolve('./fixtures/program1/nested-type-error.ts');
 var noImports = require.resolve('./fixtures/program1/no-imports.ts');
 var oneImport = require.resolve('./fixtures/program1/one-import.ts');
-var ambientImport = require.resolve('./fixtures/program1/ambient-import.ts');
+var ambientImportJs = require.resolve('./fixtures/ambients/ambient-import-js.ts');
+var ambientImportTs = require.resolve('./fixtures/ambients/ambient-import-ts.ts');
+var ambientRequires = require.resolve('./fixtures/ambients/ambient-requires.ts');
 var refImport = require.resolve('./fixtures/program1/ref-import.ts');
 var constEnums = require.resolve('./fixtures/program1/const-enums.ts');
 
@@ -36,17 +38,22 @@ function fetch(filename) {
 }
 
 function resolve(dep, parent) {
-   //console.log("resolving " + parent + " -> " + dep);
    var result = "";
 
    if (dep[0] == '/')
       result = dep;
    else if (dep[0] == '.')
       result = path.join(path.dirname(parent), dep);
-   else
+   else if (dep == "ambient")
+      result = require.resolve("./fixtures/ambients/resolved/" + dep + ".ts");
+   else if (dep.indexOf("ambient") == 0)
+      result = require.resolve("./fixtures/ambients/resolved/" + dep);
+   else if (dep.indexOf("typescript/") == 0)
       result = require.resolve(dep);
+   else
+      result = dep + ".js";
 
-   if (path.extname(result) != '.ts')
+   if ((path.extname(result) != '.ts') && (path.extname(result) != '.js'))
       result = result + ".ts";
 
    //console.log("resolved " + parent + " -> " + result);
@@ -111,12 +118,25 @@ describe('Incremental Compiler', function () {
             .then(done, done)
       });
 
-      it('ignores ambient imports', function (done) {
-         compiler.load(ambientImport)
+      it('ignores ambient javascript imports', function (done) {
+         compiler.load(ambientImportJs)
             .then(function(file) {
-               return compiler.compile(ambientImport);
+               return compiler.compile(ambientImportJs);
             })
             .then(function(output) {
+               //formatErrors(output.errors, console);
+               filelist.length.should.be.equal(4);
+            })
+            .then(done, done)
+      });
+
+      it('loads ambient typescript imports', function (done) {
+         compiler.load(ambientImportTs)
+            .then(function(file) {
+               return compiler.compile(ambientImportTs);
+            })
+            .then(function(output) {
+               //formatErrors(output.errors, console);
                filelist.length.should.be.equal(4);
             })
             .then(done, done)

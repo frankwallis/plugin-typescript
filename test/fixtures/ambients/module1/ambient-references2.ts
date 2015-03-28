@@ -1,4 +1,4 @@
-/// <reference path="ambient/ambient.d.ts" />
+/// <reference path="ambient.d.ts" />
 
 class Enigma implements IAmbient {
    hum() {
