@@ -10,9 +10,10 @@ System.config({
 System.config({
   "map": {
     "angular": "github:angular/bower-angular@1.3.15",
-    "frankwallis/plugin-typescript": "github:frankwallis/plugin-typescript@0.6.1",
-    "ts": "github:frankwallis/plugin-typescript@0.6.1",
-    "github:frankwallis/plugin-typescript@0.6.1": {
+    "traceur": "github:jmcriffey/bower-traceur@0.0.87",
+    "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.87",
+    "ts": "github:frankwallis/plugin-typescript@0.6.2",
+    "github:frankwallis/plugin-typescript@0.6.2": {
       "convert-source-map": "npm:convert-source-map@0.4.1",
       "path": "npm:path@0.11.14",
       "requires": "npm:requires@1.0.2",
