@@ -79,9 +79,10 @@ describe('Incremental Compiler', function () {
          compiler.load(noImports)
             .then(function(file) {
                file.text.should.be.equal("export var a = 1;" + os.EOL);
-               filelist.length.should.be.equal(2);
+               filelist.length.should.be.equal(2222);
             })
-            .then(done, done)
+            .then(done)
+            .catch(done);
       });
 
       it('loads lib.d.ts', function (done) {
@@ -93,7 +94,8 @@ describe('Incremental Compiler', function () {
             .then(function(output) {
                filelist.length.should.be.equal(2);
             })
-            .then(done, done)
+            .then(done)
+            .catch(done);
       });
 
       it('resolves imported dependencies', function (done) {
@@ -104,7 +106,8 @@ describe('Incremental Compiler', function () {
             .then(function(output) {
                filelist.length.should.be.equal(3);
             })
-            .then(done, done)
+            .then(done)
+            .catch(done);
       });
 
       it('resolves referenced dependencies', function (done) {
@@ -115,7 +118,8 @@ describe('Incremental Compiler', function () {
             .then(function(output) {
                filelist.length.should.be.equal(4);
             })
-            .then(done, done)
+            .then(done)
+            .catch(done);
       });
 
       it('ignores ambient javascript imports', function (done) {
@@ -127,7 +131,8 @@ describe('Incremental Compiler', function () {
                //formatErrors(output.errors, console);
                filelist.length.should.be.equal(4);
             })
-            .then(done, done)
+            .then(done)
+            .catch(done);
       });
 
       it('loads ambient typescript imports', function (done) {
@@ -139,7 +144,8 @@ describe('Incremental Compiler', function () {
                //formatErrors(output.errors, console);
                filelist.length.should.be.equal(4);
             })
-            .then(done, done)
+            .then(done)
+            .catch(done);
       });
 
       it('errors if a file is missing', function (done) {
@@ -150,7 +156,8 @@ describe('Incremental Compiler', function () {
             }, function(err) {
                err.should.have.property("code", "ENOENT");
             })
-            .then(done, done)
+            .then(done)
+            .catch(done);
       });
 
       it('handles circular references', function (done) {
@@ -161,7 +168,8 @@ describe('Incremental Compiler', function () {
             .then(function(output) {
                filelist.length.should.be.equal(4);
             })
-            .then(done, done)
+            .then(done)
+            .catch(done);
       });
 
       it('only fetches each file once', function (done) {
@@ -177,7 +185,8 @@ describe('Incremental Compiler', function () {
             .then(function() {
                filelist.length.should.be.equal(0);
             })
-            .then(done, done)
+            .then(done)
+            .catch(done);
       });
    });
 });
