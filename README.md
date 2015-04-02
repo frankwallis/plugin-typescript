@@ -40,7 +40,7 @@ This is extremely useful when compiling over multiple projects as all the projec
 
 # Configuration #
 
-Configuration settings can be passed to the compiler via "typescriptOptions"
+Configuration settings can be passed to the compiler via "typescriptOptions":
 
 ```
 System.config({
