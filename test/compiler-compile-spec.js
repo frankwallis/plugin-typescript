@@ -83,7 +83,25 @@ describe('Incremental Compiler', function () {
             .then(function(output) {
                output.should.have.property('failure', false);
                output.should.have.property('errors').with.lengthOf(0);
-               //output.should.have.property('js').with.lengthOf(0);
+               output.should.have.property('js').with.lengthOf(333);
+            })
+            .then(done)
+            .catch(done);
+      });
+
+      it('uses config options', function (done) {
+         var options = {
+            sourceMap: false
+         };
+         compiler = new Compiler(fetch, resolve, options);
+         compiler.load(oneImport)
+            .then(function(txt) {
+               return compiler.compile(oneImport);
+            })
+            .then(function(output) {
+               output.should.have.property('failure', false);
+               output.should.have.property('errors').with.lengthOf(0);
+               output.should.have.property('js').with.lengthOf(59);
             })
             .then(done)
             .catch(done);

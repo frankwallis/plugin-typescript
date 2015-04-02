@@ -79,7 +79,7 @@ describe('Incremental Compiler', function () {
          compiler.load(noImports)
             .then(function(file) {
                file.text.should.be.equal("export var a = 1;" + os.EOL);
-               filelist.length.should.be.equal(2222);
+               filelist.length.should.be.equal(2);
             })
             .then(done)
             .catch(done);
@@ -142,7 +142,7 @@ describe('Incremental Compiler', function () {
             })
             .then(function(output) {
                //formatErrors(output.errors, console);
-               filelist.length.should.be.equal(4);
+               filelist.length.should.be.equal(3);
             })
             .then(done)
             .catch(done);

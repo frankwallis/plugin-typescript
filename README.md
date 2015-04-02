@@ -6,7 +6,7 @@ TypeScript compiler plugin for SystemJS
 
 # Overview #
 
-A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to System.import TypeScript files directly. The files are compiled in the browser and compilation errors written to the console. 
+A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to System.import TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
 
 plugin-typescript uses version 1.4 of the typescript compiler
 
@@ -38,6 +38,23 @@ will resolve to ```jspm_packages/github/frankwallis/common@1.0.0/angular.d.ts```
 
 This is extremely useful when compiling over multiple projects as all the projects can easily reference the same declaration files, and they will be automatically updated with new versions etc.
 
+# Configuration #
+
+Configuration settings can be passed to the compiler via "typescriptOptions"
+
+```
+System.config({
+  "baseURL": ".",
+  "paths": {
+    "*": "*.js",
+    "github:*": "jspm_packages/github/*.js"
+  },
+  typescriptOptions: {
+    "noImplicitAny": true
+  }
+});
+```
+
 # Examples #
 
 To run the example project:
@@ -54,5 +71,3 @@ For a more complex example see [here](https://github.com/frankwallis/tower/tree/
 # Caveats #
 
 This plugin uses the TypeScript LanguageServices API. Unfortunately there is an issue in TypeScript 1.4.1 where const enums are not correctly output in the generated js. I'm hopeful that a fix will be released soon, meanwhile you can track the issue [here](https://github.com/frankwallis/plugin-typescript/issues/4).
-
-

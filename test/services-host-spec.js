@@ -1,5 +1,6 @@
 var path = require('path');
 var should  = require('should');
+var ts = require('typescript');
 
 var Traceur = require('traceur');
 
@@ -17,6 +18,26 @@ describe( 'Language Service Host', function () {
    describe( 'addFile', function () {
       beforeEach(function() {
          host = new Host();
+      });
+
+      it('defaults the config', function () {
+         host = new Host();
+         var options = host.getCompilationSettings();
+         options.module.should.be.equal(ts.ModuleKind.CommonJS);
+         options.target.should.be.equal(ts.ScriptTarget.ES5);
+         options.sourceMap.should.be.true;
+      });
+
+      it('defaults the config', function () {
+         var config = {
+            noImplicitAny: true
+         };
+         host = new Host(config);
+         var options = host.getCompilationSettings();
+         options.module.should.be.equal(ts.ModuleKind.CommonJS);
+         options.target.should.be.equal(ts.ScriptTarget.ES5);
+         options.sourceMap.should.be.true;
+         options.noImplicitAny.should.be.true;
       });
 
       it('adds files', function () {
