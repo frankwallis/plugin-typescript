@@ -27,7 +27,7 @@ gulp.task('bundle', function(cb) {
          builder.config({
             baseURL: "./example"
          })
-         return builder.buildSFX("index.ts!github:frankwallis/plugin-typescript@0.6.2", "example/build/build.js");
+         return builder.buildSFX("index.ts!github:frankwallis/plugin-typescript@0.6.3", "example/build/build.js");
       })
       .then(function() {
          console.log('Build complete');

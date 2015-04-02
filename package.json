@@ -21,7 +21,7 @@
   "dependencies": {
     "convert-source-map": "^0.4.1",
     "requires": "^1.0.2",
-    "typescript": "^1.4.1"
+    "typescript": "1.4.1"
   },
   "devDependencies": {
     "bluebird": "^2.9.8",
