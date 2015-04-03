@@ -5,8 +5,8 @@ System.config({
     "github:*": "jspm_packages/github/*.js",
     "npm:*": "jspm_packages/npm/*.js"
   },
-  typescriptOptions: {
-    "noImplicitAny": true
+  "typescriptOptions": {
+    "noImplicitAny": false
   }
 });
 
@@ -15,12 +15,13 @@ System.config({
     "angular": "github:angular/bower-angular@1.3.15",
     "traceur": "github:jmcriffey/bower-traceur@0.0.87",
     "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.87",
-    "ts": "github:frankwallis/plugin-typescript@0.6.3",
-    "github:frankwallis/plugin-typescript@0.6.3": {
+    "ts": "github:frankwallis/plugin-typescript@0.6.4",
+    "typescript": "npm:typescript@1.5.0-alpha",
+    "github:frankwallis/plugin-typescript@0.6.4": {
       "convert-source-map": "npm:convert-source-map@0.4.1",
       "path": "npm:path@0.11.14",
       "requires": "npm:requires@1.0.2",
-      "typescript": "npm:typescript@1.4.1"
+      "typescript": "npm:typescript@1.5.0-alpha"
     },
     "github:jspm/nodelibs-buffer@0.1.0": {
       "buffer": "npm:buffer@3.1.2"
@@ -66,6 +67,14 @@ System.config({
       "os": "github:jspm/nodelibs-os@0.1.0",
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.1"
+    },
+    "npm:typescript@1.5.0-alpha": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "os": "github:jspm/nodelibs-os@0.1.0",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.1",
+      "readline": "github:jspm/nodelibs-readline@0.1.0"
     },
     "npm:util@0.10.3": {
       "inherits": "npm:inherits@2.0.1",

@@ -1,12 +1,12 @@
 /// <reference path="./_references.d.ts" />
-import angular = require("angular");
+import {module} from "angular";
 
-export var Module = angular.module("example", [
+export var Module = module("example", [
 
 ]);
 
-import ExampleService = require('./example-service');
-import ExampleController = require('./example-controller');
+import {ExampleService} from './example-service';
+import {ExampleController} from './example-controller';
 
 Module.service("exampleService", ExampleService);
 Module.controller("exampleController", ExampleController);
