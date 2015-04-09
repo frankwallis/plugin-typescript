@@ -34,6 +34,12 @@ describe( 'Fix Requires', function () {
       fixRequires('a.js', input).should.be.equal(output);
    });
 
+   it('converts ambient subpaths', function () {
+      var input = 'require("a/my-file");';
+      var output = 'require("a/my-file.ts!");';
+      fixRequires('a.js', input).should.be.equal(output);
+   });
+
    it('ignores files with extensions', function () {
       var input = 'require("./my-file.html");';
       var output = input;
