@@ -28,7 +28,7 @@ var ambientDuplicate = require.resolve('./fixtures/ambients/ambient-duplicate.ts
 var ambientRequires = require.resolve('./fixtures/ambients/ambient-requires.ts');
 var refImport = require.resolve('./fixtures/program1/ref-import.ts');
 var constEnums = require.resolve('./fixtures/program1/const-enums.ts');
-
+var external = require.resolve('./fixtures/external/entry.ts');
 var filelist = [];
 
 function fetch(filename) {
@@ -267,6 +267,20 @@ describe('Incremental Compiler', function () {
          compiler.load(ambientRequires)
             .then(function(txt) {
                return compiler.compile(ambientRequires);
+            })
+            .then(function(output) {
+               formatErrors(output.errors, console);
+               output.should.have.property('failure', false);
+               output.should.have.property('errors').with.lengthOf(0);
+            })
+            .then(done)
+            .catch(done);
+      });
+
+      it('handles external imports ', function (done) {
+         compiler.load(external)
+            .then(function(txt) {
+               return compiler.compile(external);
             })
             .then(function(output) {
                formatErrors(output.errors, console);
