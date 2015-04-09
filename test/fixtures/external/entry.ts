@@ -1,5 +1,5 @@
 import other = require("./other");
 import dep = require("./dependency");
 
-if (other.dep > dep)
+if (other.num > dep.num)
    alert('aaarrgghh!');
