@@ -36,7 +36,7 @@ will resolve relative to the current directory, but
 ```
 will resolve to ```jspm_packages/github/frankwallis/common@1.0.0/angular.d.ts``` (or wherever 'common' is mapped to)
 
-This is extremely useful when compiling over multiple projects as all the projects can easily reference the same declaration files, and they will be automatically updated with new versions etc.
+This can be extremely useful when compiling over multiple projects as all the projects can easily reference declaration files from their dependencies, and they will be automatically updated with new versions etc. It is *entirely optional* so if this causes issues in your IDE then just stick to relative paths prefixed with ./
 
 # Configuration #
 
