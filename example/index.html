@@ -14,10 +14,18 @@
     <script src="jspm_packages/system.js"></script>
     <script src="config.js"></script>
     <script>
-      System.import('./index.ts!').then(function() {
-        angular.bootstrap(document, ['example']);
-        console.log(JSON.stringify(System.typescriptOptions));
-      });
+      System.import('./index.ts!')
+         .then(function() {
+            return System.import('angular');
+         })
+         .then(function(angular) {
+            console.log('running');
+            angular.bootstrap(document, ['example']);
+            console.log(JSON.stringify(System.typescriptOptions));
+         })
+         .catch(function(err) {
+            console.log('Error: ', err.stack);
+         });
     </script>
 
 </head>

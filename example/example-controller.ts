@@ -1,6 +1,6 @@
 /// <reference path="./_references.d.ts" />
 
-class ExampleController {
+export class ExampleController {
 
     public static $inject = [ 'exampleService' ];
 
@@ -16,5 +16,3 @@ class ExampleController {
 		this.greeting = this.exampleService.greet(this.name);
     }
 }
-
-export = ExampleController;
