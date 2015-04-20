@@ -8,7 +8,7 @@ TypeScript compiler plugin for SystemJS
 
 A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to System.import TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
 
-plugin-typescript uses version 1.4 of the typescript compiler
+plugin-typescript uses version 1.5.0-alpha of the typescript compiler
 
 # Usage #
 
@@ -68,6 +68,6 @@ gulp example
 
 For a more complex example see [here](https://github.com/frankwallis/tower/tree/systemjs)
 
-# Caveats #
+# Single-File Compilation #
 
-This plugin uses the TypeScript LanguageServices API. Unfortunately there is an issue in TypeScript 1.4.1 where const enums are not correctly output in the generated js. I'm hopeful that a fix will be released soon, meanwhile you can track the issue [here](https://github.com/frankwallis/plugin-typescript/issues/4).
+Single-File compilation is not currently supported
