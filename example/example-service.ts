@@ -3,13 +3,16 @@
 export class ExampleService implements example.IExampleService {
 
     constructor() {
-
+    	this.cache = new Map<string, string>();
     }
 
-    greet(name: string): string {
-      if (!name)
-         name = "clint";
+    private cache: Map<string, string>;
 
-      return "Hello " + name;
+    greet(name: string): string {
+      name = name || "clint"; // obligatory
+      let greeting = this.cache[name] ? this.cache[name] : "Hello " + name;
+      this.cache[name] = greeting;
+
+      return greeting;
     }
 }

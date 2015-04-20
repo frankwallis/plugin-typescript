@@ -15,9 +15,15 @@ System.config({
     "angular": "github:angular/bower-angular@1.3.15",
     "traceur": "github:jmcriffey/bower-traceur@0.0.87",
     "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.87",
-    "ts": "github:frankwallis/plugin-typescript@0.6.4",
+    "ts": "github:frankwallis/plugin-typescript@1.0.0",
     "typescript": "npm:typescript@1.5.0-alpha",
     "github:frankwallis/plugin-typescript@0.6.4": {
+      "convert-source-map": "npm:convert-source-map@0.4.1",
+      "path": "npm:path@0.11.14",
+      "requires": "npm:requires@1.0.2",
+      "typescript": "npm:typescript@1.5.0-alpha"
+    },
+    "github:frankwallis/plugin-typescript@1.0.0": {
       "convert-source-map": "npm:convert-source-map@0.4.1",
       "path": "npm:path@0.11.14",
       "requires": "npm:requires@1.0.2",
@@ -82,3 +88,4 @@ System.config({
     }
   }
 });
+
