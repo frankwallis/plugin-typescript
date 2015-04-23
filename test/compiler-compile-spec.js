@@ -291,7 +291,7 @@ describe('Incremental Compiler', function () {
             .catch(done);
       });
 
-      xit('handles const enums', function (done) {
+      it('handles const enums', function (done) {
          compiler.load(constEnums)
             .then(function(txt) {
                return compiler.compile(constEnums);
