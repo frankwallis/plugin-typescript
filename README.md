@@ -63,6 +63,7 @@ To run the example project:
 npm install
 cd example
 jspm install
+jspm install --dev
 gulp example
 ```
 
