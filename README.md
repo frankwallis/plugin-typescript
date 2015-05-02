@@ -67,7 +67,7 @@ jspm install --dev
 gulp example
 ```
 
-For a more complex example see [here](https://github.com/frankwallis/tower/tree/systemjs)
+For a more complex example see [here](https://github.com/frankwallis/tower/tree/angular2)
 
 # Single-File Compilation #
 
