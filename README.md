@@ -8,7 +8,7 @@ TypeScript compiler plugin for SystemJS
 
 A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to System.import TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
 
-plugin-typescript uses version 1.5.0-alpha of the typescript compiler
+plugin-typescript uses version 1.5.0-beta of the typescript compiler
 
 # Usage #
 
