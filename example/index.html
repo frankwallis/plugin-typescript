@@ -11,7 +11,8 @@
     <title>tower</title>
     <base href="/"></base>
 
-    <script src="jspm_packages/system.js"></script>
+    <script src="jspm_packages/es6-module-loader.src.js"></script>
+    <script src="jspm_packages/system.src.js"></script>
     <script src="config.js"></script>
     <script>
       System.import('./index.ts!')
@@ -35,7 +36,7 @@
         <label>Enter your name</label>
         <input type="text" ng-model="cx.name"></input>
         <button ng-click="cx.greet()">Press Me</button>
-        <p>{{cx.greeting}}</p>
+        <p class="greeting">{{cx.greeting}}</p>
     </div>
 </body>
 
