@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" ng-strict-di>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="apple-mobile-web-app-capable" content="YES"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="fragment" content="!" />
+
+    <title>plugin-typescript example</title>
+    <base href="/"></base>
+    <script src="jspm_packages/es6-module-loader.src.js"></script>
+    <script src="jspm_packages/system.src.js"></script>
+    <script src="config.js"></script>
+    <script>
+      System.import('./index.ts!')
+         .then(function() {
+            return System.import('angular');
+         })
+         .then(function(angular) {
+            console.log('running');
+            angular.bootstrap(document, ['example']);
+            console.log(JSON.stringify(System.typescriptOptions));
+         })
+         .catch(function(err) {
+            console.log('Error: ', err.stack);
+         });
+    </script>
+</head>
+
+<body ng-cloak>
+    <div ng-controller="exampleController as cx">
+        <label>Enter your name</label>
+        <input type="text" ng-model="cx.name"></input>
+        <button ng-click="cx.greet()">Press Me</button>
+        <p>{{cx.greeting}}</p>
+    </div>
+</body>
+
+</html>
