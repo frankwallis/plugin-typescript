@@ -50,7 +50,7 @@ System.config({
     "github:*": "jspm_packages/github/*.js"
   },
   typescriptOptions: {
-    "noImplicitAny": true
+    "allowNonTsExtensions": true
   }
 });
 ```

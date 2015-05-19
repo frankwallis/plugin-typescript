@@ -29,6 +29,7 @@ var ambientRequires = require.resolve('./fixtures-es6/ambients/ambient-requires.
 var refImport = require.resolve('./fixtures-es6/program1/ref-import.ts');
 var constEnums = require.resolve('./fixtures-es6/program1/const-enums.ts');
 var external = require.resolve('./fixtures-es6/external/entry.ts');
+var importCss = require.resolve('./fixtures-es6/css/import-css.ts');
 var filelist = [];
 
 function fetch(filename) {
@@ -55,11 +56,8 @@ function resolve(dep, parent) {
    else
       result = dep + ".js";
 
-   if ((path.extname(result) != '.ts') && (path.extname(result) != '.js'))
+   if ((path.extname(result) != '.ts') && (path.extname(result) != '.js') && (path.extname(result) != '.css'))
       result = result + ".ts";
-
-   // if (result[0] == '/')
-   //    result = result.slice(1);
 
    //console.log("resolved " + parent + " -> " + result);
    return Promise.resolve(result);
@@ -301,6 +299,27 @@ describe('Incremental Compiler ES6', function () {
                output.should.have.property('failure', false);
                output.should.have.property('errors').with.lengthOf(0);
                output.js.should.containEql("return 1 /* Yes */;");
+            })
+            .then(done)
+            .catch(done);
+      });
+
+      it('imports css', function (done) {
+         var options = {
+            allowNonTsExtensions: true
+         };
+         compiler = new Compiler(fetch, resolve, options);
+
+         compiler.load(importCss)
+            .then(function(txt) {
+               return compiler.compile(importCss);
+            })
+            .then(function(output) {
+               //formatErrors(output.errors, console);
+               output.should.have.property('failure', false);
+               output.should.have.property('errors').with.lengthOf(0);
+               console.log(output.js);
+               output.js.should.containEql("require('./some-css.css')");
             })
             .then(done)
             .catch(done);
