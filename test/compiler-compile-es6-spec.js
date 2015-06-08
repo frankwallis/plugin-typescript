@@ -22,6 +22,7 @@ var nestedTypeError = require.resolve('./fixtures-es6/program1/nested-type-error
 var noImports = require.resolve('./fixtures-es6/program1/no-imports.ts');
 var oneImport = require.resolve('./fixtures-es6/program1/one-import.ts');
 var ambientReference = require.resolve('./fixtures-es6/ambients/ambient-reference.ts');
+var ambientReferenceDisabled = require.resolve('./fixtures-es6/ambients/ambient-reference-disabled.ts');
 var ambientImportJs = require.resolve('./fixtures-es6/ambients/ambient-import-js.ts');
 var ambientImportTs = require.resolve('./fixtures-es6/ambients/ambient-import-ts.ts');
 var ambientDuplicate = require.resolve('./fixtures-es6/ambients/ambient-duplicate.ts');
@@ -209,6 +210,25 @@ describe('Incremental Compiler ES6', function () {
          compiler.load(ambientReference)
             .then(function(txt) {
                return compiler.compile(ambientReference);
+            })
+            .then(function(output) {
+               formatErrors(output.errors, console);
+               output.should.have.property('failure', false);
+               output.should.have.property('errors').with.lengthOf(0);
+            })
+            .then(done)
+            .catch(done);
+      });
+
+      it('obeys resolveAmbientRefs option', function (done) {
+         var options = {
+            sourceMap: false,
+            resolveAmbientRefs: false
+         };
+         compiler = new Compiler(fetch, resolve, options);
+         compiler.load(ambientReferenceDisabled)
+            .then(function(txt) {   
+               return compiler.compile(ambientReferenceDisabled);
             })
             .then(function(output) {
                formatErrors(output.errors, console);
