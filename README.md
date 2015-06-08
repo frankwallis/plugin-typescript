@@ -36,7 +36,7 @@ will resolve relative to the current directory, but
 ```
 will resolve to ```jspm_packages/github/frankwallis/common@1.0.0/angular.d.ts``` (or wherever 'common' is mapped to)
 
-This can be extremely useful when compiling over multiple projects as all the projects can easily reference declaration files from their dependencies, and they will be automatically updated with new versions etc. It is *entirely optional* so if this causes issues in your IDE then just stick to relative paths prefixed with ./
+This can be extremely useful when compiling over multiple projects as all the projects can easily reference declaration files from their dependencies, and they will be automatically updated with new versions etc. It is *optional* so if this causes issues in your IDE then it can be disabled by setting ```resolveAmbientRefs: false``` in typescriptOptions
 
 # Configuration #
 
@@ -66,9 +66,3 @@ jspm install
 jspm install --dev
 gulp example
 ```
-
-For a more complex example see [here](https://github.com/frankwallis/tower/tree/angular2)
-
-# Single-File Compilation #
-
-Single-File compilation is not currently supported
