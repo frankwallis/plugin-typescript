@@ -27,7 +27,7 @@ gulp.task('bundle', function(cb) {
          builder.config({
             baseURL: "./example"
          })
-         return builder.buildSFX("index.ts!", "example/build/build.js");
+         return builder.buildSFX("app", "example/build/build.js");
       })
       .then(function() {
          console.log('Build complete');

@@ -10,11 +10,10 @@
 
     <title>plugin-typescript example</title>
     <base href="/"></base>
-    <script src="jspm_packages/es6-module-loader.src.js"></script>
     <script src="jspm_packages/system.src.js"></script>
     <script src="config.js"></script>
     <script>
-      System.import('./index.ts!')
+      System.import('app')
          .then(function() {
             return System.import('angular');
          })
