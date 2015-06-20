@@ -19,9 +19,7 @@
     "url": "https://github.com/frankwallis/plugin-typescript.git"
   },
   "dependencies": {
-    "convert-source-map": "^0.4.1",
-    "requires": "^1.0.2",
-    "typescript": "1.5.0-beta"
+    "typescript": "mhegazy/typescript#v1.5-beta2"
   },
   "devDependencies": {
     "bluebird": "^2.9.8",
@@ -44,10 +42,8 @@
     "registry": "github",
     "name": "frankwallis/plugin-typescript",
     "dependencies": {
-      "convert-source-map": "npm:convert-source-map@^0.4.1",
       "path": "npm:path@^0.11.14",
-      "requires": "npm:requires@^1.0.2",
-      "typescript": "npm:typescript@1.5.0-beta"
+      "typescript": "github:mhegazy/typescript@v1.5-beta2"
     }
   }
 }

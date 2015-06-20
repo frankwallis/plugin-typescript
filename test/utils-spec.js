@@ -11,6 +11,8 @@ var isAbsolute = require('../lib/utils').isAbsolute;
 var isAmbientImport = require('../lib/utils').isAmbientImport;
 var isTypescript = require('../lib/utils').isTypescript;
 var isTypescriptDeclaration = require('../lib/utils').isTypescriptDeclaration;
+var isJavaScript = require('../lib/utils').isJavaScript;
+var isSourceMap = require('../lib/utils').isSourceMap;
 var tsToJs = require('../lib/utils').tsToJs;
 var tsToJsMap = require('../lib/utils').tsToJsMap;
 
@@ -99,6 +101,23 @@ describe( 'Utils', function () {
 
       it('detects declaration files', function () {
          isTypescript('a.d.ts').should.be.true;
+      });
+   });
+
+   describe( 'isJavaScript', function () {
+      it('detects javascript source files', function () {
+         isJavaScript('a.ts').should.be.false;
+         isJavaScript('a.js').should.be.true;
+         isJavaScript('a.ts.js').should.be.true;
+         isJavaScript('a.ts.ajs').should.be.false;
+      });
+   });
+   
+   describe( 'isSourceMap', function () {
+      it('detects source map files', function () {
+         isSourceMap('a.map').should.be.true;
+         isSourceMap('a.jmap').should.be.false;
+         isSourceMap('a.mapj').should.be.false;
       });
    });
 
