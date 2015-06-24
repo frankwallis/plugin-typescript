@@ -43,11 +43,11 @@ describe('Transpiler ES6', function () {
          output.should.have.property('sourceMap').with.lengthOf(133);
       });
 
-      xit('catches syntax errors', function () {
+      it('catches syntax errors', function () {
          var output = transpiler.transpile('syntax-error.ts', syntaxError);
          //formatErrors(output.errors, console);
          output.should.have.property('failure', true);
-         output.should.have.property('errors').with.lengthOf(3);
+         output.should.have.property('errors').with.lengthOf(1);
       });
 
       it('uses config options', function () {
