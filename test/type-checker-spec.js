@@ -23,14 +23,17 @@ var nestedTypeError = require.resolve('./fixtures-es6/program1/nested-type-error
 var noImports = require.resolve('./fixtures-es6/program1/no-imports.ts');
 var oneImport = require.resolve('./fixtures-es6/program1/one-import.ts');
 var ambientReference = require.resolve('./fixtures-es6/ambients/ambient-reference.ts');
+var ambientReference2 = require.resolve('./fixtures-es6/ambients/module1/ambient-references2.ts');
 var ambientReferenceDisabled = require.resolve('./fixtures-es6/ambients/ambient-reference-disabled.ts');
 var ambientImportJs = require.resolve('./fixtures-es6/ambients/ambient-import-js.ts');
 var ambientImportTs = require.resolve('./fixtures-es6/ambients/ambient-import-ts.ts');
 var ambientDuplicate = require.resolve('./fixtures-es6/ambients/ambient-duplicate.ts');
 var ambientRequires = require.resolve('./fixtures-es6/ambients/ambient-requires.ts');
 var refImport = require.resolve('./fixtures-es6/program1/ref-import.ts');
-var constEnums = require.resolve('./fixtures-es6/program1/const-enums.ts');
-var external = require.resolve('./fixtures-es6/external/entry.ts');
+var externalEntry = require.resolve('./fixtures-es6/external/entry.ts');
+var externalOther = require.resolve('./fixtures-es6/external/other.ts');
+var externalDependency = require.resolve('./fixtures-es6/external/dependency.ts');
+var circularFile = require.resolve('./fixtures-es6/circular/circular.ts');
 var importCss = require.resolve('./fixtures-es6/css/import-css.ts');
 var filelist = [];
 
@@ -69,10 +72,24 @@ describe('Type Checker ES6', function () {
 
    var typeChecker;
    var host;
-   var read = function(filename) {
-      var source = fs.readFileSync(filename, 'utf8');
-      host.addFile(filename, source);
-      return source;   
+
+   function typecheckAll(filelist) {
+      var fileChecks = [];
+      
+      /* read the files and feed them into the type-checker */
+      filelist.forEach(function (filename) {
+         var text = fs.readFileSync(filename, 'utf8');
+         host.addFile(filename, text);
+         fileChecks.push(typeChecker.check(filename, text));
+      });
+      
+      /* concatenate all the errors */
+      return Promise.all(fileChecks)
+         .then(function(fileDiags) {
+            return fileDiags.reduce(function(total, current) {
+               return total.concat(current);
+            }, []);
+         });
    }
 
    beforeEach(function() {
@@ -82,230 +99,150 @@ describe('Type Checker ES6', function () {
    });
 
    it('compiles successfully', function () {
-      return typeChecker.check(noImports, read(noImports))
+      return typecheckAll([noImports])
          .then(function(diags) {
             diags.should.have.length(0);
          });
    });
 
    it('loads lib.d.ts', function () {
-      return typeChecker.check(noImports, read(noImports))
+      return typecheckAll([noImports])
          .then(function(diags) {
             filelist.should.have.length(1);
          });
    });
 
-   xit('uses config options', function (done) {
+   it('uses config options', function () {
       var options = {
-         sourceMap: false
+         noImplicitAny: true
       };
-      compiler = new Compiler(fetch, resolve, options);
-      compiler.load(oneImport)
-         .then(function(txt) {
-            return compiler.compile(oneImport);
-         })
-         .then(function(output) {
-            output.should.have.property('failure', false);
-            output.should.have.property('errors').with.lengthOf(0);
-            output.should.have.property('js').with.lengthOf(80);
-         })
-         .then(done)
-         .catch(done);
+      host = new CompilerHost(options);
+      typeChecker = new TypeChecker(host, resolve, fetch);
+      return typecheckAll([oneImport, noImports])
+         .then(function(diags) {
+            diags.should.have.length(1);
+            diags[0].code.should.be.equal(7005);
+         });
    });
 
-   xit('compiles ambient imports', function (done) {
-      compiler.load(ambientImportJs)
-         .then(function(txt) {
-            return compiler.compile(ambientImportJs);
-         })
-         .then(function(output) {
-            output.should.have.property('failure', false);
-            output.should.have.property('errors').with.lengthOf(0);
-            //output.should.have.property('js').with.lengthOf(0);
-         })
-         .then(done)
-         .catch(done);
+   it('compiles ambient imports', function () {
+      return typecheckAll([ambientImportJs])
+         .then(function(diags) {
+            diags.should.have.length(0);
+         });
    });
 
-   xit('errors if an import is missing', function (done) {
-      compiler.load(missingImport)
-         .then(function(txt) {
-            return compiler.compile(missingImport);
-         })
-         .then(function(output) {
-            output.should.have.property('failure', 42);
-         })
-         .catch(function(err) {
-            err.toString().should.be.containEql('ENOENT');
-         })
-         .then(done)
-         .catch(done);
+   it('catches type errors', function () {
+      return typecheckAll([typeError])
+         .then(function(diags) {
+            diags.should.have.length(1);
+            diags[0].code.should.be.equal(2322);
+         });
    });
 
-   xit('catches type-checker errors', function (done) {
-      compiler.load(typeError)
-         .then(function(txt) {
-            return compiler.compile(typeError);
-         })
-         .then(function(output) {
-            //formatErrors(output.errors, console);
-            output.should.have.property('failure', true);
-            output.should.have.property('errors').with.lengthOf(1);
-            output.errors[0].code.should.be.equal(2322);
-         })
-         .then(done)
-         .catch(done);
+   it('catches nested type-checker errors', function () {
+      return typecheckAll([nestedTypeError, oneImport, noImports])
+         .then(function(diags) {
+            diags.should.have.length(1);
+            diags[0].code.should.be.equal(2339);
+         });
    });
 
-   xit('catches nested type-checker errors', function (done) {
-      compiler.load(nestedTypeError)
-         .then(function(txt) {
-            return compiler.compile(nestedTypeError);
-         })
-         .then(function(output) {
-            formatErrors(output.errors, console);
-            output.should.have.property('failure', true);
-            output.should.have.property('errors').with.lengthOf(1);
-            output.errors[0].code.should.be.equal(2339);
-         })
-         .then(done)
-         .catch(done);
-   });
-
-   xit('fetches all the files needed for compilation', function (done) {
-      compiler.load(nestedTypeError)
-         .then(function(txt) {
-            return compiler.compile(nestedTypeError);
-         })
-         .then(function(output) {
-            //formatErrors(output.errors, console);
-            filelist.length.should.be.equal(4);
-         })
-         .then(done)
-         .catch(done);
+   it('fetches all the files needed for compilation', function () {
+      return typecheckAll([refImport])
+         .then(function(diags) {
+            filelist.should.have.length(3);
+            diags.should.have.length(0);
+         });
    });
 
    it('catches syntax errors', function () {
-      return typeChecker.check(syntaxError, read(syntaxError))
+      return typecheckAll([syntaxError])
          .then(function(diags) {
             diags.should.have.length(3);
          });
    });
 
-   xit('catches syntax errors in references files', function (done) {
-      compiler.load(referenceSyntaxError)
-         .then(function(txt) {
-            return compiler.compile(referenceSyntaxError);
-         })
-         .then(function(output) {
-            //formatErrors(output.errors, console);
-            output.should.have.property('failure', true);
-            output.should.have.property('errors').with.lengthOf(8);
-         })
-         .then(done)
-         .catch(done);
+   it('catches syntax errors in reference files', function () {
+      return typecheckAll([referenceSyntaxError])
+         .then(function(diags) {
+            diags.should.have.length(8);
+         });
    });
 
    it('handles ambient references', function () {
-      return typeChecker.check(ambientReferenceDisabled, read(ambientReferenceDisabled))
+      return typecheckAll([ambientReferenceDisabled])      
          .then(function(diags) {
             diags.should.have.length(0);
          });
    });
 
-   xit('resolves ambient references when resolveAmbientRefs option is true', function () {
+   it('resolves ambient references when resolveAmbientRefs option is true', function () {
       var options = {
-         sourceMap: false,
          resolveAmbientRefs: true
       };
       host = new CompilerHost(options);
       typeChecker = new TypeChecker(host, resolve, fetch);
-      return typeChecker.check(ambientReference, read(ambientReference))
+      return typecheckAll([ambientReference, ambientReference2])      
          .then(function(diags) {
             diags.should.have.length(0);
          });
    });
 
-   xit('handles ambient javascript imports', function (done) {
-      compiler.load(ambientImportJs)
-         .then(function(txt) {
-            return compiler.compile(ambientImportJs);
-         })
-         .then(function(output) {
-            formatErrors(output.errors, console);
-            output.should.have.property('failure', false);
-            output.should.have.property('errors').with.lengthOf(0);
-         })
-         .then(done)
-         .catch(done);
+   it('handles ambient javascript imports', function () {
+      return typecheckAll([ambientImportJs])      
+         .then(function(diags) {
+            diags.should.have.length(0);
+         });
    });
 
-   xit('handles ambient typescript imports', function (done) {
-      compiler.load(ambientImportTs)
-         .then(function(txt) {
-            return compiler.compile(ambientImportTs);
-         })
-         .then(function(output) {
-            formatErrors(output.errors, console);
-            output.should.have.property('failure', false);
-            output.should.have.property('errors').with.lengthOf(0);
-         })
-         .then(done)
-         .catch(done);
+   it('handles circular references', function () {
+      return typecheckAll([circularFile])      
+         .then(function(diags) {
+            diags.should.have.length(0);
+         });
    });
 
-   xit('handles ambients with subset names', function (done) {
-      compiler.load(ambientDuplicate)
-         .then(function(txt) {
-            return compiler.compile(ambientDuplicate);
-         })
-         .then(function(output) {
-            formatErrors(output.errors, console);
-            output.should.have.property('failure', false);
-            output.should.have.property('errors').with.lengthOf(0);
-         })
-         .then(done)
-         .catch(done);
+   it('handles ambient typescript imports', function () {
+      var options = {
+         resolveAmbientRefs: true
+      };
+      host = new CompilerHost(options);
+      typeChecker = new TypeChecker(host, resolve, fetch);
+      return typecheckAll([ambientImportTs])      
+         .then(function(diags) {
+            diags.should.have.length(0);
+         });
+   });
+
+   it('handles ambients with subset names', function () {
+      var options = {
+         resolveAmbientRefs: true
+      };
+      host = new CompilerHost(options);
+      typeChecker = new TypeChecker(host, resolve, fetch);
+      return typecheckAll([ambientDuplicate, ambientImportTs])      
+         .then(function(diags) {
+            diags.should.have.length(0);
+         });
    });
 
    it('handles ambients with internal requires', function () {
-      return typeChecker.check(ambientRequires, read(ambientRequires))
+      return typecheckAll([ambientRequires])      
          .then(function(diags) {
             diags.should.have.length(0);
          });
    });
 
-   xit('handles external imports ', function (done) {
-      compiler.load(external)
-         .then(function(txt) {
-            return compiler.compile(external);
-         })
-         .then(function(output) {
-            formatErrors(output.errors, console);
-            output.should.have.property('failure', false);
-            output.should.have.property('errors').with.lengthOf(0);
-         })
-         .then(done)
-         .catch(done);
-   });
-
-   xit('handles const enums', function (done) {
-      compiler.load(constEnums)
-         .then(function(txt) {
-            return compiler.compile(constEnums);
-         })
-         .then(function(output) {
-            //formatErrors(output.errors, console);
-            output.should.have.property('failure', false);
-            output.should.have.property('errors').with.lengthOf(0);
-            output.js.should.containEql("return 1 /* Yes */;");
-         })
-         .then(done)
-         .catch(done);
+   it('handles external imports', function () {
+      return typecheckAll([externalEntry, externalOther, externalDependency])      
+         .then(function(diags) {
+            diags.should.have.length(0);
+         });
    });
 
    it('imports css', function () {
-      return typeChecker.check(importCss, read(importCss))
+      return typecheckAll([importCss])      
          .then(function(diags) {
             diags.should.have.length(0);
          });

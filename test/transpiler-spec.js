@@ -15,6 +15,7 @@ var formatErrors = require('../lib/format-errors').formatErrors;
 var oneImport = fs.readFileSync(require.resolve('./fixtures-es6/program1/one-import.ts'), 'utf8');
 var es6Symbol = fs.readFileSync(require.resolve('./fixtures-es6/program1/symbol.ts'), 'utf8');
 var syntaxError = fs.readFileSync(require.resolve('./fixtures-es6/program1/syntax-error.ts'), 'utf8');
+var constEnums = require.resolve('./fixtures-es6/program1/const-enums.ts');
 
 describe('Transpiler ES6', function () {
 
@@ -30,7 +31,7 @@ describe('Transpiler ES6', function () {
          var output = transpiler.transpile('one-import.ts', oneImport);
          output.should.have.property('failure', false);
          output.should.have.property('errors').with.lengthOf(0);
-         output.should.have.property('js').with.lengthOf(326);
+         output.should.have.property('js').with.lengthOf(337);
       });
       
       it('removes SourceMappingURL', function () {
@@ -40,10 +41,17 @@ describe('Transpiler ES6', function () {
 
       it('returns sourceMap', function () {
          var output = transpiler.transpile('one-import.ts', oneImport);
-         output.should.have.property('sourceMap').with.lengthOf(133);
+         output.should.have.property('sourceMap').with.lengthOf(143);
       });
 
       it('catches syntax errors', function () {
+         var output = transpiler.transpile('syntax-error.ts', syntaxError);
+         //formatErrors(output.errors, console);
+         output.should.have.property('failure', true);
+         output.should.have.property('errors').with.lengthOf(1);
+      });
+      
+      xit('errors on const enums', function (done) {
          var output = transpiler.transpile('syntax-error.ts', syntaxError);
          //formatErrors(output.errors, console);
          output.should.have.property('failure', true);
