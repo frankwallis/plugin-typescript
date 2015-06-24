@@ -1,7 +1,7 @@
 {
   "name": "plugin-typescript",
   "version": "1.0.5",
-  "description": "TypeScript compiler for SystemJS",
+  "description": "TypeScript loader for SystemJS",
   "main": "lib/plugin.js",
   "homepage": "https://github.com/frankwallis/plugin-typescript",
   "authors": [
@@ -9,9 +9,11 @@
   ],
   "keywords": [
     "systemjs",
+    "jspm",
     "typescript",
+    "jsx",
+    "angular2",
     "bundle",
-    "browserify",
     "plugin"
   ],
   "repository": {
@@ -19,7 +21,6 @@
     "url": "https://github.com/frankwallis/plugin-typescript.git"
   },
   "dependencies": {
-    "typescript": "mhegazy/typescript#v1.5-beta2"
   },
   "devDependencies": {
     "bluebird": "^2.9.8",
@@ -29,7 +30,8 @@
     "open": "0.0.5",
     "should": "^4.6.1",
     "systemjs-builder": "^0.10.4",
-    "traceur": "0.0.84"
+    "traceur": "0.0.84",
+    "typescript": "mhegazy/typescript#v1.5-beta2"
   },
   "scripts": {
     "test": "gulp test",
@@ -42,7 +44,6 @@
     "registry": "github",
     "name": "frankwallis/plugin-typescript",
     "dependencies": {
-      "path": "npm:path@^0.11.14",
       "typescript": "github:mhegazy/typescript@v1.5-beta2"
     }
   }

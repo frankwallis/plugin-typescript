@@ -4,7 +4,8 @@ System.config({
   "transpiler": "typescript",
   "typescriptOptions": {
     "noImplicitAny": false,
-    "allowNonTsExtensions": true
+    "allowNonTsExtensions": true,
+    "typeCheck": true
   },
   "paths": {
     "github:*": "jspm_packages/github/*",
