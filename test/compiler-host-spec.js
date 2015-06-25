@@ -1,37 +1,29 @@
-var path = require('path');
-var should  = require('should');
-var ts = require('typescript');
+import should from 'should';
+import ts from 'typescript';
 
-var Traceur = require('traceur');
+import {CompilerHost} from '../lib/compiler-host'; 
 
-// Traceur will compile all JS aside from node modules
-Traceur.require.makeDefault(function(filename) {
-   return !(/node_modules/.test(filename));
-});
+describe( 'Compiler Host', () => {
 
-var Host = require('../lib/compiler-host').CompilerHost;
-
-describe( 'Compiler Host', function () {
-
-   var host;
+   let host;
    beforeEach(function() {
-      host = new Host({});
+      host = new CompilerHost({});
    });
 
-   describe( 'constructor', function () {
-      it('defaults the config', function () {
-         var options = host._options;
+   describe( 'constructor', () => {
+      it('defaults the config', () => {
+         let options = host._options;
          options.module.should.be.equal(ts.ModuleKind.System);
          options.target.should.be.equal(ts.ScriptTarget.ES5);
          options.allowNonTsExtensions.should.be.true;
       });
 
-      it('defaults the config', function () {
-         var config = {
+      it('defaults the config', () => {
+         let config = {
             noImplicitAny: true
          };
-         host = new Host(config);
-         var options = host._options;
+         host = new CompilerHost(config);
+         let options = host._options;
          options.module.should.be.equal(ts.ModuleKind.System);
          options.target.should.be.equal(ts.ScriptTarget.ES5);
          options.allowNonTsExtensions.should.be.true;
@@ -39,20 +31,20 @@ describe( 'Compiler Host', function () {
       });
    });
    
-   describe( 'addFile', function () {
-      it('adds files', function () {
-         var filename = 'filea.ts';
-         var sourceFile = host.addFile(filename, 'sometext');
-         var sourceFile1 = host.getSourceFile(filename);
+   describe( 'addFile', () => {
+      it('adds files', () => {
+         let filename = 'filea.ts';
+         let sourceFile = host.addFile(filename, 'sometext');
+         let sourceFile1 = host.getSourceFile(filename);
          sourceFile.should.be.equal(sourceFile1);
       });
 
-      it('overwrites file if it has changed', function () {
-         var filename = 'filea.ts';
-         var sourceFile1 = host.addFile(filename, 'sometext');
-         var sourceFile2 = host.addFile(filename, 'sometext');
+      it('overwrites file if it has changed', () => {
+         let filename = 'filea.ts';
+         let sourceFile1 = host.addFile(filename, 'sometext');
+         let sourceFile2 = host.addFile(filename, 'sometext');
          sourceFile1.should.not.be.equal(sourceFile2);
-         var sourceFile3 = host.getSourceFile(filename);
+         let sourceFile3 = host.getSourceFile(filename);
          sourceFile2.should.be.equal(sourceFile3);
       });
    });

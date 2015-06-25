@@ -1,111 +1,105 @@
-var should  = require('should');
-var Traceur = require('traceur');
+import should from 'should';
 
-// Traceur will compile all JS aside from node modules
-Traceur.require.makeDefault(function(filename) {
-   return !(/node_modules/.test(filename));
-});
+import {isRelative} from '../lib/utils';
+import {isAbsolute} from '../lib/utils';
+import {isAmbientImport} from '../lib/utils';
+import {isTypescript} from '../lib/utils';
+import {isTypescriptDeclaration} from '../lib/utils';
+import {isJavaScript} from '../lib/utils';
+import {isSourceMap} from '../lib/utils';
+import {tsToJs} from '../lib/utils';
+import {tsToJsMap} from '../lib/utils';
 
-var isRelative = require('../lib/utils').isRelative;
-var isAbsolute = require('../lib/utils').isAbsolute;
-var isAmbientImport = require('../lib/utils').isAmbientImport;
-var isTypescript = require('../lib/utils').isTypescript;
-var isTypescriptDeclaration = require('../lib/utils').isTypescriptDeclaration;
-var isJavaScript = require('../lib/utils').isJavaScript;
-var isSourceMap = require('../lib/utils').isSourceMap;
-var tsToJs = require('../lib/utils').tsToJs;
-var tsToJsMap = require('../lib/utils').tsToJsMap;
+describe( 'Utils', () => {
 
-describe( 'Utils', function () {
-
-   describe( 'isRelative', function () {
-      it('does not match absolute paths', function () {
+   describe( 'isRelative', () => {
+      it('does not match absolute paths', () => {
          isRelative("/a/b.c").should.be.false;
          isRelative("/a/b").should.be.false;
       });
 
-      it('matches relative paths', function () {
+      it('matches relative paths', () => {
          isRelative("../a/b").should.be.true;
          isRelative("./a/b").should.be.true;
       });
 
-      it('does not match external paths', function () {
+      it('does not match external paths', () => {
          isRelative("b").should.be.false;
          isRelative("a/b.c").should.be.false;
       });
    });
 
-   describe( 'isAbsolute', function () {
-      it('matches absolute paths', function () {
+   describe( 'isAbsolute', () => {
+      it('matches absolute paths', () => {
          isAbsolute("/a/b.c").should.be.true;
          isAbsolute("/a/b").should.be.true;
       });
 
-      it('does not match relative paths', function () {
+      it('does not match relative paths', () => {
          isAbsolute("../a/b").should.be.false;
          isAbsolute("./a/b").should.be.false;
       });
 
-      it('does not match external paths', function () {
+      it('does not match external paths', () => {
          isAbsolute("b").should.be.false;
          isAbsolute("a/b.c").should.be.false;
       });
    });
 
-   describe( 'isAmbientImport', function () {
-      it('does not match absolute paths', function () {
+   describe( 'isAmbientImport', () => {
+      it('does not match absolute paths', () => {
          isAmbientImport("/a/b.c").should.be.false;
          isAmbientImport("/a/b").should.be.false;
       });
 
-      it('does not match relative paths', function () {
+      it('does not match relative paths', () => {
          isAmbientImport("../a/b").should.be.false;
          isAmbientImport("./a/b").should.be.false;
       });
 
-      it('matches external paths', function () {
+      it('matches external paths', () => {
          isAmbientImport("b").should.be.true;
          isAmbientImport("a/b.c").should.be.true;
       });
    });
 
-   describe( 'tsToJs', function () {
-      it('changes the file extension', function () {
+   describe( 'tsToJs', () => {
+      it('changes the file extension', () => {
          tsToJs('a.ts').should.be.equal('a.js');
          tsToJs('a.ts.ts').should.be.equal('a.ts.js');
       });
 
-      it('ignores files with wrong extension', function () {
+      it('ignores files with wrong extension', () => {
          tsToJs('a.jts').should.be.equal('a.jts');
       });
    });
 
-   describe( 'tsToJsMap', function () {
-      it('changes the file extension', function () {
+   describe( 'tsToJsMap', () => {
+      it('changes the file extension', () => {
          tsToJsMap('a.ts').should.be.equal('a.js.map');
          tsToJsMap('a.ts.ts').should.be.equal('a.ts.js.map');
       });
 
-      it('ignores files with wrong extension', function () {
+      it('ignores files with wrong extension', () => {
          tsToJsMap('a.jts').should.be.equal('a.jts');
       });
    });
 
-   describe( 'isTypescript', function () {
-      it('detects source files', function () {
+   describe( 'isTypescript', () => {
+      it('detects source files', () => {
          isTypescript('a.ts').should.be.true;
          isTypescript('a.js').should.be.false;
          isTypescript('a.ts.js').should.be.false;
          isTypescript('a.ts.ats').should.be.false;
       });
 
-      it('detects declaration files', function () {
+      it('detects declaration files', () => {
          isTypescript('a.d.ts').should.be.true;
       });
    });
 
-   describe( 'isJavaScript', function () {
-      it('detects javascript source files', function () {
+   describe( 'isJavaScript', () => {
+      it('detects javascript source files', () => {
          isJavaScript('a.ts').should.be.false;
          isJavaScript('a.js').should.be.true;
          isJavaScript('a.ts.js').should.be.true;
@@ -113,23 +107,23 @@ describe( 'Utils', function () {
       });
    });
    
-   describe( 'isSourceMap', function () {
-      it('detects source map files', function () {
+   describe( 'isSourceMap', () => {
+      it('detects source map files', () => {
          isSourceMap('a.map').should.be.true;
          isSourceMap('a.jmap').should.be.false;
          isSourceMap('a.mapj').should.be.false;
       });
    });
 
-   describe( 'isTypescriptDeclaration', function () {
-      it('detects declaration files', function () {
+   describe( 'isTypescriptDeclaration', () => {
+      it('detects declaration files', () => {
          isTypescriptDeclaration('a.d.ts').should.be.true;
          isTypescriptDeclaration('a.js').should.be.false;
          isTypescriptDeclaration('a.d.ts.js').should.be.false;
          isTypescriptDeclaration('a.ts.ats').should.be.false;
       });
 
-      it('ignores source files', function () {
+      it('ignores source files', () => {
          isTypescriptDeclaration('a.ts').should.be.false;
       });
    });

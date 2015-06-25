@@ -1,13 +1,5 @@
 var gulp = require('gulp');
 
-gulp.task('test', function(cb) {
-   var mocha = require('gulp-mocha');
-
-   gulp.src('test/*-spec.js')
-      .pipe(mocha({ reporter: 'nyan' }))
-      .on('end', cb);
-});
-
 /*
    Start an http-server for the example project
 */

@@ -23,21 +23,20 @@
     "type": "git",
     "url": "https://github.com/frankwallis/plugin-typescript.git"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
+    "babel": "^5.6.7",
     "bluebird": "^2.9.8",
     "gulp": "^3.8.10",
-    "gulp-mocha": "^2.0.0",
-    "http-server": "^0.7.4",
+    "http-server": "^0.8.0",
+    "mocha": "^2.2.5",
     "open": "0.0.5",
-    "should": "^4.6.1",
-    "systemjs-builder": "^0.10.4",
-    "traceur": "0.0.84",
+    "should": "^7.0.1",
+    "systemjs-builder": "^0.12.1",
     "typescript": "mhegazy/typescript#v1.5-beta2"
   },
   "scripts": {
-    "test": "gulp test",
+    "test": "mocha --compilers js:babel/register",
     "start": "gulp example"
   },
   "bin": {},
@@ -49,6 +48,8 @@
     "dependencies": {
       "typescript": "github:mhegazy/typescript@v1.5-beta2"
     },
-    "directories": ["lib"]
+    "directories": [
+      "lib"
+    ]
   }
 }
