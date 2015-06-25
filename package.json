@@ -36,8 +36,7 @@
     "typescript": "mhegazy/typescript#v1.5-beta2"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel/register",
-    "start": "gulp example"
+    "test": "mocha --compilers js:babel/register"
   },
   "bin": {},
   "license": "MIT",
@@ -48,6 +47,9 @@
     "dependencies": {
       "typescript": "github:mhegazy/typescript@v1.5-beta2"
     },
+    "ignore": [
+       "example", "test"
+    ],
     "directories": [
       "lib"
     ]
