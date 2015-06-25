@@ -5,7 +5,8 @@ export class ExampleController {
     public static $inject = [ 'exampleService' ];
 
     constructor(private exampleService: example.IExampleService) {
-        console.log('constructing ExampleController')
+        console.log('constructing ExampleController');
+        console.log('moduleName is ' + __moduleName);
     }
 
     public name: string;
