@@ -6,7 +6,7 @@ var gulp = require('gulp');
 gulp.task('example', function(cb) {
    var hs = require("http-server");
    var open = require('open');
-   var server = hs.createServer({"root": "./example"});
+   var server = hs.createServer({"root": "./"});
    server.listen(8080);
    open("http://127.0.0.1:8080"); // safari's not working :(
    cb();
@@ -20,12 +20,9 @@ gulp.task('bundle', function(cb) {
    var builder = new Builder();
    builder.reset();
 
-   builder.loadConfig("example/config.js")
+   builder.loadConfig("./config.js")
       .then(function() {
-         builder.config({
-            baseURL: "./example"
-         })
-         return builder.buildSFX("app", "example/build/build.js");
+         return builder.buildSFX("app", "build/build.js");
       })
       .then(function() {
          console.log('Build complete, go to http://127.0.0.1:8080/index-bundle.html');
@@ -45,12 +42,12 @@ gulp.task('flow', function(cb) {
    var builder = new Builder();
    builder.reset();
 
-   builder.loadConfig("example/config.js")
+   builder.loadConfig("config.js")
       .then(function() {
          builder.config({
             baseURL: "./example"
          })
-         return builder.buildSFX("app", "example/build/build.js");
+         return builder.buildSFX("app", "build/build.js");
       })
       .then(function() {
          console.log('Build complete, go to http://127.0.0.1:8080/index-bundle.html');
