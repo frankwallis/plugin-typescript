@@ -32,7 +32,7 @@
     "mocha": "^2.2.5",
     "open": "0.0.5",
     "should": "^7.0.1",
-    "systemjs-builder": "^0.12.1",
+    "systemjs-builder": "^0.12.2",
     "typescript": "mhegazy/typescript#v1.5-beta2"
   },
   "scripts": {
