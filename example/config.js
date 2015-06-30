@@ -4,7 +4,7 @@ System.config({
   "transpiler": "typescript",
   "typescriptOptions": {
     "noImplicitAny": false,
-    "typeCheck": false
+    "typeCheck": true
   },
   "paths": {
     "github:*": "jspm_packages/github/*",

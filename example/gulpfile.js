@@ -35,26 +35,29 @@ gulp.task('bundle', function(cb) {
 });
 
 /*
-   Run a continuous type-checker ovr the example project
+   Type-check the code
 */
-gulp.task('flow', function(cb) {
+gulp.task('check', function(cb) {
    var Builder = require('systemjs-builder');
    var builder = new Builder();
    builder.reset();
 
    builder.loadConfig("config.js")
       .then(function() {
-         builder.config({
-            baseURL: "./example"
-         })
-         return builder.buildSFX("app", "build/build.js");
+         return builder.buildSFX("app"); // build in-memory
       })
       .then(function() {
-         console.log('Build complete, go to http://127.0.0.1:8080/index-bundle.html');
          cb();
       })
       .catch(function(err) {
          console.log(err);
          cb(err);
       });
+});
+
+/*
+   Run a continuous type-checker ovr the example project
+*/
+gulp.task('flow', ['check'], function(cb) {
+   gulp.watch(["./src/**/*.ts"], ['check']);
 });
