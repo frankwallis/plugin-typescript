@@ -16,9 +16,10 @@ describe( 'Compiler Host', () => {
          options.module.should.be.equal(ts.ModuleKind.System);
          options.target.should.be.equal(ts.ScriptTarget.ES5);
          options.allowNonTsExtensions.should.be.true;
+         options.should.not.have.property("noImplicitAny");
       });
 
-      it('defaults the config', () => {
+      it('uses the config passed in', () => {
          let config = {
             noImplicitAny: true
          };
