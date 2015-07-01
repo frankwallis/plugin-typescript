@@ -24,7 +24,7 @@ describe('Transpiler ES6', () => {
          let output = transpiler.transpile('one-import.ts', oneImport);
          output.should.have.property('failure', false);
          output.should.have.property('errors').with.lengthOf(0);
-         output.should.have.property('js').with.lengthOf(337);
+         output.should.have.property('js').with.lengthOf(320);
       });
       
       it('removes SourceMappingURL', () => {

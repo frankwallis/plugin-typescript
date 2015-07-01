@@ -121,6 +121,7 @@ describe('Type Checker ES6', () => {
    it('compiles ambient imports', () => {
       return typecheckAll([ambientImportJs])
          .then((diags) => {
+            formatErrors(diags, console);
             diags.should.have.length(0);
          });
    });
@@ -156,7 +157,7 @@ describe('Type Checker ES6', () => {
          });
    });
 
-   xit('catches syntax errors in reference files', () => {
+   it('catches syntax errors in reference files', () => {
       return typecheckAll([referenceSyntaxError])
          .then((diags) => {
             diags.should.have.length(8);
@@ -185,6 +186,7 @@ describe('Type Checker ES6', () => {
    it('handles ambient javascript imports', () => {
       return typecheckAll([ambientImportJs])      
          .then((diags) => {
+            formatErrors(diags, console);
             diags.should.have.length(0);
          });
    });
@@ -192,6 +194,7 @@ describe('Type Checker ES6', () => {
    it('handles circular references', () => {
       return typecheckAll([circularFile])      
          .then((diags) => {
+            formatErrors(diags, console);
             diags.should.have.length(0);
          });
    });
