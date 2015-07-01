@@ -31,16 +31,16 @@ System.config({
   "map": {
     "angular": "github:angular/bower-angular@1.4.1",
     "css": "github:systemjs/plugin-css@0.1.10",
-    "ts": "github:frankwallis/plugin-typescript@2.0.0-alpha",
+    "ts": "github:frankwallis/plugin-typescript@2.0.0-beta",
     "typescript": "github:mhegazy/typescript@v1.5-beta2",
-    "github:frankwallis/plugin-typescript@2.0.0-alpha": {
+    "github:frankwallis/plugin-typescript@2.0.0-beta": {
       "typescript": "github:mhegazy/typescript@v1.5-beta2"
     },
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },
     "github:jspm/nodelibs-buffer@0.1.0": {
-      "buffer": "npm:buffer@3.2.2"
+      "buffer": "npm:buffer@3.3.0"
     },
     "github:jspm/nodelibs-events@0.1.1": {
       "events": "npm:events@1.0.2"
@@ -88,7 +88,7 @@ System.config({
     "npm:assert@1.3.0": {
       "util": "npm:util@0.10.3"
     },
-    "npm:buffer@3.2.2": {
+    "npm:buffer@3.3.0": {
       "base64-js": "npm:base64-js@0.0.8",
       "ieee754": "npm:ieee754@1.1.6",
       "is-array": "npm:is-array@1.0.1"
