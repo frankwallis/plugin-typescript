@@ -31,9 +31,9 @@ System.config({
   "map": {
     "angular": "github:angular/bower-angular@1.4.1",
     "css": "github:systemjs/plugin-css@0.1.10",
-    "ts": "github:frankwallis/plugin-typescript@2.0.0-beta",
+    "ts": "github:frankwallis/plugin-typescript@2.0.0",
     "typescript": "github:mhegazy/typescript@v1.5-beta2",
-    "github:frankwallis/plugin-typescript@2.0.0-beta": {
+    "github:frankwallis/plugin-typescript@2.0.0": {
       "typescript": "github:mhegazy/typescript@v1.5-beta2"
     },
     "github:jspm/nodelibs-assert@0.1.0": {
