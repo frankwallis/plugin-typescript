@@ -2,7 +2,7 @@ System.config({
   "baseURL": ".",
   "defaultJSExtensions": true,
   "transpiler": "typescript",
-  "typescriptOptions": {
+  "typescriptOptions1": {
     "noImplicitAny": false,
     "typeCheck": true
   },
@@ -31,9 +31,9 @@ System.config({
   "map": {
     "angular": "github:angular/bower-angular@1.4.1",
     "css": "github:systemjs/plugin-css@0.1.10",
-    "ts": "github:frankwallis/plugin-typescript@2.0.1",
+    "ts": "github:frankwallis/plugin-typescript@2.0.2",
     "typescript": "github:mhegazy/typescript@v1.5-beta2",
-    "github:frankwallis/plugin-typescript@2.0.1": {
+    "github:frankwallis/plugin-typescript@2.0.2": {
       "typescript": "github:mhegazy/typescript@v1.5-beta2"
     },
     "github:jspm/nodelibs-assert@0.1.0": {
