@@ -7,7 +7,7 @@ System.config({
     "npm:*": "jspm_packages/npm/*",
     "app": "src"
   },
-  "typescriptOptions1": {
+  "typescriptOptions": {
     "noImplicitAny": false,
     "typeCheck": true
   },
@@ -29,18 +29,18 @@ System.config({
 
 System.config({
   "map": {
-    "angular": "github:angular/bower-angular@1.4.1",
+    "angular": "github:angular/bower-angular@1.4.3",
     "css": "github:systemjs/plugin-css@0.1.10",
-    "ts": "github:frankwallis/plugin-typescript@2.0.2",
+    "ts": "github:frankwallis/plugin-typescript@2.0.3",
     "typescript": "github:mhegazy/typescript@v1.5-beta2",
-    "github:frankwallis/plugin-typescript@2.0.2": {
-      "typescript": "github:mhegazy/typescript@v1.5-beta2"
+    "github:frankwallis/plugin-typescript@2.0.3": {
+      "typescript": "npm:typescript@1.5.3"
     },
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },
     "github:jspm/nodelibs-buffer@0.1.0": {
-      "buffer": "npm:buffer@3.3.0"
+      "buffer": "npm:buffer@3.3.1"
     },
     "github:jspm/nodelibs-events@0.1.1": {
       "events": "npm:events@1.0.2"
@@ -79,7 +79,7 @@ System.config({
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "path": "github:jspm/nodelibs-path@0.1.0"
     },
-    "npm:amdefine@0.1.1": {
+    "npm:amdefine@1.0.0": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "module": "github:jspm/nodelibs-module@0.1.0",
       "path": "github:jspm/nodelibs-path@0.1.0",
@@ -88,7 +88,7 @@ System.config({
     "npm:assert@1.3.0": {
       "util": "npm:util@0.10.3"
     },
-    "npm:buffer@3.3.0": {
+    "npm:buffer@3.3.1": {
       "base64-js": "npm:base64-js@0.0.8",
       "ieee754": "npm:ieee754@1.1.6",
       "is-array": "npm:is-array@1.0.1"
@@ -141,7 +141,7 @@ System.config({
       "string_decoder": "npm:string_decoder@0.10.31"
     },
     "npm:source-map@0.1.43": {
-      "amdefine": "npm:amdefine@0.1.1",
+      "amdefine": "npm:amdefine@1.0.0",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.1"
@@ -153,6 +153,15 @@ System.config({
     },
     "npm:string_decoder@0.10.31": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0"
+    },
+    "npm:typescript@1.5.3": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "child_process": "github:jspm/nodelibs-child_process@0.1.0",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "os": "github:jspm/nodelibs-os@0.1.0",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.1",
+      "readline": "github:jspm/nodelibs-readline@0.1.0"
     },
     "npm:url@0.10.3": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
