@@ -2,18 +2,18 @@
 
 export class ExampleController {
 
-   public static $inject = ['exampleService'];
+	public static $inject = ['exampleService'];
 
-   constructor(private exampleService: example.IExampleService) {
-      console.log('constructing ExampleController');
-      console.log('moduleName is ' + __moduleName);
-   }
+	constructor(private exampleService: example.IExampleService) {
+		console.log('constructing ExampleController');
+		console.log('moduleName is ' + __moduleName);
+	}
 
-   public name: string;
-   public greeting: string;
+	public name: string;
+	public greeting: string;
 
-   public greet() {
-      console.log('greeting');
-      this.greeting = this.exampleService.greet(this.name);
-   }
+	public greet() {
+		console.log('greeting');
+		this.greeting = this.exampleService.greet(this.name);
+	}
 }
