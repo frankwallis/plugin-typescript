@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-strict-di>
+<html lang="en">
 <head>
 	<meta charset="utf-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -13,13 +13,8 @@
 	<script src="build/build.js"></script>
 </head>
 
-<body ng-cloak ng-app="example">
-	<div ng-controller="exampleController as cx">
-		<label>Enter your name</label>
-		<input type="text" ng-model="cx.name"></input>
-		<button ng-click="cx.greet()">Press Me</button>
-		<p>{{cx.greeting}}</p>
-	</div>
+<body>
+	<example-app/>
 </body>
 
 </html>

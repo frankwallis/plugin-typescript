@@ -1,6 +1,8 @@
 /// <reference path="./_references.d.ts" />
+import {Injectable} from 'angular2/angular2';
 
-export class ExampleService implements example.IExampleService {
+@Injectable()
+export class ExampleService {
 
 	constructor() {
 		this.cache = new Map<string, string>();

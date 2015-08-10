@@ -1,0 +1,8 @@
+<div>
+	<label>Enter your name</label>
+	<input type="text"
+		[value]="item.name"
+   	(change)="handleChangeName(seat, $event)"></input>
+	<button (click)="greet()">Press Me</button>
+	<p class="greeting">{{item.greeting}}</p>
+</div>
