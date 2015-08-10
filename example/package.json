@@ -7,7 +7,7 @@
     "devDependencies": {
       "css": "systemjs/plugin-css@0.1.10",
       "ts": "frankwallis/plugin-typescript@^2.0.3",
-      "typescript": "mhegazy/typescript@v1.5-beta2"
+      "typescript": "npm:typescript@1.5.3"
     }
   }
 }
