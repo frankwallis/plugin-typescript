@@ -1,17 +1,18 @@
 System.config({
-  "baseURL": ".",
-  "defaultJSExtensions": true,
-  "transpiler": "typescript",
-  "typescriptOptions": {
+  baseURL: ".",
+  defaultJSExtensions: true,
+  transpiler: "typescript",
+  typescriptOptions: {
     "noImplicitAny": false,
     "typeCheck": true
   },
-  "paths": {
+  paths: {
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*",
     "app": "src"
   },
-  "packages": {
+
+  packages: {
     "app": {
       "main": "index",
       "defaultExtension": "ts",
