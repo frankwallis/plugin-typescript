@@ -22,7 +22,7 @@ gulp.task('bundle', function(cb) {
 
 	builder.loadConfig("./config.js")
 		.then(function() {
-			return builder.buildSFX("app", "build/build.js");
+			return builder.buildSFX("traceur-runtime + src", "build/build.js", { runtime: true });
 		})
 		.then(function() {
 			console.log('Build complete, go to http://127.0.0.1:8080/index-bundle.html');

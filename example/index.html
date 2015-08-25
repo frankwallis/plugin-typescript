@@ -13,13 +13,14 @@
 
 	<script src="jspm_packages/system.src.js"></script>
 	<script src="config.js"></script>
+</head>
+
+<body>
+	<example-app/>
+
 	<script>
-		System.import("zone.js")
+		System.import("src")
 			.then(function() {
-				return System.import('app')
-			})
-			.then(function(app) {
-				app.main();
 				console.log('running');
 			})
 			.catch(function(err) {
@@ -27,10 +28,6 @@
 			});
 	</script>
 
-</head>
-
-<body>
-	<example-app/>
 </body>
 
 </html>
