@@ -1,0 +1,13 @@
+{
+  "jspm": {
+    "registry": "github",
+    "dependencies": {
+      "react": "npm:react@^0.13.3"
+    },
+    "devDependencies": {
+      "css": "systemjs/plugin-css@0.1.10",
+      "ts": "frankwallis/plugin-typescript@^2.0.6",
+      "typescript": "npm:typescript@^1.6.0-dev.20150818"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-strict-di>
 <head>
 	<meta charset="utf-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -8,25 +8,24 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<meta name="fragment" content="!" />
 
-	<title>plugin-typescript angular2 example</title>
+	<title>plugin-typescript react example</title>
 	<base href="/"></base>
-
 	<script src="jspm_packages/system.src.js"></script>
 	<script src="config.js"></script>
 </head>
 
 <body>
-	<example-app/>
+	<div id="body"></div>
 
 	<script>
-		System.import("src")
+		System.import('src')
 			.then(function() {
 				console.log('running');
 			})
 			.catch(function(err) {
 				console.log('Error: ', err);
 			});
-	</script>
+   </script>
 
 </body>
 

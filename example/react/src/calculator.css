@@ -1,0 +1,32 @@
+
+.adder-container {
+	font-size: 2rem;
+}
+
+.adder-display {
+	box-sizing: border-box;
+	border: solid 2px gray;
+	border-radius: .2em;
+	width: 6em;
+	display: block;
+	margin-bottom: .2em;
+	padding: 2px;
+}
+
+.adder-button {
+	font-size: 2rem;
+	width: 2em;
+	height: 2em;
+}
+
+.adder-button-clear {
+	background: orangered; 
+}
+
+.adder-button-add {
+	background: mediumseagreen;
+}
+
+.adder-button-digit {
+	background: dodgerblue;
+}
