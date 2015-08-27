@@ -96,6 +96,11 @@ describe( 'Utils', () => {
 		it('detects declaration files', () => {
 			isTypescript('a.d.ts').should.be.true;
 		});
+
+		it('detects tsx files', () => {
+			isTypescript('a.d.tsx').should.be.true;
+			isTypescript('a.tsx').should.be.true;
+		});
 	});
 
 	describe( 'isJavaScript', () => {
@@ -123,8 +128,13 @@ describe( 'Utils', () => {
 			isTypescriptDeclaration('a.ts.ats').should.be.false;
 		});
 
+		it('detects tsx declaration files', () => {
+			isTypescriptDeclaration('a.d.tsx').should.be.true;
+		});
+
 		it('ignores source files', () => {
 			isTypescriptDeclaration('a.ts').should.be.false;
+			isTypescriptDeclaration('a.tsx').should.be.false;
 		});
 	});
 

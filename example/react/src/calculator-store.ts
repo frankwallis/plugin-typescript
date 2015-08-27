@@ -1,7 +1,5 @@
-/*
-	A very simple flux-like store to model the calculator.
-	All operations are synchronous, so update notifications are not needed.
-*/
+/// <reference path="./_references.d.ts" />
+
 export class CalculatorStore {
 	constructor() {
 		this.clear();
