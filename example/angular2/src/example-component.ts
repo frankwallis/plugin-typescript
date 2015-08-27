@@ -1,5 +1,5 @@
 /// <reference path="./_references.d.ts" />
-import {Component, Directive, View} from 'angular2/angular2';
+import {Component, Directive, View, NgModel} from 'angular2/angular2';
 import {ExampleService} from "./example-service";
 import exampleTemplate from "example-view";
 
@@ -9,21 +9,19 @@ import exampleTemplate from "example-view";
 })
 @View({
   template: exampleTemplate,
-  directives: []
+  directives: [NgModel]
 })
 export class ExampleComponent {
 
 	constructor(private exampleService: ExampleService) {
 		console.log('constructing ExampleComponent');
 		console.log('moduleName is ' + __moduleName);
-
-		this.item = {
-			name: "",
-			greeting: ""
-		}
 	}
 
-	public item: any;
+	public item = {
+		name: "",
+		greeting: ""
+	};
 
   	public handleChangeName(seat, event) {
       this.item.name = event.target.value;
