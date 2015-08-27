@@ -15,6 +15,7 @@ describe( 'Compiler Host', () => {
 			let options = host._options;
 			options.module.should.be.equal(ts.ModuleKind.System);
 			options.target.should.be.equal(ts.ScriptTarget.ES5);
+			options.jsx.should.be.equal(ts.JsxEmit.None);
 			options.allowNonTsExtensions.should.be.true;
 			options.should.not.have.property("noImplicitAny");
 		});
@@ -46,6 +47,12 @@ describe( 'Compiler Host', () => {
 			host.options.target.should.be.equal(ts.ScriptTarget.ES5);
 		});
 
+		it('handles the jsx option', () => {
+			host = new CompilerHost({
+				jsx: "reAct"
+			});
+			host.options.jsx.should.be.equal(ts.JsxEmit.React);
+		});
 	});
 
 	describe( 'addFile', () => {
