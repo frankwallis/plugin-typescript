@@ -72,4 +72,16 @@ describe( 'Compiler Host', () => {
 			sourceFile2.should.be.equal(sourceFile3);
 		});
 	});
+
+	describe( 'get canonical filename', () => {
+		it('fixes .tsx.ts', () => {
+			host.getCanonicalFileName("a.tsx.ts").should.be.equal("a.tsx");
+			host.getCanonicalFileName("a.tsx").should.be.equal("a.tsx");
+		});
+
+		it('fixes .ts.ts', () => {
+			host.getCanonicalFileName("a.ts.ts").should.be.equal("a.ts");
+			host.getCanonicalFileName("a.ts").should.be.equal("a.ts");
+		});
+	});
 });
