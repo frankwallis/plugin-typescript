@@ -28,6 +28,7 @@ let externalOther = require.resolve('./fixtures-es6/external/other.ts');
 let externalDependency = require.resolve('./fixtures-es6/external/dependency.ts');
 let circularFile = require.resolve('./fixtures-es6/circular/circular.ts');
 let importCss = require.resolve('./fixtures-es6/css/import-css.ts');
+let importHtml = require.resolve('./fixtures-es6/html/import-html.ts');
 let filelist = [];
 
 function fetch(filename) {
@@ -54,7 +55,10 @@ function resolve(dep, parent) {
 	else
 		result = dep + ".js";
 
-	if ((path.extname(result) != '.ts') && (path.extname(result) != '.js') && (path.extname(result) != '.css'))
+	if ((path.extname(result) != '.ts') &&
+		 (path.extname(result) != '.js') &&
+		 (path.extname(result) != '.html') &&
+		 (path.extname(result) != '.css'))
 		result = result + ".ts";
 
 	//console.log("resolved " + parent + " -> " + result);
@@ -240,6 +244,14 @@ describe('Type Checker ES6', () => {
 	it('imports css', () => {
 		return typecheckAll([importCss])
 			.then((diags) => {
+				diags.should.have.length(0);
+			});
+	});
+
+	it('imports html', () => {
+		return typecheckAll([importHtml])
+			.then((diags) => {
+				formatErrors(diags, console);
 				diags.should.have.length(0);
 			});
 	});

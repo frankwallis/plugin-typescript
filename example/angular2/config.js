@@ -10,7 +10,6 @@ System.config({
     "experimentalDecorators": true
   },
   paths: {
-    "example-view": "./src/example-view.html",
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
   },

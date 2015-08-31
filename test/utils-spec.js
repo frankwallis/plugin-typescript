@@ -9,6 +9,7 @@ import {isJavaScript} from '../lib/utils';
 import {isSourceMap} from '../lib/utils';
 import {tsToJs} from '../lib/utils';
 import {tsToJsMap} from '../lib/utils';
+import {isHtml} from '../lib/utils';
 
 describe( 'Utils', () => {
 
@@ -117,6 +118,14 @@ describe( 'Utils', () => {
 			isSourceMap('a.map').should.be.true;
 			isSourceMap('a.jmap').should.be.false;
 			isSourceMap('a.mapj').should.be.false;
+		});
+	});
+
+	describe( 'isHtml', () => {
+		it('detects html files', () => {
+			isHtml('a.html').should.be.true;
+			isHtml('a.html.js').should.be.false;
+			isHtml('fixHtml').should.be.false;
 		});
 	});
 
