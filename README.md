@@ -83,11 +83,11 @@ A boolean flag which controls whether the files are type-checked or simply trans
 
 ## Type-checking over Multiple Packages ##
 
-The type-checker runs across multiple packages if the imported file resolves to a typescript file. This means that if you do ```import "mypackage/index"``` and that resolves to a typescript file then that import will be properly type-checked. You no longer have to handcraft an external declaration file for mypackage! 
+The type-checker runs across multiple packages if the imported file resolves to a typescript file. This means that if you do ```import "mypackage/index"``` and that resolves to a typescript file then that import will be properly type-checked. You no longer have to handcraft an external declaration file for 'mypackage'! 
 
 ## HTML Imports ##
 
-The type-checker automatically resolves any file with a .html extension to have a default export which is a string. This enables importing of html templates using plugin-text with full type-checking an no errors.
+The type-checker automatically resolves any file with a .html extension to have a default export which is a string. This enables importing of html templates using plugin-text with full type-checking and no errors.
 
 See the angular2 example project for a demonstration of both these features working.
 
