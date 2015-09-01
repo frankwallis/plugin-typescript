@@ -1,6 +1,6 @@
 /// <reference path="./_references.d.ts" />
 import {Component, Directive, View, NgModel} from 'angular2/angular2';
-import {ExampleService} from "example-service";
+import {ExampleService} from "example-service/index";
 import exampleTemplate from "./example-view.html";
 
 @Component({

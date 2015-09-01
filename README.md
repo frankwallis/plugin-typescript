@@ -10,7 +10,7 @@ A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you 
 
 For JSPM version 0.15 and below, use [plugin-typescript 1.0.x](https://github.com/frankwallis/plugin-typescript/tree/1.0). For any later versions use version 2.x.
 
-plugin-typescript uses version 1.7.0-dev.20150831 of the typescript compiler
+plugin-typescript uses version 1.7.0-dev.20150901 of the typescript compiler
 
 # Usage #
 
@@ -79,7 +79,19 @@ The default value is false (this is a breaking change from version 1.0), which m
 
 A boolean flag which controls whether the files are type-checked or simply transpiled. Type-checking does add some overhead to the build process as reference files need to be loaded and the compiler has more work to do.
 
-# Example Project #
+# Features #
+
+## Type-checking over Multiple Packages ##
+
+The type-checker runs across multiple packages if the imported file resolves to a typescript file. This means that if you do ```import "mypackage/index"``` and that resolves to a typescript file then that import will be properly type-checked. You no longer have to handcraft an external declaration file for mypackage! 
+
+## HTML Imports ##
+
+The type-checker automatically resolves any file with a .html extension to have a default export which is a string. This enables importing of html templates using plugin-text with full type-checking an no errors.
+
+See the angular2 example project for a demonstration of both these features working.
+
+# Example Projects #
 
 To setup the example project:
 ```

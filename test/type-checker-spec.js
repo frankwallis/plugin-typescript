@@ -20,6 +20,8 @@ let ambientReference2 = require.resolve('./fixtures-es6/ambients/module1/ambient
 let ambientReferenceDisabled = require.resolve('./fixtures-es6/ambients/ambient-reference-disabled.ts');
 let ambientImportJs = require.resolve('./fixtures-es6/ambients/ambient-import-js.ts');
 let ambientImportTs = require.resolve('./fixtures-es6/ambients/ambient-import-ts.ts');
+let ambientResolveTs = require.resolve('./fixtures-es6/ambients/ambient-resolve.ts');
+let ambientResolvedTs = require.resolve('./fixtures-es6/ambients/resolved/ambient.ts');
 let ambientDuplicate = require.resolve('./fixtures-es6/ambients/ambient-duplicate.ts');
 let ambientRequires = require.resolve('./fixtures-es6/ambients/ambient-requires.ts');
 let refImport = require.resolve('./fixtures-es6/program1/ref-import.ts');
@@ -47,7 +49,9 @@ function resolve(dep, parent) {
 	else if (dep[0] == '.')
 		result = path.join(path.dirname(parent), dep);
 	else if (dep == "ambient")
-		result = require.resolve("./fixtures-es6/ambients/resolved/" + dep + ".ts");
+		result = require.resolve("./fixtures-es6/ambients/resolved/" + dep + ".js");
+	else if (dep == "ambient/ambient")
+		result = require.resolve("./fixtures-es6/ambients/resolved/ambient.ts");
 	else if (path.dirname(dep) == "ambient")
 		result = require.resolve("./fixtures-es6/ambients/resolved/" + dep.slice(8));
 	else if (dep.indexOf("typescript/") == 0)
@@ -211,6 +215,14 @@ describe('Type Checker ES6', () => {
 		typeChecker = new TypeChecker(host, resolve, fetch);
 		return typecheckAll([ambientImportTs])
 			.then((diags) => {
+				diags.should.have.length(0);
+			});
+	});
+
+	it('resolves ambient typescript imports', () => {
+		return typecheckAll([ambientResolveTs, ambientResolvedTs])
+			.then((diags) => {
+				formatErrors(diags, console);
 				diags.should.have.length(0);
 			});
 	});

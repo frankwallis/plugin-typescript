@@ -1,5 +1,4 @@
-/// <reference path="./ambient.d.ts" />
-class Jarre implements IAmbient {
+class Jarre {
    hum() {
       console.log("mmmMmmmMMmm")
    }
