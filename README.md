@@ -10,7 +10,7 @@ A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you 
 
 For JSPM version 0.15 and below, use [plugin-typescript 1.0.x](https://github.com/frankwallis/plugin-typescript/tree/1.0). For any later versions use version 2.x.
 
-plugin-typescript uses version 1.7.0-dev.20150901 of the typescript compiler
+plugin-typescript uses version 1.6.0-beta of the typescript compiler
 
 # Usage #
 
@@ -48,11 +48,13 @@ Configuration settings can be passed to the compiler via "typescriptOptions":
 System.config({
   "baseURL": ".",
   "paths": {
-    "*": "*.js",
-    "github:*": "jspm_packages/github/*.js"
+    "github:*": "jspm_packages/github/*",
+    "npm:*": "jspm_packages/npm/*"
   },
   typescriptOptions: {
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "typeCheck": true,
+    "resolveAmbientRefs": true
   }
 });
 ```
@@ -108,6 +110,10 @@ gulp example
 To bundle the example project:
 ```
 gulp bundle
+```
+or
+```
+jspm bundle-sfx src build/build.js
 ```
 
 To watch the example project and continuously report on type-errors:
