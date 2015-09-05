@@ -8,7 +8,7 @@ gulp.task('example', function(cb) {
 	var open = require('open');
 	var server = hs.createServer({"root": "./"});
 	server.listen(8080);
-	open("http://127.0.0.1:8080"); // safari's not working :(
+	open("http://127.0.0.1:8080");
 	cb();
 });
 
@@ -44,7 +44,7 @@ gulp.task('check', function(cb) {
 
 	builder.loadConfig("config.js")
 		.then(function() {
-			return builder.buildSFX("app"); // build in-memory
+			return builder.buildSFX("src"); // build in-memory
 		})
 		.then(function() {
 			cb();

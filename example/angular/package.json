@@ -6,7 +6,8 @@
     },
     "devDependencies": {
       "css": "systemjs/plugin-css@0.1.10",
-      "ts": "frankwallis/plugin-typescript@^2.0.12"
+      "ts": "frankwallis/plugin-typescript@^2.0.12",
+      "typescript": "npm:typescript@1.6.0-beta"
     }
   }
 }
