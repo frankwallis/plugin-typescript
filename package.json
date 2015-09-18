@@ -1,6 +1,6 @@
 {
   "name": "plugin-typescript",
-  "version": "2.0.12",
+  "version": "2.0.14",
   "description": "TypeScript loader for SystemJS",
   "main": "lib/plugin.js",
   "homepage": "https://github.com/frankwallis/plugin-typescript",
@@ -35,7 +35,7 @@
     "open": "0.0.5",
     "should": "^7.0.1",
     "systemjs-builder": "^0.13.0",
-    "typescript": "^1.6.0-beta"
+    "typescript": "^1.6.2"
   },
   "scripts": {
     "test": "mocha --compilers js:babel/register"
@@ -48,7 +48,7 @@
     "registry": "github",
     "name": "frankwallis/plugin-typescript",
     "dependencies": {
-      "typescript": "npm:typescript@1.6.0-beta"
+      "typescript": "npm:typescript@^1.6.2"
     },
     "directories": {
       "lib": "lib"
