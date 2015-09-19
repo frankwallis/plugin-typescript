@@ -1,6 +1,6 @@
 {
   "name": "plugin-typescript",
-  "version": "2.0.16",
+  "version": "2.0.17",
   "description": "TypeScript loader for SystemJS",
   "main": "lib/plugin.js",
   "homepage": "https://github.com/frankwallis/plugin-typescript",
@@ -30,7 +30,7 @@
     "bluebird": "^2.9.8",
     "gulp": "^3.8.10",
     "http-server": "^0.8.0",
-    "jspm": "^0.16.2",
+    "jspm": "^0.16.4",
     "mocha": "^2.2.5",
     "open": "0.0.5",
     "should": "^7.0.1",
