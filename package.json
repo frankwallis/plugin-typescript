@@ -30,11 +30,11 @@
     "bluebird": "^2.9.8",
     "gulp": "^3.8.10",
     "http-server": "^0.8.0",
-    "jspm": "^0.16.0",
+    "jspm": "0.16.2",
     "mocha": "^2.2.5",
     "open": "0.0.5",
     "should": "^7.0.1",
-    "systemjs-builder": "^0.13.0",
+    "systemjs-builder": "0.13.5",
     "typescript": "^1.6.2"
   },
   "scripts": {
