@@ -22,7 +22,7 @@ gulp.task('bundle', function(cb) {
 
 	builder.loadConfig("./config.js")
 		.then(function() {
-			return builder.buildSFX("traceur-runtime + src", "build/build.js", { runtime: true });
+			return builder.buildStatic("traceur-runtime + src", "build/build.js", { runtime: true });
 		})
 		.then(function() {
 			console.log('Build complete, go to http://127.0.0.1:8080/index-bundle.html');
@@ -44,7 +44,7 @@ gulp.task('check', function(cb) {
 
 	builder.loadConfig("config.js")
 		.then(function() {
-			return builder.buildSFX("src"); // build in-memory
+			return builder.bundle("src"); // build in-memory
 		})
 		.then(function() {
 			cb();
