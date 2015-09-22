@@ -2,7 +2,7 @@
   "jspm": {
     "registry": "github",
     "dependencies": {
-      "angular2": "npm:angular2@2.0.0-alpha.35",
+      "angular2": "npm:angular2@^2.0.0-alpha.37",
       "example-service": "frankwallis/example-service@master",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0",
       "zone": "npm:zone.js@^0.5.3"
