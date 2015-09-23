@@ -95,19 +95,19 @@ See the angular2 example project for a demonstration of both these features work
 
 # Example Projects #
 
-To setup the example project:
+To setup each example project:
 ```
 npm install
-cd example
+cd example/angular2 or react or angular
 jspm install
 ```
 
-To run the example project, compiling in the browser:
+To run each example project, compiling in the browser:
 ```
 gulp example
 ```
 
-To bundle the example project:
+To bundle each example project:
 ```
 gulp bundle
 ```
@@ -116,7 +116,7 @@ or
 jspm bundle-sfx src build/build.js
 ```
 
-To watch the example project and continuously report on type-errors:
+To watch each example project and continuously report on type-errors:
 ```
 gulp flow
 ```
