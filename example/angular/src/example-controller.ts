@@ -1,5 +1,3 @@
-/// <reference path="./_references.d.ts" />
-
 export class ExampleController {
 
 	public static $inject = ['exampleService'];

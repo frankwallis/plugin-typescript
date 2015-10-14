@@ -1,4 +1,3 @@
-/// <reference path="./_references.d.ts" />
 import {module} from "angular";
 import "./index.css";
 

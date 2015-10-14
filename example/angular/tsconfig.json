@@ -1,0 +1,8 @@
+{
+	"compilerOptions": {
+		"noImplicitAny": true
+	},
+	"files": [
+		"./src/_references.d.ts"
+	]
+}

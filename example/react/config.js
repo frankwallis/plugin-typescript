@@ -5,7 +5,7 @@ System.config({
   typescriptOptions: {
     "noImplicitAny": false,
     "typeCheck": true,
-    "jsx": "react"
+    "tsconfig": true
   },
   paths: {
     "github:*": "jspm_packages/github/*",
@@ -29,4 +29,4 @@ System.config({
       }
     }
   }
- });
+});
