@@ -59,5 +59,5 @@ gulp.task('check', function(cb) {
 	Run a continuous type-checker ovr the example project
 */
 gulp.task('flow', ['check'], function(cb) {
-	gulp.watch(["./src/**/*.ts"], ['check']);
+	gulp.watch(["./src/**/*.ts", "./src/**/*.tsx"], ['check']);
 });
