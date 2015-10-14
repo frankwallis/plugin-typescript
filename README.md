@@ -53,13 +53,26 @@ System.config({
   },
   typescriptOptions: {
     "noImplicitAny": true,
-    "typeCheck": true,
+    "typeCheck": true,				// also accepts "strict"
+    "tsconfig": true,				// also accepts a path
     "resolveAmbientRefs": true
   }
 });
 ```
 
 All the usual TypeScript compiler options are supported, as well as these additional ones:
+
+## typeCheck ##
+
+A boolean flag which controls whether the files are type-checked or simply transpiled. Type-checking does add some overhead to the build process as reference files need to be loaded and the compiler has more work to do. 
+
+By default compiler errors are written to the console but the build is allowed to continue. To change this behaviour you can use ```typeCheck: "strict"``` in which case the build will be failed when compiler errors are encountered.
+
+## tsconfig ##
+
+A boolean flag which instructs the plugin to load configuration from "tsconfig.json". To override the location of the file set this option to the path of the configuration file, which will be resolved using normal SystemJS resolution.
+
+Compiler options which do not conflict with those required by plugin-typescript will be loaded from the ```compilerOptions``` section of the file. Any declaration files contained in the ```files``` array will also be loaded if type-checking is enabled.
 
 ## resolveAmbientRefs ##
 
@@ -76,10 +89,6 @@ will resolve to ```jspm_packages/github/frankwallis/common@1.0.0/angular.d.ts```
 
 This can be extremely useful when compiling over multiple projects as all the projects can easily reference declaration files from their dependencies, and they will be automatically updated with new versions etc. 
 The default value is false (this is a breaking change from version 1.0), which means that both of the above references will resolve relative to the current file.
-
-## typeCheck ##
-
-A boolean flag which controls whether the files are type-checked or simply transpiled. Type-checking does add some overhead to the build process as reference files need to be loaded and the compiler has more work to do.
 
 # Features #
 
