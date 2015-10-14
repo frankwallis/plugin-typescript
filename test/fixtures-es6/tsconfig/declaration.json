@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"noImplicitAny": false
+	},
+	"files": [
+		"./theirmodule.d.ts",
+		"./module.ts"
+	]
+}

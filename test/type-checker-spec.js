@@ -76,6 +76,7 @@ describe('Type Checker ES6', () => {
 
 	function typecheckAll(filelist) {
 		let fileChecks = [];
+		typeChecker.registerDeclarationFile(require.resolve(host.getDefaultLibFileName()), true);
 
 		/* read the files and feed them into the type-checker */
 		filelist.forEach((filename) => {

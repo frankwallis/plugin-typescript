@@ -1,12 +1,16 @@
 import fs from 'fs';
+import path from 'path';
 import should from 'should';
 import Promise from 'bluebird';
 import ts from 'typescript';
 
 import {createFactory} from '../lib/factory';
+import {formatErrors} from '../lib/format-errors';
 
 let defaultFile = require.resolve('./fixtures-es6/tsconfig/default.json');
 let alternateFile = require.resolve('./fixtures-es6/tsconfig/alternate.json');
+let declarationFile = require.resolve('./fixtures-es6/tsconfig/declaration.json');
+let theirModuleFile = require.resolve('./fixtures-es6/tsconfig/theirmodule.d.ts');
 let filelist = [];
 
 function fetch(filename) {
@@ -17,10 +21,16 @@ function fetch(filename) {
 }
 
 function resolve(dep, parent) {
-	let result = dep;
+	let result = undefined;
 
 	if (dep === "tsconfig.json")
 		result = defaultFile;
+	else if (dep[0] === ".")
+		result = require.resolve('./' + path.join('./fixtures-es6/tsconfig', dep));
+	else if (dep.indexOf(".") < 0)
+		return dep + '.js';
+	else
+		result = require.resolve(dep);
 
 	//console.log("resolved " + parent + " -> " + dep + " = " + result);
 	return Promise.resolve(result);
@@ -94,9 +104,35 @@ describe( 'Factory', () => {
 		let factory = createFactory(config, resolve, fetch);
 		return factory.then(({transpiler, typeChecker}) => {
 			transpiler.should.be.defined;
-			transpiler.should.be.false;
+			typeChecker.should.be.false;
 			filelist.should.have.length(1);
 			filelist[0].should.be.equal(alternateFile);
+		});
+	});
+
+	it('adds declaration files into type-checker', () => {
+		let config = {
+			tsconfig: declarationFile,
+			typeCheck: true
+		};
+		let factory = createFactory(config, resolve, fetch);
+		return factory.then(({transpiler, typeChecker}) => {
+			transpiler.should.be.defined;
+			typeChecker.should.be.defined;
+
+			let filename = "mymodule.ts";
+			let text = "import {theirvariable} from 'theirmodule'; if (theirvariable == 20) throw new Error('help!');";
+
+			typeChecker._host.addFile(filename, text);
+			return typeChecker.check(filename, text)
+				.then(diags => {
+					formatErrors(diags, console);
+
+					diags.should.have.length(0);
+					filelist.should.have.length(3);
+					filelist[0].should.be.equal(declarationFile);
+					filelist[2].should.be.equal(theirModuleFile);
+				});
 		});
 	});
 });
