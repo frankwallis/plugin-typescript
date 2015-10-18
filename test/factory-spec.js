@@ -1,11 +1,13 @@
 import fs from 'fs';
 import path from 'path';
-import should from 'should';
+import chai from 'chai';
 import Promise from 'bluebird';
 import ts from 'typescript';
 
 import {createFactory} from '../lib/factory';
 import {formatErrors} from '../lib/format-errors';
+
+let should = chai.should();
 
 let defaultFile = require.resolve('./fixtures-es6/tsconfig/default.json');
 let alternateFile = require.resolve('./fixtures-es6/tsconfig/alternate.json');
@@ -59,7 +61,7 @@ describe( 'Factory', () => {
 		let factory = createFactory(config, resolve, fetch);
 		return factory.then(({transpiler, typeChecker}) => {
 			transpiler.should.be.defined;
-			typeChecker.should.not.be.true;
+			typeChecker.should.be.defined;
 		});
 	});
 
@@ -70,7 +72,7 @@ describe( 'Factory', () => {
 		let factory = createFactory(config, resolve, fetch);
 		return factory.then(({transpiler, typeChecker}) => {
 			transpiler.should.be.defined;
-			transpiler.should.be.false;
+			typeChecker.should.be.false;
 			filelist.should.have.length(1);
 			filelist[0].should.be.equal(defaultFile);
 		});

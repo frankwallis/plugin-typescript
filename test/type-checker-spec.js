@@ -1,11 +1,13 @@
 import fs from 'fs';
 import path from 'path';
-import should from 'should';
+import chai from 'chai';
 import Promise from 'bluebird';
 
 import {TypeChecker} from '../lib/type-checker';
 import {CompilerHost} from '../lib/compiler-host';
 import {formatErrors} from '../lib/format-errors';
+
+let should = chai.should();
 
 let missingFile = '/somefolder/fixtures-es6/program1/missing-file.ts';
 let missingImport = require.resolve('./fixtures-es6/program1/missing-import.ts');

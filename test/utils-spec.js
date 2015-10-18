@@ -1,4 +1,4 @@
-import should from 'should';
+import chai from 'chai';
 
 import {isRelative} from '../lib/utils';
 import {isAbsolute} from '../lib/utils';
@@ -10,6 +10,8 @@ import {isSourceMap} from '../lib/utils';
 import {tsToJs} from '../lib/utils';
 import {tsToJsMap} from '../lib/utils';
 import {isHtml} from '../lib/utils';
+
+let should = chai.should();
 
 describe( 'Utils', () => {
 

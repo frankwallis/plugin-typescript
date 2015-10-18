@@ -1,7 +1,9 @@
-import should from 'should';
+import chai from 'chai';
 import ts from 'typescript';
 
 import {CompilerHost} from '../lib/compiler-host';
+
+let should = chai.should();
 
 describe( 'Compiler Host', () => {
 

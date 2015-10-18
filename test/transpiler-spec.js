@@ -1,9 +1,11 @@
 import fs from 'fs';
-import should from 'should';
+import chai from 'chai';
 
 import {CompilerHost} from '../lib/compiler-host';
 import {Transpiler} from '../lib/transpiler';
 import {formatErrors} from '../lib/format-errors';
+
+let should = chai.should();
 
 let oneImport = fs.readFileSync(require.resolve('./fixtures-es6/program1/one-import.ts'), 'utf8');
 let es6Symbol = fs.readFileSync(require.resolve('./fixtures-es6/program1/symbol.ts'), 'utf8');
@@ -30,7 +32,7 @@ describe('Transpiler ES6', () => {
 
 		it('removes SourceMappingURL', () => {
 			let output = transpiler.transpile('one-import.ts', oneImport);
-			output.js.should.not.containEql("SourceMappingURL");
+			output.js.should.not.contain("SourceMappingURL");
 		});
 
 		it('returns sourceMap', () => {
