@@ -15,7 +15,7 @@ System.config({
   packages: {
     "src": {
       "main": "index.tsx",
-      "defaultExtension": "ts",
+      "defaultExtension": "tsx",
       "meta": {
         "*.ts": {
           "loader": "ts"

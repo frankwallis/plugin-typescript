@@ -1,5 +1,10 @@
 {
 	"compilerOptions": {
-		"jsx": "react"
-	}
+		"jsx": "react",
+		"target": "es6"
+	},
+	"files": [
+		"./src/_references.d.ts",
+		"./src/index.tsx"
+	]
 }

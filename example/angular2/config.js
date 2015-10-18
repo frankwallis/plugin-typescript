@@ -5,9 +5,7 @@ System.config({
   typescriptOptions: {
     "noImplicitAny": false,
     "typeCheck": true,
-    "resolveAmbientRefs": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "resolveAmbientRefs": true
   },
   paths: {
     "github:*": "jspm_packages/github/*",

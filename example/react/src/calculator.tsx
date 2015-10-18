@@ -1,5 +1,3 @@
-/// <reference path="./_references.d.ts" />
-
 import * as React from 'react';
 import {CalculatorStore} from "./calculator-store";
 
