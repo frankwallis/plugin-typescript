@@ -38,7 +38,7 @@ System.config({
 ```
 
 This will tell SystemJS to load all '.ts' files through plugin-typescript.
-See the example project contained within this repository for a working setup.
+See the example projects contained within this repository for a working setup.
 
 # Configuration #
 
