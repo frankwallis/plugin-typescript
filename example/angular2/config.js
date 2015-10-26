@@ -5,6 +5,7 @@ System.config({
   typescriptOptions: {
     "noImplicitAny": false,
     "typeCheck": true,
+    "tsconfig": true,
     "resolveAmbientRefs": true
   },
   paths: {
