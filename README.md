@@ -54,8 +54,7 @@ System.config({
   typescriptOptions: {
     "noImplicitAny": true,
     "typeCheck": true,				// also accepts "strict"
-    "tsconfig": true,				// also accepts a path
-    "resolveAmbientRefs": true
+    "tsconfig": true					// also accepts a path
   }
 });
 ```
@@ -90,41 +89,37 @@ will resolve to ```jspm_packages/github/frankwallis/common@1.0.0/angular.d.ts```
 This can be extremely useful when compiling over multiple projects as all the projects can easily reference declaration files from their dependencies, and they will be automatically updated with new versions etc. 
 The default value is false (this is a breaking change from version 1.0), which means that both of the above references will resolve relative to the current file.
 
+See the angular2 example project for an example of this feature working.
+
 # Features #
 
 ## Type-checking over Multiple Packages ##
 
 The type-checker runs across multiple packages if the imported file resolves to a typescript file. This means that if you do ```import "mypackage/index"``` and that resolves to a typescript file then that import will be properly type-checked. You no longer have to handcraft an external declaration file for 'mypackage'! 
 
+See the angular2 example project for an example of this feature working.
+
 ## HTML Imports ##
 
 The type-checker automatically resolves any file with a .html extension to have a default export which is a string. This enables importing of html templates using plugin-text with full type-checking and no errors.
 
-See the angular2 example project for a demonstration of both these features working.
+See the angular2 example project for an example of this feature working.
 
 # Example Projects #
 
-To setup each example project:
+To run the example projects:
 ```
-npm install
-cd example/angular2 or react or angular
-jspm install
+> git clone https://github.com/frankwallis/plugin-typescript.git
+> cd plugin-typescript
+> npm install
+> cd example/angular  		// or example/angular2 or example/react
+> jspm install
+> gulp example
 ```
-
-To run each example project, compiling in the browser:
-```
-gulp example
-```
-
 To bundle each example project:
 ```
-gulp bundle
+gulp bundle 					// or jspm bundle-sfx src build/build.js
 ```
-or
-```
-jspm bundle-sfx src build/build.js
-```
-
 To watch each example project and continuously report on type-errors:
 ```
 gulp flow
