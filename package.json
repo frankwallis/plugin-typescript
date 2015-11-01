@@ -35,21 +35,21 @@
     "http-server": "^0.8.0",
     "jspm": "^0.16.4",
     "mocha": "^2.2.5",
-    "open": "0.0.5",
-    "systemjs-builder": "^0.14.2"
+    "open": "0.0.5"
   },
   "scripts": {
+  	 "build": "tsc",
     "test": "mocha --compilers js:babel/register ./test/*.js"
   },
   "bin": {},
   "license": "MIT",
   "jspm": {
-    "format": "commonjs",
+    "format": "cjs",
     "main": "plugin",
     "registry": "github",
     "name": "frankwallis/plugin-typescript",
     "dependencies": {
-      "typescript": "npm:typescript@^1.6.2"
+	   "typescript": "npm:typescript@1.8.0-dev.20151101"
     },
     "directories": {
       "lib": "lib"
