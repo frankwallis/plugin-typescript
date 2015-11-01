@@ -1,7 +1,6 @@
 /// <reference path="./_references.d.ts" />
 
-// these should probably be shimmed in jspm registry
-import "zone";
+// this should probably be shimmed in jspm registry
 import "reflect-metadata";
 
 import {bootstrap} from 'angular2/angular2';
