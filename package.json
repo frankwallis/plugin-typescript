@@ -1,6 +1,6 @@
 {
   "name": "plugin-typescript",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "TypeScript loader for SystemJS",
   "main": "lib/plugin.js",
   "homepage": "https://github.com/frankwallis/plugin-typescript",
