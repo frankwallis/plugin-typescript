@@ -4,7 +4,10 @@
 		"outDir": "lib",
 		"target": "es5",
 		"noLib": true,
-		"removeComments": true
+		"removeComments": true,
+		"moduleResolution": "node",
+		"inlineSourceMap": true,
+		"inlineSources": true
 	},
 	"files": [
 		"./node_modules/typescript/lib/lib.es6.d.ts",

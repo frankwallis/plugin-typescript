@@ -25,7 +25,9 @@ function fetch(filename) {
 function resolve(dep, parent) {
 	let result = undefined;
 
-	if (dep === "tsconfig.json")
+	if (dep === "ts")
+		result = __filename;
+	else if (dep === "tsconfig.json")
 		result = defaultFile;
 	else if (dep[0] === ".")
 		result = require.resolve('./' + path.join('./fixtures-es6/tsconfig', dep));

@@ -1,7 +1,7 @@
 /* */
 import * as ts from 'typescript';
 import Logger from './logger';
-import {CompilerHost} from './compiler-host';
+import {CompilerHost, CombinedOptions} from './compiler-host';
 import {formatErrors} from './format-errors';
 import {isTypescript, isTypescriptDeclaration, isAmbient} from "./utils";
 import {__HTML_MODULE__} from "./compiler-host";
@@ -22,7 +22,7 @@ export class TypeChecker {
 	private _host: CompilerHost;
 	private _resolve: ResolveFunction;
 	private _fetch: FetchFunction;
-   private _options: any;
+   private _options: CombinedOptions;
 	private _files: Map<string, FileEntry>;
 	private _declarationFiles: FileEntry[];
 
@@ -36,7 +36,6 @@ export class TypeChecker {
 		this._options.sourceMap = false;
 		this._options.declaration = false;
 		this._options.isolatedModules = false;
-		this._options.noLibCheck = true;
 
 		// map of all typescript files -> file-entry
 		this._files = new Map<string, FileEntry>();

@@ -1,7 +1,7 @@
 System.config({
   baseURL: ".",
   defaultJSExtensions: true,
-  transpiler: "typescript",
+  transpiler: "none",
   typescriptOptions: {
     "noImplicitAny": false,
     "typeCheck": true,
@@ -19,6 +19,9 @@ System.config({
       "defaultExtension": "ts",
       "meta": {
         "*.ts": {
+          "loader": "ts"
+        },
+        "*.js": {
           "loader": "ts"
         },
         "*.css": {

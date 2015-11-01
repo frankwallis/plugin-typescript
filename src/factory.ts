@@ -15,7 +15,7 @@ interface FactoryOutput {
 	 typeChecker: TypeChecker;
 }
 
-export function createFactory(options: TypeScriptOptions, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<FactoryOutput> {
+export function createFactory(options: PluginOptions, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<FactoryOutput> {
 	options = options || {};
 
 	if (options.tsconfig) {
@@ -29,8 +29,8 @@ export function createFactory(options: TypeScriptOptions, _resolve: ResolveFunct
 					});
 			})
 			.then(({tsconfigAddress, tsconfigText}) => {
-				//let result = ts.parseConfigFileText ? ts.parseConfigFileText(tsconfigAddress, tsconfigText) : ts.parseConfigFileTextToJson(tsconfigAddress, tsconfigText);
-				let result = ts.parseConfigFileTextToJson(tsconfigAddress, tsconfigText);
+				let ts1 = ts as any;
+				let result = ts1.parseConfigFileText ? ts1.parseConfigFileText(tsconfigAddress, tsconfigText) : ts1.parseConfigFileTextToJson(tsconfigAddress, tsconfigText);
 
 				if (result.error) {
 					formatErrors([result.error], logger);
@@ -61,7 +61,7 @@ export function createFactory(options: TypeScriptOptions, _resolve: ResolveFunct
 	}
 }
 
-function createServices(config: TypeScriptOptions, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<FactoryOutput> {
+function createServices(config: PluginOptions, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<FactoryOutput> {
 	let host = new CompilerHost(config);
 	let transpiler = new Transpiler(host);
 	let typeChecker = undefined;
@@ -69,11 +69,14 @@ function createServices(config: TypeScriptOptions, _resolve: ResolveFunction, _f
 	if (config.typeCheck) {
 		typeChecker = new TypeChecker(host, _resolve, _fetch);
 
-		return _resolve(host.getDefaultLibFileName())
-			.then(defaultLibAddress => {
-				typeChecker.registerDeclarationFile(defaultLibAddress, true);
-				return {transpiler, typeChecker, host};
-			});
+		return _resolve('ts', '')
+				.then(moduleName => {
+					 return _resolve(host.getDefaultLibFileName(), moduleName)
+				})
+				.then(defaultLibAddress => {
+					typeChecker.registerDeclarationFile(defaultLibAddress, true);
+					return {transpiler, typeChecker, host};
+				});
 	}
 	else {
 		return Promise.resolve({transpiler, typeChecker, host});

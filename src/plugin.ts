@@ -52,8 +52,6 @@ function wrapSource(source: string, load: Module): string {
  * called by the type-checker when it needs to resolve a file
  */
 function _resolve(dep: string, parent: string): Promise<string> {
-	if (!parent) parent = __filename;
-
 	return System.normalize(dep, parent)
 		.then(normalized => {
 			if (normalized.slice(-6) == '.ts.js')

@@ -6,12 +6,14 @@ import {isHtml} from './utils';
 let logger = new Logger({ debug: false });
 export let __HTML_MODULE__ = "__html_module__";
 
+export interface CombinedOptions extends PluginOptions, ts.CompilerOptions { };
+
 export class CompilerHost implements ts.CompilerHost {
 	private _options: any;
 	private _files: Map<string, ts.SourceFile>;
 	private _fileResMaps: Map<string, any>;
 
-	constructor(options) {
+	constructor(options: any) {
 		this._options = options || {};
 		this._options.module = this.getEnum(this._options.module, ts.ModuleKind, ts.ModuleKind.System);
 		this._options.target = this.getEnum(this._options.target, ts.ScriptTarget, ts.ScriptTarget.ES5);
@@ -45,7 +47,7 @@ export class CompilerHost implements ts.CompilerHost {
 		throw new Error(`Unrecognised value [${enumValue}]`);
 	}
 
-	public get options() {
+	public get options(): CombinedOptions {
 		return this._options;
 	}
 

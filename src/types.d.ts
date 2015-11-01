@@ -14,7 +14,6 @@ interface SystemJS {
 
 declare var System: SystemJS;
 declare var __moduleName: string;
-declare var __filename: string;
 
 interface ResolveFunction {
 	(dep: string, parent?: string): Promise<string>;
@@ -24,7 +23,7 @@ interface FetchFunction {
 	(address: string): Promise<string>;
 }
 
-interface TypeScriptOptions {
+interface PluginOptions {
 	tsconfig?: boolean | string;
 	typeCheck?: boolean | string;
 	resolveAmbientRefs?: boolean;

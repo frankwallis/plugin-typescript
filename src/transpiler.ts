@@ -1,6 +1,6 @@
 /* */
 import * as ts from 'typescript';
-import {CompilerHost} from './compiler-host';
+import {CompilerHost, CombinedOptions} from './compiler-host';
 import Logger from './logger';
 import {isJavaScript, isSourceMap} from "./utils";
 
@@ -15,7 +15,7 @@ interface TranspileResult {
 
 export class Transpiler {
 	private _host: CompilerHost;
-	private _options: any;
+	private _options: CombinedOptions;
 
 	constructor(host: CompilerHost) {
 		this._host = host;
