@@ -1,5 +1,5 @@
 import fs from 'fs';
-import chai from 'chai';
+import * as chai from 'chai';
 
 import {CompilerHost} from '../lib/compiler-host';
 import {Transpiler} from '../lib/transpiler';

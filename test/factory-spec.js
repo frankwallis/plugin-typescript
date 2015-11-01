@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import chai from 'chai';
 import Promise from 'bluebird';
-import ts from 'typescript';
+import * as chai from 'chai';
+import * as ts from 'typescript';
 
 import {createFactory} from '../lib/factory';
 import {formatErrors} from '../lib/format-errors';
@@ -49,7 +49,7 @@ describe( 'Factory', () => {
 		let factory = createFactory(config, resolve, fetch);
 		return factory.then(({transpiler, typeChecker}) => {
 			transpiler.should.be.defined;
-			typeChecker.should.be.false;
+			should.not.exist(typeChecker);
 			filelist.should.have.length(0);
 		});
 	});
@@ -72,7 +72,7 @@ describe( 'Factory', () => {
 		let factory = createFactory(config, resolve, fetch);
 		return factory.then(({transpiler, typeChecker}) => {
 			transpiler.should.be.defined;
-			typeChecker.should.be.false;
+			should.not.exist(typeChecker);
 			filelist.should.have.length(1);
 			filelist[0].should.be.equal(defaultFile);
 		});
@@ -106,7 +106,7 @@ describe( 'Factory', () => {
 		let factory = createFactory(config, resolve, fetch);
 		return factory.then(({transpiler, typeChecker}) => {
 			transpiler.should.be.defined;
-			typeChecker.should.be.false;
+			should.not.exist(typeChecker);
 			filelist.should.have.length(1);
 			filelist[0].should.be.equal(alternateFile);
 		});

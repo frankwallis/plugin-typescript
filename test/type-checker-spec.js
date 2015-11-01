@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import chai from 'chai';
+import * as chai from 'chai';
 import Promise from 'bluebird';
 
 import {TypeChecker} from '../lib/type-checker';

@@ -1,15 +1,17 @@
-import chai from 'chai';
+import * as chai from 'chai';
 
-import {isRelative} from '../lib/utils';
-import {isAbsolute} from '../lib/utils';
-import {isAmbientImport} from '../lib/utils';
-import {isTypescript} from '../lib/utils';
-import {isTypescriptDeclaration} from '../lib/utils';
-import {isJavaScript} from '../lib/utils';
-import {isSourceMap} from '../lib/utils';
-import {tsToJs} from '../lib/utils';
-import {tsToJsMap} from '../lib/utils';
-import {isHtml} from '../lib/utils';
+import {
+	isRelative,
+	isAbsolute,
+	isAmbientImport,
+	isTypescript,
+	isTypescriptDeclaration,
+	isJavaScript,
+	isSourceMap,
+	tsToJs,
+	tsToJsMap,
+	isHtml
+} from '../lib/utils';
 
 let should = chai.should();
 

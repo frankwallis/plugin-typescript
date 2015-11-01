@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"outDir": "lib",
+		"target": "es6"
+	},
+	"files": [
+		"./src/plugin.ts",
+		"./src/type-checker.ts",
+		"./src/transpiler.ts",
+		"./src/compiler-host.ts",
+		"./src/factory.ts",
+		"./src/format-errors.ts",
+		"./src/logger.ts",
+		"./src/utils.ts",
+		"./src/types.d.ts",
+		"./typings/tsd.d.ts"
+	]
+}

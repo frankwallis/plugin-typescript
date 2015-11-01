@@ -1,5 +1,5 @@
-import chai from 'chai';
-import ts from 'typescript';
+import * as chai from 'chai';
+import * as ts from 'typescript';
 
 import {CompilerHost} from '../lib/compiler-host';
 
