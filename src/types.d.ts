@@ -14,6 +14,7 @@ interface SystemJS {
 
 declare var System: SystemJS;
 declare var __moduleName: string;
+declare var __filename: string;
 
 interface ResolveFunction {
 	(dep: string, parent?: string): Promise<string>;

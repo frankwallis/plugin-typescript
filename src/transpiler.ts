@@ -14,10 +14,10 @@ interface TranspileResult {
 }
 
 export class Transpiler {
-    private _host: CompilerHost;
-    private _options: any;
+	private _host: CompilerHost;
+	private _options: any;
 
-    constructor(host: CompilerHost) {
+	constructor(host: CompilerHost) {
 		this._host = host;
 
 		this._options = Object.assign(this._host.options);

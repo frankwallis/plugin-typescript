@@ -46,7 +46,6 @@ export class TypeChecker {
 	}
 
 	/*
-		public entry point
 		returns a promise to an array of typescript errors for this file
 	*/
 	public check(sourceName: string, source: string) {
@@ -55,11 +54,16 @@ export class TypeChecker {
 		return file.errors;
 	}
 
+	/*
+		register declaration files from config
+	*/
 	public registerDeclarationFile(sourceName: string, isDefaultLib: boolean) {
 		let file = this.registerFile(sourceName, isDefaultLib);
 		this._declarationFiles.push(file);
 		return file;
 	}
+
+	/* private */
 
 	private registerFile(sourceName: string, isDefaultLib: boolean = false) {
 		if (!this._files[sourceName]) {

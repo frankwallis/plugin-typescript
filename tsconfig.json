@@ -2,9 +2,12 @@
 	"compilerOptions": {
 		"module": "commonjs",
 		"outDir": "lib",
-		"target": "es6"
+		"target": "es5",
+		"noLib": true,
+		"removeComments": true
 	},
 	"files": [
+		"./node_modules/typescript/lib/lib.es6.d.ts",
 		"./src/plugin.ts",
 		"./src/type-checker.ts",
 		"./src/transpiler.ts",
