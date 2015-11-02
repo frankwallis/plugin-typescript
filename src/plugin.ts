@@ -32,7 +32,7 @@ export function translate(load: Module): Promise<Module> {
 
 					if (host.options.typeCheck === "strict") {
 						if (diags.some(diag => diag.category === ts.DiagnosticCategory.Error))
-							new Error("TypeScript found type errors");
+							throw new Error("TypeScript found type errors");
 					}
 				});
 		}
@@ -45,6 +45,7 @@ export function translate(load: Module): Promise<Module> {
 }
 
 function wrapSource(source: string, load: Module): string {
+	// this should probably happen in systemjs
 	return '(function(__moduleName){' + source + '\n})("' + load.name + '");\n//# sourceURL=' + load.address + '!transpiled';
 }
 
@@ -52,6 +53,9 @@ function wrapSource(source: string, load: Module): string {
  * called by the type-checker when it needs to resolve a file
  */
 function _resolve(dep: string, parent: string): Promise<string> {
+	// TODO: __moduleName is not available without a built-in transpiler
+	//if (!parent) parent = __moduleName;
+
 	return System.normalize(dep, parent)
 		.then(normalized => {
 			if (normalized.slice(-6) == '.ts.js')

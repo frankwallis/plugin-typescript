@@ -29,8 +29,10 @@ export function createFactory(options: PluginOptions, _resolve: ResolveFunction,
 					});
 			})
 			.then(({tsconfigAddress, tsconfigText}) => {
-				let ts1 = ts as any;
-				let result = ts1.parseConfigFileText ? ts1.parseConfigFileText(tsconfigAddress, tsconfigText) : ts1.parseConfigFileTextToJson(tsconfigAddress, tsconfigText);
+				let ts1 = ts as any; // support TS 1.6.2 and > 1.7
+				let result = ts1.parseConfigFileText ?
+					ts1.parseConfigFileText(tsconfigAddress, tsconfigText) :
+					ts1.parseConfigFileTextToJson(tsconfigAddress, tsconfigText);
 
 				if (result.error) {
 					formatErrors([result.error], logger);
@@ -69,6 +71,7 @@ function createServices(config: PluginOptions, _resolve: ResolveFunction, _fetch
 	if (config.typeCheck) {
 		typeChecker = new TypeChecker(host, _resolve, _fetch);
 
+		// TODO - remove this when __moduleName is available
 		return _resolve('ts', '')
 				.then(moduleName => {
 					 return _resolve(host.getDefaultLibFileName(), moduleName)

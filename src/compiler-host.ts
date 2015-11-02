@@ -94,7 +94,7 @@ export class CompilerHost implements ts.CompilerHost {
 		return this._files[filename];
 	}
 
-	public addResolutionMap(filename: string, map: any) {
+	public addResolutionMap(filename: string, map: Map<string, string>) {
 		this._fileResMaps[filename] = map;
 	}
 

@@ -25,17 +25,17 @@
     "url": "https://github.com/frankwallis/plugin-typescript.git"
   },
   "dependencies": {
-    "typescript": "1.8.0-dev.20151101"
   },
   "devDependencies": {
     "babel": "^5.8.29",
-    "bluebird": "^2.9.8",
+    "bluebird": "^3.0.5",
     "chai": "^3.3.0",
     "gulp": "^3.8.10",
     "http-server": "^0.8.0",
     "jspm": "^0.16.4",
     "mocha": "^2.2.5",
-    "open": "0.0.5"
+    "open": "0.0.5",
+    "typescript": "1.8.0-dev.20151101"
   },
   "scripts": {
   	 "build": "tsc",

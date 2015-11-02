@@ -20,7 +20,7 @@ export class Transpiler {
 	constructor(host: CompilerHost) {
 		this._host = host;
 
-		this._options = Object.assign(this._host.options);
+		this._options = Object.assign({}, this._host.options);
 		this._options.inlineSourceMap = false;
 		this._options.sourceMap = (this._options.sourceMap !== false);
 		this._options.declaration = false;
