@@ -62,6 +62,8 @@ function _resolve(dep: string, parent: string): Promise<string> {
 				normalized = normalized.slice(0, -3);
 			else if (normalized.slice(-8) == '.json.js')
 				normalized = normalized.slice(0, -3);
+			else if (normalized.slice(-8) == '.json.ts')
+				normalized = normalized.slice(0, -3);
 
 			logger.debug(`resolved ${normalized} (${parent} -> ${dep})`);
 			return normalized;

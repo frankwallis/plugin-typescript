@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"target": "es5"
+	},
+	"files": [
+		"./index.ts",
+		"./_references.d.ts"
+	]
+}

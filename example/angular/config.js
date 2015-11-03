@@ -5,7 +5,7 @@ System.config({
   typescriptOptions: {
     "noImplicitAny": false,
     "typeCheck": true,
-    "tsconfig": true
+    "tsconfig": "src/another-tsconfig.json"
   },
   paths: {
     "github:*": "jspm_packages/github/*",
