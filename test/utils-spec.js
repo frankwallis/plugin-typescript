@@ -10,7 +10,8 @@ import {
 	isSourceMap,
 	tsToJs,
 	tsToJsMap,
-	isHtml
+	isHtml,
+	stripDoubleExtension
 } from '../lib/utils';
 
 let should = chai.should();
@@ -148,6 +149,23 @@ describe( 'Utils', () => {
 		it('ignores source files', () => {
 			isTypescriptDeclaration('a.ts').should.be.false;
 			isTypescriptDeclaration('a.tsx').should.be.false;
+		});
+	});
+
+	describe( 'sanitizeFilename', () => {
+		it('strips double extension', () => {
+			let filename = stripDoubleExtension("a.js.ts");
+			filename.should.equal("a.js");
+		});
+
+		it('ignores non-extension', () => {
+			let filename = stripDoubleExtension("amodule.core.ts");
+			filename.should.equal("amodule.core.ts");
+		});
+
+		it('handles normal names', () => {
+			let filename = stripDoubleExtension("amodule.ts");
+			filename.should.equal("amodule.ts");
 		});
 	});
 

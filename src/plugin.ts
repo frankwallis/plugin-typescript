@@ -3,7 +3,7 @@ import * as ts from 'typescript';
 import Logger from './logger';
 import {createFactory} from './factory';
 import {formatErrors} from './format-errors';
-import {isTypescript} from './utils';
+import {isTypescript, stripDoubleExtension} from './utils';
 
 let logger = new Logger({ debug: false });
 let factory = createFactory(System.typescriptOptions, _resolve, _fetch);
@@ -58,12 +58,7 @@ function _resolve(dep: string, parent: string): Promise<string> {
 
 	return System.normalize(dep, parent)
 		.then(normalized => {
-			if (normalized.slice(-6) == '.ts.js')
-				normalized = normalized.slice(0, -3);
-			else if (normalized.slice(-8) == '.json.js')
-				normalized = normalized.slice(0, -3);
-			else if (normalized.slice(-8) == '.json.ts')
-				normalized = normalized.slice(0, -3);
+			normalized = stripDoubleExtension(normalized);
 
 			logger.debug(`resolved ${normalized} (${parent} -> ${dep})`);
 			return normalized;

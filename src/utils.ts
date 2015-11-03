@@ -51,3 +51,16 @@ export function tsToJs(tsFile: string) {
 export function tsToJsMap(tsFile: string) {
 	return tsFile.replace(typescriptRegex, '.js.map');
 }
+
+export function stripDoubleExtension(normalized: string) {
+	const parts = normalized.split('.');
+
+	if (parts.length > 1) {
+		const extensions = [ "js", "jsx", "ts", "tsx", "json" ];
+
+		if (extensions.indexOf(parts[parts.length -2]) >= 0) {
+			return parts.slice(0, -1).join('.');
+		}
+	}
+	return normalized;
+}
