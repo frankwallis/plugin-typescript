@@ -44,6 +44,8 @@ export function createFactory(options: PluginOptions, _resolve: ResolveFunction,
 
 				return createServices(config, _resolve, _fetch)
 					.then(services => {
+						if (!services.typeChecker) return services;
+
 						let resolutions = files
 							.filter(filename => isTypescriptDeclaration(filename))
 							.map(filename => _resolve(filename, tsconfigAddress));
