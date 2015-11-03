@@ -137,4 +137,16 @@ describe( 'Factory', () => {
 				});
 		});
 	});
+
+	it('doesnt add declaration files when typeCheck is false', () => {
+		let config = {
+			tsconfig: declarationFile,
+			typeCheck: false
+		};
+		let factory = createFactory(config, resolve, fetch);
+		return factory.then(({transpiler, typeChecker}) => {
+			transpiler.should.be.defined;
+			typeChecker.should.be.false;
+		});
+	});
 });
