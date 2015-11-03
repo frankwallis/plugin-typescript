@@ -87,8 +87,9 @@ export class CompilerHost implements ts.CompilerHost {
 		return "\n";
 	}
 
-	public addFile(filename: string, text: string) {
+	public addFile(filename: string, text: string, isDefaultLib: boolean = false) {
 		this._files[filename] = ts.createSourceFile(filename, text, this._options.target);
+		this._files[filename].isDefaultLib = isDefaultLib;
 
 		logger.debug(`added ${filename}`);
 		return this._files[filename];

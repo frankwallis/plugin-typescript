@@ -27,4 +27,7 @@ interface PluginOptions {
 	tsconfig?: boolean | string;
 	typeCheck?: boolean | string;
 	resolveAmbientRefs?: boolean;
+
+	// this is a hidden typescript option
+	skipDefaultLibCheck?: boolean;
 }

@@ -14,7 +14,6 @@ interface FileEntry {
 	deps?: FileEntry[];
 	loaded: Promise<any>;
 	errors: Promise<ts.Diagnostic[]>;
-	isDefaultLib: boolean;
 	checked: boolean;
 }
 
@@ -36,6 +35,7 @@ export class TypeChecker {
 		this._options.sourceMap = false;
 		this._options.declaration = false;
 		this._options.isolatedModules = false;
+		this._options.skipDefaultLibCheck = true; // don't check the default lib for better performance
 
 		// map of all typescript files -> file-entry
 		this._files = new Map<string, FileEntry>();
@@ -47,7 +47,7 @@ export class TypeChecker {
 	/*
 		returns a promise to an array of typescript errors for this file
 	*/
-	public check(sourceName: string, source: string) {
+	public check(sourceName: string, source: string): Promise<ts.Diagnostic[]> {
 		var file = this.registerFile(sourceName);
 		this.registerSource(sourceName, source);
 		return file.errors;
@@ -59,20 +59,19 @@ export class TypeChecker {
 	public registerDeclarationFile(sourceName: string, isDefaultLib: boolean) {
 		let file = this.registerFile(sourceName, isDefaultLib);
 		this._declarationFiles.push(file);
-		return file;
 	}
 
 	/* private */
 
-	private registerFile(sourceName: string, isDefaultLib: boolean = false) {
+	private registerFile(sourceName: string, isDefaultLib: boolean = false): FileEntry {
 		if (!this._files[sourceName]) {
-			let source = new Deferred<string>()
+			let source = new Deferred<string>();
 
 			/* we need to fetch declaration files ourselves */
 			if (isTypescriptDeclaration(sourceName)) {
 				this._fetch(sourceName)
 					.then((source) => {
-						this._host.addFile(sourceName, source);
+						this._host.addFile(sourceName, source, isDefaultLib);
 						this.registerSource(sourceName, source);
 					});
 			}
@@ -99,7 +98,6 @@ export class TypeChecker {
 			this._files[sourceName] = {
 				sourceName,
 				source,
-				isDefaultLib,
 				loaded,
 				errors,
 				checked: false,
@@ -120,7 +118,7 @@ export class TypeChecker {
 		process the source to get its dependencies and resolve and register them
 		returns a promise to the list of registered dependency files
 	*/
-	private resolveDependencies(sourceName: string, source: string) {
+	private resolveDependencies(sourceName: string, source: string): Promise<Map<string, string>> {
 		let info = ts.preProcessFile(source, true);
 
 		/* build the list of files we need to resolve */
@@ -155,7 +153,7 @@ export class TypeChecker {
 	/*
 		returns promise resolved when file can be emitted
 	*/
-	private canEmit(file: FileEntry, seen?: FileEntry[]) {
+	private canEmit(file: FileEntry, seen?: FileEntry[]): Promise<any> {
 		/* avoid circular references */
 		seen = seen || [];
 
@@ -192,8 +190,7 @@ export class TypeChecker {
 		let program = ts.createProgram(filelist, this._options, this._host);
 
 		return deps.reduce((diags, dep) => {
-			// don't check the default lib for better performance
-			if (!dep.isDefaultLib && !dep.checked) {
+			if (!dep.checked) {
 				let sourceFile = this._host.getSourceFile(dep.sourceName);
 
 				diags = diags
