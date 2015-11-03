@@ -73,8 +73,9 @@ function createServices(config: PluginOptions, _resolve: ResolveFunction, _fetch
 	if (config.typeCheck) {
 		typeChecker = new TypeChecker(host, _resolve, _fetch);
 
-		// TODO - remove this when __moduleName is available
-		return _resolve('ts', '')
+		if (!host.options.noLib) {
+			// TODO - remove this when __moduleName is available
+			return _resolve('ts', '')
 				.then(moduleName => {
 					 return _resolve(host.getDefaultLibFileName(), moduleName)
 				})
@@ -82,8 +83,8 @@ function createServices(config: PluginOptions, _resolve: ResolveFunction, _fetch
 					typeChecker.registerDeclarationFile(defaultLibAddress, true);
 					return {transpiler, typeChecker, host};
 				});
+		}
 	}
-	else {
-		return Promise.resolve({transpiler, typeChecker, host});
-	}
+
+	return Promise.resolve({transpiler, typeChecker, host});
 }

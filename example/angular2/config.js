@@ -1,7 +1,7 @@
 System.config({
   baseURL: ".",
   defaultJSExtensions: true,
-  transpiler: "none",
+  transpiler: false,
   typescriptOptions: {
     "noImplicitAny": false,
     "typeCheck": true,

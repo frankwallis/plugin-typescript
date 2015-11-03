@@ -19,9 +19,8 @@ export class CompilerHost implements ts.CompilerHost {
 		this._options.target = this.getEnum(this._options.target, ts.ScriptTarget, ts.ScriptTarget.ES5);
 		this._options.jsx = this.getEnum(this._options.jsx, ts.JsxEmit, ts.JsxEmit.None);
 		this._options.allowNonTsExtensions = (this._options.allowNonTsExtensions !== false);
-
+		this._options.skipDefaultLibCheck = (this._options.skipDefaultLibCheck !== false);
 		this._options.noResolve = true;
-		this._options.noLib = true;
 
 		this._files = new Map<string, ts.SourceFile>();
 		this._fileResMaps = new Map<string, any>();

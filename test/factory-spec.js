@@ -114,6 +114,18 @@ describe( 'Factory', () => {
 		});
 	});
 
+	it('adds the default library', () => {
+		let config = {
+			typeCheck: true
+		};
+		let factory = createFactory(config, resolve, fetch);
+		return factory.then(({transpiler, typeChecker, host}) => {
+			transpiler.should.be.defined;
+			typeChecker.should.be.defined;
+			typeChecker._declarationFiles.should.have.length(1);
+		});
+	});
+
 	it('adds declaration files into type-checker', () => {
 		let config = {
 			tsconfig: declarationFile,
@@ -137,6 +149,19 @@ describe( 'Factory', () => {
 					filelist[0].should.be.equal(declarationFile);
 					filelist[2].should.be.equal(theirModuleFile);
 				});
+		});
+	});
+
+	it('observes the noLib option', () => {
+		let config = {
+			noLib: true,
+			typeCheck: true
+		};
+		let factory = createFactory(config, resolve, fetch);
+		return factory.then(({transpiler, typeChecker, host}) => {
+			transpiler.should.be.defined;
+			typeChecker.should.be.defined;
+			typeChecker._declarationFiles.should.have.length(0);
 		});
 	});
 

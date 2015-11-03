@@ -21,8 +21,14 @@ export class Transpiler {
 		this._host = host;
 
 		this._options = Object.assign({}, this._host.options);
+
+		if (this._options.sourceMap === undefined)
+			this._options.sourceMap = this._options.inlineSourceMap;
+
+		if (this._options.sourceMap === undefined)
+			this._options.sourceMap = true;
+
 		this._options.inlineSourceMap = false;
-		this._options.sourceMap = (this._options.sourceMap !== false);
 		this._options.declaration = false;
 		this._options.isolatedModules = true;
 	}
