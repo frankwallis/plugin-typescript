@@ -109,7 +109,7 @@ The type-checker automatically resolves any file with a .html extension to have 
 
 See the angular2 example project for an example of this feature working.
 
-## change TypeScript version ##
+## Use Specific TypeScript Version ##
 
 To override the version of TypeScript used by the plugin, add an override to the ```jspm``` section of your package.json
 
