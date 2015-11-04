@@ -24,11 +24,15 @@ And add a 'packages' entry in your SystemJS config:
 
 ```
 System.config({
+  "transpiler": false,
   "packages": {
     "app": {
       "defaultExtension": "ts",
       "meta": {
         "*.ts": {
+          "loader": "ts"
+        },
+        "*.js": {
           "loader": "ts"
         }
       }
@@ -37,7 +41,7 @@ System.config({
 });
 ```
 
-This will tell SystemJS to load all '.ts' files through plugin-typescript.
+This will tell SystemJS to load all '.ts' and '.js' files through plugin-typescript.
 See the example projects contained within this repository for a working setup.
 
 # Configuration #
@@ -54,7 +58,7 @@ System.config({
   typescriptOptions: {
     "noImplicitAny": true,
     "typeCheck": true,				// also accepts "strict"
-    "tsconfig": true					// also accepts a path
+    "tsconfig": true				// also accepts a path
   }
 });
 ```
@@ -104,6 +108,24 @@ See the angular2 example project for an example of this feature working.
 The type-checker automatically resolves any file with a .html extension to have a default export which is a string. This enables importing of html templates using plugin-text with full type-checking and no errors.
 
 See the angular2 example project for an example of this feature working.
+
+## change TypeScript version ##
+
+To override the version of TypeScript used by the plugin, add an override to the ```jspm``` section of your package.json
+
+```
+	"devDependencies": {
+		"css": "systemjs/plugin-css@0.1.10",
+		"ts": "frankwallis/plugin-typescript@^2.2.0"
+	},
+	"overrides": {
+		"github:frankwallis/plugin-typescript@2.2.0": {
+	 		"dependencies": {
+	    		"typescript": "npm:typescript@1.8.0-dev.20151105"
+	  		}
+		}
+	}
+```
 
 # Example Projects #
 

@@ -10,7 +10,7 @@
       "clean-css": "npm:clean-css@^3.4.3",
       "css": "systemjs/plugin-css@^0.1.17",
       "text": "systemjs/plugin-text@^0.0.2",
-      "ts": "frankwallis/plugin-typescript@^2.1.0"
+      "ts": "frankwallis/plugin-typescript@^2.2.0"
     }
   }
 }
