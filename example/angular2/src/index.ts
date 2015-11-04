@@ -1,5 +1,3 @@
-/// <reference path="./_references.d.ts" />
-
 // this should probably be shimmed in jspm registry
 import "reflect-metadata";
 
