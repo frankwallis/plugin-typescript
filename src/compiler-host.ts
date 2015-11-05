@@ -1,7 +1,7 @@
 /* */
 import * as ts from 'typescript';
 import Logger from './logger';
-import {isHtml} from './utils';
+import {isHtml, isTypescriptDeclaration, isJavaScript} from './utils';
 
 let logger = new Logger({ debug: false });
 export let __HTML_MODULE__ = "__html_module__";
@@ -94,19 +94,38 @@ export class CompilerHost implements ts.CompilerHost {
 		return this._files[filename];
 	}
 
+	/*
+		Called by the type-checker, this method adds a map of imports/references used
+		by this file to their resolved locations.
+		These will include any redirections to a typings file if one is present.
+		This map is then used in resolveModuleNames below.
+	*/
 	public addResolutionMap(filename: string, map: Map<string, string>) {
 		this._fileResMaps[filename] = map;
 	}
 
+	/*
+		Overrides the standard resolution algorithm used by the compiler so that we can use systemjs
+		resolution. Because TypeScript requires synchronous resolution, everything is pre-resolved
+		by the type-checker and registered with the host before type-checking.
+	*/
 	public resolveModuleNames(moduleNames: string[], containingFile: string): ts.ResolvedModule[] {
 		return moduleNames.map((modName) => {
-			if (isHtml(modName))
+			let mappings = this._fileResMaps[containingFile];
+
+			if (isHtml(modName)) {
 				return { resolvedFileName: __HTML_MODULE__ };
-			else if (this._fileResMaps[containingFile])
-				return { resolvedFileName: this._fileResMaps[containingFile][modName] };
-			else
+			}
+			else if (mappings) {
+				let resolvedFileName = mappings[modName];
+				let isExternalLibraryImport = isTypescriptDeclaration(resolvedFileName);
+
+				return { resolvedFileName, isExternalLibraryImport };
+			}
+			else {
 				return ts.resolveModuleName(modName, containingFile, this._options, this).resolvedModule;
 				// 	throw new Error(`containing file ${containingFile} has not been loaded`);
+			}
 		});
 	}
 }

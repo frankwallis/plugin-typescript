@@ -25,19 +25,29 @@ function fetch(filename) {
 function resolve(dep, parent) {
 	let result = undefined;
 
-	if (dep === "ts")
-		result = __filename;
-	else if (dep === "tsconfig.json")
-		result = defaultFile;
-	else if (dep[0] === ".")
-		result = require.resolve('./' + path.join('./fixtures-es6/tsconfig', dep));
-	else if (dep.indexOf(".") < 0)
-		return dep + '.js';
-	else
-		result = require.resolve(dep);
+	//console.log('resolving ' + parent + ' -> ' + dep);
 
-	//console.log("resolved " + parent + " -> " + dep + " = " + result);
-	return Promise.resolve(result);
+	try {
+		if (dep === "ts")
+			result = __filename;
+		else if (dep === "tsconfig.json")
+			result = defaultFile;
+		else if (dep == "theirmodule")
+			result = "theirmodule.js";
+		else if (dep[0] === ".")
+			result = path.resolve(path.dirname(parent), dep);
+		else if (dep.indexOf(".") < 0)
+			return dep + '.js';
+		else
+			result = require.resolve(dep);
+
+		//console.log("resolved " + parent + " -> " + dep + " = " + result);
+		return Promise.resolve(result);
+	}
+	catch(err) {
+		console.error(err);
+		return Promise.reject(err);
+	}
 }
 
 describe( 'Factory', () => {
@@ -176,4 +186,5 @@ describe( 'Factory', () => {
 			should.not.exist(typeChecker);
 		});
 	});
+
 });

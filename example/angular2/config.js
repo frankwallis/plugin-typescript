@@ -1,12 +1,12 @@
 System.config({
   baseURL: ".",
   defaultJSExtensions: true,
-  transpiler: false,
+  transpiler: "traceur",
   typescriptOptions: {
     "noImplicitAny": false,
     "typeCheck": true,
     "tsconfig": true,
-    "resolveAmbientRefs": true
+    "resolveTypings": true
   },
   paths: {
     "github:*": "jspm_packages/github/*",
@@ -48,8 +48,11 @@ System.config({
     "clean-css": "npm:clean-css@3.4.6",
     "css": "github:systemjs/plugin-css@0.1.19",
     "example-service": "github:frankwallis/example-service@master",
+    "frankwallis/plugin-typescript": "github:frankwallis/plugin-typescript@2.2.0",
     "reflect-metadata": "npm:reflect-metadata@0.1.2",
     "text": "github:systemjs/plugin-text@0.0.2",
+    "traceur": "github:jmcriffey/bower-traceur@0.0.92",
+    "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.92",
     "ts": "github:frankwallis/plugin-typescript@2.2.0",
     "github:frankwallis/example-service@master": {
       "angular2": "npm:angular2@2.0.0-alpha.45"

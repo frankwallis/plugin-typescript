@@ -77,6 +77,12 @@ A boolean flag which instructs the plugin to load configuration from "tsconfig.j
 
 Compiler options which do not conflict with those required by plugin-typescript will be loaded from the ```compilerOptions``` section of the file. Any declaration files contained in the ```files``` array will also be loaded if type-checking is enabled.
 
+## resolveTypings ##
+
+In TypeScript 1.6.2 the ```typings``` field was introduced in package.json to enable delivery of type declaration files alongside javascript libraries. A boolean flag which controls whether the type-checker will look for the ```typings``` field in package.json when importing external dependencies, and load the declaration files when present. For more information on this see [here](https://github.com/Microsoft/TypeScript/wiki/Typings-for-npm-packages).
+
+The default value is ```false```. See the angular2 example project for an example of this feature working.
+
 ## resolveAmbientRefs ##
 
 A boolean flag which controls how reference files are resolved. When it is set then SystemJS will be used to resolve references, so
@@ -84,16 +90,15 @@ A boolean flag which controls how reference files are resolved. When it is set t
 ```
 /// <reference path="./common/angular.d.ts" />
 ```
-will resolve relative to the current directory, but
+will resolve relative to the current directory because of the ```"./"```, but
 ```
-/// <reference path="common/angular.d.ts" />
+/// <reference path="angular2/bundles/typings/angular2/angular2.d.ts" />
 ```
-will resolve to ```jspm_packages/github/frankwallis/common@1.0.0/angular.d.ts``` (or wherever 'common' is mapped to)
+will resolve to ```jspm_packages/npm/angular2@2.0.0/bundles/typings/angular2/angular2.d.ts```
 
-This can be extremely useful when compiling over multiple projects as all the projects can easily reference declaration files from their dependencies, and they will be automatically updated with new versions etc. 
-The default value is false (this is a breaking change from version 1.0), which means that both of the above references will resolve relative to the current file.
+This can be useful when compiling over multiple projects as all the projects can easily reference declaration files from their dependencies, and they will be automatically updated with new versions etc.  
 
-See the angular2 example project for an example of this feature working.
+The default value is ```false```. As it is incompatible with other tools (editors etc), this setting is deprecated in favour of using ```typings``` as described above.
 
 # Features #
 

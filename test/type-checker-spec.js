@@ -33,6 +33,9 @@ let externalDependency = require.resolve('./fixtures-es6/external/dependency.ts'
 let circularFile = require.resolve('./fixtures-es6/circular/circular.ts');
 let importCss = require.resolve('./fixtures-es6/css/import-css.ts');
 let importHtml = require.resolve('./fixtures-es6/html/import-html.ts');
+let angular2Typings = require.resolve('./fixtures-es6/typings/angular2-typings.ts');
+let missingTypings = require.resolve('./fixtures-es6/typings/missing-typings.ts');
+let missingPackage = require.resolve('./fixtures-es6/typings/missing-package.ts');
 let filelist = [];
 
 function fetch(filename) {
@@ -46,29 +49,38 @@ function resolve(dep, parent) {
 	//console.log("resolving " + parent + " -> " + dep);
 	let result = "";
 
-	if (dep[0] == '/')
-		result = dep;
-	else if (dep[0] == '.')
-		result = path.join(path.dirname(parent), dep);
-	else if (dep == "ambient")
-		result = require.resolve("./fixtures-es6/ambients/resolved/" + dep + ".js");
-	else if (dep == "ambient/ambient")
-		result = require.resolve("./fixtures-es6/ambients/resolved/ambient.ts");
-	else if (path.dirname(dep) == "ambient")
-		result = require.resolve("./fixtures-es6/ambients/resolved/" + dep.slice(8));
-	else if (dep.indexOf("typescript/") == 0)
-		result = require.resolve(dep);
-	else
-		result = dep + ".js";
+	try {
+		if ((dep === "angular2") || (dep === "missing"))
+			result = require.resolve("./" + path.join('fixtures-es6/typings/', dep, dep +'.js'));
+		else if ((dep === "angular2/package.json") || (dep === "missing/package.json"))
+			result = require.resolve("./" + path.join('fixtures-es6/typings/', dep));
+		else if (dep === "ambient")
+			result = require.resolve("./fixtures-es6/ambients/resolved/" + dep + ".js");
+		else if (dep == "ambient/ambient")
+			result = require.resolve("./fixtures-es6/ambients/resolved/ambient.ts");
+		else if (path.dirname(dep) == "ambient")
+			result = require.resolve("./fixtures-es6/ambients/resolved/" + dep.slice(8));
+		else if (dep.indexOf("typescript/") == 0)
+			result = require.resolve(dep);
+		else if (dep[0] == '/')
+			result = dep;
+		else if (dep[0] == '.')
+			result = path.join(path.dirname(parent), dep);
+		else if (path.extname(dep) == "")
+			result = dep + ".js";
+		else
+			result = dep;
 
-	if ((path.extname(result) != '.ts') &&
-		 (path.extname(result) != '.js') &&
-		 (path.extname(result) != '.html') &&
-		 (path.extname(result) != '.css'))
-		result = result + ".ts";
+		if (path.extname(result) == "")
+			result = result + ".ts";
 
-	//console.log("resolved " + parent + " -> " + result);
-	return Promise.resolve(result);
+		//console.log("resolved " + parent + " -> " + result);
+		return Promise.resolve(result);
+	}
+	catch (err) {
+		console.error(err);
+		return Promise.reject(err)
+	}
 }
 
 describe('Type Checker ES6', () => {
@@ -109,7 +121,7 @@ describe('Type Checker ES6', () => {
 			});
 	});
 
-	it('loads lib.d.ts', () => {
+	it('loads lib.d.ts by default', () => {
 		return typecheckAll([noImports])
 			.then((diags) => {
 				filelist.should.have.length(1);
@@ -175,7 +187,7 @@ describe('Type Checker ES6', () => {
 			});
 	});
 
-	it('handles ambient references', () => {
+	it('handles ambient references when resolveAmbientRefs option is false', () => {
 		return typecheckAll([ambientReferenceDisabled])
 			.then((diags) => {
 				diags.should.have.length(0);
@@ -256,18 +268,72 @@ describe('Type Checker ES6', () => {
 			});
 	});
 
-	it('imports css', () => {
+	it('imports .css files', () => {
 		return typecheckAll([importCss])
 			.then((diags) => {
 				diags.should.have.length(0);
 			});
 	});
 
-	it('imports html', () => {
+	it('imports .html files', () => {
 		return typecheckAll([importHtml])
 			.then((diags) => {
 				formatErrors(diags, console);
 				diags.should.have.length(0);
 			});
 	});
+
+	it('resolves typings files from package.json when resolveTypings is true', () => {
+		let options = {
+			resolveTypings: true
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host, resolve, fetch);
+		return typecheckAll([angular2Typings])
+			.then((diags) => {
+				formatErrors(diags, console);
+				diags.should.have.length(0);
+			});
+	});
+
+	it('doesnt resolve typings files when resolveTypings is false', () => {
+		let options = {
+			resolveTypings: false
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host, resolve, fetch);
+		return typecheckAll([angular2Typings])
+			.then((diags) => {
+				//formatErrors(diags, console);
+				diags.should.have.length(1);
+				diags[0].code.should.be.equal(2307);
+			});
+	});
+
+	it('handles missing typings field in package.json', () => {
+		let options = {
+			resolveTypings: true
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host, resolve, fetch);
+		return typecheckAll([missingTypings])
+			.then((diags) => {
+				formatErrors(diags, console);
+				diags.should.have.length(0);
+			});
+	});
+
+	it('handles package.json not found', () => {
+		let options = {
+			resolveTypings: true
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host, resolve, fetch);
+		return typecheckAll([missingPackage])
+			.then((diags) => {
+				formatErrors(diags, console);
+				diags.should.have.length(0);
+			});
+	});
+
 });

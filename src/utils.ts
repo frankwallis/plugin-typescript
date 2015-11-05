@@ -52,6 +52,10 @@ export function tsToJsMap(tsFile: string) {
 	return tsFile.replace(typescriptRegex, '.js.map');
 }
 
+export function jsToDts(jsFile: string) {
+	 return jsFile.replace(javascriptRegex, '.d.ts');
+}
+
 export function stripDoubleExtension(normalized: string) {
 	const parts = normalized.split('.');
 

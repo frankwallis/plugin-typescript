@@ -10,6 +10,7 @@ import {
 	isSourceMap,
 	tsToJs,
 	tsToJsMap,
+	jsToDts,
 	isHtml,
 	stripDoubleExtension
 } from '../lib/utils';
@@ -88,6 +89,17 @@ describe( 'Utils', () => {
 
 		it('ignores files with wrong extension', () => {
 			tsToJsMap('a.jts').should.be.equal('a.jts');
+		});
+	});
+
+	describe( 'jsToDts', () => {
+		it('changes the file extension', () => {
+			jsToDts('a.js').should.be.equal('a.d.ts');
+			jsToDts('a.js.js').should.be.equal('a.js.d.ts');
+		});
+
+		it('ignores files with wrong extension', () => {
+			jsToDts('a.ejs').should.be.equal('a.ejs');
 		});
 	});
 

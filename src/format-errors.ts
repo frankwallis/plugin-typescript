@@ -4,9 +4,6 @@ import Logger from './logger';
 
 /**
  * Write the compiler errors to console
- *
- * @param {array} the TypeScript compiler errors
- * @param {Logger} the output console
  */
 export function formatErrors(diags: ts.Diagnostic[], logger: Logger) {
 	// feature: don't spam the console, only display the first 10 errors
@@ -16,6 +13,8 @@ export function formatErrors(diags: ts.Diagnostic[], logger: Logger) {
 				// feature: print the compiler output over 2 lines! file then message
 				let position = diag.file.getLineAndCharacterOfPosition(diag.start);
 				let filename = diag.file.fileName;
+
+				// feature: output in format address:line:position to enable direct linking to error location in chrome dev tools
 				let locationText = `${filename}:${position.line + 1}:${position.character + 1}`;
 
 				if (diag.category === ts.DiagnosticCategory.Error)

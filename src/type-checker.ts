@@ -3,7 +3,10 @@ import * as ts from 'typescript';
 import Logger from './logger';
 import {CompilerHost, CombinedOptions} from './compiler-host';
 import {formatErrors} from './format-errors';
-import {isTypescript, isTypescriptDeclaration, isAmbient} from "./utils";
+import {
+	isTypescript, isTypescriptDeclaration,
+	isJavaScript, isRelative,
+	isAmbient, isAmbientImport} from "./utils";
 import {__HTML_MODULE__} from "./compiler-host";
 
 let logger = new Logger({ debug: false });
@@ -24,6 +27,7 @@ export class TypeChecker {
    private _options: CombinedOptions;
 	private _files: Map<string, FileEntry>;
 	private _declarationFiles: FileEntry[];
+	private _typings: Map<string, string>;
 
 	constructor(host: CompilerHost, resolve: ResolveFunction, fetch: FetchFunction) {
 		this._host = host;
@@ -42,6 +46,9 @@ export class TypeChecker {
 
 		// list of all registered declaration files
 		this._declarationFiles = [];
+
+		// map of external modules to their typings
+		this._typings = new Map<string, string>();
 	}
 
 	/*
@@ -61,7 +68,7 @@ export class TypeChecker {
 		this._declarationFiles.push(file);
 	}
 
-	/* private */
+	/* private methods */
 
 	private registerFile(sourceName: string, isDefaultLib: boolean = false): FileEntry {
 		if (!this._files[sourceName]) {
@@ -73,6 +80,9 @@ export class TypeChecker {
 					.then((source) => {
 						this._host.addFile(sourceName, source, isDefaultLib);
 						this.registerSource(sourceName, source);
+					})
+					.catch(err => {
+						logger.error(err.message);
 					});
 			}
 
@@ -85,7 +95,7 @@ export class TypeChecker {
 
 					this._files[sourceName].deps = Object.keys(depsMap)
 						.map((key) => depsMap[key])
-						.filter((res) => isTypescript(res)) // ignore e.g. css files
+						.filter((res) => isTypescript(res)) // ignore e.g. js, css files
 						.map((res) => this.registerFile(res))
 						.concat(this._declarationFiles);
 				});
@@ -121,24 +131,16 @@ export class TypeChecker {
 	private resolveDependencies(sourceName: string, source: string): Promise<Map<string, string>> {
 		let info = ts.preProcessFile(source, true);
 
-		/* build the list of files we need to resolve */
+		/* build the list of file resolutions */
 		/* references first */
-		let references = info.referencedFiles
-			.map((ref) => {
-				if ((isAmbient(ref.fileName) && !this._options.resolveAmbientRefs) || (ref.fileName.indexOf("/") == -1))
-					return "./" + ref.fileName;
-				else
-					return ref.fileName;
-			});
+		let resolvedReferences = info.referencedFiles
+			.map((ref) => this.resolveReference(ref.fileName, sourceName));
 
-		/* now imports */
-		let imports = info.importedFiles
-			.map((imp) => imp.fileName);
+		let resolvedImports = info.importedFiles
+			.map((imp) => this.resolveImport(imp.fileName, sourceName));
 
-		let refs = [].concat(references).concat(imports);
-
-		/* convert to list of promises to resolved addresses */
-		let deps = refs.map((ref) => this._resolve(ref, sourceName));
+		let refs = [].concat(info.referencedFiles).concat(info.importedFiles).map(pre => pre.fileName);
+		let deps = resolvedReferences.concat(resolvedImports);
 
 		/* and convert to promise to a map of local reference to resolved dependency */
 		return Promise.all(deps)
@@ -147,6 +149,56 @@ export class TypeChecker {
 					result[ref] = resolved[idx];
 					return result;
 				}, {});
+			});
+	}
+
+	private resolveReference(referenceName: string, sourceName: string): Promise<string> {
+		if ((isAmbient(referenceName) && !this._options.resolveAmbientRefs) || (referenceName.indexOf("/") === -1))
+			referenceName = "./" + referenceName;
+
+		return this._resolve(referenceName, sourceName);
+	}
+
+	private resolveImport(importName: string, sourceName: string): Promise<string> {
+		if (isRelative(importName) &&  isTypescriptDeclaration(sourceName) && !isTypescriptDeclaration(importName))
+			importName = importName + ".d.ts";
+
+		return this._resolve(importName, sourceName)
+			.then(resolvedImport => {
+			  	if (this._options.resolveTypings && isAmbientImport(importName) && isJavaScript(resolvedImport) && !isTypescriptDeclaration(sourceName)) {
+			  		if (!this._typings[resolvedImport]) {
+						this._typings[resolvedImport] = this.resolveTyping(importName, sourceName)
+							.then(resolvedTyping => {
+								return resolvedTyping ? resolvedTyping : resolvedImport;
+							});
+					}
+
+					return this._typings[resolvedImport];
+			  	}
+			  	else {
+			  		return resolvedImport;
+			  	}
+  			});
+	}
+
+	private resolveTyping(importName: string, sourceName: string): Promise<string> {
+		// we can only support packages registered without a slash in them
+		let packageName = importName.split(/\//)[0];
+
+		return this._resolve(packageName, sourceName)
+			.then(exported => {
+				return exported.slice(0, -3) + "/package.json";
+			})
+			.then(address => {
+				return this._fetch(address)
+					.then(packageText => {
+						let typings = JSON.parse(packageText).typings;
+						return typings ? this._resolve(typings, address) : undefined;
+					})
+					.catch(err => {
+						logger.warn(`unable to resolve typings for ${importName}, ${address} could not be found`);
+						return undefined;
+					});
 			});
 	}
 
