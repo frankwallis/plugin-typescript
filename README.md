@@ -79,11 +79,12 @@ Compiler options which do not conflict with those required by plugin-typescript 
 
 ## resolveTypings ##
 
-In TypeScript 1.6.2 the ```typings``` field was introduced in package.json to enable delivery of type declaration files alongside javascript libraries. A boolean flag which controls whether the type-checker will look for the ```typings``` field in package.json when importing external dependencies, and load the declaration files when present. For more information on this see [here](https://github.com/Microsoft/TypeScript/wiki/Typings-for-npm-packages).
+In TypeScript 1.6.2 the ```typings``` field was introduced in package.json to enable delivery of type declaration files alongside javascript libraries. This boolean flag controls whether the type-checker will look for the ```typings``` field in package.json when importing external dependencies, and load the declaration file when it is present. For more information see [here](https://github.com/Microsoft/TypeScript/wiki/Typings-for-npm-packages).
 
 The default value is ```false```. See the angular2 example project for an example of this feature working.
 
-## resolveAmbientRefs ##
+## resolveAmbientRefs 
+*(deprecated)*
 
 A boolean flag which controls how reference files are resolved. When it is set then SystemJS will be used to resolve references, so
 
@@ -98,7 +99,7 @@ will resolve to ```jspm_packages/npm/angular2@2.0.0/bundles/typings/angular2/ang
 
 This can be useful when compiling over multiple projects as all the projects can easily reference declaration files from their dependencies, and they will be automatically updated with new versions etc.  
 
-The default value is ```false```. As it is incompatible with other tools (editors etc), this setting is deprecated in favour of using ```typings``` as described above.
+The default value is ```false```. As it is incompatible with other tools (editors etc), **this setting is deprecated** in favour of using ```typings``` as described above.
 
 # Features #
 
