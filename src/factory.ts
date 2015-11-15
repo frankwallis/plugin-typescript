@@ -19,7 +19,7 @@ interface FactoryOutput {
 /*
 	This code looks a lot better with async functions...
 */
-export function createFactory(sjsconfig: PluginOptions, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<FactoryOutput> {
+export function createFactory(sjsconfig: PluginOptions = {}, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<FactoryOutput> {
 	let tsconfigFiles = [];
 	let typingsFiles = [];
 
