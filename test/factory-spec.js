@@ -56,6 +56,16 @@ describe( 'Factory', () => {
 		filelist = [];
 	});
 
+	it('handles sjsconfig = undefined', () => {
+		let config = undefined;
+		let factory = createFactory(config, resolve, fetch);
+		return factory.then(({transpiler, typeChecker}) => {
+			transpiler.should.be.defined;
+			should.not.exist(typeChecker);
+			filelist.should.have.length(0);
+		});
+	});
+
 	it('handles tsconfig = undefined', () => {
 		let config = {};
 		let factory = createFactory(config, resolve, fetch);
