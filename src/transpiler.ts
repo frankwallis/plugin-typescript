@@ -20,7 +20,7 @@ export class Transpiler {
 	constructor(host: CompilerHost) {
 		this._host = host;
 
-		this._options = Object.assign({}, this._host.options);
+		this._options = (<any>ts).clone(this._host.options);
 
 		if (this._options.sourceMap === undefined)
 			this._options.sourceMap = this._options.inlineSourceMap;

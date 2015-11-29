@@ -34,7 +34,7 @@ export class TypeChecker {
 		this._resolve = resolve;
 		this._fetch = fetch;
 
-      this._options = Object.assign({}, this._host.options);
+      this._options = (<any>ts).clone(this._host.options);
 		this._options.inlineSourceMap = false;
 		this._options.sourceMap = false;
 		this._options.declaration = false;

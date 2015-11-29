@@ -63,7 +63,7 @@ function loadOptions(sjsconfig: PluginOptions, _resolve: ResolveFunction, _fetch
 				}
 
 				let files = result.config.files;
-				return Object.assign(result.config.compilerOptions, sjsconfig, { tsconfigAddress, files });
+				return (<any>ts).extend((<any>ts).extend({ tsconfigAddress, files }, sjsconfig), result.config.compilerOptions);
 			});
 	}
 	else {
