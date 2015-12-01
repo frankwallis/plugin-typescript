@@ -7,6 +7,7 @@ import {isTypescript, stripDoubleExtension} from './utils';
 
 let logger = new Logger({ debug: false });
 let factory = createFactory(System.typescriptOptions, _resolve, _fetch);
+let typeCheckErrored = false;
 
 /*
  * load.name
@@ -29,11 +30,9 @@ export function translate(load: Module): Promise<Module> {
 				.catch(err => logger.error(err.message))
 				.then(diags => {
 					formatErrors(diags, logger);
-
-					if (host.options.typeCheck === "strict") {
-						if (diags.some(diag => diag.category === ts.DiagnosticCategory.Error))
-							throw new Error("TypeScript found type errors");
-					}
+					
+					if (diags.some(diag => diag.category === ts.DiagnosticCategory.Error))
+						typeCheckErrored = true;
 				});
 		}
 
@@ -42,6 +41,15 @@ export function translate(load: Module): Promise<Module> {
 		load.metadata.format = 'register';
 		return load;
 	});
+}
+
+export function bundle() {
+	if (typeCheckErrored && System.typescriptOptions.typeCheck === "strict") {
+		typeCheckErrored = false;
+		throw new Error("TypeScript found type errors");
+	}
+	
+	return [];
 }
 
 function wrapSource(source: string, load: Module): string {
