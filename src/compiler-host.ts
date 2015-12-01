@@ -15,9 +15,9 @@ export class CompilerHost implements ts.CompilerHost {
 
 	constructor(options: any) {
 		this._options = options || {};
-		this._options.module = this.getEnum(this._options.module, ts.ModuleKind, ts.ModuleKind.System);
-		this._options.target = this.getEnum(this._options.target, ts.ScriptTarget, ts.ScriptTarget.ES5);
-		this._options.jsx = this.getEnum(this._options.jsx, ts.JsxEmit, ts.JsxEmit.None);
+		this._options.module = this.getEnum(this._options.module, (<any>ts).ModuleKind, ts.ModuleKind.System);
+		this._options.target = this.getEnum(this._options.target, (<any>ts).ScriptTarget, ts.ScriptTarget.ES5);
+		this._options.jsx = this.getEnum(this._options.jsx, (<any>ts).JsxEmit, ts.JsxEmit.None);
 		this._options.allowNonTsExtensions = (this._options.allowNonTsExtensions !== false);
 		this._options.skipDefaultLibCheck = (this._options.skipDefaultLibCheck !== false);
 		this._options.noResolve = true;

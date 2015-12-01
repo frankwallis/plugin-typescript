@@ -10,7 +10,7 @@ A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you 
 
 For JSPM version 0.15 and below, use [plugin-typescript 1.0.x](https://github.com/frankwallis/plugin-typescript/tree/1.0). For any later versions use version 2.x.
 
-plugin-typescript uses version 1.6.2 of the typescript compiler
+plugin-typescript uses version 1.7.3 of the typescript compiler
 
 # Usage #
 
