@@ -36,11 +36,19 @@ export function translate(load: Module): Promise<Module> {
 				});
 		}
 
-		load.source = wrapSource(result.js, load);
+		if (this.loader)
+			load.source = wrapSource(result.js, load);
+		else 
+			load.source = result.js;
+		
 		load.metadata.sourceMap = result.sourceMap;
 		load.metadata.format = 'register';
 		return load;
 	});
+}
+
+function wrapSource(source: string, load: Module): string {
+	return '(function(__moduleName){' + source + '\n})("' + load.name + '");\n//# sourceURL=' + load.address + '!transpiled';
 }
 
 export function bundle() {
@@ -50,11 +58,6 @@ export function bundle() {
 	}
 	
 	return [];
-}
-
-function wrapSource(source: string, load: Module): string {
-	// this should probably happen in systemjs
-	return '(function(__moduleName){' + source + '\n})("' + load.name + '");\n//# sourceURL=' + load.address + '!transpiled';
 }
 
 /*

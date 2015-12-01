@@ -4,7 +4,10 @@ export class ExampleController {
 
 	constructor(private exampleService: example.IExampleService) {
 		console.log('constructing ExampleController');
-		console.log('moduleName is ' + __moduleName);
+		try {
+			console.log('moduleName is ' + __moduleName);
+		}
+		catch (ex) {}
 	}
 
 	public name: string;

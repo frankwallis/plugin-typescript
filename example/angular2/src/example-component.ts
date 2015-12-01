@@ -14,7 +14,6 @@ export class ExampleComponent {
 
 	constructor(private exampleService: ExampleService) {
 		console.log('constructing ExampleComponent');
-		console.log('moduleName is ' + __moduleName);
 	}
 
 	public item = {
