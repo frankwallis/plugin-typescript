@@ -1,14 +1,15 @@
-import {Component, Directive, View, NgModel} from 'angular2/angular2';
+import {Component, View, ChangeDetectionStrategy} from 'angular2/angular2';
 import {ExampleService} from "example-service/example-service";
 import exampleTemplate from "./example-view.html";
 
 @Component({
-  selector: 'example-app',
-  viewBindings: [ExampleService]
+  selector: 'example-component',
+  viewBindings: [ExampleService],
+  changeDetection: ChangeDetectionStrategy.CheckAlways
 })
 @View({
   template: exampleTemplate,
-  directives: [NgModel]
+  directives: [] 
 })
 export class ExampleComponent {
 
@@ -16,18 +17,17 @@ export class ExampleComponent {
 		console.log('constructing ExampleComponent');
 	}
 
-	public item = {
-		name: "",
-		greeting: ""
-	};
-
-  	public handleChangeName(seat, event) {
-      this.item.name = event.target.value;
+	public name = "";
+	public greeting = "";
+	
+  	public handleChangeName(event) {
+      this.name = event.target.value;
    }
 
 	public async greet() {
-		console.log('greeting ' + this.item.name);
-		this.item.greeting = await this.exampleService.greet(this.item.name);
-		console.log(this.item.greeting);
+		console.log('greeting ' + this.name);
+		this.greeting = await this.exampleService.greet(this.name);
+		console.log(this.greeting);
+		this.name = "";
 	}
 }
