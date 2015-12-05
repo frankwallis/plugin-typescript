@@ -31,7 +31,6 @@ export class Transpiler {
 		this._options.inlineSourceMap = false;
 		this._options.declaration = false;
 		this._options.isolatedModules = true;
-		this._options.module = ts.ModuleKind.System;
 	}
 
 	public transpile(sourceName: string, source: string): TranspileResult {

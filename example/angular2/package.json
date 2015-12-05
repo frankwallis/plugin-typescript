@@ -2,15 +2,17 @@
   "jspm": {
     "registry": "github",
     "dependencies": {
-      "angular2": "npm:angular2@^2.0.0-alpha.37",
+      "angular2": "npm:angular2@2.0.0-alpha.46",
       "example-service": "frankwallis/example-service@master",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0"
     },
     "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
       "clean-css": "npm:clean-css@^3.4.3",
       "css": "systemjs/plugin-css@^0.1.17",
       "text": "systemjs/plugin-text@^0.0.2",
-      "ts": "frankwallis/plugin-typescript@^2.2.0"
+      "ts": "frankwallis/plugin-typescript@^2.4.0"
     }
   }
 }

@@ -1,10 +1,16 @@
 System.config({
   baseURL: ".",
   defaultJSExtensions: true,
-  transpiler: "typescript",
+  transpiler: "babel",
+  babelOptions: {
+    "optional": [
+      "runtime",
+      "optimisation.modules.system"
+    ]
+  },
   typescriptOptions: {
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "module": "es6",
+    "target": "es6",
     "noImplicitAny": false,
     "typeCheck": true,
     "tsconfig": true,
@@ -21,9 +27,6 @@ System.config({
       "defaultExtension": "ts",
       "meta": {
         "*.ts": {
-          "loader": "ts"
-        },
-        "*.js": {
           "loader": "ts"
         },
         "*.css": {

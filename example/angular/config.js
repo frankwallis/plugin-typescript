@@ -3,6 +3,7 @@ System.config({
   defaultJSExtensions: true,
   transpiler: "typescript",
   typescriptOptions: {
+    "module": "system",
     "noImplicitAny": false,
     "typeCheck": "strict",
     "tsconfig": "src/another-tsconfig.json"

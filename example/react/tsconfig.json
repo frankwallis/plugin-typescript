@@ -1,7 +1,8 @@
 {
 	"compilerOptions": {
 		"jsx": "react",
-		"target": "es5"
+		"target": "es5",
+		"module": "system"
 	},
 	"files": [
 		"./src/_references.d.ts",

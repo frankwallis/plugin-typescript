@@ -7,7 +7,8 @@
 		"removeComments": true,
 		"moduleResolution": "node",
 		"inlineSourceMap": true,
-		"inlineSources": true
+		"inlineSources": true,
+		"rootDir": "./src"
 	},
 	"files": [
 		"./node_modules/typescript/lib/lib.es6.d.ts",

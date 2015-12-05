@@ -56,6 +56,7 @@ System.config({
     "npm:*": "jspm_packages/npm/*"
   },
   typescriptOptions: {
+    "module": "system",
     "noImplicitAny": true,
     "typeCheck": true,				// also accepts "strict"
     "tsconfig": true				// also accepts a path

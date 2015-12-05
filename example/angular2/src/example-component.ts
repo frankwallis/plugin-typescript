@@ -25,9 +25,9 @@ export class ExampleComponent {
       this.item.name = event.target.value;
    }
 
-	public greet() {
+	public async greet() {
 		console.log('greeting ' + this.item.name);
-		this.item.greeting = this.exampleService.greet(this.item.name);
+		this.item.greeting = await this.exampleService.greet(this.item.name);
 		console.log(this.item.greeting);
 	}
 }

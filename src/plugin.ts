@@ -36,13 +36,18 @@ export function translate(load: Module): Promise<Module> {
 				});
 		}
 
-		if (this.loader)
+		if (this.loader && (host.options.module === ts.ModuleKind.System))
 			load.source = wrapSource(result.js, load);
 		else 
 			load.source = result.js;
 		
-		load.metadata.sourceMap = result.sourceMap;
-		load.metadata.format = 'register';
+		load.metadata.sourceMap = JSON.parse(result.sourceMap);
+		
+		if (host.options.module === ts.ModuleKind.System)
+			load.metadata.format = 'register';
+		else if (host.options.module === ts.ModuleKind.ES6)
+			load.metadata.format = 'esm';			
+
 		return load;
 	});
 }
