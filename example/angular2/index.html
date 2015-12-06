@@ -19,7 +19,10 @@
 	<example-app></example-app>
 
 	<script>
-		System.import("src")
+		System.import("shims")
+			.then(function() {
+				return System.import("src")				
+			})
 			.then(function() {
 				console.log('running');
 			})

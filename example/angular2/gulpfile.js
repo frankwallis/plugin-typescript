@@ -17,7 +17,7 @@ gulp.task('example', function(cb) {
 	Bundle the example project
 */
 gulp.task('bundle', function(cb) {
-	jspm.bundleSFX("src", "build/build.js")
+	jspm.bundleSFX("shims + src", "build/build.js")
 		.then(function() {
 			console.log('Build complete, go to http://127.0.0.1:8080/index-bundle.html');
 			cb();
