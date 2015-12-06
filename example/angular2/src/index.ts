@@ -11,5 +11,4 @@ import "./index.css";
   directives: [ExampleComponent] 
 })
 export class ExampleApp {}
-
-setTimeout(() => bootstrap(ExampleApp), 0);
+bootstrap(ExampleApp);
