@@ -25,9 +25,9 @@ export class TypeChecker {
 	private _resolve: ResolveFunction;
 	private _fetch: FetchFunction;
    private _options: CombinedOptions;
-	private _files: Map<string, FileEntry>;
+	private _files: { [s: string]: FileEntry; }; // Map<string, FileEntry>;
 	private _declarationFiles: FileEntry[];
-	private _typings: Map<string, string>;
+	private _typings: { [s: string]: Promise<string>; }; //Map<string, string>;
 
 	constructor(host: CompilerHost, resolve: ResolveFunction, fetch: FetchFunction) {
 		this._host = host;
@@ -42,13 +42,13 @@ export class TypeChecker {
 		this._options.skipDefaultLibCheck = true; // don't check the default lib for better performance
 
 		// map of all typescript files -> file-entry
-		this._files = new Map<string, FileEntry>();
+		this._files = {}; //new Map<string, FileEntry>();
 
 		// list of all registered declaration files
 		this._declarationFiles = [];
 
 		// map of external modules to their typings
-		this._typings = new Map<string, string>();
+		this._typings = {}; //new Map<string, string>();
 	}
 
 	/*

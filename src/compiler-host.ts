@@ -10,8 +10,8 @@ export interface CombinedOptions extends PluginOptions, ts.CompilerOptions { };
 
 export class CompilerHost implements ts.CompilerHost {
 	private _options: any;
-	private _files: Map<string, ts.SourceFile>;
-	private _fileResMaps: Map<string, any>;
+	private _files: { [s: string]: any; }; //Map<string, ts.SourceFile>;
+	private _fileResMaps: { [s: string]: any; }; //Map<string, any>;
 
 	constructor(options: any) {
 		this._options = options || {};
@@ -22,8 +22,8 @@ export class CompilerHost implements ts.CompilerHost {
 		this._options.skipDefaultLibCheck = (this._options.skipDefaultLibCheck !== false);
 		this._options.noResolve = true;
 
-		this._files = new Map<string, ts.SourceFile>();
-		this._fileResMaps = new Map<string, any>();
+		this._files = {}; //new Map<string, ts.SourceFile>();
+		this._fileResMaps = {}; //new Map<string, any>();
 
 		// support for importing html templates until
 		// https://github.com/Microsoft/TypeScript/issues/2709#issuecomment-91968950 gets implemented
