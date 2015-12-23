@@ -25,6 +25,7 @@ describe('Transpiler ES6', () => {
 
 		it('transpiles successfully', () => {
 			let output = transpiler.transpile('one-import.ts', oneImport);
+			formatErrors(output.errors, console);
 			output.should.have.property('failure', false);
 			output.should.have.property('errors').with.lengthOf(0);
 			output.should.have.property('js').with.lengthOf(322);
@@ -45,6 +46,37 @@ describe('Transpiler ES6', () => {
 			//formatErrors(output.errors, console);
 			output.should.have.property('failure', true);
 			output.should.have.property('errors').with.lengthOf(1);
+		});
+
+		it('catches configuation errors', () => {
+			let options = {
+				emitDecoratorMetadata: true,
+				experimentalDecorators: false
+			};
+			let host = new CompilerHost(options);
+			transpiler = new Transpiler(host);
+
+			let output = transpiler.transpile('one-import.ts', oneImport);
+			//formatErrors(output.errors, console);
+			output.should.have.property('failure', true);
+			output.should.have.property('errors').with.lengthOf(1);
+			output.errors[0].code.should.be.equal(5052);
+		});
+
+		it('overrides invalid config options', () => {
+			let options = {
+				noEmitOnError: true,
+				out: "somefile.js",
+				declaration: true,
+				noLib: false
+			};
+			let host = new CompilerHost(options);
+			transpiler = new Transpiler(host);
+
+			let output = transpiler.transpile('one-import.ts', oneImport);
+			formatErrors(output.errors, console);
+			output.should.have.property('failure', false);
+			output.should.have.property('errors').with.lengthOf(0);
 		});
 
 		xit('errors on const enums', () => {

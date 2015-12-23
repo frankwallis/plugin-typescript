@@ -22,6 +22,9 @@ export class Transpiler {
 
 		this._options = (<any>ts).clone(this._host.options);
 
+		this._options.isolatedModules = true;
+
+		/* arrange for an external source map */
 		if (this._options.sourceMap === undefined)
 			this._options.sourceMap = this._options.inlineSourceMap;
 
@@ -29,8 +32,16 @@ export class Transpiler {
 			this._options.sourceMap = true;
 
 		this._options.inlineSourceMap = false;
+
+		/* these options are incompatible with isolatedModules */
 		this._options.declaration = false;
-		this._options.isolatedModules = true;
+		this._options.noEmitOnError = false;
+		this._options.out = undefined;
+		this._options.outFile = undefined;
+
+		/* without this we get a 'lib.d.ts not found' error */
+		this._options.noLib = true;
+
 	}
 
 	public transpile(sourceName: string, source: string): TranspileResult {
@@ -52,7 +63,9 @@ export class Transpiler {
 				throw new Error(`unexpected ouput file ${outputName}`)
 		});
 
-		let diagnostics = program.getSyntacticDiagnostics().concat(emitResult.diagnostics);
+		let diagnostics = emitResult.diagnostics
+			.concat(program.getOptionsDiagnostics())
+			.concat(program.getSyntacticDiagnostics());
 
 		return {
 			failure: this.hasError(diagnostics),
