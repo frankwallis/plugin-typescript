@@ -12,9 +12,8 @@ System.config({
     "module": "es6",
     "target": "es6",
     "noImplicitAny": false,
-    "typeCheck": true,
-    "tsconfig": true,
-    "resolveTypings": true
+    "typeCheck": false,
+    "tsconfig": true
   },
   paths: {
     "github:*": "jspm_packages/github/*",

@@ -1,4 +1,4 @@
-import {Component, View, ChangeDetectionStrategy} from 'angular2/angular2';
+import {Component, View, ChangeDetectionStrategy} from 'angular2/core';
 import {ExampleService} from "example-service/example-service";
 import exampleTemplate from "./example-view.html";
 
@@ -24,10 +24,17 @@ export class ExampleComponent {
       this.name = event.target.value;
    }
 
-	public async greet() {
+	public greet() {
 		console.log('greeting ' + this.name);
-		this.greeting = await this.exampleService.greet(this.name);
+		this.greeting = this.exampleService.greet(this.name);
 		console.log(this.greeting);
 		this.name = "";
 	}
+   
+	// public async greet() {
+	// 	console.log('greeting ' + this.name);
+	// 	this.greeting = await this.exampleService.greetAsync(this.name);
+	// 	console.log(this.greeting);
+	// 	this.name = "";
+	// }
 }

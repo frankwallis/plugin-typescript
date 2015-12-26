@@ -2,8 +2,8 @@
 	<label>Enter your name</label>
 	<input type="text"
 		[value]="name"
-   	(change)="handleChangeName($event)"></input>
+   	(change)="handleChangeName($event)"/>
 	<button (click)="greet()">Press Me</button>
 	<p class="greeting">{{greeting}}</p>
-		<p [text-content]="greeting"></p>
+		<!--<p [text-content]="greeting"></p>-->
 </div>

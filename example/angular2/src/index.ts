@@ -1,5 +1,5 @@
-import {bootstrap} from 'angular2/angular2';
-import {Component, Directive, View} from 'angular2/angular2';
+import {bootstrap} from 'angular2/bootstrap';
+import {Component, Directive, View} from 'angular2/core';
 import {ExampleComponent} from './example-component';
 import "./index.css";
 
