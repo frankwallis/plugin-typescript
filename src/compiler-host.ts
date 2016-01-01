@@ -21,6 +21,9 @@ export class CompilerHost implements ts.CompilerHost {
 		this._options.allowNonTsExtensions = (this._options.allowNonTsExtensions !== false);
 		this._options.skipDefaultLibCheck = (this._options.skipDefaultLibCheck !== false);
 		this._options.noResolve = true;
+		
+		// Remove module resolution option in order to prevent node module resolution from kicking in
+		delete this._options.moduleResolution;
 
 		this._files = {}; //new Map<string, ts.SourceFile>();
 		this._fileResMaps = {}; //new Map<string, any>();
