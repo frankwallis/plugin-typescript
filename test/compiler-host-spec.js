@@ -55,6 +55,14 @@ describe( 'Compiler Host', () => {
 			});
 			host.options.jsx.should.be.equal(ts.JsxEmit.React);
 		});
+
+		it('forces moduleResolution to classic', () => {
+			host = new CompilerHost({
+				moduleResolution: ts.ModuleResolutionKind.NodeJs
+			});
+			host.options.moduleResolution.should.be.equal(ts.ModuleResolutionKind.Classic);
+		});
+
 	});
 
 	describe( 'addFile', () => {
