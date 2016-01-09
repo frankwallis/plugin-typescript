@@ -193,7 +193,7 @@ export class TypeChecker {
 				return this._fetch(address)
 					.then(packageText => {
 						let typings = JSON.parse(packageText).typings;
-						return typings ? this._resolve(typings, address) : undefined;
+						return typings ? this._resolve("./" + typings, address) : undefined;
 					})
 					.catch(err => {
 						logger.warn(`unable to resolve typings for ${importName}, ${address} could not be found`);

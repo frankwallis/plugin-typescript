@@ -34,6 +34,7 @@ let circularFile = require.resolve('./fixtures-es6/circular/circular.ts');
 let importCss = require.resolve('./fixtures-es6/css/import-css.ts');
 let importHtml = require.resolve('./fixtures-es6/html/import-html.ts');
 let angular2Typings = require.resolve('./fixtures-es6/typings/angular2-typings.ts');
+let rxjsTypings = require.resolve('./fixtures-es6/typings/rxjs-typings.ts');
 let missingTypings = require.resolve('./fixtures-es6/typings/missing-typings.ts');
 let missingPackage = require.resolve('./fixtures-es6/typings/missing-package.ts');
 let filelist = [];
@@ -50,9 +51,9 @@ function resolve(dep, parent) {
 	let result = "";
 
 	try {
-		if ((dep === "angular2") || (dep === "missing"))
+		if ((dep === "angular2") || (dep === "missing") || dep == "rxjs")
 			result = require.resolve("./" + path.join('fixtures-es6/typings/', dep, dep +'.js'));
-		else if ((dep === "angular2/package.json") || (dep === "missing/package.json"))
+		else if ((dep.indexOf("angular2/") == 0) || (dep.indexOf("missing/") == 0) || (dep.indexOf("rxjs/") == 0))
 			result = require.resolve("./" + path.join('fixtures-es6/typings/', dep));
 		else if (dep === "ambient")
 			result = require.resolve("./fixtures-es6/ambients/resolved/" + dep + ".js");
@@ -317,6 +318,19 @@ describe('Type Checker ES6', () => {
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host, resolve, fetch);
 		return typecheckAll([missingTypings])
+			.then((diags) => {
+				formatErrors(diags, console);
+				diags.should.have.length(0);
+			});
+	});
+
+	it('handles non-relative typings field in package.json', () => {
+		let options = {
+			resolveTypings: true
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host, resolve, fetch);
+		return typecheckAll([rxjsTypings])
 			.then((diags) => {
 				formatErrors(diags, console);
 				diags.should.have.length(0);
