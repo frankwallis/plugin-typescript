@@ -15,7 +15,7 @@ let typeCheckErrored = false;
  * load.metadata
  * load.source: the fetched source
  */
-export function translate(load: Module): Promise<Module> {
+export function translate(load: Module): Promise<string> {
 	logger.debug(`systemjs translating ${load.address}`);
 
 	return factory.then(({transpiler, typeChecker, host}) => {
@@ -49,7 +49,7 @@ export function translate(load: Module): Promise<Module> {
 		else if (host.options.module === ts.ModuleKind.ES6)
 			load.metadata.format = 'esm';			
 
-		return load;
+		return load.source;
 	});
 }
 
