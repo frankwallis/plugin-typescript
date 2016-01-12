@@ -54,11 +54,12 @@ export class CompilerHost implements ts.CompilerHost {
 	}
 
 	public getSourceFile(fileName: string): ts.SourceFile {
+		fileName = this.getCanonicalFileName(fileName);
 		return this._files[fileName];
 	}
 
 	public fileExists(fileName: string): boolean {
-		return !!this._files[fileName];
+		return !!this.getSourceFile(fileName);
 	}
 
 	public readFile(fileName: string): string {
@@ -78,7 +79,7 @@ export class CompilerHost implements ts.CompilerHost {
 	}
 
 	public getCanonicalFileName(fileName: string): string {
-		return fileName;
+		return (ts as any).normalizePath(fileName);
 	}
 
 	public getCurrentDirectory(): string {
@@ -89,12 +90,13 @@ export class CompilerHost implements ts.CompilerHost {
 		return "\n";
 	}
 
-	public addFile(filename: string, text: string, isDefaultLib: boolean = false) {
-		this._files[filename] = ts.createSourceFile(filename, text, this._options.target);
-		this._files[filename].isDefaultLib = isDefaultLib;
+	public addFile(fileName: string, text: string, isDefaultLib: boolean = false) {
+		fileName = this.getCanonicalFileName(fileName);
+		this._files[fileName] = ts.createSourceFile(fileName, text, this._options.target);
+		this._files[fileName].isDefaultLib = isDefaultLib;
 
-		logger.debug(`added ${filename}`);
-		return this._files[filename];
+		logger.debug(`added ${fileName}`);
+		return this._files[fileName];
 	}
 
 	/*
@@ -103,8 +105,9 @@ export class CompilerHost implements ts.CompilerHost {
 		These will include any redirections to a typings file if one is present.
 		This map is then used in resolveModuleNames below.
 	*/
-	public addResolutionMap(filename: string, map: Map<string, string>) {
-		this._fileResMaps[filename] = map;
+	public addResolutionMap(fileName: string, map: Map<string, string>) {
+		fileName = this.getCanonicalFileName(fileName);
+		this._fileResMaps[fileName] = map;
 	}
 
 	/*
