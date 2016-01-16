@@ -10,6 +10,7 @@ interface SystemJS {
 	fetch(load: Module): Promise<string>;
 
 	typescriptOptions?: any;
+   transpiler?: string;
 }
 
 declare var System: SystemJS;
