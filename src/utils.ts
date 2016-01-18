@@ -1,4 +1,6 @@
 /* */
+import * as ts from "typescript";
+
 export function isAbsolute(filename: string) {
 	return (filename[0] == '/');
 }
@@ -19,27 +21,27 @@ export function isAmbient(filename: string) {
 	return (!isRelative(filename) && !isAbsolute(filename));
 }
 
-var typescriptRegex = /\.tsx?$/i;
+const typescriptRegex = /\.tsx?$/i;
 export function isTypescript(filename: string) {
 	return typescriptRegex.test(filename);
 }
 
-var javascriptRegex = /\.js$/i;
+const javascriptRegex = /\.js$/i;
 export function isJavaScript(filename: string) {
 	return javascriptRegex.test(filename);
 }
 
-var mapRegex = /\.map$/i;
+const mapRegex = /\.map$/i;
 export function isSourceMap(filename: string) {
 	return mapRegex.test(filename);
 }
 
-var declarationRegex = /\.d\.tsx?$/i;
+const declarationRegex = /\.d\.tsx?$/i;
 export function isTypescriptDeclaration(filename: string) {
 	return declarationRegex.test(filename);
 }
 
-var htmlRegex = /\.html$/i;
+const htmlRegex = /\.html$/i;
 export function isHtml(filename: string) {
 	return htmlRegex.test(filename);
 }
@@ -67,4 +69,8 @@ export function stripDoubleExtension(normalized: string) {
 		}
 	}
 	return normalized;
+}
+
+export function hasError(diags: Array<ts.Diagnostic>): boolean {
+   return diags.some(diag => (diag.category === ts.DiagnosticCategory.Error))
 }

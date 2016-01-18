@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "start": "node ../tasks/start",
+    "bundle": "node ../tasks/bundle"
+  },
   "jspm": {
     "registry": "github",
     "dependencies": {
@@ -13,6 +17,7 @@
       "clean-css": "npm:clean-css@^3.4.3",
       "core-js": "npm:core-js@^1.1.4",
       "css": "systemjs/plugin-css@^0.1.17",
+      "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.2",
       "ts": "frankwallis/plugin-typescript@^2.4.0"
     }

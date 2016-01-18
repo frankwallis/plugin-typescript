@@ -13,6 +13,7 @@ let defaultFile = require.resolve('./fixtures-es6/tsconfig/default.json');
 let alternateFile = require.resolve('./fixtures-es6/tsconfig/alternate.json');
 let declarationFile = require.resolve('./fixtures-es6/tsconfig/declaration.json');
 let theirModuleFile = require.resolve('./fixtures-es6/tsconfig/theirmodule.d.ts');
+let defaultLib = require.resolve('typescript/lib/lib.es6.d.ts');
 let filelist = [];
 
 function fetch(filename) {
@@ -50,7 +51,7 @@ function resolve(dep, parent) {
 	}
 }
 
-describe( 'Factory', () => {
+describe('Factory', () => {
 
 	beforeEach(function() {
 		filelist = [];
@@ -76,14 +77,28 @@ describe( 'Factory', () => {
 		});
 	});
 
-	it('creates typeChecker if typeCheck is true', () => {
+	it('creates typeChecker & resolver if typeCheck is true', () => {
 		let config = {
 			typeCheck: true,
 		};
 		let factory = createFactory(config, resolve, fetch);
-		return factory.then(({transpiler, typeChecker}) => {
+		return factory.then(({transpiler, resolver, typeChecker}) => {
 			transpiler.should.be.defined;
 			typeChecker.should.be.defined;
+         resolver.should.be.defined;
+		});
+	});
+
+	it('does not create typeChecker & resolver when typeCheck is false', () => {
+		let config = {
+			tsconfig: declarationFile,
+			typeCheck: false
+		};
+		let factory = createFactory(config, resolve, fetch);
+		return factory.then(({transpiler, resolver, typeChecker}) => {
+			transpiler.should.be.defined;
+         should.not.exist(typeChecker);
+			should.not.exist(resolver);
 		});
 	});
 
@@ -139,36 +154,23 @@ describe( 'Factory', () => {
 			typeCheck: true
 		};
 		let factory = createFactory(config, resolve, fetch);
-		return factory.then(({transpiler, typeChecker, host}) => {
-			transpiler.should.be.defined;
-			typeChecker.should.be.defined;
-			typeChecker._declarationFiles.should.have.length(1);
+		return factory.then(({resolver}) => {
+			resolver.should.be.defined;
+			resolver._declarationFiles.should.have.length(1);
 		});
 	});
 
-	it('adds declaration files into type-checker', () => {
+	it('adds declaration files into resolver', () => {
 		let config = {
 			tsconfig: declarationFile,
 			typeCheck: true
 		};
 		let factory = createFactory(config, resolve, fetch);
-		return factory.then(({transpiler, typeChecker}) => {
-			transpiler.should.be.defined;
-			typeChecker.should.be.defined;
-
-			let filename = "mymodule.ts";
-			let text = "import {theirvariable} from 'theirmodule'; if (theirvariable == 20) throw new Error('help!');";
-
-			typeChecker._host.addFile(filename, text);
-			return typeChecker.check(filename, text)
-				.then(diags => {
-					formatErrors(diags, console);
-
-					diags.should.have.length(0);
-					filelist.should.have.length(3);
-					filelist[0].should.be.equal(declarationFile);
-					filelist[2].should.be.equal(theirModuleFile);
-				});
+		return factory.then(({resolver}) => {
+ 			 resolver.should.be.defined;
+		    resolver._declarationFiles.should.have.length(2);
+			 resolver._declarationFiles[0].should.be.equal(defaultLib);
+			 resolver._declarationFiles[1].should.be.equal(theirModuleFile);
 		});
 	});
 
@@ -178,23 +180,9 @@ describe( 'Factory', () => {
 			typeCheck: true
 		};
 		let factory = createFactory(config, resolve, fetch);
-		return factory.then(({transpiler, typeChecker, host}) => {
-			transpiler.should.be.defined;
-			typeChecker.should.be.defined;
-			typeChecker._declarationFiles.should.have.length(0);
+		return factory.then(({resolver}) => {
+			resolver.should.be.defined;
+			resolver._declarationFiles.should.have.length(0);
 		});
 	});
-
-	it('doesnt add declaration files when typeCheck is false', () => {
-		let config = {
-			tsconfig: declarationFile,
-			typeCheck: false
-		};
-		let factory = createFactory(config, resolve, fetch);
-		return factory.then(({transpiler, typeChecker}) => {
-			transpiler.should.be.defined;
-			should.not.exist(typeChecker);
-		});
-	});
-
 });

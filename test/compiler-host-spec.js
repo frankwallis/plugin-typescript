@@ -73,10 +73,17 @@ describe( 'Compiler Host', () => {
 			sourceFile.should.be.equal(sourceFile1);
 		});
 
-		it('overwrites file if it has changed', () => {
+		it('keeps same file if it has not changed', () => {
 			let filename = 'filea.ts';
 			let sourceFile1 = host.addFile(filename, 'sometext');
 			let sourceFile2 = host.addFile(filename, 'sometext');
+			sourceFile1.should.be.equal(sourceFile2);
+		});
+
+		it('overwrites file if it has changed', () => {
+			let filename = 'filea.ts';
+			let sourceFile1 = host.addFile(filename, 'sometext');
+			let sourceFile2 = host.addFile(filename, 'differenttext');
 			sourceFile1.should.not.be.equal(sourceFile2);
 			let sourceFile3 = host.getSourceFile(filename);
 			sourceFile2.should.be.equal(sourceFile3);
