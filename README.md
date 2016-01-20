@@ -143,15 +143,9 @@ To run the example projects:
 > npm install
 > cd example/angular  		// or example/angular2 or example/react
 > jspm install
-> gulp example
+> npm start
 ```
 To bundle each example project:
 ```
-gulp bundle 					// or jspm bundle-sfx src build/build.js
+npm run bundle 					// or jspm bundle-sfx src build/build.js
 ```
-To watch each example project and continuously report on type-errors:
-```
-gulp flow
-```
-
-For a more complex angular2 example see [here](https://github.com/frankwallis/redouble/tree/angular2)

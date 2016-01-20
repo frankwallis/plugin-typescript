@@ -17,6 +17,11 @@
 <body>
    <div id="body"></div>
    <script>
+      System.trace = true
+      System.import('systemjs-hot-reloader').then(function(HotReloader){
+         new HotReloader.default('http://localhost:8080')  // chokidar-socket-emitter port
+      });
+
 		System.import('src')
 			.then(function() {
 				console.log('running');

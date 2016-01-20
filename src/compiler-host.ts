@@ -3,15 +3,30 @@ import * as ts from 'typescript';
 import Logger from './logger';
 import {isHtml, isTypescriptDeclaration, isJavaScript} from './utils';
 
-let logger = new Logger({ debug: false });
-export let __HTML_MODULE__ = "__html_module__";
+const logger = new Logger({ debug: false });
+export const __HTML_MODULE__ = "__html_module__";
 
 export interface CombinedOptions extends PluginOptions, ts.CompilerOptions { };
 
+export interface TranspileResult {
+	failure: boolean;
+	errors: Array<ts.Diagnostic>;
+	js: string;
+	sourceMap: string;
+}
+
+export interface SourceFile extends ts.SourceFile {
+   output?: TranspileResult;
+   pendingDependencies?: Promise<DependencyInfo>;
+   dependencies?: DependencyInfo;
+   errors?: ts.Diagnostic[];
+   checked?: boolean;
+   isLibFile?: boolean;
+}
+
 export class CompilerHost implements ts.CompilerHost {
 	private _options: any;
-	private _files: { [s: string]: any; }; //Map<string, ts.SourceFile>;
-	private _fileResMaps: { [s: string]: any; }; //Map<string, any>;
+	private _files: { [s: string]: SourceFile; }; //Map<string, ts.SourceFile>;
 
 	constructor(options: any) {
 		this._options = options || {};
@@ -26,12 +41,14 @@ export class CompilerHost implements ts.CompilerHost {
 		this._options.moduleResolution = ts.ModuleResolutionKind.Classic;
 
 		this._files = {}; //new Map<string, ts.SourceFile>();
-		this._fileResMaps = {}; //new Map<string, any>();
 
 		// support for importing html templates until
 		// https://github.com/Microsoft/TypeScript/issues/2709#issuecomment-91968950 gets implemented
 		// note - this only affects type-checking, not runtime!
-		this.addFile(__HTML_MODULE__, "var __html__: string = ''; export default __html__;");
+		const file = this.addFile(__HTML_MODULE__, "var __html__: string = ''; export default __html__;");
+      file.dependencies = { list: [], mappings: {} };
+      file.checked = true;
+      file.errors = [];
 	}
 
 	private getEnum<T>(enumValue: any, enumType: any, defaultValue: T): T {
@@ -52,24 +69,6 @@ export class CompilerHost implements ts.CompilerHost {
 	public get options(): CombinedOptions {
 		return this._options;
 	}
-
-	public getSourceFile(fileName: string): ts.SourceFile {
-		fileName = this.getCanonicalFileName(fileName);
-		return this._files[fileName];
-	}
-
-	public fileExists(fileName: string): boolean {
-		return !!this.getSourceFile(fileName);
-	}
-
-	public readFile(fileName: string): string {
-		throw new Error("Not implemented");
-	}
-
-	public writeFile(name: string, text: string, writeByteOrderMark: boolean) {
-		throw new Error("Not implemented");
-	}
-
 	public getDefaultLibFileName(): string {
 		return "typescript/lib/lib.es6.d.ts";
 	}
@@ -90,24 +89,42 @@ export class CompilerHost implements ts.CompilerHost {
 		return "\n";
 	}
 
-	public addFile(fileName: string, text: string, isDefaultLib: boolean = false) {
-		fileName = this.getCanonicalFileName(fileName);
-		this._files[fileName] = ts.createSourceFile(fileName, text, this._options.target);
-		this._files[fileName].isDefaultLib = isDefaultLib;
+	public readFile(fileName: string): string {
+		throw new Error("Not implemented");
+	}
 
-		logger.debug(`added ${fileName}`);
+	public writeFile(name: string, text: string, writeByteOrderMark: boolean) {
+		throw new Error("Not implemented");
+	}
+
+	public getSourceFile(fileName: string): SourceFile {
+		fileName = this.getCanonicalFileName(fileName);
 		return this._files[fileName];
 	}
 
-	/*
-		Called by the type-checker, this method adds a map of imports/references used
-		by this file to their resolved locations.
-		These will include any redirections to a typings file if one is present.
-		This map is then used in resolveModuleNames below.
-	*/
-	public addResolutionMap(fileName: string, map: Map<string, string>) {
-		fileName = this.getCanonicalFileName(fileName);
-		this._fileResMaps[fileName] = map;
+	public getAllFiles(): SourceFile[] {
+      return Object.keys(this._files).map(key => this._files[key]);
+	}
+
+	public fileExists(fileName: string): boolean {
+		return !!this.getSourceFile(fileName);
+	}
+
+	public addFile(fileName: string, text: string): SourceFile {
+		fileName = this.getCanonicalFileName(fileName);      
+      const file = this._files[fileName];
+      
+      if (!file) {
+		   this._files[fileName] = ts.createSourceFile(fileName, text, this._options.target);
+         logger.debug(`added ${fileName}`);         
+      }
+      else if (file.text != text) {
+         // create a new one
+         this._files[fileName] = ts.createSourceFile(fileName, text, this._options.target);
+         logger.debug(`updated ${fileName}`);         
+      }
+		
+		return this._files[fileName];
 	}
 
 	/*
@@ -117,14 +134,14 @@ export class CompilerHost implements ts.CompilerHost {
 	*/
 	public resolveModuleNames(moduleNames: string[], containingFile: string): ts.ResolvedModule[] {
 		return moduleNames.map((modName) => {
-			let mappings = this._fileResMaps[containingFile];
+			const dependencies = this._files[containingFile].dependencies;
 
 			if (isHtml(modName)) {
 				return { resolvedFileName: __HTML_MODULE__ };
 			}
-			else if (mappings) {
-				let resolvedFileName = mappings[modName];
-				let isExternalLibraryImport = isTypescriptDeclaration(resolvedFileName);
+			else if (dependencies) {
+				const resolvedFileName = dependencies.mappings[modName];
+				const isExternalLibraryImport = isTypescriptDeclaration(resolvedFileName);
 
 				return { resolvedFileName, isExternalLibraryImport };
 			}

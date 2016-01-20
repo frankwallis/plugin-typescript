@@ -3,15 +3,17 @@ import * as ts from 'typescript';
 import Logger from './logger';
 import {CompilerHost} from './compiler-host';
 import {Transpiler} from './transpiler';
+import {Resolver} from './resolver';
 import {TypeChecker} from './type-checker';
 import {formatErrors} from './format-errors';
 import {isTypescriptDeclaration} from "./utils";
 
-let logger = new Logger({ debug: false });
+const logger = new Logger({ debug: false });
 
 interface FactoryOutput {
 	 host: CompilerHost;
 	 transpiler: Transpiler;
+    resolver: Resolver;
 	 typeChecker: TypeChecker;
 	 options: PluginOptions;
 }
@@ -20,8 +22,8 @@ interface FactoryOutput {
 	This code looks a lot better with async functions...
 */
 export function createFactory(sjsconfig: PluginOptions = {}, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<FactoryOutput> {
-	let tsconfigFiles = [];
-	let typingsFiles = [];
+	const tsconfigFiles = [];
+	const typingsFiles = [];
 
 	return loadOptions(sjsconfig, _resolve, _fetch)
 		.then(options => {
@@ -32,7 +34,7 @@ export function createFactory(sjsconfig: PluginOptions = {}, _resolve: ResolveFu
 				return resolveDeclarationFiles(services.options, _resolve)
 					.then(resolvedFiles => {
 						resolvedFiles.forEach(resolvedFile => {
-							services.typeChecker.registerDeclarationFile(resolvedFile, false);
+							services.resolver.registerDeclarationFile(resolvedFile, false);
 						});
 						return services;
 					});
@@ -45,15 +47,15 @@ export function createFactory(sjsconfig: PluginOptions = {}, _resolve: ResolveFu
 
 function loadOptions(sjsconfig: PluginOptions, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<PluginOptions> {
 	if (sjsconfig.tsconfig) {
-		let tsconfig = (sjsconfig.tsconfig === true) ? "tsconfig.json" : sjsconfig.tsconfig as string;
+		const tsconfig = (sjsconfig.tsconfig === true) ? "tsconfig.json" : sjsconfig.tsconfig as string;
 
 		return _resolve(tsconfig)
 			.then(tsconfigAddress => {
 				return _fetch(tsconfigAddress).then(tsconfigText => ({tsconfigText, tsconfigAddress}));
 			})
 			.then(({tsconfigAddress, tsconfigText}) => {
-				let ts1 = ts as any; // support TS 1.6.2 and > 1.7
-				let result = ts1.parseConfigFileText ?
+				const ts1 = ts as any; // support TS 1.6.2 and > 1.7
+				const result = ts1.parseConfigFileText ?
 					ts1.parseConfigFileText(tsconfigAddress, tsconfigText) :
 					ts1.parseConfigFileTextToJson(tsconfigAddress, tsconfigText);
 
@@ -62,7 +64,7 @@ function loadOptions(sjsconfig: PluginOptions, _resolve: ResolveFunction, _fetch
 					throw new Error(`failed to load tsconfig from ${tsconfigAddress}`);
 				}
 
-				let files = result.config.files;
+				const files = result.config.files;
 				return (<any>ts).extend((<any>ts).extend({ tsconfigAddress, files }, sjsconfig), result.config.compilerOptions);
 			});
 	}
@@ -72,7 +74,7 @@ function loadOptions(sjsconfig: PluginOptions, _resolve: ResolveFunction, _fetch
 }
 
 function resolveDeclarationFiles(options: PluginOptions, _resolve: ResolveFunction): Promise<string[]> {
-	let files = options.files || [];
+	const files = options.files || [];
 
 	let declarationFiles = files
 		.filter(filename => isTypescriptDeclaration(filename))
@@ -82,12 +84,15 @@ function resolveDeclarationFiles(options: PluginOptions, _resolve: ResolveFuncti
 }
 
 function createServices(options: PluginOptions, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<FactoryOutput> {
-	let host = new CompilerHost(options);
-	let transpiler = new Transpiler(host);
+	const host = new CompilerHost(options);
+	const transpiler = new Transpiler(host);
+   
+   let resolver = undefined; 
 	let typeChecker = undefined;
-
+   
 	if (options.typeCheck) {
-		typeChecker = new TypeChecker(host, _resolve, _fetch);
+      resolver = new Resolver(host, _resolve, _fetch);
+		typeChecker = new TypeChecker(host);
 
 		if (!host.options.noLib) {
 			// TODO - remove this when __moduleName is available
@@ -96,11 +101,11 @@ function createServices(options: PluginOptions, _resolve: ResolveFunction, _fetc
 					 return _resolve(host.getDefaultLibFileName(), moduleName)
 				})
 				.then(defaultLibAddress => {
-					typeChecker.registerDeclarationFile(defaultLibAddress, true);
-					return {transpiler, typeChecker, host, options};
+					resolver.registerDeclarationFile(defaultLibAddress, true);
+					return {transpiler, resolver, typeChecker, host, options};
 				});
 		}
 	}
 
-	return Promise.resolve({transpiler, typeChecker, host, options});
+	return Promise.resolve({host, transpiler, resolver, typeChecker, options});
 }

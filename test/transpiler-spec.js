@@ -15,16 +15,16 @@ let trailingComma = fs.readFileSync(require.resolve('./fixtures-es6/es3/trailing
 
 describe('Transpiler ES6', () => {
 
-	let transpiler;
+   function transpile(sourceName, source, host) {
+      host = host || new CompilerHost({}); 
+	   const transpiler = new Transpiler(host);
+      host.addFile(sourceName, source);
+      return transpiler.transpile(sourceName);
+   }
 
 	describe('transpile', () => {
-		beforeEach(function() {
-			let host = new CompilerHost({});
-			transpiler = new Transpiler(host);
-		});
-
 		it('transpiles successfully', () => {
-			let output = transpiler.transpile('one-import.ts', oneImport);
+			let output = transpile('one-import.ts', oneImport);
 			formatErrors(output.errors, console);
 			output.should.have.property('failure', false);
 			output.should.have.property('errors').with.lengthOf(0);
@@ -32,17 +32,17 @@ describe('Transpiler ES6', () => {
 		});
 
 		it('removes SourceMappingURL', () => {
-			let output = transpiler.transpile('one-import.ts', oneImport);
+			let output = transpile('one-import.ts', oneImport);
 			output.js.should.not.contain("SourceMappingURL");
 		});
 
 		it('returns sourceMap', () => {
-			let output = transpiler.transpile('one-import.ts', oneImport);
+			let output = transpile('one-import.ts', oneImport);
 			output.should.have.property('sourceMap').with.lengthOf(143);
 		});
 
 		it('catches syntax errors', () => {
-			let output = transpiler.transpile('syntax-error.ts', syntaxError);
+			let output = transpile('syntax-error.ts', syntaxError);
 			//formatErrors(output.errors, console);
 			output.should.have.property('failure', true);
 			output.should.have.property('errors').with.lengthOf(1);
@@ -54,9 +54,8 @@ describe('Transpiler ES6', () => {
 				experimentalDecorators: false
 			};
 			let host = new CompilerHost(options);
-			transpiler = new Transpiler(host);
 
-			let output = transpiler.transpile('one-import.ts', oneImport);
+			let output = transpile('one-import.ts', oneImport, host);
 			//formatErrors(output.errors, console);
 			output.should.have.property('failure', true);
 			output.should.have.property('errors').with.lengthOf(1);
@@ -71,16 +70,15 @@ describe('Transpiler ES6', () => {
 				noLib: false
 			};
 			let host = new CompilerHost(options);
-			transpiler = new Transpiler(host);
 
-			let output = transpiler.transpile('one-import.ts', oneImport);
+			let output = transpile('one-import.ts', oneImport, host);
 			formatErrors(output.errors, console);
 			output.should.have.property('failure', false);
 			output.should.have.property('errors').with.lengthOf(0);
 		});
 
 		xit('errors on const enums', () => {
-			let output = transpiler.transpile('const-enums.ts', constEnums);
+			let output = transpile('const-enums.ts', constEnums);
 			//formatErrors(output.errors, console);
 			output.should.have.property('failure', true);
 			output.should.have.property('errors').with.lengthOf(1);
@@ -91,8 +89,7 @@ describe('Transpiler ES6', () => {
 				sourceMap: false
 			};
 			let host = new CompilerHost(options);
-			transpiler = new Transpiler(host);
-			let output = transpiler.transpile('symbol.ts', es6Symbol);
+			let output = transpile('symbol.ts', es6Symbol, host);
 			(output.sourceMap === undefined).should.be.true;
 		});
 
@@ -100,14 +97,12 @@ describe('Transpiler ES6', () => {
 			let host = new CompilerHost({
 				target: "es3"
 			});
-			transpiler = new Transpiler(host);
-			let es3output = transpiler.transpile('trailing-comma.ts', trailingComma);
+			let es3output = transpile('trailing-comma.ts', trailingComma, host);
 
 			host = new CompilerHost({
 				target: "es5"
 			});
-			transpiler = new Transpiler(host);
-			let es5output = transpiler.transpile('trailing-comma.ts', trailingComma);
+			let es5output = transpile('trailing-comma.ts', trailingComma, host);
 			es3output.should.not.be.equal(es5output);
 		});
 	});

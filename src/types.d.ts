@@ -38,3 +38,12 @@ interface PluginOptions {
 	// this is a hidden typescript option
 	skipDefaultLibCheck?: boolean;
 }
+
+interface DependencyInfo {
+   /* list of all typescript files required to compile this one */
+   list: string[];
+   
+   /* map of imports/references used by this file to their resolved locations.
+		These will include any redirections to a typings file if one is present. */
+   mappings: { [s: string]: string; }
+}
