@@ -46,7 +46,7 @@
   "bin": {},
   "license": "MIT",
   "jspm": {
-    "format": "cjs",
+    "format": "register",
     "main": "plugin",
     "registry": "github",
     "name": "frankwallis/plugin-typescript",
