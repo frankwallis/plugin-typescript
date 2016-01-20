@@ -42,7 +42,7 @@ export function translate(load: Module): Promise<string> {
 			load.source = result.js;
 		
 		if (result.sourceMap) {
-         if (System.transpiler && System.transpiler.indexOf("babel") >= 0)
+         if (this.transpiler && this.transpiler.indexOf("babel") >= 0)
    			load.metadata.sourceMap = JSON.parse(result.sourceMap);
          else
             load.metadata.sourceMap = result.sourceMap;
