@@ -34,7 +34,8 @@
     "http-server": "^0.8.0",
     "jspm": "^0.16.4",
     "mocha": "^2.2.5",
-    "open": "0.0.5"
+    "open": "0.0.5",
+    "ts-node": "^0.5.5"
   },
   "scripts": {
     "build": "tsc",
