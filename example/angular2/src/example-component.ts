@@ -1,6 +1,6 @@
 import {Component, View, ChangeDetectionStrategy} from 'angular2/core';
 import {ExampleService} from "example-service/example-service";
-import exampleTemplate from "./example-view.html";
+import exampleTemplate = require("./example-view.html");
 
 @Component({
   selector: 'example-component',

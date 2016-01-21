@@ -1,12 +1,12 @@
-import fs from 'fs';
-import path from 'path';
-import * as chai from 'chai';
-import Promise from 'bluebird';
+import fs = require('fs');
+import path = require('path');
+import Promise = require('bluebird');
+import chai = require('chai');
 
-import {Resolver} from '../lib/resolver';
-import {TypeChecker} from '../lib/type-checker';
-import {CompilerHost} from '../lib/compiler-host';
-import {formatErrors} from '../lib/format-errors';
+import {Resolver} from '../src/resolver';
+import {TypeChecker} from '../src/type-checker';
+import {CompilerHost} from '../src/compiler-host';
+import {formatErrors} from '../src/format-errors';
 
 let should = chai.should();
 

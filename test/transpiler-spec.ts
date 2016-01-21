@@ -1,9 +1,10 @@
-import fs from 'fs';
-import * as chai from 'chai';
+import fs = require('fs');
+import path = require('path');
+import chai = require('chai');
 
-import {CompilerHost} from '../lib/compiler-host';
-import {Transpiler} from '../lib/transpiler';
-import {formatErrors} from '../lib/format-errors';
+import {CompilerHost} from '../src/compiler-host';
+import {Transpiler} from '../src/transpiler';
+import {formatErrors} from '../src/format-errors';
 
 let should = chai.should();
 

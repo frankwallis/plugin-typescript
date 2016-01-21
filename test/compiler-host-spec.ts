@@ -1,7 +1,7 @@
-import * as chai from 'chai';
+import chai = require('chai');
 import * as ts from 'typescript';
 
-import {CompilerHost} from '../lib/compiler-host';
+import {CompilerHost} from '../src/compiler-host';
 
 let should = chai.should();
 

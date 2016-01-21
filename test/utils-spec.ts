@@ -1,4 +1,4 @@
-import * as chai from 'chai';
+import chai = require('chai');
 
 import {
 	isRelative,
@@ -13,7 +13,7 @@ import {
 	jsToDts,
 	isHtml,
 	stripDoubleExtension
-} from '../lib/utils';
+} from '../src/utils';
 
 let should = chai.should();
 

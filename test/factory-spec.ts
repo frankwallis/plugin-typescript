@@ -1,11 +1,11 @@
-import fs from 'fs';
-import path from 'path';
-import Promise from 'bluebird';
-import * as chai from 'chai';
+import fs = require('fs');
+import path = require('path');
+import Promise = require('bluebird');
+import chai = require('chai');
 import * as ts from 'typescript';
 
-import {createFactory} from '../lib/factory';
-import {formatErrors} from '../lib/format-errors';
+import {createFactory} from '../src/factory';
+import {formatErrors} from '../src/format-errors';
 
 let should = chai.should();
 
@@ -22,7 +22,11 @@ function fetch(filename) {
 	let readFile = Promise.promisify(fs.readFile.bind(fs));
 	return readFile(filename, 'utf8');
 }
-
+declare module Chai {
+   interface Assertion {
+      defined: any;
+   }
+}
 function resolve(dep, parent) {
 	let result = undefined;
 
@@ -120,8 +124,8 @@ describe('Factory', () => {
 			tsconfig: true
 		};
 		let factory = createFactory(config, resolve, fetch);
-		return factory.then(({transpiler, typeChecker}) => {
-			transpiler._options.noImplicitAny.should.be.true;
+		return factory.then(({host}) => {
+			host.options.noImplicitAny.should.be.true;
 		});
 	});
 
@@ -131,8 +135,8 @@ describe('Factory', () => {
 			noImplicitAny: false
 		};
 		let factory = createFactory(config, resolve, fetch);
-		return factory.then(({transpiler, typeChecker}) => {
-			transpiler._options.noImplicitAny.should.be.false;
+		return factory.then(({host}) => {
+			host.options.noImplicitAny.should.be.false;
 		});
 	});
 

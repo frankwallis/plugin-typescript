@@ -1,6 +1,6 @@
 {
   "name": "plugin-typescript",
-  "version": "2.4.7",
+  "version": "2.4.9",
   "description": "TypeScript loader for SystemJS",
   "main": "lib/plugin.js",
   "homepage": "https://github.com/frankwallis/plugin-typescript",
@@ -28,9 +28,6 @@
     "typescript": "^1.7.5"
   },
   "devDependencies": {
-    "babel-core": "^6.2.4",
-    "babel-plugin-transform-object-assign": "^6.2.4",
-    "babel-preset-es2015": "^6.2.4",
     "bluebird": "^3.0.5",
     "chai": "^3.4.1",
     "chokidar-socket-emitter": "^0.4.2",
@@ -41,7 +38,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "mocha --compilers js:babel-core/register ./test/*.js"
+    "test": "mocha --require ./test/environment ./test/*.ts"
   },
   "bin": {},
   "license": "MIT",
