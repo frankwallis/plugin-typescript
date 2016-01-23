@@ -8,7 +8,7 @@ export const __HTML_MODULE__ = "__html_module__";
 
 export interface CombinedOptions extends PluginOptions, ts.CompilerOptions { };
 
-export interface TranspileResult {
+export type TranspileResult = {
 	failure: boolean;
 	errors: Array<ts.Diagnostic>;
 	js: string;
@@ -26,7 +26,7 @@ export interface SourceFile extends ts.SourceFile {
 
 export class CompilerHost implements ts.CompilerHost {
 	private _options: any;
-	private _files: { [s: string]: SourceFile; }; //Map<string, ts.SourceFile>;
+	private _files: { [s: string]: SourceFile; };
 
 	constructor(options: any) {
 		this._options = options || {};
@@ -40,7 +40,7 @@ export class CompilerHost implements ts.CompilerHost {
 		// Force module resolution into 'classic' mode, to prevent node module resolution from kicking in
 		this._options.moduleResolution = ts.ModuleResolutionKind.Classic;
 
-		this._files = {}; //new Map<string, ts.SourceFile>();
+		this._files = {};
 
 		// support for importing html templates until
 		// https://github.com/Microsoft/TypeScript/issues/2709#issuecomment-91968950 gets implemented
@@ -69,6 +69,7 @@ export class CompilerHost implements ts.CompilerHost {
 	public get options(): CombinedOptions {
 		return this._options;
 	}
+   
 	public getDefaultLibFileName(): string {
 		return "typescript/lib/lib.es6.d.ts";
 	}

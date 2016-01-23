@@ -4,7 +4,7 @@ import {CompilerHost, CombinedOptions, TranspileResult} from './compiler-host';
 import {isJavaScript, isSourceMap, hasError} from "./utils";
 import Logger from './logger';
 
-let logger = new Logger({ debug: false });
+const logger = new Logger({ debug: false });
 
 export class Transpiler {
 	private _host: CompilerHost;

@@ -10,7 +10,7 @@ import {isTypescriptDeclaration} from "./utils";
 
 const logger = new Logger({ debug: false });
 
-interface FactoryOutput {
+type FactoryOutput = {
 	 host: CompilerHost;
 	 transpiler: Transpiler;
     resolver: Resolver;
@@ -102,7 +102,7 @@ function createServices(options: PluginOptions, _resolve: ResolveFunction, _fetc
 				})
 				.then(defaultLibAddress => {
 					resolver.registerDeclarationFile(defaultLibAddress, true);
-					return {transpiler, resolver, typeChecker, host, options};
+					return {host, transpiler, resolver, typeChecker, options};
 				});
 		}
 	}

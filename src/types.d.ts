@@ -1,4 +1,4 @@
-interface Module {
+declare type Module = {
 	name: string;
 	address: string;
 	source?: string;
@@ -16,13 +16,8 @@ interface SystemJS {
 declare var System: SystemJS;
 declare var __moduleName: string;
 
-interface ResolveFunction {
-	(dep: string, parent?: string): Promise<string>;
-}
-
-interface FetchFunction {
-	(address: string): Promise<string>;
-}
+declare type ResolveFunction = (dep: string, parent?: string) => Promise<string>;
+declare type FetchFunction = (address: string) => Promise<string>;
 
 interface PluginOptions {
 	tsconfig?: boolean | string;
@@ -39,7 +34,7 @@ interface PluginOptions {
 	skipDefaultLibCheck?: boolean;
 }
 
-interface DependencyInfo {
+declare type DependencyInfo = {
    /* list of all typescript files required to compile this one */
    list: string[];
    

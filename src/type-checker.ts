@@ -5,7 +5,7 @@ import {hasError} from './utils';
 import {CompilerHost, CombinedOptions, SourceFile} from './compiler-host';
 import {__HTML_MODULE__} from "./compiler-host";
 
-let logger = new Logger({ debug: false });
+const logger = new Logger({ debug: false });
 
 type Candidate = {
    name: string;

@@ -15,7 +15,7 @@ export function formatErrors(diags: ts.Diagnostic[], logger: Logger) {
 				const filename = diag.file.fileName;
 
 				// feature: output in format address:line:position to enable direct linking to error location in chrome dev tools
-				let locationText = `${filename}:${position.line + 1}:${position.character + 1}`;
+				const locationText = `${filename}:${position.line + 1}:${position.character + 1}`;
 
 				if (diag.category === ts.DiagnosticCategory.Error)
 					logger.error(locationText);

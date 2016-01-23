@@ -14,7 +14,7 @@ let syntaxError = fs.readFileSync(require.resolve('./fixtures-es6/program1/synta
 let constEnums = fs.readFileSync(require.resolve('./fixtures-es6/program1/const-enums.ts'), 'utf8');
 let trailingComma = fs.readFileSync(require.resolve('./fixtures-es6/es3/trailing-comma.ts'), 'utf8');
 
-describe('Transpiler ES6', () => {
+describe('Transpiler', () => {
 
    function transpile(sourceName, source, host) {
       host = host || new CompilerHost({}); 

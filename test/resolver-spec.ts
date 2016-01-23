@@ -8,35 +8,6 @@ import {CompilerHost} from '../src/compiler-host';
 import {formatErrors} from '../src/format-errors';
 
 let should = chai.should();
-
-let missingFile = '/somefolder/fixtures-es6/program1/missing-file.ts';
-let missingImport = require.resolve('./fixtures-es6/program1/missing-import.ts');
-let syntaxError = require.resolve('./fixtures-es6/program1/syntax-error.ts');
-let referenceSyntaxError = require.resolve('./fixtures-es6/program1/ref-syntax-error.ts');
-let typeError = require.resolve('./fixtures-es6/program1/type-error.ts');
-let nestedTypeError = require.resolve('./fixtures-es6/program1/nested-type-error.ts');
-let noImports = require.resolve('./fixtures-es6/program1/no-imports.ts');
-let oneImport = require.resolve('./fixtures-es6/program1/one-import.ts');
-let ambientReference = require.resolve('./fixtures-es6/ambients/ambient-reference.ts');
-let ambientReference2 = require.resolve('./fixtures-es6/ambients/module1/ambient-references2.ts');
-let ambientReferenceDisabled = require.resolve('./fixtures-es6/ambients/ambient-reference-disabled.ts');
-let ambientImportJs = require.resolve('./fixtures-es6/ambients/ambient-import-js.ts');
-let ambientImportTs = require.resolve('./fixtures-es6/ambients/ambient-import-ts.ts');
-let ambientResolveTs = require.resolve('./fixtures-es6/ambients/ambient-resolve.ts');
-let ambientResolvedTs = require.resolve('./fixtures-es6/ambients/resolved/ambient.ts');
-let ambientDuplicate = require.resolve('./fixtures-es6/ambients/ambient-duplicate.ts');
-let ambientRequires = require.resolve('./fixtures-es6/ambients/ambient-requires.ts');
-let refImport = require.resolve('./fixtures-es6/program1/ref-import.ts');
-let externalEntry = require.resolve('./fixtures-es6/external/entry.ts');
-let externalOther = require.resolve('./fixtures-es6/external/other.ts');
-let externalDependency = require.resolve('./fixtures-es6/external/dependency.ts');
-let circularFile = require.resolve('./fixtures-es6/circular/circular.ts');
-let importCss = require.resolve('./fixtures-es6/css/import-css.ts');
-let importHtml = require.resolve('./fixtures-es6/html/import-html.ts');
-let angular2Typings = require.resolve('./fixtures-es6/typings/angular2-typings.ts');
-let rxjsTypings = require.resolve('./fixtures-es6/typings/rxjs-typings.ts');
-let missingTypings = require.resolve('./fixtures-es6/typings/missing-typings.ts');
-let missingPackage = require.resolve('./fixtures-es6/typings/missing-package.ts');
 let filelist = [];
 
 function fetch(filename) {
@@ -47,20 +18,20 @@ function fetch(filename) {
 }
 
 function resolve(dep, parent) {
-	//console.log("resolving " + parent + " -> " + dep);
+	console.log("resolving " + parent + " -> " + dep);
 	let result = "";
 
 	try {
 		if ((dep === "angular2") || (dep === "missing") || dep == "rxjs")
-			result = require.resolve("./" + path.join('fixtures-es6/typings/', dep, dep +'.js'));
+			result = path.resolve(__dirname, path.join('fixtures-es6/typings/', dep, dep + '.js'));
 		else if ((dep.indexOf("angular2/") == 0) || (dep.indexOf("missing/") == 0) || (dep.indexOf("rxjs/") == 0))
-			result = require.resolve("./" + path.join('fixtures-es6/typings/', dep));
+			result = path.resolve(__dirname, path.join('fixtures-es6/typings/', dep));
 		else if (dep === "ambient")
-			result = require.resolve("./fixtures-es6/ambients/resolved/" + dep + ".js");
+			result = path.resolve(__dirname, "./fixtures-es6/ambients/resolved/" + dep + ".js");
 		else if (dep == "ambient/ambient")
-			result = require.resolve("./fixtures-es6/ambients/resolved/ambient.ts");
+			result = path.resolve(__dirname, "./fixtures-es6/ambients/resolved/ambient.ts");
 		else if (path.dirname(dep) == "ambient")
-			result = require.resolve("./fixtures-es6/ambients/resolved/" + dep.slice(8));
+			result = path.resolve(__dirname, "./fixtures-es6/ambients/resolved/" + dep.slice(8));
 		else if (dep.indexOf("typescript/") == 0)
 			result = require.resolve(dep);
 		else if (dep[0] == '/')
@@ -75,7 +46,7 @@ function resolve(dep, parent) {
 		if (path.extname(result) == "")
 			result = result + ".ts";
 
-		//console.log("resolved " + parent + " -> " + result);
+		console.log("resolved " + parent + " -> " + result);
 		return Promise.resolve(result);
 	}
 	catch (err) {
@@ -84,16 +55,14 @@ function resolve(dep, parent) {
 	}
 }
 
-xdescribe('Resolver', () => {
+describe.only('Resolver', () => {
 
+   const AMBIENT_NAME = path.join(path.resolve(__dirname, "./fixtures-es6/ambients"), "somefile.ts");
+   const TYPINGS_NAME = path.join(path.resolve(__dirname, "./fixtures-es6/typings"), "somefile.ts");
+   const ANYFILE_NAME = "somefile.ts";
+   
 	let resolver;
 	let host;
-
-	function resolve(filename) {
-      let text = fs.readFileSync(filename, 'utf8');
-      host.addFile(filename, text);
-      return resolver.resolve(filename, text);
-	}
 
 	beforeEach(() => {
 		filelist = [];
@@ -102,105 +71,92 @@ xdescribe('Resolver', () => {
 	});
 
 	it('resolves successfully', () => {
-		return resolve(noImports)
+      host.addFile(ANYFILE_NAME, "export = 42;");
+		return resolver.resolve(ANYFILE_NAME)
 			.then((deps) => {
 				deps.list.should.have.length(0);
 			});
 	});
 
 	it('adds declaration files', () => {
-      resolver.registerDeclarationFile("declations.d.ts");
-		return resolve(noImports)
+      resolver.registerDeclarationFile("declarations.d.ts");
+      host.addFile(ANYFILE_NAME, "export = 42;");
+		return resolver.resolve(ANYFILE_NAME)
 			.then((deps) => {
 				deps.list.should.have.length(1);
-            deps.list[0].should.equal("declations.d.ts");
+            deps.list[0].should.equal("declarations.d.ts");
 			});
 	});
 
 	it('flags the default library', () => {
-      let defaultLib = require.resolve(host.getDefaultLibFileName());
-      resolver.registerDeclarationFile(defaultLib);
-		return resolve(noImports)
+      const defaultLibName = require.resolve(host.getDefaultLibFileName());
+      const defaultLibSource = fs.readFileSync(defaultLibName, 'utf8');
+      const file = host.addFile(defaultLibName, defaultLibSource);
+		return resolver.resolve(defaultLibName)
+			.then((deps) => {
+				deps.list.should.have.length(0);
+            file.isLibFile.should.be.true;
+			});
+	});
+
+   
+	it('resolves ambient imports', () => {
+      const source = 'import "ambient";'
+      host.addFile(AMBIENT_NAME, source);
+            
+		return resolver.resolve(AMBIENT_NAME)
+			.then((deps) => {
+				deps.list.should.have.length(0);
+			});
+	});
+
+	it('handles ambient references when resolveAmbientRefs option is false', () => {
+      const source = '/// <reference path="ambient/ambient.d.ts" />';
+      const expected = path.resolve(__dirname, './fixtures-es6/ambients/ambient/ambient.d.ts');
+      
+      host.addFile(AMBIENT_NAME, source);
+            
+		return resolver.resolve(AMBIENT_NAME)
 			.then((deps) => {
 				deps.list.should.have.length(1);
-            deps.list[0].should.equal(defaultLib);
-            host.getSourceFile(defaultLib).isLibFile.should.be.true;
+            deps.list[0].should.equal(expected);
 			});
 	});
 
-	xit('compiles ambient imports', () => {
-      resolver.registerDeclarationFile(defaultLib);
-		return resolve([ambientImportJs])
+	it('resolves ambient references when resolveAmbientRefs option is true', () => {
+		let options = {
+			resolveAmbientRefs: true
+		};      
+		host = new CompilerHost(options);
+		resolver = new Resolver(host, resolve, fetch);
+      
+      const source = '/// <reference path="ambient/ambient.d.ts" />';
+      const expected = path.resolve(__dirname, './fixtures-es6/ambients/resolved/ambient.d.ts');
+
+      host.addFile(AMBIENT_NAME, source);
+      
+		return resolver.resolve(AMBIENT_NAME)
 			.then((deps) => {
-				deps.list.should.have.length(3);
-            deps.list[0].should.equal(defaultLib);
-            deps.list[0].should.equal(ambientImportJs);
+				deps.list.should.have.length(1);
+            deps.list[0].should.equal(expected);
 			});
 	});
 
-	xit('handles ambient references when resolveAmbientRefs option is false', () => {
-		return typecheckAll([ambientReferenceDisabled])
-			.then((diags) => {
-				diags.should.have.length(0);
-			});
-	});
-
-	xit('resolves ambient references when resolveAmbientRefs option is true', () => {
+	it('ignores non ambient refs resolveAmbientRefs option is true', () => {
 		let options = {
 			resolveAmbientRefs: true
-		};
+		};      
 		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host, resolve, fetch);
-		return typecheckAll([ambientReference, ambientReference2])
-			.then((diags) => {
-				diags.should.have.length(0);
-			});
-	});
-
-	xit('handles ambient javascript imports', () => {
-		return typecheckAll([ambientImportJs])
-			.then((diags) => {
-				formatErrors(diags, console);
-				diags.should.have.length(0);
-			});
-	});
-
-	xit('handles ambient typescript imports', () => {
-		let options = {
-			resolveAmbientRefs: true
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host, resolve, fetch);
-		return typecheckAll([ambientImportTs])
-			.then((diags) => {
-				diags.should.have.length(0);
-			});
-	});
-
-	xit('resolves ambient typescript imports', () => {
-		return typecheckAll([ambientResolveTs, ambientResolvedTs])
-			.then((diags) => {
-				formatErrors(diags, console);
-				diags.should.have.length(0);
-			});
-	});
-
-	xit('handles ambients with subset names', () => {
-		let options = {
-			resolveAmbientRefs: true
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host, resolve, fetch);
-		return typecheckAll([ambientDuplicate, ambientImportTs])
-			.then((diags) => {
-				diags.should.have.length(0);
-			});
-	});
-
-	xit('handles ambients with internal requires', () => {
-		return typecheckAll([ambientRequires])
-			.then((diags) => {
-				diags.should.have.length(0);
+		resolver = new Resolver(host, resolve, fetch);
+      
+      const source = '/// <reference path="not-ambient.d.ts" />';
+      const expected = path.resolve(__dirname, './fixtures-es6/ambients/not-ambient.d.ts');
+      host.addFile(AMBIENT_NAME, source);
+      
+		return resolver.resolve(AMBIENT_NAME)
+			.then((deps) => {
+				deps.list.should.have.length(1);
+            deps.list[0].should.equal(expected);
 			});
 	});
 
@@ -209,13 +165,16 @@ xdescribe('Resolver', () => {
 			resolveTypings: true
 		};
 		host = new CompilerHost(options);
+		resolver = new Resolver(host, resolve, fetch);
       
-      resolver.registerDeclarationFile(defaultLib);
-		return resolve([ambientImportJs])
+      const source = 'import {bootstrap} from "angular2";';
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/angular2/angular2/angular2.d.ts');
+      host.addFile(TYPINGS_NAME, source);
+      
+		return resolver.resolve(TYPINGS_NAME)
 			.then((deps) => {
-				deps.list.should.have.length(3);
-            deps.list[0].should.equal(defaultLib);
-            deps.list[0].should.equal(ambientImportJs);
+				deps.list.should.have.length(1);
+            deps.list[0].should.equal(expected);
 			});
 	});
 
@@ -224,12 +183,16 @@ xdescribe('Resolver', () => {
 			resolveTypings: false
 		};
 		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host, resolve, fetch);
-		return typecheckAll([angular2Typings])
-			.then((diags) => {
-				//formatErrors(diags, console);
-				diags.should.have.length(1);
-				diags[0].code.should.be.equal(2307);
+		resolver = new Resolver(host, resolve, fetch);
+      
+      const source = 'import {bootstrap} from "angular2";';
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/angular2/angular2.js');
+      host.addFile(TYPINGS_NAME, source);
+
+		return resolver.resolve(TYPINGS_NAME)
+			.then((deps) => {
+				deps.list.should.have.length(0);
+            deps.mappings["angular2"].should.equal(expected);
 			});
 	});
 
@@ -238,11 +201,16 @@ xdescribe('Resolver', () => {
 			resolveTypings: true
 		};
 		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host, resolve, fetch);
-		return typecheckAll([missingTypings])
-			.then((diags) => {
-				formatErrors(diags, console);
-				diags.should.have.length(0);
+		resolver = new Resolver(host, resolve, fetch);
+      
+      const source = 'import * as missing from "missing";';
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/missing/missing.js');
+      host.addFile(TYPINGS_NAME, source);
+
+		return resolver.resolve(TYPINGS_NAME)
+			.then((deps) => {
+				deps.list.should.have.length(0);
+            deps.mappings["missing"].should.equal(expected);
 			});
 	});
 
@@ -251,11 +219,16 @@ xdescribe('Resolver', () => {
 			resolveTypings: true
 		};
 		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host, resolve, fetch);
-		return typecheckAll([rxjsTypings])
-			.then((diags) => {
-				formatErrors(diags, console);
-				diags.should.have.length(0);
+		resolver = new Resolver(host, resolve, fetch);
+      
+      const source = 'import {Observable} from "rxjs";';
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/rxjs/rxjs/Rx.d.ts');
+      host.addFile(TYPINGS_NAME, source);
+
+		return resolver.resolve(TYPINGS_NAME)
+			.then((deps) => {
+				deps.list.should.have.length(1);
+            deps.list[0].should.equal(expected);
 			});
 	});
 
@@ -264,12 +237,16 @@ xdescribe('Resolver', () => {
 			resolveTypings: true
 		};
 		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host, resolve, fetch);
-		return typecheckAll([missingPackage])
-			.then((diags) => {
-				formatErrors(diags, console);
-				diags.should.have.length(0);
+		resolver = new Resolver(host, resolve, fetch);
+      
+      const source = 'import * as missing from "missing_package";';
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/missing/missing_package.js');
+      host.addFile(TYPINGS_NAME, source);
+
+		return resolver.resolve(TYPINGS_NAME)
+			.then((deps) => {
+				deps.list.should.have.length(0);
+            deps.mappings["missing_package"].should.equal(expected);
 			});
 	});
-
 });

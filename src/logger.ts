@@ -1,5 +1,5 @@
 /* */
-interface LoggerOptions {
+type LoggerOptions = {
 	debug?: boolean;
 }
 
