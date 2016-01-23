@@ -122,12 +122,36 @@ export class CompilerHost implements ts.CompilerHost {
       else if (file.text != text) {
          // create a new one
          this._files[fileName] = ts.createSourceFile(fileName, text, this._options.target);
+         this.invalidate(fileName);
          logger.debug(`updated ${fileName}`);         
       }
 		
 		return this._files[fileName];
 	}
 
+   private invalidate(fileName: string, seen?: string[]) {
+      seen = seen || [];
+      
+      if (seen.indexOf(fileName) < 0) {
+         seen.push(fileName);
+         
+         const file = this._files[fileName];
+         
+         if (file) {
+            file.checked = false;
+            file.errors = [];
+         }
+         
+         Object.keys(this._files)
+            .map(key => this._files[key])
+            .forEach(file => {
+               if (file.dependencies && file.dependencies.list.indexOf(fileName) >= 0) {
+                  this.invalidate(file.fileName, seen);
+               }
+            });
+      }
+   }
+   
 	/*
 		Overrides the standard resolution algorithm used by the compiler so that we can use systemjs
 		resolution. Because TypeScript requires synchronous resolution, everything is pre-resolved
