@@ -16,15 +16,10 @@
       "babel-runtime": "npm:babel-runtime@^5.8.24",
       "clean-css": "npm:clean-css@^3.4.3",
       "core-js": "npm:core-js@^1.1.4",
-      "css": "systemjs/plugin-css@^0.1.17",
+      "css": "frankwallis/plugin-css@master",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.2",
       "ts": "frankwallis/plugin-typescript@^2.5.0"
-    },
-    "overrides": {
-      "npm:weakee@0.9.1": {
-        "format": "esm"
-      }
     }
   }
 }
