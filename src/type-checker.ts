@@ -48,7 +48,8 @@ export class TypeChecker {
 		throws if there are compiler errors or unresolved files
 	*/
 	public forceCheck(): ts.Diagnostic[] {
-      const files = this._host.getAllFiles();
+      const files = this._host.getAllFiles()
+         .filter(file => file.fileName != __HTML_MODULE__);
       const unchecked = files.filter(file => !file.checked);
       const errored = files.filter(file => file.checked && hasError(file.errors));
       
@@ -59,7 +60,7 @@ export class TypeChecker {
             length: undefined,
             code: 9999,
             category: ts.DiagnosticCategory.Error,
-            messageText: `compilation failed [${files.length} files, ${errored.length} errored, ${unchecked.length} unchecked]`
+            messageText: `compilation failed [${files.length} files, ${errored.length} failed, ${unchecked.length} unchecked]`
          }];
       }
       
@@ -111,15 +112,19 @@ export class TypeChecker {
 
 		return candidates.reduce((errors, candidate) => {
 			if (candidate.checkable && !candidate.file.checked) {
+            candidate.file.errors = [];
+            
             if (!candidate.file.isLibFile) {
-               errors = errors
-                  .concat(program.getSyntacticDiagnostics(candidate.file))
+               candidate.file.errors = program.getSyntacticDiagnostics(candidate.file)
                   .concat(program.getSemanticDiagnostics(candidate.file));
-            }
-            candidate.file.errors = errors;
+            }            
+
 				candidate.file.checked = true;
+            return errors.concat(candidate.file.errors);
 			}
-			return errors;
+         else {
+            return errors;
+         }        			
 		}, program.getGlobalDiagnostics());
 	}
 }

@@ -12,7 +12,7 @@
       "clean-css": "npm:clean-css@^3.4.3",
       "css": "systemjs/plugin-css@^0.1.17",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
-      "ts": "frankwallis/plugin-typescript@^2.4.0"
+      "ts": "frankwallis/plugin-typescript@^2.5.0"
     }
   }
 }
