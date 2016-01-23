@@ -8,42 +8,39 @@ import {TypeChecker} from '../src/type-checker';
 import {CompilerHost} from '../src/compiler-host';
 import {formatErrors} from '../src/format-errors';
 
-let should = chai.should();
+const should = chai.should();
 
-let missingFile = '/somefolder/fixtures-es6/program1/missing-file.ts';
-let missingImport = require.resolve('./fixtures-es6/program1/missing-import.ts');
-let syntaxError = require.resolve('./fixtures-es6/program1/syntax-error.ts');
-let referenceSyntaxError = require.resolve('./fixtures-es6/program1/ref-syntax-error.ts');
-let typeError = require.resolve('./fixtures-es6/program1/type-error.ts');
-let nestedTypeError = require.resolve('./fixtures-es6/program1/nested-type-error.ts');
-let noImports = require.resolve('./fixtures-es6/program1/no-imports.ts');
-let oneImport = require.resolve('./fixtures-es6/program1/one-import.ts');
-let ambientReference = require.resolve('./fixtures-es6/ambients/ambient-reference.ts');
-let ambientReference2 = require.resolve('./fixtures-es6/ambients/module1/ambient-references2.ts');
-let ambientReferenceDisabled = require.resolve('./fixtures-es6/ambients/ambient-reference-disabled.ts');
-let ambientImportJs = require.resolve('./fixtures-es6/ambients/ambient-import-js.ts');
-let ambientImportTs = require.resolve('./fixtures-es6/ambients/ambient-import-ts.ts');
-let ambientResolveTs = require.resolve('./fixtures-es6/ambients/ambient-resolve.ts');
-let ambientResolvedTs = require.resolve('./fixtures-es6/ambients/resolved/ambient.ts');
-let ambientDuplicate = require.resolve('./fixtures-es6/ambients/ambient-duplicate.ts');
-let ambientRequires = require.resolve('./fixtures-es6/ambients/ambient-requires.ts');
-let refImport = require.resolve('./fixtures-es6/program1/ref-import.ts');
-let externalEntry = require.resolve('./fixtures-es6/external/entry.ts');
-let externalOther = require.resolve('./fixtures-es6/external/other.ts');
-let externalDependency = require.resolve('./fixtures-es6/external/dependency.ts');
-let circularFile = require.resolve('./fixtures-es6/circular/circular.ts');
-let importCss = require.resolve('./fixtures-es6/css/import-css.ts');
-let importHtml = require.resolve('./fixtures-es6/html/import-html.ts');
-let angular2Typings = require.resolve('./fixtures-es6/typings/angular2-typings.ts');
-let rxjsTypings = require.resolve('./fixtures-es6/typings/rxjs-typings.ts');
-let missingTypings = require.resolve('./fixtures-es6/typings/missing-typings.ts');
-let missingPackage = require.resolve('./fixtures-es6/typings/missing-package.ts');
+const missingFile = '/somefolder/fixtures-es6/program1/missing-file.ts';
+const missingImport = require.resolve('./fixtures-es6/program1/missing-import.ts');
+const syntaxError = require.resolve('./fixtures-es6/program1/syntax-error.ts');
+const referenceSyntaxError = require.resolve('./fixtures-es6/program1/ref-syntax-error.ts');
+const typeError = require.resolve('./fixtures-es6/program1/type-error.ts');
+const nestedTypeError = require.resolve('./fixtures-es6/program1/nested-type-error.ts');
+const noImports = require.resolve('./fixtures-es6/program1/no-imports.ts');
+const oneImport = require.resolve('./fixtures-es6/program1/one-import.ts');
+const ambientReference = require.resolve('./fixtures-es6/ambients/ambient-reference.ts');
+const ambientReferenceDisabled = require.resolve('./fixtures-es6/ambients/ambient-reference-disabled.ts');
+const ambientImportJs = require.resolve('./fixtures-es6/ambients/ambient-import-js.ts');
+const ambientImportTs = require.resolve('./fixtures-es6/ambients/ambient-import-ts.ts');
+const ambientResolveTs = require.resolve('./fixtures-es6/ambients/ambient-resolve.ts');
+const ambientDuplicate = require.resolve('./fixtures-es6/ambients/ambient-duplicate.ts');
+const ambientRequires = require.resolve('./fixtures-es6/ambients/ambient-requires.ts');
+const refImport = require.resolve('./fixtures-es6/program1/ref-import.ts');
+const externalEntry = require.resolve('./fixtures-es6/external/entry.ts');
+const circularFile = require.resolve('./fixtures-es6/circular/circular.ts');
+const importCss = require.resolve('./fixtures-es6/css/import-css.ts');
+const importHtml = require.resolve('./fixtures-es6/html/import-html.ts');
+const angular2Typings = require.resolve('./fixtures-es6/typings/angular2-typings.ts');
+const rxjsTypings = require.resolve('./fixtures-es6/typings/rxjs-typings.ts');
+const missingTypings = require.resolve('./fixtures-es6/typings/missing-typings.ts');
+const missingPackage = require.resolve('./fixtures-es6/typings/missing-package.ts');
+
 let filelist = [];
+const readFile: any = Promise.promisify(fs.readFile.bind(fs));
 
 function fetch(filename) {
 	//console.log("fetching " + filename);
 	filelist.push(filename);
-	let readFile = Promise.promisify(fs.readFile.bind(fs));
 	return readFile(filename, 'utf8');
 }
 
@@ -52,27 +49,23 @@ function resolve(dep, parent) {
 	let result = "";
 
 	try {
-		if ((dep === "angular2") || (dep === "missing") || dep == "rxjs")
-			result = require.resolve("./" + path.join('fixtures-es6/typings/', dep, dep +'.js'));
-		else if ((dep.indexOf("angular2/") == 0) || (dep.indexOf("missing/") == 0) || (dep.indexOf("rxjs/") == 0))
-			result = require.resolve("./" + path.join('fixtures-es6/typings/', dep));
-		else if (dep === "ambient")
-			result = require.resolve("./fixtures-es6/ambients/resolved/" + dep + ".js");
-		else if (dep == "ambient/ambient")
-			result = require.resolve("./fixtures-es6/ambients/resolved/ambient.ts");
-		else if (path.dirname(dep) == "ambient")
-			result = require.resolve("./fixtures-es6/ambients/resolved/" + dep.slice(8));
-		else if (dep.indexOf("typescript/") == 0)
-			result = require.resolve(dep);
-		else if (dep[0] == '/')
+      if (dep[0] === '/')
 			result = dep;
-		else if (dep[0] == '.')
+		else if (dep[0] === '.')
 			result = path.join(path.dirname(parent), dep);
-		else if (path.extname(dep) == "")
-			result = dep + ".js";
-		else
-			result = dep;
+		else {
+         result = path.join(path.dirname(parent), "resolved", dep);
+         
+         if (dep.indexOf('/') < 0)
+            result = path.join(result, dep);         
 
+         if (dep == "ambient/ambient")
+            result = result + ".ts";
+            
+         if (path.extname(result) == "")
+            result = result + ".js";
+      }
+      
 		if (path.extname(result) == "")
 			result = result + ".ts";
 
@@ -91,7 +84,7 @@ describe('TypeChecker', () => {
    let resolver;
 	let host;
 
-   function resolveAll(filelist) {
+   function resolveAll(filelist: string[]) {
       var resolutions = filelist.map((filename) => {
          let text = fs.readFileSync(filename, 'utf8');
          host.addFile(filename, text);
@@ -111,9 +104,9 @@ describe('TypeChecker', () => {
          });
    }
    
-	function typecheckAll(filelist) {
+	function typecheckAll(filename: string) {
 		resolver.registerDeclarationFile(require.resolve(host.getDefaultLibFileName()));
-      return resolveAll(filelist).then(() => {
+      return resolveAll([filename]).then(() => {
          var result = typeChecker.check();
          
          if (result.length == 0)
@@ -131,7 +124,7 @@ describe('TypeChecker', () => {
 	});
 
 	it('compiles successfully', () => {
-		return typecheckAll([noImports])
+		return typecheckAll(noImports)
 			.then((diags) => {
 				diags.should.have.length(0);
 			});
@@ -144,7 +137,7 @@ describe('TypeChecker', () => {
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
-		return typecheckAll([oneImport, noImports])
+		return typecheckAll(oneImport)
 			.then((diags) => {
 				diags.should.have.length(1);
 				diags[0].code.should.be.equal(7005);
@@ -152,15 +145,15 @@ describe('TypeChecker', () => {
 	});
 
 	it('compiles ambient imports', () => {
-		return typecheckAll([ambientImportJs])
+		return typecheckAll(ambientImportJs)
 			.then((diags) => {
-				formatErrors(diags, console);
+				formatErrors(diags, console as any);
 				diags.should.have.length(0);
 			});
 	});
 
 	it('catches type errors', () => {
-		return typecheckAll([typeError])
+		return typecheckAll(typeError)
 			.then((diags) => {
 				diags.should.have.length(1);
 				diags[0].code.should.be.equal(2322);
@@ -168,7 +161,7 @@ describe('TypeChecker', () => {
 	});
 
 	it('catches nested type-checker errors', () => {
-		return typecheckAll([nestedTypeError, oneImport, noImports])
+		return typecheckAll(nestedTypeError)
 			.then((diags) => {
 				diags.should.have.length(1);
 				diags[0].code.should.be.equal(2339);
@@ -176,21 +169,21 @@ describe('TypeChecker', () => {
 	});
 
 	it('catches syntax errors', () => {
-		return typecheckAll([syntaxError])
+		return typecheckAll(syntaxError)
 			.then((diags) => {
 				diags.should.have.length(3);
 			});
 	});
 
 	it('catches syntax errors in reference files', () => {
-		return typecheckAll([referenceSyntaxError])
+		return typecheckAll(referenceSyntaxError)
 			.then((diags) => {
 				diags.should.have.length(8);
 			});
 	});
 
 	it('handles ambient references when resolveAmbientRefs option is false', () => {
-		return typecheckAll([ambientReferenceDisabled])
+		return typecheckAll(ambientReferenceDisabled)
 			.then((diags) => {
 				diags.should.have.length(0);
 			});
@@ -203,24 +196,24 @@ describe('TypeChecker', () => {
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
-		return typecheckAll([ambientReference, ambientReference2])
+		return typecheckAll(ambientReference)
 			.then((diags) => {
 				diags.should.have.length(0);
 			});
 	});
 
 	it('handles ambient javascript imports', () => {
-		return typecheckAll([ambientImportJs])
+		return typecheckAll(ambientImportJs)
 			.then((diags) => {
-				formatErrors(diags, console);
+				formatErrors(diags, console as any);
 				diags.should.have.length(0);
 			});
 	});
 
 	it('handles circular references', () => {
-		return typecheckAll([circularFile])
+		return typecheckAll(circularFile)
 			.then((diags) => {
-				formatErrors(diags, console);
+				formatErrors(diags, console as any);
 				diags.should.have.length(0);
 			});
 	});
@@ -232,16 +225,16 @@ describe('TypeChecker', () => {
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
-		return typecheckAll([ambientImportTs])
+		return typecheckAll(ambientImportTs)
 			.then((diags) => {
 				diags.should.have.length(0);
 			});
 	});
 
 	it('resolves ambient typescript imports', () => {
-		return typecheckAll([ambientResolveTs, ambientResolvedTs])
+		return typecheckAll(ambientResolveTs)
 			.then((diags) => {
-				formatErrors(diags, console);
+				formatErrors(diags, console as any);
 				diags.should.have.length(0);
 			});
 	});
@@ -253,38 +246,110 @@ describe('TypeChecker', () => {
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
-		return typecheckAll([ambientDuplicate, ambientImportTs])
+		return typecheckAll(ambientDuplicate)
 			.then((diags) => {
 				diags.should.have.length(0);
 			});
 	});
 
 	it('handles ambients with internal requires', () => {
-		return typecheckAll([ambientRequires])
+		return typecheckAll(ambientRequires)
 			.then((diags) => {
 				diags.should.have.length(0);
 			});
 	});
 
 	it('handles external imports', () => {
-		return typecheckAll([externalEntry, externalOther, externalDependency])
+		return typecheckAll(externalEntry)
 			.then((diags) => {
 				diags.should.have.length(0);
 			});
 	});
 
 	it('imports .css files', () => {
-		return typecheckAll([importCss])
+		return typecheckAll(importCss)
 			.then((diags) => {
 				diags.should.have.length(0);
 			});
 	});
 
 	it('imports .html files', () => {
-		return typecheckAll([importHtml])
+		return typecheckAll(importHtml)
 			.then((diags) => {
-				formatErrors(diags, console);
+				formatErrors(diags, console as any);
 				diags.should.have.length(0);
 			});
 	});
+   
+   it('resolve typings files when resolveTypings is true', () => {
+		let options = {
+			resolveTypings: true
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host);
+      resolver = new Resolver(host, resolve, fetch);
+		return typecheckAll(angular2Typings)
+			.then((diags) => {
+				formatErrors(diags, console as any);
+				diags.should.have.length(0);
+			});
+	});
+
+   it('doesnt resolve typings files when resolveTypings is false', () => {
+		let options = {
+			resolveTypings: false
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host);
+      resolver = new Resolver(host, resolve, fetch);
+		return typecheckAll(angular2Typings)
+			.then((diags) => {
+				//formatErrors(diags, console as any);
+				diags.should.have.length(1);
+				diags[0].code.should.be.equal(2307);
+			});
+	});
+
+	it('handles missing typings field in package.json', () => {
+		let options = {
+			resolveTypings: true
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host);
+      resolver = new Resolver(host, resolve, fetch);
+		return typecheckAll(missingTypings)
+			.then((diags) => {
+				formatErrors(diags, console as any);
+				diags.should.have.length(0);
+			});
+	});
+
+	it('handles non-relative typings field in package.json', () => {
+		let options = {
+			resolveTypings: true
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host);
+      resolver = new Resolver(host, resolve, fetch);
+		return typecheckAll(rxjsTypings)
+			.then((diags) => {
+				formatErrors(diags, console as any);
+				diags.should.have.length(0);
+			});
+	});
+
+	it('handles package.json not found', () => {
+		let options = {
+			resolveTypings: true
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host);
+      resolver = new Resolver(host, resolve, fetch);
+		return typecheckAll(missingPackage)
+			.then((diags) => {
+				formatErrors(diags, console as any);
+				diags.should.have.length(0);
+			});
+	});
+
 });

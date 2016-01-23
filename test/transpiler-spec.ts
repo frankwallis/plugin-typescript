@@ -6,17 +6,17 @@ import {CompilerHost} from '../src/compiler-host';
 import {Transpiler} from '../src/transpiler';
 import {formatErrors} from '../src/format-errors';
 
-let should = chai.should();
+const should = chai.should();
 
-let oneImport = fs.readFileSync(require.resolve('./fixtures-es6/program1/one-import.ts'), 'utf8');
-let es6Symbol = fs.readFileSync(require.resolve('./fixtures-es6/program1/symbol.ts'), 'utf8');
-let syntaxError = fs.readFileSync(require.resolve('./fixtures-es6/program1/syntax-error.ts'), 'utf8');
-let constEnums = fs.readFileSync(require.resolve('./fixtures-es6/program1/const-enums.ts'), 'utf8');
-let trailingComma = fs.readFileSync(require.resolve('./fixtures-es6/es3/trailing-comma.ts'), 'utf8');
+const oneImport = fs.readFileSync(require.resolve('./fixtures-es6/program1/one-import.ts'), 'utf8');
+const es6Symbol = fs.readFileSync(require.resolve('./fixtures-es6/program1/symbol.ts'), 'utf8');
+const syntaxError = fs.readFileSync(require.resolve('./fixtures-es6/program1/syntax-error.ts'), 'utf8');
+const constEnums = fs.readFileSync(require.resolve('./fixtures-es6/program1/const-enums.ts'), 'utf8');
+const trailingComma = fs.readFileSync(require.resolve('./fixtures-es6/es3/trailing-comma.ts'), 'utf8');
 
 describe('Transpiler', () => {
 
-   function transpile(sourceName, source, host) {
+   function transpile(sourceName, source, host?) {
       host = host || new CompilerHost({}); 
 	   const transpiler = new Transpiler(host);
       host.addFile(sourceName, source);
@@ -25,8 +25,8 @@ describe('Transpiler', () => {
 
 	describe('transpile', () => {
 		it('transpiles successfully', () => {
-			let output = transpile('one-import.ts', oneImport);
-			formatErrors(output.errors, console);
+			const output = transpile('one-import.ts', oneImport);
+			formatErrors(output.errors, console as any);
 			output.should.have.property('failure', false);
 			output.should.have.property('errors').with.lengthOf(0);
 			output.should.have.property('js').with.lengthOf(322);
@@ -44,7 +44,7 @@ describe('Transpiler', () => {
 
 		it('catches syntax errors', () => {
 			let output = transpile('syntax-error.ts', syntaxError);
-			//formatErrors(output.errors, console);
+			//formatErrors(output.errors, console as any);
 			output.should.have.property('failure', true);
 			output.should.have.property('errors').with.lengthOf(1);
 		});
@@ -57,7 +57,7 @@ describe('Transpiler', () => {
 			let host = new CompilerHost(options);
 
 			let output = transpile('one-import.ts', oneImport, host);
-			//formatErrors(output.errors, console);
+			//formatErrors(output.errors, console as any);
 			output.should.have.property('failure', true);
 			output.should.have.property('errors').with.lengthOf(1);
 			output.errors[0].code.should.be.equal(5052);
@@ -73,14 +73,14 @@ describe('Transpiler', () => {
 			let host = new CompilerHost(options);
 
 			let output = transpile('one-import.ts', oneImport, host);
-			formatErrors(output.errors, console);
+			formatErrors(output.errors, console as any);
 			output.should.have.property('failure', false);
 			output.should.have.property('errors').with.lengthOf(0);
 		});
 
 		xit('errors on const enums', () => {
 			let output = transpile('const-enums.ts', constEnums);
-			//formatErrors(output.errors, console);
+			//formatErrors(output.errors, console as any);
 			output.should.have.property('failure', true);
 			output.should.have.property('errors').with.lengthOf(1);
 		});

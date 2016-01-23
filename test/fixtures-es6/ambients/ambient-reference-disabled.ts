@@ -1,4 +1,4 @@
-/// <reference path="resolved/ambient.d.ts" />
+/// <reference path="resolved/ambient/ambient.d.ts" />
 
 class Enya implements IAmbient {
    hum() {

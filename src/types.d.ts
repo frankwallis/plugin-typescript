@@ -42,3 +42,9 @@ declare type DependencyInfo = {
 		These will include any redirections to a typings file if one is present. */
    mappings: { [s: string]: string; }
 }
+
+declare module Chai {
+   interface Assertion {
+      defined: any;
+   }
+}

@@ -1,6 +1,6 @@
 /// <reference path="ambient/ambient.d.ts" />
 
-import {Enigma} from "./module1/ambient-references2";
+import {Enigma} from "./ambient-consumer";
 
 class Enya implements IAmbient {
    hum() {

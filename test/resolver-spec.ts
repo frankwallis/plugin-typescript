@@ -7,46 +7,39 @@ import {Resolver} from '../src/resolver';
 import {CompilerHost} from '../src/compiler-host';
 import {formatErrors} from '../src/format-errors';
 
-let should = chai.should();
-let filelist = [];
+const should = chai.should();
 
+let filelist = [];
+const readFile: any = Promise.promisify(fs.readFile.bind(fs));
 function fetch(filename) {
 	//console.log("fetching " + filename);
 	filelist.push(filename);
-	let readFile = Promise.promisify(fs.readFile.bind(fs));
 	return readFile(filename, 'utf8');
 }
 
 function resolve(dep, parent) {
-	console.log("resolving " + parent + " -> " + dep);
+	//console.log("resolving " + parent + " -> " + dep);
 	let result = "";
 
 	try {
-		if ((dep === "angular2") || (dep === "missing") || dep == "rxjs")
-			result = path.resolve(__dirname, path.join('fixtures-es6/typings/', dep, dep + '.js'));
-		else if ((dep.indexOf("angular2/") == 0) || (dep.indexOf("missing/") == 0) || (dep.indexOf("rxjs/") == 0))
-			result = path.resolve(__dirname, path.join('fixtures-es6/typings/', dep));
-		else if (dep === "ambient")
-			result = path.resolve(__dirname, "./fixtures-es6/ambients/resolved/" + dep + ".js");
-		else if (dep == "ambient/ambient")
-			result = path.resolve(__dirname, "./fixtures-es6/ambients/resolved/ambient.ts");
-		else if (path.dirname(dep) == "ambient")
-			result = path.resolve(__dirname, "./fixtures-es6/ambients/resolved/" + dep.slice(8));
-		else if (dep.indexOf("typescript/") == 0)
-			result = require.resolve(dep);
-		else if (dep[0] == '/')
+      if (dep[0] === '/')
 			result = dep;
-		else if (dep[0] == '.')
+		else if (dep[0] === '.')
 			result = path.join(path.dirname(parent), dep);
-		else if (path.extname(dep) == "")
-			result = dep + ".js";
-		else
-			result = dep;
+		else {
+         result = path.join(path.dirname(parent), "resolved", dep);
+         
+         if (dep.indexOf('/') < 0)
+            result = path.join(result, dep);         
 
+         if (path.extname(result) == "")
+            result = result + ".js";
+      }
+      
 		if (path.extname(result) == "")
 			result = result + ".ts";
 
-		console.log("resolved " + parent + " -> " + result);
+		//console.log("resolved " + parent + " -> " + result);
 		return Promise.resolve(result);
 	}
 	catch (err) {
@@ -55,7 +48,7 @@ function resolve(dep, parent) {
 	}
 }
 
-describe.only('Resolver', () => {
+describe('Resolver', () => {
 
    const AMBIENT_NAME = path.join(path.resolve(__dirname, "./fixtures-es6/ambients"), "somefile.ts");
    const TYPINGS_NAME = path.join(path.resolve(__dirname, "./fixtures-es6/typings"), "somefile.ts");
@@ -131,7 +124,7 @@ describe.only('Resolver', () => {
 		resolver = new Resolver(host, resolve, fetch);
       
       const source = '/// <reference path="ambient/ambient.d.ts" />';
-      const expected = path.resolve(__dirname, './fixtures-es6/ambients/resolved/ambient.d.ts');
+      const expected = path.resolve(__dirname, './fixtures-es6/ambients/resolved/ambient/ambient.d.ts');
 
       host.addFile(AMBIENT_NAME, source);
       
@@ -168,7 +161,7 @@ describe.only('Resolver', () => {
 		resolver = new Resolver(host, resolve, fetch);
       
       const source = 'import {bootstrap} from "angular2";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/angular2/angular2/angular2.d.ts');
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2/angular2.d.ts');
       host.addFile(TYPINGS_NAME, source);
       
 		return resolver.resolve(TYPINGS_NAME)
@@ -186,7 +179,7 @@ describe.only('Resolver', () => {
 		resolver = new Resolver(host, resolve, fetch);
       
       const source = 'import {bootstrap} from "angular2";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/angular2/angular2.js');
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2.js');
       host.addFile(TYPINGS_NAME, source);
 
 		return resolver.resolve(TYPINGS_NAME)
@@ -204,7 +197,7 @@ describe.only('Resolver', () => {
 		resolver = new Resolver(host, resolve, fetch);
       
       const source = 'import * as missing from "missing";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/missing/missing.js');
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/missing/missing.js');
       host.addFile(TYPINGS_NAME, source);
 
 		return resolver.resolve(TYPINGS_NAME)
@@ -222,7 +215,7 @@ describe.only('Resolver', () => {
 		resolver = new Resolver(host, resolve, fetch);
       
       const source = 'import {Observable} from "rxjs";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/rxjs/rxjs/Rx.d.ts');
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/rxjs/Rx.d.ts');
       host.addFile(TYPINGS_NAME, source);
 
 		return resolver.resolve(TYPINGS_NAME)
@@ -240,7 +233,7 @@ describe.only('Resolver', () => {
 		resolver = new Resolver(host, resolve, fetch);
       
       const source = 'import * as missing from "missing_package";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/missing/missing_package.js');
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/missing_package/missing_package.js');
       host.addFile(TYPINGS_NAME, source);
 
 		return resolver.resolve(TYPINGS_NAME)

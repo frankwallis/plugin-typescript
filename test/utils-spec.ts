@@ -15,7 +15,7 @@ import {
 	stripDoubleExtension
 } from '../src/utils';
 
-let should = chai.should();
+const should = chai.should();
 
 describe( 'Utils', () => {
 

@@ -7,29 +7,24 @@ import * as ts from 'typescript';
 import {createFactory} from '../src/factory';
 import {formatErrors} from '../src/format-errors';
 
-let should = chai.should();
+const should = chai.should();
 
-let defaultFile = require.resolve('./fixtures-es6/tsconfig/default.json');
-let alternateFile = require.resolve('./fixtures-es6/tsconfig/alternate.json');
-let declarationFile = require.resolve('./fixtures-es6/tsconfig/declaration.json');
-let theirModuleFile = require.resolve('./fixtures-es6/tsconfig/theirmodule.d.ts');
-let defaultLib = require.resolve('typescript/lib/lib.es6.d.ts');
+const defaultFile = require.resolve('./fixtures-es6/tsconfig/default.json');
+const alternateFile = require.resolve('./fixtures-es6/tsconfig/alternate.json');
+const declarationFile = require.resolve('./fixtures-es6/tsconfig/declaration.json');
+const theirModuleFile = require.resolve('./fixtures-es6/tsconfig/theirmodule.d.ts');
+const defaultLib = require.resolve('typescript/lib/lib.es6.d.ts');
+
 let filelist = [];
-
+const readFile: any = Promise.promisify(fs.readFile.bind(fs));
 function fetch(filename) {
 	//console.log("fetching " + filename);
 	filelist.push(filename);
-	let readFile = Promise.promisify(fs.readFile.bind(fs));
 	return readFile(filename, 'utf8');
 }
-declare module Chai {
-   interface Assertion {
-      defined: any;
-   }
-}
+
 function resolve(dep, parent) {
 	let result = undefined;
-
 	//console.log('resolving ' + parent + ' -> ' + dep);
 
 	try {
@@ -42,7 +37,7 @@ function resolve(dep, parent) {
 		else if (dep[0] === ".")
 			result = path.resolve(path.dirname(parent), dep);
 		else if (dep.indexOf(".") < 0)
-			return dep + '.js';
+			result = dep + '.js';
 		else
 			result = require.resolve(dep);
 

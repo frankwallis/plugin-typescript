@@ -3,9 +3,9 @@ import * as ts from 'typescript';
 
 import {CompilerHost} from '../src/compiler-host';
 
-let should = chai.should();
+const should = chai.should();
 
-describe( 'Compiler Host', () => {
+describe('Host', () => {
 
 	let host;
 	beforeEach(function() {
