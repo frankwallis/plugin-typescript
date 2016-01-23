@@ -13,10 +13,7 @@
 	<script src="jspm_packages/system.src.js"></script>
 	<script src="config.js"></script>
 	<script>
-		System.import("shims")
-			.then(function() {
-				return System.import("src")				
-			})
+      System.import("src")				
 			.then(function(app) {
 				console.log('running');
 			})

@@ -24,10 +24,7 @@
          new HotReloader.default('http://localhost:8080')  // chokidar-socket-emitter port
       });
 
-		System.import("shims")
-			.then(function() {
-				return System.import("src")				
-			})
+      System.import("src")				
 			.then(function() {
 				console.log('running');
 			})
