@@ -20,6 +20,11 @@
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.2",
       "ts": "frankwallis/plugin-typescript@^2.5.0"
+    },
+    "overrides": {
+      "npm:weakee@0.9.1": {
+        "format": "esm"
+      }
     }
   }
 }
