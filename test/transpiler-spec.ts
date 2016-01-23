@@ -23,88 +23,86 @@ describe('Transpiler', () => {
       return transpiler.transpile(sourceName);
    }
 
-	describe('transpile', () => {
-		it('transpiles successfully', () => {
-			const output = transpile('one-import.ts', oneImport);
-			formatErrors(output.errors, console as any);
-			output.should.have.property('failure', false);
-			output.should.have.property('errors').with.lengthOf(0);
-			output.should.have.property('js').with.lengthOf(322);
-		});
+   it('transpiles successfully', () => {
+      const output = transpile('one-import.ts', oneImport);
+      formatErrors(output.errors, console as any);
+      output.should.have.property('failure', false);
+      output.should.have.property('errors').with.lengthOf(0);
+      output.should.have.property('js').with.lengthOf(322);
+   });
 
-		it('removes SourceMappingURL', () => {
-			let output = transpile('one-import.ts', oneImport);
-			output.js.should.not.contain("SourceMappingURL");
-		});
+   it('removes SourceMappingURL', () => {
+      let output = transpile('one-import.ts', oneImport);
+      output.js.should.not.contain("SourceMappingURL");
+   });
 
-		it('returns sourceMap', () => {
-			let output = transpile('one-import.ts', oneImport);
-			output.should.have.property('sourceMap').with.lengthOf(143);
-		});
+   it('returns sourceMap', () => {
+      let output = transpile('one-import.ts', oneImport);
+      output.should.have.property('sourceMap').with.lengthOf(143);
+   });
 
-		it('catches syntax errors', () => {
-			let output = transpile('syntax-error.ts', syntaxError);
-			//formatErrors(output.errors, console as any);
-			output.should.have.property('failure', true);
-			output.should.have.property('errors').with.lengthOf(1);
-		});
+   it('catches syntax errors', () => {
+      let output = transpile('syntax-error.ts', syntaxError);
+      //formatErrors(output.errors, console as any);
+      output.should.have.property('failure', true);
+      output.should.have.property('errors').with.lengthOf(1);
+   });
 
-		it('catches configuation errors', () => {
-			let options = {
-				emitDecoratorMetadata: true,
-				experimentalDecorators: false
-			};
-			let host = new CompilerHost(options);
+   it('catches configuation errors', () => {
+      let options = {
+         emitDecoratorMetadata: true,
+         experimentalDecorators: false
+      };
+      let host = new CompilerHost(options);
 
-			let output = transpile('one-import.ts', oneImport, host);
-			//formatErrors(output.errors, console as any);
-			output.should.have.property('failure', true);
-			output.should.have.property('errors').with.lengthOf(1);
-			output.errors[0].code.should.be.equal(5052);
-		});
+      let output = transpile('one-import.ts', oneImport, host);
+      //formatErrors(output.errors, console as any);
+      output.should.have.property('failure', true);
+      output.should.have.property('errors').with.lengthOf(1);
+      output.errors[0].code.should.be.equal(5052);
+   });
 
-		it('overrides invalid config options', () => {
-			let options = {
-				noEmitOnError: true,
-				out: "somefile.js",
-				declaration: true,
-				noLib: false
-			};
-			let host = new CompilerHost(options);
+   it('overrides invalid config options', () => {
+      let options = {
+         noEmitOnError: true,
+         out: "somefile.js",
+         declaration: true,
+         noLib: false
+      };
+      let host = new CompilerHost(options);
 
-			let output = transpile('one-import.ts', oneImport, host);
-			formatErrors(output.errors, console as any);
-			output.should.have.property('failure', false);
-			output.should.have.property('errors').with.lengthOf(0);
-		});
+      let output = transpile('one-import.ts', oneImport, host);
+      formatErrors(output.errors, console as any);
+      output.should.have.property('failure', false);
+      output.should.have.property('errors').with.lengthOf(0);
+   });
 
-		xit('errors on const enums', () => {
-			let output = transpile('const-enums.ts', constEnums);
-			//formatErrors(output.errors, console as any);
-			output.should.have.property('failure', true);
-			output.should.have.property('errors').with.lengthOf(1);
-		});
+   xit('errors on const enums', () => {
+      let output = transpile('const-enums.ts', constEnums);
+      //formatErrors(output.errors, console as any);
+      output.should.have.property('failure', true);
+      output.should.have.property('errors').with.lengthOf(1);
+   });
 
-		it('uses sourceMap option', () => {
-			let options = {
-				sourceMap: false
-			};
-			let host = new CompilerHost(options);
-			let output = transpile('symbol.ts', es6Symbol, host);
-			(output.sourceMap === undefined).should.be.true;
-		});
+   it('uses sourceMap option', () => {
+      let options = {
+         sourceMap: false
+      };
+      let host = new CompilerHost(options);
+      let output = transpile('symbol.ts', es6Symbol, host);
+      (output.sourceMap === undefined).should.be.true;
+   });
 
-		it('uses target option', () => {
-			let host = new CompilerHost({
-				target: "es3"
-			});
-			let es3output = transpile('trailing-comma.ts', trailingComma, host);
+   it('uses target option', () => {
+      let host = new CompilerHost({
+         target: "es3"
+      });
+      let es3output = transpile('trailing-comma.ts', trailingComma, host);
 
-			host = new CompilerHost({
-				target: "es5"
-			});
-			let es5output = transpile('trailing-comma.ts', trailingComma, host);
-			es3output.should.not.be.equal(es5output);
-		});
-	});
+      host = new CompilerHost({
+         target: "es5"
+      });
+      let es5output = transpile('trailing-comma.ts', trailingComma, host);
+      es3output.should.not.be.equal(es5output);
+   });
 });
