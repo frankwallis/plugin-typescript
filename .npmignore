@@ -1,0 +1,8 @@
+*.log
+.*
+*.json
+example/
+node_modules/
+src/
+test/
+typings/
