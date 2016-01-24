@@ -5,7 +5,7 @@ SystemJS.config({
     "github:*/*.json"
   ],
   globalEvaluationScope: false,
-  transpiler: "typescript",
+  transpiler: "ts",
 
   map: {
     "angular": "github:angular/bower-angular@1.4.9",

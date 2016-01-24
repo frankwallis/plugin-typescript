@@ -5,7 +5,7 @@ SystemJS.config({
     "github:*/*.json"
   ],
   globalEvaluationScope: false,
-  transpiler: "typescript",
+  transpiler: "ts",
 
   map: {
     "assert": "github:jspm/nodelibs-assert@0.2.0-alpha",
@@ -161,18 +161,6 @@ SystemJS.config({
       "main": "index.tsx",
       "defaultExtension": "tsx",
       "meta": {
-        "*.js": {
-          "loader": "ts"
-        },
-        "*.jsx": {
-          "loader": "ts"
-        },
-        "*.ts": {
-          "loader": "ts"
-        },
-        "*.tsx": {
-          "loader": "ts"
-        },
         "*.css": {
           "loader": "css"
         }

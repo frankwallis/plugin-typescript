@@ -27,7 +27,6 @@
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "ts": "frankwallis/plugin-typescript@^2.5.0",
       "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
-      "typescript": "npm:typescript@^1.6.2",
       "url": "jspm/nodelibs-url@^0.2.0-alpha",
       "util": "jspm/nodelibs-util@^0.2.0-alpha"
     },
