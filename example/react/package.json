@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node ../tasks/start",
-    "bundle": "node ../tasks/bundle"
+    "build": "node ../tasks/build"
   },
   "jspm": {
     "registry": "npm",
