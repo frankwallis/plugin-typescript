@@ -10,7 +10,7 @@ A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you 
 
 For JSPM version 0.15 and below, use [plugin-typescript 1.0.x](https://github.com/frankwallis/plugin-typescript/tree/1.0). For any later versions use version 2.x.
 
-plugin-typescript uses version 1.7.3 of the typescript compiler
+plugin-typescript uses version 1.7.5 of the typescript compiler
 
 # Usage #
 
@@ -20,28 +20,20 @@ Install plugin-typescript like this:
 jspm install ts
 ```
 
-And add a 'packages' entry in your SystemJS config:
+Set the transpiler to 'ts' and add a 'packages' entry in your SystemJS config:
 
 ```
 System.config({
-  "transpiler": false,
+  "transpiler": "ts",
   "packages": {
     "app": {
-      "defaultExtension": "ts",
-      "meta": {
-        "*.ts": {
-          "loader": "ts"
-        },
-        "*.js": {
-          "loader": "ts"
-        }
-      }
+      "defaultExtension": "ts"
     }
   }
 });
 ```
 
-This will tell SystemJS to load all '.ts' and '.js' files through plugin-typescript.
+This will tell SystemJS to load all modules through plugin-typescript.
 See the example projects contained within this repository for a working setup.
 
 # Configuration #
@@ -128,7 +120,7 @@ To override the version of TypeScript used by the plugin, add an override to the
 	"overrides": {
 		"github:frankwallis/plugin-typescript@2.2.1": {
 	 		"dependencies": {
-	    		"typescript": "npm:typescript@1.8.0-dev.20151108"
+	    		"typescript": "npm:typescript@1.8.0-dev.20160108"
 	  		}
 		}
 	}
@@ -147,5 +139,5 @@ To run the example projects:
 ```
 To bundle each example project:
 ```
-npm run bundle 					// or jspm bundle-sfx src build/build.js
+npm run build 					// or jspm bundle-sfx src build/build.js
 ```
