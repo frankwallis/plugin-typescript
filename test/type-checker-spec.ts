@@ -20,6 +20,7 @@ const noImports = require.resolve('./fixtures-es6/program1/no-imports.ts');
 const oneImport = require.resolve('./fixtures-es6/program1/one-import.ts');
 const ambientReference = require.resolve('./fixtures-es6/ambients/ambient-reference.ts');
 const ambientReferenceDisabled = require.resolve('./fixtures-es6/ambients/ambient-reference-disabled.ts');
+const nestedReference = require.resolve('./fixtures-es6/ambients/ambient-nested.ts');
 const ambientImportJs = require.resolve('./fixtures-es6/ambients/ambient-import-js.ts');
 const ambientImportTs = require.resolve('./fixtures-es6/ambients/ambient-import-ts.ts');
 const ambientResolveTs = require.resolve('./fixtures-es6/ambients/ambient-resolve.ts');
@@ -160,11 +161,33 @@ describe('TypeChecker', () => {
 			});
 	});
 
-	it('catches nested type-checker errors', () => {
-		return typecheckAll(nestedTypeError)
+	it('only checks full resolved typescript files', () => {
+		let options = {
+			noImplicitAny: true
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host);
+      resolver = new Resolver(host, resolve, fetch);
+      host.addFile("declaration.d.ts", "export var a: string = 10;");
+      return resolver.resolve("declaration.d.ts")
+         .then(() => {
+            let diags = typeChecker.check();
+            diags.should.have.length(0);
+            
+            host.addFile("index.ts", '/// <reference path="declaration.d.ts" />');
+            return resolver.resolve("index.ts")
+               .then(() => {
+                  let diags = typeChecker.check(); 
+                  diags.should.not.have.length(0);                  
+               })            
+         })
+	});
+
+	it('loads nested reference files', () => {
+		return typecheckAll(nestedReference)
 			.then((diags) => {
-				diags.should.have.length(1);
-				diags[0].code.should.be.equal(2339);
+				formatErrors(diags, console as any);
+				diags.should.have.length(0);
 			});
 	});
 
