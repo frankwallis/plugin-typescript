@@ -112,7 +112,7 @@ function _resolve(dep: string, parent: string): Promise<string> {
 			normalized = stripDoubleExtension(normalized);
 
 			logger.debug(`resolved ${normalized} (${parent} -> ${dep})`);
-			return normalized;
+         return (ts as any).normalizePath(normalized);
 		});
 }
 
@@ -124,5 +124,5 @@ function _fetch(address: string): Promise<string> {
 		.then(text => {
 			logger.debug(`fetched ${address}`);
 			return text;
-		})
+		});
 }

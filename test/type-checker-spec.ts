@@ -2,6 +2,7 @@ import fs = require('fs');
 import path = require('path');
 import Promise = require('bluebird');
 import chai = require('chai');
+import ts = require('typescript');
 
 import {Resolver} from '../src/resolver';
 import {TypeChecker} from '../src/type-checker';
@@ -21,6 +22,7 @@ const oneImport = require.resolve('./fixtures-es6/program1/one-import.ts');
 const ambientReference = require.resolve('./fixtures-es6/ambients/ambient-reference.ts');
 const ambientReferenceDisabled = require.resolve('./fixtures-es6/ambients/ambient-reference-disabled.ts');
 const nestedReference = require.resolve('./fixtures-es6/ambients/ambient-nested.ts');
+const backslashReference = require.resolve('./fixtures-es6/ambients/backslash-reference.ts');
 const ambientImportJs = require.resolve('./fixtures-es6/ambients/ambient-import-js.ts');
 const ambientImportTs = require.resolve('./fixtures-es6/ambients/ambient-import-ts.ts');
 const ambientResolveTs = require.resolve('./fixtures-es6/ambients/ambient-resolve.ts');
@@ -71,7 +73,7 @@ function resolve(dep, parent) {
 			result = result + ".ts";
 
 		//console.log("resolved " + parent + " -> " + result);
-		return Promise.resolve(result);
+		return Promise.resolve((ts as any).normalizePath(result));
 	}
 	catch (err) {
 		console.error(err);
@@ -181,6 +183,14 @@ describe('TypeChecker', () => {
                   diags.should.not.have.length(0);                  
                })            
          })
+	});
+
+	it('handles backslash in references', () => {
+		return typecheckAll(backslashReference)
+			.then((diags) => {
+				formatErrors(diags, console as any);
+				diags.should.have.length(0);
+			});
 	});
 
 	it('loads nested reference files', () => {
