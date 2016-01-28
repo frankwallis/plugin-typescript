@@ -89,6 +89,7 @@ describe('TypeChecker', () => {
 
    function resolveAll(filelist: string[]) {
       var resolutions = filelist.map((filename) => {
+      filename = (ts as any).normalizePath(filename);
          let text = fs.readFileSync(filename, 'utf8');
          host.addFile(filename, text);
          return resolver.resolve(filename);
@@ -108,8 +109,9 @@ describe('TypeChecker', () => {
    }
    
 	function typecheckAll(filename: string) {
-		resolver.registerDeclarationFile(require.resolve(host.getDefaultLibFileName()));
-      return resolveAll([filename]).then(() => {
+		resolver.registerDeclarationFile((ts as any).normalizePath(require.resolve(host.getDefaultLibFileName())));
+      	return resolveAll([filename]).then(() => {
+
          var result = typeChecker.check();
          
          if (result.length == 0)
@@ -123,12 +125,13 @@ describe('TypeChecker', () => {
 		filelist = [];
 		host = new CompilerHost({});
 		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+      	resolver = new Resolver(host, resolve, fetch);
 	});
 
 	it('compiles successfully', () => {
 		return typecheckAll(noImports)
 			.then((diags) => {
+				formatErrors(diags, console as any);
 				diags.should.have.length(0);
 			});
 	});
@@ -349,7 +352,7 @@ describe('TypeChecker', () => {
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+      	resolver = new Resolver(host, resolve, fetch);
 		return typecheckAll(missingTypings)
 			.then((diags) => {
 				formatErrors(diags, console as any);
