@@ -49,7 +49,7 @@
     "registry": "github",
     "name": "frankwallis/plugin-typescript",
     "dependencies": {
-      "typescript": "npm:typescript@^1.7.5"
+      "typescript": "npm:typescript@1.7.5"
     },
     "directories": {
       "lib": "lib"
