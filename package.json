@@ -1,6 +1,6 @@
 {
   "name": "plugin-typescript",
-  "version": "2.5.7",
+  "version": "2.5.8",
   "description": "TypeScript loader for SystemJS",
   "main": "lib/plugin.js",
   "homepage": "https://github.com/frankwallis/plugin-typescript",
@@ -49,7 +49,7 @@
     "registry": "github",
     "name": "frankwallis/plugin-typescript",
     "dependencies": {
-      "typescript": "npm:typescript@^1.7.5"
+      "typescript": "npm:typescript@1.7.5"
     },
     "directories": {
       "lib": "lib"
