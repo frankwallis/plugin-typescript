@@ -1,7 +1,7 @@
 /* */
 import * as ts from 'typescript';
 import Logger from './logger';
-import {hasError} from './utils';
+import {isTypescriptDeclaration, hasError} from './utils';
 import {CompilerHost, CombinedOptions, SourceFile} from './compiler-host';
 import {__HTML_MODULE__} from "./compiler-host";
 
@@ -38,7 +38,7 @@ export class TypeChecker {
 	*/
 	public check(): ts.Diagnostic[] {         
       const candidates = this.getCandidates();
-      if (candidates.some(candidate => candidate.checkable))            
+      if (candidates.some(candidate => candidate.checkable && !isTypescriptDeclaration(candidate.name)))            
          return this.getAllDiagnostics(candidates); 
       else
          return [];

@@ -23,12 +23,20 @@ describe('Transpiler', () => {
       return transpiler.transpile(sourceName);
    }
 
-   it('transpiles successfully', () => {
+   it('transpiles typescript successfully', () => {
       const output = transpile('one-import.ts', oneImport);
       formatErrors(output.errors, console as any);
       output.should.have.property('failure', false);
       output.should.have.property('errors').with.lengthOf(0);
       output.should.have.property('js').with.lengthOf(322);
+   });
+
+   it('transpiles javascript successfully', () => {
+      const output = transpile('no-import.js', "var a = 10; export default a;");
+      formatErrors(output.errors, console as any);
+      output.should.have.property('failure', false);
+      output.should.have.property('errors').with.lengthOf(0);
+      output.should.have.property('js').with.lengthOf(192);
    });
 
    it('removes SourceMappingURL', () => {

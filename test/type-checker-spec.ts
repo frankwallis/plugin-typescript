@@ -2,6 +2,7 @@ import fs = require('fs');
 import path = require('path');
 import Promise = require('bluebird');
 import chai = require('chai');
+import ts = require('typescript');
 
 import {Resolver} from '../src/resolver';
 import {TypeChecker} from '../src/type-checker';
@@ -20,6 +21,8 @@ const noImports = require.resolve('./fixtures-es6/program1/no-imports.ts');
 const oneImport = require.resolve('./fixtures-es6/program1/one-import.ts');
 const ambientReference = require.resolve('./fixtures-es6/ambients/ambient-reference.ts');
 const ambientReferenceDisabled = require.resolve('./fixtures-es6/ambients/ambient-reference-disabled.ts');
+const nestedReference = require.resolve('./fixtures-es6/ambients/ambient-nested.ts');
+const backslashReference = require.resolve('./fixtures-es6/ambients/backslash-reference.ts');
 const ambientImportJs = require.resolve('./fixtures-es6/ambients/ambient-import-js.ts');
 const ambientImportTs = require.resolve('./fixtures-es6/ambients/ambient-import-ts.ts');
 const ambientResolveTs = require.resolve('./fixtures-es6/ambients/ambient-resolve.ts');
@@ -70,7 +73,7 @@ function resolve(dep, parent) {
 			result = result + ".ts";
 
 		//console.log("resolved " + parent + " -> " + result);
-		return Promise.resolve(result);
+		return Promise.resolve((ts as any).normalizePath(result));
 	}
 	catch (err) {
 		console.error(err);
@@ -86,6 +89,7 @@ describe('TypeChecker', () => {
 
    function resolveAll(filelist: string[]) {
       var resolutions = filelist.map((filename) => {
+      filename = (ts as any).normalizePath(filename);
          let text = fs.readFileSync(filename, 'utf8');
          host.addFile(filename, text);
          return resolver.resolve(filename);
@@ -105,8 +109,9 @@ describe('TypeChecker', () => {
    }
    
 	function typecheckAll(filename: string) {
-		resolver.registerDeclarationFile(require.resolve(host.getDefaultLibFileName()));
-      return resolveAll([filename]).then(() => {
+		resolver.registerDeclarationFile((ts as any).normalizePath(require.resolve(host.getDefaultLibFileName())));
+      	return resolveAll([filename]).then(() => {
+
          var result = typeChecker.check();
          
          if (result.length == 0)
@@ -120,12 +125,13 @@ describe('TypeChecker', () => {
 		filelist = [];
 		host = new CompilerHost({});
 		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+      	resolver = new Resolver(host, resolve, fetch);
 	});
 
 	it('compiles successfully', () => {
 		return typecheckAll(noImports)
 			.then((diags) => {
+				formatErrors(diags, console as any);
 				diags.should.have.length(0);
 			});
 	});
@@ -160,11 +166,41 @@ describe('TypeChecker', () => {
 			});
 	});
 
-	it('catches nested type-checker errors', () => {
-		return typecheckAll(nestedTypeError)
+	it('only checks full resolved typescript files', () => {
+		let options = {
+			noImplicitAny: true
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host);
+      resolver = new Resolver(host, resolve, fetch);
+      host.addFile("declaration.d.ts", "export var a: string = 10;");
+      return resolver.resolve("declaration.d.ts")
+         .then(() => {
+            let diags = typeChecker.check();
+            diags.should.have.length(0);
+            
+            host.addFile("index.ts", '/// <reference path="declaration.d.ts" />');
+            return resolver.resolve("index.ts")
+               .then(() => {
+                  let diags = typeChecker.check(); 
+                  diags.should.not.have.length(0);                  
+               })            
+         })
+	});
+
+	it('handles backslash in references', () => {
+		return typecheckAll(backslashReference)
 			.then((diags) => {
-				diags.should.have.length(1);
-				diags[0].code.should.be.equal(2339);
+				formatErrors(diags, console as any);
+				diags.should.have.length(0);
+			});
+	});
+
+	it('loads nested reference files', () => {
+		return typecheckAll(nestedReference)
+			.then((diags) => {
+				formatErrors(diags, console as any);
+				diags.should.have.length(0);
 			});
 	});
 
@@ -316,7 +352,7 @@ describe('TypeChecker', () => {
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+      	resolver = new Resolver(host, resolve, fetch);
 		return typecheckAll(missingTypings)
 			.then((diags) => {
 				formatErrors(diags, console as any);
