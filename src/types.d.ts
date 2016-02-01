@@ -32,6 +32,7 @@ interface PluginOptions {
 
 	// this is a hidden typescript option
 	skipDefaultLibCheck?: boolean;
+   suppressOutputPathCheck?: boolean;
 }
 
 declare type DependencyInfo = {
