@@ -25,10 +25,9 @@
     "url": "https://github.com/frankwallis/plugin-typescript.git"
   },
   "dependencies": {
-    "typescript": "^1.7.5"
+    "typescript": "^1.9.0-dev.20160202"
   },
   "devDependencies": {
-    "bluebird": "^3.0.5",
     "chai": "^3.4.1",
     "chokidar-socket-emitter": "^0.4.2",
     "http-server": "^0.8.0",
@@ -39,7 +38,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "mocha --require ./test/environment ./test/*.ts"
+    "test": "mocha --harmony --harmony-destructuring --harmony_default_parameters --require ./test/environment ./test/*.ts"
   },
   "bin": {},
   "license": "MIT",
