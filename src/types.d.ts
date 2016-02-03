@@ -6,10 +6,11 @@ declare type Module = {
 }
 
 interface SystemJS {
-	normalize(dep: string, parent: string): Promise<string>;
-	fetch(load: Module): Promise<string>;
+   normalize(dep: string, parent: string): Promise<string>;
+   fetch(load: Module): Promise<string>;
+   import(modname: string): Promise<any>;
 
-	typescriptOptions?: any;
+   typescriptOptions?: any;
    transpiler?: string;
 }
 
