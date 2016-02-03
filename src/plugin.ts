@@ -58,8 +58,13 @@ export function translate(load: Module): Promise<string> {
                var diags = typeChecker.check();
                formatErrors(diags, logger);
                   
-               // this makes SystemJS fetch our declaration files for us
-               load.metadata.deps = deps.list.filter(isTypescriptDeclaration).map(d => d + "!");
+               // this makes SystemJS fetch any declaration files 
+               // and feed them back through the plugin
+               // TODO - use ___moduleName when available?
+               deps.list
+                  .filter(isTypescriptDeclaration)
+                  .forEach(d => System.import(d + "!"));
+                  
                return load.source;
             });
       }

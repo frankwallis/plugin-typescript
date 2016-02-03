@@ -34,8 +34,8 @@ export class Transpiler {
 		/* without this we get a 'lib.d.ts not found' error */
 		this._options.noLib = true;
       
-      /* redirect output to prevent 'cannot overwrite existing file' error with .js files */
-      this._options.outDir = '/__transpiler_output__';
+      /* without this we get 'cannot overwrite existing file' when transpiling js files */
+      this._options.suppressOutputPathCheck = true;
 	}
 
 	public transpile(sourceName: string): TranspileResult {

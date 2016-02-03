@@ -1,6 +1,5 @@
 import fs = require('fs');
 import path = require('path');
-import Promise = require('bluebird');
 import chai = require('chai');
 
 import {Resolver} from '../src/resolver';
@@ -10,11 +9,15 @@ import {formatErrors} from '../src/format-errors';
 const should = chai.should();
 
 let filelist = [];
-const readFile: any = Promise.promisify(fs.readFile.bind(fs));
 function fetch(filename) {
 	//console.log("fetching " + filename);
 	filelist.push(filename);
-	return readFile(filename, 'utf8');
+   try {
+      return Promise.resolve(fs.readFileSync(filename, 'utf8'));   
+   }
+   catch (err) {
+      return Promise.reject(err);
+   }
 }
 
 function resolve(dep, parent) {
@@ -63,60 +66,49 @@ describe('Resolver', () => {
 		resolver = new Resolver(host, resolve, fetch);
 	});
 
-	it('resolves successfully', () => {
+	it('resolves successfully', async () => {
       host.addFile(ANYFILE_NAME, "export = 42;");
-		return resolver.resolve(ANYFILE_NAME)
-			.then((deps) => {
-				deps.list.should.have.length(0);
-			});
+		let deps = await resolver.resolve(ANYFILE_NAME);
+      deps.list.should.have.length(0);
 	});
 
-	it('adds declaration files', () => {
+	it('adds declaration files', async () => {
       resolver.registerDeclarationFile("declarations.d.ts");
       host.addFile(ANYFILE_NAME, "export = 42;");
-		return resolver.resolve(ANYFILE_NAME)
-			.then((deps) => {
-				deps.list.should.have.length(1);
-            deps.list[0].should.equal("declarations.d.ts");
-			});
+		let deps = await resolver.resolve(ANYFILE_NAME);
+      deps.list.should.have.length(1);
+      deps.list[0].should.equal("declarations.d.ts");
 	});
 
-	it('flags the default library', () => {
+	it('flags the default library', async () => {
       const defaultLibName = require.resolve(host.getDefaultLibFileName());
       const defaultLibSource = fs.readFileSync(defaultLibName, 'utf8');
       const file = host.addFile(defaultLibName, defaultLibSource);
-		return resolver.resolve(defaultLibName)
-			.then((deps) => {
-				deps.list.should.have.length(0);
-            file.isLibFile.should.be.true;
-			});
+		let deps = await resolver.resolve(defaultLibName);
+      deps.list.should.have.length(0);
+      file.isLibFile.should.be.true;
 	});
-
    
-	it('resolves ambient imports', () => {
+	it('resolves ambient imports', async () => {
       const source = 'import "ambient";'
       host.addFile(AMBIENT_NAME, source);
             
-		return resolver.resolve(AMBIENT_NAME)
-			.then((deps) => {
-				deps.list.should.have.length(0);
-			});
+		let deps = await resolver.resolve(AMBIENT_NAME);
+      deps.list.should.have.length(0);
 	});
 
-	it('handles ambient references when resolveAmbientRefs option is false', () => {
+	it('handles ambient references when resolveAmbientRefs option is false', async () => {
       const source = '/// <reference path="ambient/ambient.d.ts" />';
       const expected = path.resolve(__dirname, './fixtures-es6/ambients/ambient/ambient.d.ts');
       
       host.addFile(AMBIENT_NAME, source);
             
-		return resolver.resolve(AMBIENT_NAME)
-			.then((deps) => {
-				deps.list.should.have.length(1);
-            deps.list[0].should.equal(expected);
-			});
+		let deps = await resolver.resolve(AMBIENT_NAME);
+      deps.list.should.have.length(1);
+      deps.list[0].should.equal(expected);
 	});
 
-	it('resolves ambient references when resolveAmbientRefs option is true', () => {
+	it('resolves ambient references when resolveAmbientRefs option is true', async () => {
 		let options = {
 			resolveAmbientRefs: true
 		};      
@@ -128,14 +120,12 @@ describe('Resolver', () => {
 
       host.addFile(AMBIENT_NAME, source);
       
-		return resolver.resolve(AMBIENT_NAME)
-			.then((deps) => {
-				deps.list.should.have.length(1);
-            deps.list[0].should.equal(expected);
-			});
+		let deps = await resolver.resolve(AMBIENT_NAME);
+      deps.list.should.have.length(1);
+      deps.list[0].should.equal(expected);
 	});
 
-	it('ignores non ambient refs resolveAmbientRefs option is true', () => {
+	it('ignores non ambient refs resolveAmbientRefs option is true', async () => {
 		let options = {
 			resolveAmbientRefs: true
 		};      
@@ -146,14 +136,12 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/ambients/not-ambient.d.ts');
       host.addFile(AMBIENT_NAME, source);
       
-		return resolver.resolve(AMBIENT_NAME)
-			.then((deps) => {
-				deps.list.should.have.length(1);
-            deps.list[0].should.equal(expected);
-			});
+		let deps = await resolver.resolve(AMBIENT_NAME);
+      deps.list.should.have.length(1);
+      deps.list[0].should.equal(expected);
 	});
 
-	it('resolves typings files from package.json when resolveTypings is true', () => {
+	it('resolves typings files from package.json when resolveTypings is true', async () => {
 		let options = {
 			resolveTypings: true
 		};
@@ -164,14 +152,12 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2/angular2.d.ts');
       host.addFile(TYPINGS_NAME, source);
       
-		return resolver.resolve(TYPINGS_NAME)
-			.then((deps) => {
-				deps.list.should.have.length(1);
-            deps.list[0].should.equal(expected);
-			});
+		let deps = await resolver.resolve(TYPINGS_NAME);
+      deps.list.should.have.length(1);
+      deps.list[0].should.equal(expected);
 	});
 
-	it('doesnt resolve typings files when resolveTypings is false', () => {
+	it('doesnt resolve typings files when resolveTypings is false', async () => {
 		let options = {
 			resolveTypings: false
 		};
@@ -182,14 +168,12 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2.js');
       host.addFile(TYPINGS_NAME, source);
 
-		return resolver.resolve(TYPINGS_NAME)
-			.then((deps) => {
-				deps.list.should.have.length(0);
-            deps.mappings["angular2"].should.equal(expected);
-			});
+		let deps = await resolver.resolve(TYPINGS_NAME);
+      deps.list.should.have.length(0);
+      deps.mappings["angular2"].should.equal(expected);
 	});
 
-	it('handles missing typings field in package.json', () => {
+	it('handles missing typings field in package.json', async () => {
 		let options = {
 			resolveTypings: true
 		};
@@ -200,14 +184,12 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/missing/missing.js');
       host.addFile(TYPINGS_NAME, source);
 
-		return resolver.resolve(TYPINGS_NAME)
-			.then((deps) => {
-				deps.list.should.have.length(0);
-            deps.mappings["missing"].should.equal(expected);
-			});
+		let deps = await resolver.resolve(TYPINGS_NAME);
+      deps.list.should.have.length(0);
+      deps.mappings["missing"].should.equal(expected);
 	});
 
-	it('handles non-relative typings field in package.json', () => {
+	it('handles non-relative typings field in package.json', async () => {
 		let options = {
 			resolveTypings: true
 		};
@@ -218,14 +200,12 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/rxjs/Rx.d.ts');
       host.addFile(TYPINGS_NAME, source);
 
-		return resolver.resolve(TYPINGS_NAME)
-			.then((deps) => {
-				deps.list.should.have.length(1);
-            deps.list[0].should.equal(expected);
-			});
+		let deps = await resolver.resolve(TYPINGS_NAME);
+      deps.list.should.have.length(1);
+      deps.list[0].should.equal(expected);
 	});
 
-	it('handles package.json not found', () => {
+	it('handles package.json not found', async () => {
 		let options = {
 			resolveTypings: true
 		};
@@ -236,10 +216,8 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/missing_package/missing_package.js');
       host.addFile(TYPINGS_NAME, source);
 
-		return resolver.resolve(TYPINGS_NAME)
-			.then((deps) => {
-				deps.list.should.have.length(0);
-            deps.mappings["missing_package"].should.equal(expected);
-			});
+		let deps = await resolver.resolve(TYPINGS_NAME);
+      deps.list.should.have.length(0);
+      deps.mappings["missing_package"].should.equal(expected);
 	});
 });
