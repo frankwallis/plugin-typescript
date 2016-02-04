@@ -12,7 +12,7 @@
       "clean-css": "^3.4.3",
       "css": "github:frankwallis/plugin-css@master",
       "systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@^0.5.3",
-      "ts": "github:frankwallis/plugin-typescript@^2.5.0",
+      "ts": "github:frankwallis/plugin-typescript@^2.6.0",
       "typescript": "1.7.5"
     }
   }

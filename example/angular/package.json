@@ -12,7 +12,7 @@
       "clean-css": "npm:clean-css@^3.4.3",
       "css": "frankwallis/plugin-css@master",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
-      "ts": "frankwallis/plugin-typescript@^2.5.0",
+      "ts": "frankwallis/plugin-typescript@^2.6.0",
       "typescript": "npm:typescript@1.7.5"
     }
   }
