@@ -6,8 +6,7 @@
 		"noLib": true,
 		"removeComments": true,
 		"moduleResolution": "node",
-		"inlineSourceMap": true,
-		"inlineSources": true,
+		"inlineSourceMap": false,
 		"rootDir": "./src"
 	},
 	"files": [

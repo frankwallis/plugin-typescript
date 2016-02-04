@@ -277,7 +277,20 @@ describe('TypeChecker', () => {
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
-   
+
+	it('loads lib.d.ts', async () => {
+		let options = {
+         targetLib: "es5"			
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host);
+      resolver = new Resolver(host, resolve, fetch);
+		
+		let diags = await typecheckAll(noImports);
+      formatErrors(diags, console as any);
+      diags.should.have.length(0);
+	});   
+
    it('resolve typings files when resolveTypings is true', async () => {
 		let options = {
 			resolveTypings: true

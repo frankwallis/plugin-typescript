@@ -25,7 +25,8 @@ interface PluginOptions {
 	typeCheck?: boolean | string;
 	resolveAmbientRefs?: boolean;
 	resolveTypings?: boolean | any;//string[];
-
+   targetLib?: number;
+   
 	/* private */
 	typings?: any;//string[];
 	files?: any;
