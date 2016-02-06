@@ -6,10 +6,11 @@ TypeScript loader for SystemJS
 
 # Overview #
 
-A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to System.import TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
-plugin-typescript uses version 1.9.0-dev.20160206 of the typescript compiler
+A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to ```System.import``` TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
 
-For JSPM version 0.15 and below, use [plugin-typescript 1.0.x](https://github.com/frankwallis/plugin-typescript/tree/1.0).
+plugin-typescript uses version 1.9.0-dev.20160206 of the typescript compiler.
+
+For JSPM version 0.15 and below, use [plugin-typescript 1.0.x](https://github.com/frankwallis/plugin-typescript/tree/1.0).  
 For TypeScript 1.7.5 and below use [plugin-typescript 2.x.x](https://github.com/frankwallis/plugin-typescript/tree/2.0).
 
 # Installation #
@@ -41,6 +42,11 @@ jspm install ts
 ```
 System.config({
   transpiler: "ts"
+  packages: {
+    "app": {
+      "defaultExtension": "ts",
+    }
+  }
 });
 ```
 
@@ -64,7 +70,7 @@ System.config({
 });
 ```
 
-This will cause all .ts files in the "src" package to be fed through plugin-typescript.
+This will cause all .ts files in the "src" package to be loaded through plugin-typescript.
 
 See the example projects contained within this repository for a working setup.
 
