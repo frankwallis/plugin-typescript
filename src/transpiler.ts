@@ -36,6 +36,9 @@ export class Transpiler {
       
       /* without this we get 'cannot overwrite existing file' when transpiling js files */
       this._options.suppressOutputPathCheck = true;
+
+		/* with this we don't get any files */
+		this._options.noEmit = false;
 	}
 
 	public transpile(sourceName: string): TranspileResult {

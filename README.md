@@ -169,18 +169,18 @@ To override the version of TypeScript used by the plugin, add an override to the
 	}
 ```
 
-## Example Projects ##
+## Examples ##
 
 To run the example projects:
 ```
 > git clone https://github.com/frankwallis/plugin-typescript.git
 > cd plugin-typescript
 > npm install
-> cd example/angular  		// or example/angular2 or example/react
+> cd example/react  		// or example/angular2 or example/angular
 > jspm install
 > npm start
 ```
 To bundle each example project:
 ```
-npm run build 					// or jspm bundle-sfx src build/build.js
+> npm run build 			// or jspm bundle-sfx src build/build.js
 ```

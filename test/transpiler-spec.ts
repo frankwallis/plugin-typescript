@@ -75,7 +75,8 @@ describe('Transpiler', () => {
          noEmitOnError: true,
          out: "somefile.js",
          declaration: true,
-         noLib: false
+         noLib: false,
+         noEmit: true
       };
       let host = new CompilerHost(options);
 
@@ -83,6 +84,7 @@ describe('Transpiler', () => {
       formatErrors(output.errors, console as any);
       output.should.have.property('failure', false);
       output.should.have.property('errors').with.lengthOf(0);
+      output.js.length.should.be.greaterThan(0);
    });
 
    xit('errors on const enums', () => {
