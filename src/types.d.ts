@@ -9,7 +9,8 @@ interface SystemJS {
    normalize(dep: string, parent: string): Promise<string>;
    fetch(load: Module): Promise<string>;
    import(modname: string): Promise<any>;
-
+   builder?: any;
+   
    typescriptOptions?: any;
    transpiler?: string;
 }

@@ -28,7 +28,7 @@ export class CompilerHost implements ts.CompilerHost {
 	private _options: any;
 	private _files: { [s: string]: SourceFile; };
 
-	constructor(options: any) {
+	constructor(options: any, builder: boolean = false) {
 		this._options = options || {};
 		this._options.module = this.getEnum(this._options.module, (<any>ts).ModuleKind, ts.ModuleKind.System);
 		this._options.target = this.getEnum(this._options.target, (<any>ts).ScriptTarget, ts.ScriptTarget.ES5);
@@ -41,6 +41,14 @@ export class CompilerHost implements ts.CompilerHost {
 		// Force module resolution into 'classic' mode, to prevent node module resolution from kicking in
 		this._options.moduleResolution = ts.ModuleResolutionKind.Classic;
 
+      // When bundling output es6 modules instead of system to enable rollup support
+      if (builder) {
+         if (this._options.module === ts.ModuleKind.System) {
+            this._options.module = ts.ModuleKind.ES6;
+            this._options.target = ts.ScriptTarget.ES6;
+         }
+      }
+      
 		this._files = {};
 
 		// support for importing html templates until

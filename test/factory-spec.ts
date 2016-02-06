@@ -59,7 +59,7 @@ describe('Factory', () => {
 
 	it('handles sjsconfig = undefined', async () => {
 		let config = undefined;
-		let {transpiler, typeChecker} = await createFactory(config, resolve, fetch);
+		let {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
       transpiler.should.be.defined;
       should.not.exist(typeChecker);
       filelist.should.have.length(0);
@@ -67,7 +67,7 @@ describe('Factory', () => {
 
 	it('handles tsconfig = undefined', async () => {
 		let config = {};
-		let {transpiler, typeChecker} = await createFactory(config, resolve, fetch);
+		let {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
       transpiler.should.be.defined;
       should.not.exist(typeChecker);
       filelist.should.have.length(0);
@@ -77,7 +77,7 @@ describe('Factory', () => {
 		let config = {
 			typeCheck: true,
 		};
-		let {transpiler, typeChecker, resolver} = await createFactory(config, resolve, fetch);
+		let {transpiler, typeChecker, resolver} = await createFactory(config, false, resolve, fetch);
       transpiler.should.be.defined;
       typeChecker.should.be.defined;
       resolver.should.be.defined;
@@ -88,7 +88,7 @@ describe('Factory', () => {
 			tsconfig: declarationFile,
 			typeCheck: false
 		};
-		let {transpiler, typeChecker, resolver} = await createFactory(config, resolve, fetch);
+		let {transpiler, typeChecker, resolver} = await createFactory(config, false, resolve, fetch);
       transpiler.should.be.defined;
       should.not.exist(typeChecker);
       should.not.exist(resolver);
@@ -98,7 +98,7 @@ describe('Factory', () => {
 		let config = {
 			tsconfig: true
 		};
-		let {transpiler, typeChecker} = await createFactory(config, resolve, fetch);
+		let {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
       transpiler.should.be.defined;
       should.not.exist(typeChecker);
       filelist.should.have.length(1);
@@ -109,8 +109,16 @@ describe('Factory', () => {
 		let config = {
 			tsconfig: true
 		};
-		let {host} = await createFactory(config, resolve, fetch);
+		let {host} = await createFactory(config, false, resolve, fetch);
       host.options.noImplicitAny.should.be.true;
+	});
+
+	it('passes builder param to host', async () => {
+		let config = {
+			module: "system"
+		};
+		let {host} = await createFactory(config, true, resolve, fetch);
+      host.options.module.should.equal(ts.ModuleKind.ES6);
 	});
 
 	it('SystemJS.typescriptOptions take precedence over tsconfig settings', async () => {
@@ -118,7 +126,7 @@ describe('Factory', () => {
 			tsconfig: true,
 			noImplicitAny: false
 		};
-		let {host} = await createFactory(config, resolve, fetch);
+		let {host} = await createFactory(config, false, resolve, fetch);
       host.options.noImplicitAny.should.be.false;
 	});
 
@@ -126,7 +134,7 @@ describe('Factory', () => {
 		let config = {
 			tsconfig: alternateFile
 		};
-		let {transpiler, typeChecker} = await createFactory(config, resolve, fetch);
+		let {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
       transpiler.should.be.defined;
       should.not.exist(typeChecker);
       filelist.should.have.length(1);
@@ -137,7 +145,7 @@ describe('Factory', () => {
 		let config = {
 			typeCheck: true
 		};
-		let {resolver} = await createFactory(config, resolve, fetch);
+		let {resolver} = await createFactory(config, false, resolve, fetch);
       resolver.should.be.defined;
       resolver._declarationFiles.should.have.length(1);
 	});
@@ -147,7 +155,7 @@ describe('Factory', () => {
 			tsconfig: declarationFile,
 			typeCheck: true
 		};
-		let {resolver} = await createFactory(config, resolve, fetch);
+		let {resolver} = await createFactory(config, false, resolve, fetch);
       resolver.should.be.defined;
       resolver._declarationFiles.should.have.length(2);
       resolver._declarationFiles[0].should.be.equal(defaultLib);
@@ -159,7 +167,7 @@ describe('Factory', () => {
 			noLib: true,
 			typeCheck: true
 		};
-		let {resolver} = await createFactory(config, resolve, fetch);
+		let {resolver} = await createFactory(config, false, resolve, fetch);
       resolver.should.be.defined;
       resolver._declarationFiles.should.have.length(0);
 	});

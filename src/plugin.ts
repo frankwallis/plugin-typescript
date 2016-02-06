@@ -6,11 +6,7 @@ import {formatErrors} from './format-errors';
 import {isTypescript, isTypescriptDeclaration, stripDoubleExtension} from './utils';
 
 const logger = new Logger({ debug: false });
-const factory = createFactory(System.typescriptOptions, _resolve, _fetch)
-   .then((output) => {
-      validateOptions(output.host.options);
-      return output;
-   });
+let factory = undefined;
    
 /*
  * load.name
@@ -21,6 +17,12 @@ const factory = createFactory(System.typescriptOptions, _resolve, _fetch)
 export function translate(load: Module): Promise<string> {
 	logger.debug(`systemjs translating ${load.address}`);
 
+   factory = factory || createFactory(System.typescriptOptions, this.builder, _resolve, _fetch)
+      .then((output) => {
+         validateOptions(output.host.options);
+         return output;
+      });
+   
 	return factory.then(({transpiler, resolver, typeChecker, host}) => {            
       host.addFile(load.address, load.source);
 
@@ -74,6 +76,8 @@ export function translate(load: Module): Promise<string> {
 }
 
 export function bundle() {
+   if (!factory) return [];
+   
    return factory.then(({typeChecker, host}) => {
       
       if (host.options.typeCheck) {
@@ -94,9 +98,8 @@ export function bundle() {
 function validateOptions(options) {
    /* The only time you don't want to output in system format is when you are using babel 
       downstream to compile es6 output (e.g. for async/await support) */      
-   if (options.module != ts.ModuleKind.System) {      
-      if ((!System.transpiler || System.transpiler.indexOf("babel") < 0) || (options.target != ts.ScriptTarget.ES6))
-         logger.warn(`transpiling to ${(<any>ts).ModuleKind[options.module]}, consider setting module: "system" in typescriptOptions to transpile directly to System.register format`);
+   if ((options.module != ts.ModuleKind.System) && (options.module != ts.ModuleKind.ES6)) {
+      logger.warn(`transpiling to ${(<any>ts).ModuleKind[options.module]}, consider setting module: "system" in typescriptOptions to transpile directly to System.register format`);
    }
 }
 

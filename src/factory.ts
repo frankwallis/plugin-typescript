@@ -21,13 +21,16 @@ type FactoryOutput = {
 /*
 	This code looks a lot better with async functions...
 */
-export function createFactory(sjsconfig: PluginOptions = {}, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<FactoryOutput> {
+export function createFactory(sjsconfig: PluginOptions = {},
+                              builder: boolean, 
+                              _resolve: ResolveFunction, 
+                              _fetch: FetchFunction): Promise<FactoryOutput> {
 	const tsconfigFiles = [];
 	const typingsFiles = [];
 
 	return loadOptions(sjsconfig, _resolve, _fetch)
 		.then(options => {
-			return createServices(options, _resolve, _fetch);
+			return createServices(options, builder, _resolve, _fetch);
 		})
 		.then(services => {
 			if (services.options.typeCheck) {
@@ -80,8 +83,8 @@ function resolveDeclarationFiles(options: PluginOptions, _resolve: ResolveFuncti
 	return Promise.all<string>(declarationFiles);
 }
 
-function createServices(options: PluginOptions, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<FactoryOutput> {
-	const host = new CompilerHost(options);
+function createServices(options: PluginOptions, builder: boolean, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<FactoryOutput> {
+	const host = new CompilerHost(options, builder);
 	const transpiler = new Transpiler(host);
    
    let resolver = undefined; 
