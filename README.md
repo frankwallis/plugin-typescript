@@ -18,13 +18,14 @@ For TypeScript 1.7.5 and below use [plugin-typescript 2.x.x](https://github.com/
 
 Add SystemJS map configuration for plugin-typescript and typescript:
 
+```
 SystemJS.config({
   map: {
     "ts": "path/to/plugin-typescript/lib/plugin.js",
     "typescript": "path/to/typescript/lib/typescript.js"
   }
 });
-
+```
 ## JSPM ##
 
 Install plugin-typescript like this:
@@ -45,7 +46,7 @@ System.config({
 
 This will tell SystemJS to load all modules (.js and .ts) through plugin-typescript.
 
-## Or: make plugin-typescript load specific files, using SystemJS ```packages``` configuration ##
+## Or: target specific files, using ```packages``` configuration ##
 
 ```
 System.config({
