@@ -25,7 +25,7 @@
       "react": "^0.13.3",
       "stream": "github:jspm/nodelibs-stream@^0.2.0-alpha",
       "systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@^0.5.3",
-      "ts": "github:frankwallis/plugin-typescript@^2.5.0",
+      "ts": "github:frankwallis/plugin-typescript@^2.6.0",
       "tty": "github:jspm/nodelibs-tty@^0.2.0-alpha",
       "url": "github:jspm/nodelibs-url@^0.2.0-alpha",
       "util": "github:jspm/nodelibs-util@^0.2.0-alpha"

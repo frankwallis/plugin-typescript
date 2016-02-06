@@ -36,7 +36,7 @@
       "string_decoder": "jspm/nodelibs-string_decoder@^0.2.0-alpha",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.2",
-      "ts": "frankwallis/plugin-typescript@^2.5.0",
+      "ts": "frankwallis/plugin-typescript@^2.6.0",
       "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
       "url": "jspm/nodelibs-url@^0.2.0-alpha",
       "util": "jspm/nodelibs-util@^0.2.0-alpha",

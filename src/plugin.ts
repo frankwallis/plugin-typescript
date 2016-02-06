@@ -41,7 +41,7 @@ export function translate(load: Module): Promise<string> {
             load.source = result.js;
          
          if (result.sourceMap)
-            load.metadata.sourceMap = result.sourceMap;
+            load.metadata.sourceMap = JSON.parse(result.sourceMap);
          
          if (host.options.module === ts.ModuleKind.System)
             load.metadata.format = 'register';

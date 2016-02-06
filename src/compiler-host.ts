@@ -32,6 +32,7 @@ export class CompilerHost implements ts.CompilerHost {
 		this._options = options || {};
 		this._options.module = this.getEnum(this._options.module, (<any>ts).ModuleKind, ts.ModuleKind.System);
 		this._options.target = this.getEnum(this._options.target, (<any>ts).ScriptTarget, ts.ScriptTarget.ES5);
+		this._options.targetLib = this.getEnum(this._options.targetLib, (<any>ts).ScriptTarget, ts.ScriptTarget.ES6);
 		this._options.jsx = this.getEnum(this._options.jsx, (<any>ts).JsxEmit, ts.JsxEmit.None);
 		this._options.allowNonTsExtensions = (this._options.allowNonTsExtensions !== false);
 		this._options.skipDefaultLibCheck = (this._options.skipDefaultLibCheck !== false);
@@ -71,7 +72,10 @@ export class CompilerHost implements ts.CompilerHost {
 	}
    
 	public getDefaultLibFileName(): string {
-		return "typescript/lib/lib.es6.d.ts";
+      if (this._options.targetLib === ts.ScriptTarget.ES6)
+         return "typescript/lib/lib.es6.d.ts";
+      else
+         return "typescript/lib/lib.d.ts";
 	}
 
 	public useCaseSensitiveFileNames(): boolean {

@@ -70,11 +70,16 @@ A boolean flag which instructs the plugin to load configuration from "tsconfig.j
 
 Compiler options which do not conflict with those required by plugin-typescript will be loaded from the ```compilerOptions``` section of the file. Any declaration files contained in the ```files``` array will also be loaded if type-checking is enabled.
 
+## targetLib ##
+
+Specify whether to use lib.d.ts ["es5"] or lib.es6.d.ts [default] 
+
 ## resolveTypings ##
 
 In TypeScript 1.6.2 the ```typings``` field was introduced in package.json to enable delivery of type declaration files alongside javascript libraries. This boolean flag controls whether the type-checker will look for the ```typings``` field in package.json when importing external dependencies, and load the declaration file when it is present. For more information see [here](https://github.com/Microsoft/TypeScript/wiki/Typings-for-npm-packages).
 
 The default value is ```false```. See the angular2 example project for an example of this feature working.
+*(this feature is "under improvement")*
 
 ## resolveAmbientRefs 
 *(deprecated)*

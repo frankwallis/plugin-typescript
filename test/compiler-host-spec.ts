@@ -63,6 +63,16 @@ describe('Host', () => {
 			host.options.moduleResolution.should.be.equal(ts.ModuleResolutionKind.Classic);
 		});
 
+		it('defaults to lib.es6.d.ts', () => {
+			host.getDefaultLibFileName().should.be.equal("typescript/lib/lib.es6.d.ts");
+		});
+
+		it('handles the targetLib option', () => {
+			host = new CompilerHost({
+				targetLib: "Es5"
+			});
+			host.getDefaultLibFileName().should.be.equal("typescript/lib/lib.d.ts");
+		});
 	});
 
 	describe( 'addFile', () => {
