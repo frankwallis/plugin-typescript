@@ -7,21 +7,22 @@ TypeScript loader for SystemJS
 # Overview #
 
 A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to System.import TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
-
-For JSPM version 0.15 and below, use [plugin-typescript 1.0.x](https://github.com/frankwallis/plugin-typescript/tree/1.0). For any later versions use version 2.x.
-
 plugin-typescript uses version 1.9.0-dev.20160206 of the typescript compiler
+
+For JSPM version 0.15 and below, use [plugin-typescript 1.0.x](https://github.com/frankwallis/plugin-typescript/tree/1.0).
+For TypeScript 1.7.5 and below use [plugin-typescript 2.x.x](https://github.com/frankwallis/plugin-typescript/tree/2.0).
 
 # Installation #
 
 ## SystemJS ##
 
+Add SystemJS map configuration for plugin-typescript and typescript:
+
 SystemJS.config({
   map: {
     "ts": "path/to/plugin-typescript/lib/plugin.js",
     "typescript": "path/to/typescript/lib/typescript.js"
-  },
-  transpiler: 'ts'
+  }
 });
 
 ## JSPM ##
@@ -34,7 +35,7 @@ jspm install ts
 
 # Setup #
 
-## Set plugin-typescript to be the default transpiler ##
+## Either: make plugin-typescript the default transpiler ##
 
 ```
 System.config({
@@ -44,7 +45,7 @@ System.config({
 
 This will tell SystemJS to load all modules (.js and .ts) through plugin-typescript.
 
-## Setup plugin-typescript using packages configuration ##
+## Or: make plugin-typescript load specific files, using SystemJS ```packages``` configuration ##
 
 ```
 System.config({
@@ -72,12 +73,6 @@ Configuration settings can be passed to the compiler via "typescriptOptions":
 
 ```
 System.config({
-  baseURL: ".",
-  packageConfigPaths: [
-    "npm:@*/*.json",
-    "npm:*.json",
-    "github:*/*.json"
-  ],
   typescriptOptions: {
     module: "system",
     noImplicitAny: true,

@@ -5,7 +5,6 @@ export class Calculator extends React.Component {
    constructor(props) {
       super(props);
       this.calculatorStore = new CalculatorStore();
-      console.log(__moduleName);
    }
 
    private calculatorStore: CalculatorStore;

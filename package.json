@@ -1,6 +1,6 @@
 {
   "name": "plugin-typescript",
-  "version": "2.6.0",
+  "version": "3.0.0",
   "description": "TypeScript loader for SystemJS",
   "main": "lib/plugin.js",
   "homepage": "https://github.com/frankwallis/plugin-typescript",
@@ -31,7 +31,7 @@
     "chai": "^3.4.1",
     "chokidar-socket-emitter": "^0.4.2",
     "http-server": "^0.8.0",
-    "jspm": "^0.17.0-beta.6",
+    "jspm": "^0.16.27",
     "mocha": "^2.2.5",
     "open": "0.0.5",
     "ts-node": "^0.5.5"

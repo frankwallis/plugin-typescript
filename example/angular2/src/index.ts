@@ -1,4 +1,4 @@
-import "../shims.js";
+import "../shims";
 import {bootstrap} from 'angular2/bootstrap';
 import {Component, Directive, View} from 'angular2/core';
 import {ExampleComponent} from './example-component';
