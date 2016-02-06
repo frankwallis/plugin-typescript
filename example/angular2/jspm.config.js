@@ -42,12 +42,12 @@ SystemJS.config({
     "string_decoder": "github:jspm/nodelibs-string_decoder@0.2.0-alpha",
     "systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@0.5.5",
     "text": "github:systemjs/plugin-text@0.0.2",
-    "ts": "github:frankwallis/plugin-typescript@2.5.1",
+    "ts": "github:frankwallis/plugin-typescript@2.6.0",
     "tty": "github:jspm/nodelibs-tty@0.2.0-alpha",
     "url": "github:jspm/nodelibs-url@0.2.0-alpha",
     "util": "github:jspm/nodelibs-util@0.2.0-alpha",
     "vm": "github:jspm/nodelibs-vm@0.2.0-alpha",
-    "zone.js": "npm:zone.js@0.5.10"
+    "zone.js": "npm:zone.js@0.5.13"
   },
   typescriptOptions: {
     "module": "commonjs",
@@ -61,7 +61,7 @@ SystemJS.config({
     "github:capaj/systemjs-hot-reloader@0.5.5": {
       "map": {
         "debug": "npm:debug@2.2.0",
-        "socket.io-client": "github:socketio/socket.io-client@1.4.4",
+        "socket.io-client": "github:socketio/socket.io-client@1.4.5",
         "weakee": "npm:weakee@1.0.0"
       }
     },
@@ -70,14 +70,14 @@ SystemJS.config({
         "angular2": "npm:angular2@2.0.0-beta.0"
       }
     },
-    "github:frankwallis/plugin-typescript@2.5.1": {
+    "github:frankwallis/plugin-typescript@2.6.0": {
       "map": {
         "typescript": "npm:typescript@1.7.5"
       }
     },
     "github:jspm/nodelibs-buffer@0.2.0-alpha": {
       "map": {
-        "buffer-browserify": "npm:buffer@4.3.0"
+        "buffer-browserify": "npm:buffer@4.4.0"
       }
     },
     "github:jspm/nodelibs-crypto@0.2.0-alpha": {
@@ -110,9 +110,9 @@ SystemJS.config({
         "url-browserify": "npm:url@0.11.0"
       }
     },
-    "npm:asn1.js@4.3.0": {
+    "npm:asn1.js@4.4.0": {
       "map": {
-        "bn.js": "npm:bn.js@4.6.6",
+        "bn.js": "npm:bn.js@4.10.1",
         "inherits": "npm:inherits@2.0.1",
         "minimalistic-assert": "npm:minimalistic-assert@1.0.0"
       }
@@ -142,22 +142,22 @@ SystemJS.config({
     },
     "npm:browserify-rsa@4.0.0": {
       "map": {
-        "bn.js": "npm:bn.js@4.6.6",
+        "bn.js": "npm:bn.js@4.10.1",
         "randombytes": "npm:randombytes@2.0.2"
       }
     },
     "npm:browserify-sign@4.0.0": {
       "map": {
-        "bn.js": "npm:bn.js@4.6.6",
+        "bn.js": "npm:bn.js@4.10.1",
         "browserify-rsa": "npm:browserify-rsa@4.0.0",
         "create-hash": "npm:create-hash@1.1.2",
         "create-hmac": "npm:create-hmac@1.1.4",
-        "elliptic": "npm:elliptic@6.2.0",
+        "elliptic": "npm:elliptic@6.2.3",
         "inherits": "npm:inherits@2.0.1",
         "parse-asn1": "npm:parse-asn1@5.0.0"
       }
     },
-    "npm:buffer@4.3.0": {
+    "npm:buffer@4.4.0": {
       "map": {
         "base64-js": "npm:base64-js@1.0.2",
         "ieee754": "npm:ieee754@1.1.6",
@@ -182,8 +182,8 @@ SystemJS.config({
     },
     "npm:create-ecdh@4.0.0": {
       "map": {
-        "bn.js": "npm:bn.js@4.6.6",
-        "elliptic": "npm:elliptic@6.2.0"
+        "bn.js": "npm:bn.js@4.10.1",
+        "elliptic": "npm:elliptic@6.2.3"
       }
     },
     "npm:create-hash@1.1.2": {
@@ -207,7 +207,7 @@ SystemJS.config({
         "create-ecdh": "npm:create-ecdh@4.0.0",
         "create-hash": "npm:create-hash@1.1.2",
         "create-hmac": "npm:create-hmac@1.1.4",
-        "diffie-hellman": "npm:diffie-hellman@5.0.1",
+        "diffie-hellman": "npm:diffie-hellman@5.0.2",
         "inherits": "npm:inherits@2.0.1",
         "pbkdf2": "npm:pbkdf2@3.0.4",
         "public-encrypt": "npm:public-encrypt@4.0.0",
@@ -225,16 +225,16 @@ SystemJS.config({
         "minimalistic-assert": "npm:minimalistic-assert@1.0.0"
       }
     },
-    "npm:diffie-hellman@5.0.1": {
+    "npm:diffie-hellman@5.0.2": {
       "map": {
-        "bn.js": "npm:bn.js@4.6.6",
+        "bn.js": "npm:bn.js@4.10.1",
         "miller-rabin": "npm:miller-rabin@4.0.0",
         "randombytes": "npm:randombytes@2.0.2"
       }
     },
-    "npm:elliptic@6.2.0": {
+    "npm:elliptic@6.2.3": {
       "map": {
-        "bn.js": "npm:bn.js@4.6.6",
+        "bn.js": "npm:bn.js@4.10.1",
         "brorand": "npm:brorand@1.0.5",
         "hash.js": "npm:hash.js@1.0.3",
         "inherits": "npm:inherits@2.0.1"
@@ -252,13 +252,13 @@ SystemJS.config({
     },
     "npm:miller-rabin@4.0.0": {
       "map": {
-        "bn.js": "npm:bn.js@4.6.6",
+        "bn.js": "npm:bn.js@4.10.1",
         "brorand": "npm:brorand@1.0.5"
       }
     },
     "npm:parse-asn1@5.0.0": {
       "map": {
-        "asn1.js": "npm:asn1.js@4.3.0",
+        "asn1.js": "npm:asn1.js@4.4.0",
         "browserify-aes": "npm:browserify-aes@1.0.6",
         "create-hash": "npm:create-hash@1.1.2",
         "evp_bytestokey": "npm:evp_bytestokey@1.0.0",
@@ -272,7 +272,7 @@ SystemJS.config({
     },
     "npm:public-encrypt@4.0.0": {
       "map": {
-        "bn.js": "npm:bn.js@4.6.6",
+        "bn.js": "npm:bn.js@4.10.1",
         "browserify-rsa": "npm:browserify-rsa@4.0.0",
         "create-hash": "npm:create-hash@1.1.2",
         "parse-asn1": "npm:parse-asn1@5.0.0",
@@ -319,7 +319,7 @@ SystemJS.config({
         "querystring": "npm:querystring@0.2.0"
       }
     },
-    "npm:zone.js@0.5.10": {
+    "npm:zone.js@0.5.13": {
       "map": {
         "es6-promise": "npm:es6-promise@3.0.2"
       }

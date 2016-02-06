@@ -8,7 +8,7 @@ SystemJS.config({
   transpiler: "ts",
 
   map: {
-    "angular": "github:angular/bower-angular@1.4.9",
+    "angular": "github:angular/bower-angular@1.5.0",
     "assert": "github:jspm/nodelibs-assert@0.2.0-alpha",
     "buffer": "github:jspm/nodelibs-buffer@0.2.0-alpha",
     "child_process": "github:jspm/nodelibs-child_process@0.2.0-alpha",
@@ -25,9 +25,8 @@ SystemJS.config({
     "process": "github:jspm/nodelibs-process@0.2.0-alpha",
     "stream": "github:jspm/nodelibs-stream@0.2.0-alpha",
     "systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@0.5.5",
-    "ts": "github:frankwallis/plugin-typescript@2.5.1",
+    "ts": "github:frankwallis/plugin-typescript@2.6.0",
     "tty": "github:jspm/nodelibs-tty@0.2.0-alpha",
-    "typescript": "npm:typescript@1.7.5",
     "url": "github:jspm/nodelibs-url@0.2.0-alpha",
     "util": "github:jspm/nodelibs-util@0.2.0-alpha"
   },
@@ -42,18 +41,18 @@ SystemJS.config({
     "github:capaj/systemjs-hot-reloader@0.5.5": {
       "map": {
         "debug": "npm:debug@2.2.0",
-        "socket.io-client": "github:socketio/socket.io-client@1.4.4",
+        "socket.io-client": "github:socketio/socket.io-client@1.4.5",
         "weakee": "npm:weakee@1.0.0"
       }
     },
-    "github:frankwallis/plugin-typescript@2.5.1": {
+    "github:frankwallis/plugin-typescript@2.6.0": {
       "map": {
         "typescript": "npm:typescript@1.7.5"
       }
     },
     "github:jspm/nodelibs-buffer@0.2.0-alpha": {
       "map": {
-        "buffer-browserify": "npm:buffer@4.3.0"
+        "buffer-browserify": "npm:buffer@4.4.0"
       }
     },
     "github:jspm/nodelibs-http@0.2.0-alpha": {
@@ -76,7 +75,7 @@ SystemJS.config({
         "url-browserify": "npm:url@0.11.0"
       }
     },
-    "npm:buffer@4.3.0": {
+    "npm:buffer@4.4.0": {
       "map": {
         "base64-js": "npm:base64-js@1.0.2",
         "ieee754": "npm:ieee754@1.1.6",
@@ -138,12 +137,6 @@ SystemJS.config({
       "main": "index",
       "defaultExtension": "ts",
       "meta": {
-        "*.ts": {
-          "loader": "ts"
-        },
-        "*.js": {
-          "loader": "ts"
-        },
         "*.css": {
           "loader": "css"
         }

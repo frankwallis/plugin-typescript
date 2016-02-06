@@ -5,22 +5,30 @@
   },
   "jspm": {
     "registry": "github",
-    "dependencies": {},
-    "devDependencies": {},
-    "peerDependencies": {
+    "dependencies": {
       "angular2": "npm:angular2@2.0.0-beta.0",
+      "core-js": "npm:core-js@^1.1.4",
+      "example-service": "frankwallis/example-service@master",
+      "reflect-metadata": "npm:reflect-metadata@^0.1.0",
+      "zone.js": "npm:zone.js@^0.5.10"
+    },
+    "devDependencies": {
+      "clean-css": "npm:clean-css@^3.4.3",
+      "css": "frankwallis/plugin-css@master",
+      "plugin-babel": "systemjs/plugin-babel@^0.0.2",
+      "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
+      "text": "systemjs/plugin-text@^0.0.2",
+      "ts": "frankwallis/plugin-typescript@^2.6.0"
+    },
+    "peerDependencies": {
       "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
       "buffer": "jspm/nodelibs-buffer@^0.2.0-alpha",
       "child_process": "jspm/nodelibs-child_process@^0.2.0-alpha",
-      "clean-css": "npm:clean-css@^3.4.3",
       "constants": "jspm/nodelibs-constants@^0.2.0-alpha",
-      "core-js": "npm:core-js@^1.1.4",
       "crypto": "jspm/nodelibs-crypto@^0.2.0-alpha",
-      "css": "frankwallis/plugin-css@master",
       "es6-promise": "npm:es6-promise@^3.0.2",
       "es6-shim": "npm:es6-shim@^0.33.3",
       "events": "jspm/nodelibs-events@^0.2.0-alpha",
-      "example-service": "frankwallis/example-service@master",
       "fs": "jspm/nodelibs-fs@^0.2.0-alpha",
       "http": "jspm/nodelibs-http@^0.2.0-alpha",
       "https": "jspm/nodelibs-https@^0.2.0-alpha",
@@ -28,20 +36,14 @@
       "net": "jspm/nodelibs-net@^0.2.0-alpha",
       "os": "jspm/nodelibs-os@^0.2.0-alpha",
       "path": "jspm/nodelibs-path@^0.2.0-alpha",
-      "plugin-babel": "systemjs/plugin-babel@^0.0.2",
       "process": "jspm/nodelibs-process@^0.2.0-alpha",
-      "reflect-metadata": "npm:reflect-metadata@^0.1.0",
       "rxjs": "npm:rxjs@5.0.0-beta.0",
       "stream": "jspm/nodelibs-stream@^0.2.0-alpha",
       "string_decoder": "jspm/nodelibs-string_decoder@^0.2.0-alpha",
-      "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
-      "text": "systemjs/plugin-text@^0.0.2",
-      "ts": "frankwallis/plugin-typescript@^2.6.0",
       "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
       "url": "jspm/nodelibs-url@^0.2.0-alpha",
       "util": "jspm/nodelibs-util@^0.2.0-alpha",
-      "vm": "jspm/nodelibs-vm@^0.2.0-alpha",
-      "zone.js": "npm:zone.js@^0.5.10"
+      "vm": "jspm/nodelibs-vm@^0.2.0-alpha"
     },
     "overrides": {
       "npm:inherits@2.0.1": {
