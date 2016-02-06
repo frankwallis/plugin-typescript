@@ -13,7 +13,8 @@ System.config({
     "target": "es6",
     "noImplicitAny": false,
     "typeCheck": false,
-    "tsconfig": true
+    "tsconfig": true,
+    "sourceMap": true
   },
   paths: {
     "github:*": "jspm_packages/github/*",
