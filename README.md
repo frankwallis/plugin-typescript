@@ -10,9 +10,21 @@ A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you 
 
 For JSPM version 0.15 and below, use [plugin-typescript 1.0.x](https://github.com/frankwallis/plugin-typescript/tree/1.0). For any later versions use version 2.x.
 
-plugin-typescript uses version 1.7.5 of the typescript compiler
+plugin-typescript uses version 1.9.0-dev.20160206 of the typescript compiler
 
-# Usage #
+# Installation #
+
+## SystemJS ##
+
+SystemJS.config({
+  map: {
+    "ts": "path/to/plugin-typescript/lib/plugin.js",
+    "typescript": "path/to/typescript/lib/typescript.js"
+  },
+  transpiler: 'ts'
+});
+
+## JSPM ##
 
 Install plugin-typescript like this:
 
@@ -20,20 +32,38 @@ Install plugin-typescript like this:
 jspm install ts
 ```
 
-Set the transpiler to 'ts' and add a 'packages' entry in your SystemJS config:
+# Setup #
+
+## Set plugin-typescript to be the default transpiler ##
 
 ```
 System.config({
-  "transpiler": "ts",
-  "packages": {
+  transpiler: "ts"
+});
+```
+
+This will tell SystemJS to load all modules (.js and .ts) through plugin-typescript.
+
+## Setup plugin-typescript using packages configuration ##
+
+```
+System.config({
+  transpiler: "plugin-babel",
+  packages: {
     "app": {
-      "defaultExtension": "ts"
+      "defaultExtension": "ts",
+      "meta": {
+        "*.ts": {
+          "loader": "ts"
+        }
+      }
     }
   }
 });
 ```
 
-This will tell SystemJS to load all modules through plugin-typescript.
+This will cause all .ts files in the "src" package to be fed through plugin-typescript.
+
 See the example projects contained within this repository for a working setup.
 
 # Configuration #
@@ -42,16 +72,17 @@ Configuration settings can be passed to the compiler via "typescriptOptions":
 
 ```
 System.config({
-  "baseURL": ".",
-  "paths": {
-    "github:*": "jspm_packages/github/*",
-    "npm:*": "jspm_packages/npm/*"
-  },
+  baseURL: ".",
+  packageConfigPaths: [
+    "npm:@*/*.json",
+    "npm:*.json",
+    "github:*/*.json"
+  ],
   typescriptOptions: {
-    "module": "system",
-    "noImplicitAny": true,
-    "typeCheck": true,				// also accepts "strict"
-    "tsconfig": true				// also accepts a path
+    module: "system",
+    noImplicitAny: true,
+    typeCheck: true,				// also accepts "strict"
+    tsconfig: true				// also accepts a path
   }
 });
 ```
@@ -72,13 +103,14 @@ Compiler options which do not conflict with those required by plugin-typescript 
 
 ## targetLib ##
 
-Specify whether to use lib.d.ts ["es5"] or lib.es6.d.ts [default] 
+Specify whether to use lib.d.ts ```targetLib: "es5"``` or lib.es6.d.ts ```targetLib: "es6"``` (default) 
 
 ## resolveTypings ##
 
 In TypeScript 1.6.2 the ```typings``` field was introduced in package.json to enable delivery of type declaration files alongside javascript libraries. This boolean flag controls whether the type-checker will look for the ```typings``` field in package.json when importing external dependencies, and load the declaration file when it is present. For more information see [here](https://github.com/Microsoft/TypeScript/wiki/Typings-for-npm-packages).
 
 The default value is ```false```. See the angular2 example project for an example of this feature working.
+
 *(this feature is "under improvement")*
 
 ## resolveAmbientRefs 
