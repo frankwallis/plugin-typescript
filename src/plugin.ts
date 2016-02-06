@@ -35,10 +35,7 @@ export function translate(load: Module): Promise<string> {
          if (result.failure)
             throw new Error("TypeScript transpilation failed");
 
-         if (this.loader && (host.options.module === ts.ModuleKind.System))
-            load.source = wrapSource(result.js, load);
-         else 
-            load.source = result.js;
+         load.source = result.js;
          
          if (result.sourceMap)
             load.metadata.sourceMap = JSON.parse(result.sourceMap);
@@ -60,10 +57,12 @@ export function translate(load: Module): Promise<string> {
                   
                // this makes SystemJS fetch any declaration files 
                // and feed them back through the plugin
-               // TODO - use ___moduleName when available?
                deps.list
                   .filter(isTypescriptDeclaration)
-                  .forEach(d => System.import(d + "!"));
+                  .forEach(d => {
+                     System.import(d + "!" + __moduleName)
+                        .catch(err => { throw err });
+                  });
                   
                return load.source;
             });
@@ -101,16 +100,11 @@ function validateOptions(options) {
    }
 }
 
-function wrapSource(source: string, load: Module): string {
-	return '(function(__moduleName){' + source + '\n})("' + load.name + '");\n//# sourceURL=' + load.address + '!transpiled';
-}
-
 /*
  * called by the factory/resolver when it needs to resolve a file
  */
 function _resolve(dep: string, parent: string): Promise<string> {
-	// TODO: __moduleName is not available without a built-in transpiler
-	//if (!parent) parent = __moduleName;
+	if (!parent) parent = __moduleName;
 
 	return System.normalize(dep, parent)
 		.then(normalized => {

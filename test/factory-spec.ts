@@ -31,9 +31,7 @@ function resolve(dep, parent) {
 	//console.log('resolving ' + parent + ' -> ' + dep);
 
 	try {
-		if (dep === "ts")
-			result = __filename;
-		else if (dep === "tsconfig.json")
+		if (dep === "tsconfig.json")
 			result = defaultFile;
 		else if (dep == "theirmodule")
 			result = "theirmodule.js";

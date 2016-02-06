@@ -6,3 +6,5 @@ declare module "react" {
 
 	export function render(component: Component, element: any);
 }
+
+declare var __moduleName: string;

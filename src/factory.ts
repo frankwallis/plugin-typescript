@@ -54,10 +54,7 @@ function loadOptions(sjsconfig: PluginOptions, _resolve: ResolveFunction, _fetch
 				return _fetch(tsconfigAddress).then(tsconfigText => ({tsconfigText, tsconfigAddress}));
 			})
 			.then(({tsconfigAddress, tsconfigText}) => {
-				const ts1 = ts as any; // support TS 1.6.2 and > 1.7
-				const result = ts1.parseConfigFileText ?
-					ts1.parseConfigFileText(tsconfigAddress, tsconfigText) :
-					ts1.parseConfigFileTextToJson(tsconfigAddress, tsconfigText);
+				const result = ts.parseConfigFileTextToJson(tsconfigAddress, tsconfigText);
 
 				if (result.error) {
 					formatErrors([result.error], logger);
@@ -95,11 +92,7 @@ function createServices(options: PluginOptions, _resolve: ResolveFunction, _fetc
 		typeChecker = new TypeChecker(host);
 
 		if (!host.options.noLib) {
-			// TODO - remove this when __moduleName is available
-			return _resolve('ts', '')
-				.then(moduleName => {
-					 return _resolve(host.getDefaultLibFileName(), moduleName)
-				})
+         return _resolve(host.getDefaultLibFileName())
 				.then(defaultLibAddress => {
 					resolver.registerDeclarationFile(defaultLibAddress, true);
 					return {host, transpiler, resolver, typeChecker, options};
