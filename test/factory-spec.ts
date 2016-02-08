@@ -115,7 +115,8 @@ describe('Factory', () => {
 
 	it('passes builder param to host', async () => {
 		let config = {
-			module: "system"
+			module: "system",
+         target: "es6"
 		};
 		let {host} = await createFactory(config, true, resolve, fetch);
       host.options.module.should.equal(ts.ModuleKind.ES6);

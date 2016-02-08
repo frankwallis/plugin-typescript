@@ -42,10 +42,10 @@ export class CompilerHost implements ts.CompilerHost {
 		this._options.moduleResolution = ts.ModuleResolutionKind.Classic;
 
       // When bundling output es6 modules instead of system to enable rollup support
+      // TypeScript currently cannot output ES6 modules with target ES5, see https://github.com/Microsoft/TypeScript/issues/6319
       if (builder) {
-         if (this._options.module === ts.ModuleKind.System) {
+         if ((this._options.module === ts.ModuleKind.System) && (this._options.target === ts.ScriptTarget.ES6)) {
             this._options.module = ts.ModuleKind.ES6;
-            this._options.target = ts.ScriptTarget.ES6;
          }
       }
       
