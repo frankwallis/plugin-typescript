@@ -6,7 +6,7 @@ import {isHtml, isTypescriptDeclaration, isJavaScript} from './utils';
 const logger = new Logger({ debug: false });
 export const __HTML_MODULE__ = "__html_module__";
 
-export interface CombinedOptions extends PluginOptions, ts.CompilerOptions { };
+export type CombinedOptions = PluginOptions & ts.CompilerOptions;
 
 export type TranspileResult = {
 	failure: boolean;
@@ -37,6 +37,7 @@ export class CompilerHost implements ts.CompilerHost {
 		this._options.allowNonTsExtensions = (this._options.allowNonTsExtensions !== false);
 		this._options.skipDefaultLibCheck = (this._options.skipDefaultLibCheck !== false);
 		this._options.noResolve = true;
+      this._options.typingsMap = options.typingsMap || {};
 
 		// Force module resolution into 'classic' mode, to prevent node module resolution from kicking in
 		this._options.moduleResolution = ts.ModuleResolutionKind.Classic;

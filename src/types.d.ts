@@ -9,9 +9,9 @@ interface SystemJS {
    normalize(dep: string, parent: string): Promise<string>;
    fetch(load: Module): Promise<string>;
    import(modname: string): Promise<any>;
-   builder?: any;
+   builder?: boolean;
    
-   typescriptOptions?: any;
+   typescriptOptions?: PluginOptions;
    transpiler?: string;
 }
 
@@ -25,15 +25,15 @@ interface PluginOptions {
 	tsconfig?: boolean | string;
 	typeCheck?: boolean | string;
 	resolveAmbientRefs?: boolean;
-	resolveTypings?: boolean | any;//string[];
+	resolveTypings?: boolean;
    targetLib?: number;
+   typingsMap?: { [s: string]: string | boolean };
    
 	/* private */
-	typings?: any;//string[];
-	files?: any;
+	files?: string[];
 	tsconfigAddress?: string;
 
-	// this is a hidden typescript option
+	/* reveal some hidden typescript options */
 	skipDefaultLibCheck?: boolean;
    suppressOutputPathCheck?: boolean;
 }

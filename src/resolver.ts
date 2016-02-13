@@ -1,11 +1,13 @@
 /* */
 import * as ts from 'typescript';
+import * as path from 'path';
 import Logger from './logger';
 import {CompilerHost} from './compiler-host';
 import {
 	isTypescript, isTypescriptDeclaration,
 	isJavaScript, isRelative,
-	isAmbient, isAmbientImport
+	isAmbient, isAmbientImport,
+   jsToDts
 } from './utils';
 
 const logger = new Logger({ debug: false });
@@ -107,29 +109,49 @@ export class Resolver {
 
 		return this._resolve(importName, sourceName)
 			.then(resolvedImport => {
-			  	if (this._host.options.resolveTypings && isAmbientImport(importName) && isJavaScript(resolvedImport) && !isTypescriptDeclaration(sourceName)) {
-			  		if (!this._typings[resolvedImport]) {
-						this._typings[resolvedImport] = this.resolveTyping(importName, sourceName)
-							.then(resolvedTyping => {
-								return resolvedTyping ? resolvedTyping : resolvedImport;
-							});
-					}
+            if (isAmbientImport(importName) && isJavaScript(resolvedImport)) {
+               if (this._host.options.typingsMap) {
+                  const mappedTyping = this.resolveMappedTyping(importName, resolvedImport);
+                  if (mappedTyping) return mappedTyping;
+               }
 
-					return this._typings[resolvedImport];
-			  	}
-			  	else {
-			  		return resolvedImport;
-			  	}
+               if (this._host.options.resolveTypings) {
+                  if (!this._typings[resolvedImport]) {
+                     this._typings[resolvedImport] = this.resolveTyping(importName, sourceName)
+                        .then(resolvedTyping => {
+                           return resolvedTyping ? resolvedTyping : resolvedImport;
+                        });
+                  }
+
+                  return this._typings[resolvedImport];
+               }
+            }
+            
+            return resolvedImport;
   			});
 	}
 
+	private resolveMappedTyping(importName: string, resolvedImportName: string): string {
+      return Object.keys(this._host.options.typingsMap).reduce((result, key) => {
+         if (this._host.options.typingsMap[key] === true) {
+            if (importName.indexOf(key) === 0) {
+               return jsToDts(resolvedImportName);
+            }
+         }
+         else if (key === importName) {
+            return path.join(path.dirname(resolvedImportName), importName, this._host.options.typingsMap[key]);
+         }
+         return result;
+      }, undefined);      
+   }
+   
 	private resolveTyping(importName: string, sourceName: string): Promise<string> {
 		// we can only support packages registered without a slash in them
 		const packageName = importName.split(/\//)[0];
 
 		return this._resolve(packageName, sourceName)
 			.then(exported => {
-				return exported.slice(0, -3) + "/package.json";
+				return path.join(exported.slice(0, -3), "package.json");
 			})
 			.then(address => {
 				return this._fetch(address)

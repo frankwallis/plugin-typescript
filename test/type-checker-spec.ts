@@ -60,18 +60,15 @@ function resolve(dep, parent) {
 			result = path.join(path.dirname(parent), dep);
 		else {
          result = path.join(path.dirname(parent), "resolved", dep);
-         
-         if (dep.indexOf('/') < 0)
-            result = path.join(result, dep);         
 
-         if (dep == "ambient/ambient")
+         if (dep === "ambient/ambient")
             result = result + ".ts";
             
-         if (path.extname(result) == "")
+         if (path.extname(result) === "")
             result = result + ".js";
       }
       
-		if (path.extname(result) == "")
+		if (path.extname(result) === "")
 			result = result + ".ts";
 
 		//console.log("resolved " + parent + " -> " + result);
@@ -90,14 +87,14 @@ describe('TypeChecker', () => {
 	let host;
 
    async function resolveAll(filelist: string[]) {
-      var resolutions = filelist.map((filename) => {
-      filename = (ts as any).normalizePath(filename);
-         let text = fs.readFileSync(filename, 'utf8');
-         host.addFile(filename, text);
-         return resolver.resolve(filename);
-      });
+      const resolutions = filelist.map((filename) => {
+         filename = (ts as any).normalizePath(filename);
+            let text = fs.readFileSync(filename, 'utf8');
+            host.addFile(filename, text);
+            return resolver.resolve(filename);
+         });
       
-      let resolved = await Promise.all(resolutions);
+      const resolved = await Promise.all(resolutions);
       const unfetched = resolved.reduce((result, deps) => {
          const files = deps.list.filter(dep => !host.fileExists(dep) && (result.indexOf(dep) < 0));
          return result.concat(files);
@@ -111,7 +108,7 @@ describe('TypeChecker', () => {
 	async function typecheckAll(filename: string) {
 		resolver.registerDeclarationFile((ts as any).normalizePath(require.resolve(host.getDefaultLibFileName())));
       await resolveAll([filename]);
-      var result = typeChecker.check();
+      let result = typeChecker.check();
       
       if (result.length == 0)
          result = typeChecker.forceCheck();
@@ -123,7 +120,7 @@ describe('TypeChecker', () => {
 		filelist = [];
 		host = new CompilerHost({});
 		typeChecker = new TypeChecker(host);
-      	resolver = new Resolver(host, resolve, fetch);
+      resolver = new Resolver(host, resolve, fetch);
 	});
 
 	it('compiles successfully', async () => {
@@ -294,6 +291,22 @@ describe('TypeChecker', () => {
    it('resolve typings files when resolveTypings is true', async () => {
 		const options = {
 			resolveTypings: true
+		};
+		host = new CompilerHost(options);
+		typeChecker = new TypeChecker(host);
+      resolver = new Resolver(host, resolve, fetch);
+		
+      const diags = await typecheckAll(angular2Typings);
+      formatErrors(diags, console as any);
+      diags.should.have.length(0);
+	});
+
+   it('uses typingsMap when present', async () => {
+		const options = {
+			resolveTypings: false,
+         typingsMap: {
+            "angular2": true
+         }
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);

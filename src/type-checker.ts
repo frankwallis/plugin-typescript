@@ -97,7 +97,7 @@ export class TypeChecker {
             candidate.checkable = candidate.resolved && candidate.deps.every(dep => this.isCheckable(candidatesMap[dep], candidatesMap));            
          }
          
-         return (candidate.checkable !== false); // handles circular graph because seen = true but checkable = undefiend
+         return (candidate.checkable !== false); // handles circular graph because seen = true but checkable = undefined
       }
    }
    

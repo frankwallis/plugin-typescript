@@ -32,9 +32,6 @@ function resolve(dep, parent) {
 		else {
          result = path.join(path.dirname(parent), "resolved", dep);
          
-         if (dep.indexOf('/') < 0)
-            result = path.join(result, dep);         
-
          if (path.extname(result) == "")
             result = result + ".js";
       }
@@ -149,12 +146,48 @@ describe('Resolver', () => {
 		resolver = new Resolver(host, resolve, fetch);
       
       const source = 'import {bootstrap} from "angular2";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2/angular2.d.ts');
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2.d.ts');
       host.addFile(TYPINGS_NAME, source);
       
 		const deps = await resolver.resolve(TYPINGS_NAME);
       deps.list.should.have.length(1);
       deps.list[0].should.equal(expected);
+	});
+
+	it('resolves using entry in typingsMap of true', async () => {
+		const options = {
+			typingsMap: {
+            "angular2": true
+         }
+		};
+		host = new CompilerHost(options);
+		resolver = new Resolver(host, resolve, fetch);
+      
+      const source = 'import {bootstrap} from "angular2/router";';
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/router.d.ts');
+      host.addFile(TYPINGS_NAME, source);
+
+		const deps = await resolver.resolve(TYPINGS_NAME);
+      deps.list.should.have.length(1);
+      deps.mappings["angular2/router"].should.equal(expected);
+	});
+
+	it('resolves using entry in typingsMap with string path', async () => {
+		const options = {
+			typingsMap: {
+            "zone.js": "./dist/core.d.ts"
+         }
+		};
+		host = new CompilerHost(options);
+		resolver = new Resolver(host, resolve, fetch);
+      
+      const source = 'import Zone from "zone.js";';
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/zone.js/dist/core.d.ts');
+      host.addFile(TYPINGS_NAME, source);
+
+		const deps = await resolver.resolve(TYPINGS_NAME);
+      deps.list.should.have.length(1);
+      deps.mappings["zone.js"].should.equal(expected);
 	});
 
 	it('doesnt resolve typings files when resolveTypings is false', async () => {
@@ -165,7 +198,7 @@ describe('Resolver', () => {
 		resolver = new Resolver(host, resolve, fetch);
       
       const source = 'import {bootstrap} from "angular2";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2.js');
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2.js');
       host.addFile(TYPINGS_NAME, source);
 
 		const deps = await resolver.resolve(TYPINGS_NAME);
@@ -181,7 +214,7 @@ describe('Resolver', () => {
 		resolver = new Resolver(host, resolve, fetch);
       
       const source = 'import * as missing from "missing";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/missing/missing.js');
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/missing.js');
       host.addFile(TYPINGS_NAME, source);
 
 		const deps = await resolver.resolve(TYPINGS_NAME);
@@ -197,7 +230,7 @@ describe('Resolver', () => {
 		resolver = new Resolver(host, resolve, fetch);
       
       const source = 'import {Observable} from "rxjs";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/rxjs/Rx.d.ts');
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/Rx.d.ts');
       host.addFile(TYPINGS_NAME, source);
 
 		const deps = await resolver.resolve(TYPINGS_NAME);
@@ -213,7 +246,7 @@ describe('Resolver', () => {
 		resolver = new Resolver(host, resolve, fetch);
       
       const source = 'import * as missing from "missing_package";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/missing_package/missing_package.js');
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/missing_package.js');
       host.addFile(TYPINGS_NAME, source);
 
 		const deps = await resolver.resolve(TYPINGS_NAME);
