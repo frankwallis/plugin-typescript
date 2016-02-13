@@ -6,7 +6,7 @@ import {
 	isTypescript, isTypescriptDeclaration,
 	isJavaScript, isRelative,
 	isAmbient, isAmbientImport
-} from "./utils";
+} from './utils';
 
 const logger = new Logger({ debug: false });
 
@@ -15,7 +15,7 @@ export class Resolver {
 	private _resolve: ResolveFunction;
 	private _fetch: FetchFunction;
 	private _declarationFiles: string[];
-	private _typings: { [s: string]: Promise<string>; }; //Map<string, string>;
+	private _typings: { [s: string]: Promise<string>; };
 
 	constructor(host: CompilerHost, resolve: ResolveFunction, fetch: FetchFunction) {
 		this._host = host;
@@ -26,7 +26,7 @@ export class Resolver {
 		this._declarationFiles = [];
 
 		// map of external modules to their typings
-		this._typings = {}; //new Map<string, string>();
+		this._typings = {};
 	}
 
 	/*
@@ -64,7 +64,7 @@ export class Resolver {
 	/*
 		register declaration files from config
 	*/
-	public registerDeclarationFile(sourceName: string, isDefaultLib: boolean) {
+	public registerDeclarationFile(sourceName: string) {
 		this._declarationFiles.push(sourceName);
 	}
 	

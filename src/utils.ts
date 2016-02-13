@@ -2,11 +2,11 @@
 import * as ts from "typescript";
 
 export function isAbsolute(filename: string) {
-	return (filename[0] == '/');
+	return (filename[0] === '/');
 }
 
 export function isRelative(filename: string) {
-	return (filename[0] == '.');
+	return (filename[0] === '.');
 }
 
 export function isAmbientImport(filename: string) {
@@ -72,5 +72,5 @@ export function stripDoubleExtension(normalized: string) {
 }
 
 export function hasError(diags: Array<ts.Diagnostic>): boolean {
-   return diags.some(diag => (diag.category === ts.DiagnosticCategory.Error))
+   return diags.some(diag => (diag.category === ts.DiagnosticCategory.Error));
 }

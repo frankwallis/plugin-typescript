@@ -107,8 +107,8 @@ export class TypeChecker {
 	*/
 	private getAllDiagnostics(candidates: Candidate[]): ts.Diagnostic[] {
 		// hack to support html imports
-      let filelist = candidates.map((dep) => dep.name).concat([__HTML_MODULE__]);
-		let program = ts.createProgram(filelist, this._options, this._host);
+      const filelist = candidates.map((dep) => dep.name).concat([__HTML_MODULE__]);
+		const program = ts.createProgram(filelist, this._options, this._host);
 
 		return candidates.reduce((errors, candidate) => {
 			if (candidate.checkable && !candidate.file.checked) {

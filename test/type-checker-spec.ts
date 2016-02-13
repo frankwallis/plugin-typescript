@@ -127,38 +127,38 @@ describe('TypeChecker', () => {
 	});
 
 	it('compiles successfully', async () => {
-		let diags = await typecheckAll(noImports);
+		const diags = await typecheckAll(noImports);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
 
 	it('uses config options', async () => {
-		let options = {
+		const options = {
 			noImplicitAny: true
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
 
-		let diags = await typecheckAll(oneImport);
+		const diags = await typecheckAll(oneImport);
       diags.should.have.length(1);
       diags[0].code.should.be.equal(7005);
 	});
 
 	it('compiles ambient imports', async () => {
-		let diags = await typecheckAll(ambientImportJs);
+		const diags = await typecheckAll(ambientImportJs);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
 
 	it('catches type errors', async () => {
-		let diags = await typecheckAll(typeError);
+		const diags = await typecheckAll(typeError);
       diags.should.have.length(1);
       diags[0].code.should.be.equal(2322);
 	});
 
-	it('only checks full resolved typescript files', async () => {
-		let options = {
+	it('only checks fully resolved typescript files', async () => {
+		const options = {
 			noImplicitAny: true
 		};
 		host = new CompilerHost(options);
@@ -177,184 +177,183 @@ describe('TypeChecker', () => {
 	});
 
 	it('handles backslash in references', async () => {
-		let diags = await typecheckAll(backslashReference);
+		const diags = await typecheckAll(backslashReference);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
 
 	it('loads nested reference files', async () => {
-		let diags = await typecheckAll(nestedReference)
+		const diags = await typecheckAll(nestedReference)
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
 
 	it('catches syntax errors', async () => {
-		let diags = await typecheckAll(syntaxError);
+		const diags = await typecheckAll(syntaxError);
       diags.should.have.length(3);
 	});
 
 	it('catches syntax errors in reference files', async () => {
-		let diags = await typecheckAll(referenceSyntaxError);
+		const diags = await typecheckAll(referenceSyntaxError);
       diags.should.have.length(8);
 	});
 
 	it('handles ambient references when resolveAmbientRefs option is false', async () => {
-		let diags = await typecheckAll(ambientReferenceDisabled);
+		const diags = await typecheckAll(ambientReferenceDisabled);
       diags.should.have.length(0);
 	});
 
 	it('resolves ambient references when resolveAmbientRefs option is true', async () => {
-		let options = {
+		const options = {
 			resolveAmbientRefs: true
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
 
-		let diags = await typecheckAll(ambientReference);
+		const diags = await typecheckAll(ambientReference);
       diags.should.have.length(0);
 	});
 
 	it('handles ambient javascript imports', async () => {
-		let diags = await typecheckAll(ambientImportJs);
+		const diags = await typecheckAll(ambientImportJs);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
 
 	it('handles circular references', async () => {
-		let diags = await typecheckAll(circularFile);
+		const diags = await typecheckAll(circularFile);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
 
 	it('handles ambient typescript imports', async () => {
-		let options = {
+		const options = {
 			resolveAmbientRefs: true
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
 		
-      let diags = await typecheckAll(ambientImportTs);
+      const diags = await typecheckAll(ambientImportTs);
       diags.should.have.length(0);
 	});
 
 	it('resolves ambient typescript imports', async () => {
-		let diags = await typecheckAll(ambientResolveTs);
+		const diags = await typecheckAll(ambientResolveTs);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
 
 	it('handles ambients with subset names', async () => {
-		let options = {
+		const options = {
 			resolveAmbientRefs: true
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
 
-		let diags = await typecheckAll(ambientDuplicate);
+		const diags = await typecheckAll(ambientDuplicate);
       diags.should.have.length(0);
 	});
 
 	it('handles ambients with internal requires', async () => {
-		let diags = await typecheckAll(ambientRequires);
+		const diags = await typecheckAll(ambientRequires);
       diags.should.have.length(0);
 	});
 
 	it('handles external imports', async () => {
-		let diags = await typecheckAll(externalEntry);
+		const diags = await typecheckAll(externalEntry);
       diags.should.have.length(0);
 	});
 
 	it('imports .css files', async () => {
-		let diags = await typecheckAll(importCss);
+		const diags = await typecheckAll(importCss);
       diags.should.have.length(0);
 	});
 
 	it('imports .html files', async () => {
-		let diags = await typecheckAll(importHtml);
+		const diags = await typecheckAll(importHtml);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
 
 	it('loads lib.d.ts', async () => {
-		let options = {
+		const options = {
          targetLib: "es5"			
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
 		
-		let diags = await typecheckAll(noImports);
+		const diags = await typecheckAll(noImports);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});   
 
    it('resolve typings files when resolveTypings is true', async () => {
-		let options = {
+		const options = {
 			resolveTypings: true
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
 		
-      let diags = await typecheckAll(angular2Typings);
+      const diags = await typecheckAll(angular2Typings);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
 
    it('doesnt resolve typings files when resolveTypings is false', async () => {
-		let options = {
+		const options = {
 			resolveTypings: false
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
 
-		let diags = await typecheckAll(angular2Typings);
+		const diags = await typecheckAll(angular2Typings);
       //formatErrors(diags, console as any);
       diags.should.have.length(1);
       diags[0].code.should.be.equal(2307);
 	});
 
 	it('handles missing typings field in package.json', async () => {
-		let options = {
+		const options = {
 			resolveTypings: true
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
 
-		let diags = await typecheckAll(missingTypings);
+		const diags = await typecheckAll(missingTypings);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
 
 	it('handles non-relative typings field in package.json', async () => {
-		let options = {
+		const options = {
 			resolveTypings: true
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
 
-		let diags = await typecheckAll(rxjsTypings);
+		const diags = await typecheckAll(rxjsTypings);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
 
 	it('handles package.json not found', async () => {
-		let options = {
+		const options = {
 			resolveTypings: true
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, fetch);
 
-		let diags = await typecheckAll(missingPackage);
+		const diags = await typecheckAll(missingPackage);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
-
 });

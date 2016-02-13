@@ -58,47 +58,47 @@ describe('Factory', () => {
 	});
 
 	it('handles sjsconfig = undefined', async () => {
-		let config = undefined;
-		let {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
+		const config = undefined;
+		const {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
       transpiler.should.be.defined;
       should.not.exist(typeChecker);
       filelist.should.have.length(0);
 	});
 
 	it('handles tsconfig = undefined', async () => {
-		let config = {};
-		let {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
+		const config = {};
+		const {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
       transpiler.should.be.defined;
       should.not.exist(typeChecker);
       filelist.should.have.length(0);
 	});
 
 	it('creates typeChecker & resolver if typeCheck is true', async () => {
-		let config = {
+		const config = {
 			typeCheck: true,
 		};
-		let {transpiler, typeChecker, resolver} = await createFactory(config, false, resolve, fetch);
+		const {transpiler, typeChecker, resolver} = await createFactory(config, false, resolve, fetch);
       transpiler.should.be.defined;
       typeChecker.should.be.defined;
       resolver.should.be.defined;
 	});
 
 	it('does not create typeChecker & resolver when typeCheck is false', async () => {
-		let config = {
+		const config = {
 			tsconfig: declarationFile,
 			typeCheck: false
 		};
-		let {transpiler, typeChecker, resolver} = await createFactory(config, false, resolve, fetch);
+		const {transpiler, typeChecker, resolver} = await createFactory(config, false, resolve, fetch);
       transpiler.should.be.defined;
       should.not.exist(typeChecker);
       should.not.exist(resolver);
 	});
 
 	it('handles tsconfig = true', async () => {
-		let config = {
+		const config = {
 			tsconfig: true
 		};
-		let {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
+		const {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
       transpiler.should.be.defined;
       should.not.exist(typeChecker);
       filelist.should.have.length(1);
@@ -106,36 +106,36 @@ describe('Factory', () => {
 	});
 
 	it('loads the compiler options from tsconfig', async () => {
-		let config = {
+		const config = {
 			tsconfig: true
 		};
-		let {host} = await createFactory(config, false, resolve, fetch);
+		const {host} = await createFactory(config, false, resolve, fetch);
       host.options.noImplicitAny.should.be.true;
 	});
 
 	it('passes builder param to host', async () => {
-		let config = {
+		const config = {
 			module: "system",
          target: "es6"
 		};
-		let {host} = await createFactory(config, true, resolve, fetch);
+		const {host} = await createFactory(config, true, resolve, fetch);
       host.options.module.should.equal(ts.ModuleKind.ES6);
 	});
 
 	it('SystemJS.typescriptOptions take precedence over tsconfig settings', async () => {
-		let config = {
+		const config = {
 			tsconfig: true,
 			noImplicitAny: false
 		};
-		let {host} = await createFactory(config, false, resolve, fetch);
+		const {host} = await createFactory(config, false, resolve, fetch);
       host.options.noImplicitAny.should.be.false;
 	});
 
 	it('handles tsconfig = <pathname>', async () => {
-		let config = {
+		const config = {
 			tsconfig: alternateFile
 		};
-		let {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
+		const {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
       transpiler.should.be.defined;
       should.not.exist(typeChecker);
       filelist.should.have.length(1);
@@ -143,20 +143,20 @@ describe('Factory', () => {
 	});
 
 	it('adds the default library', async () => {
-		let config = {
+		const config = {
 			typeCheck: true
 		};
-		let {resolver} = await createFactory(config, false, resolve, fetch);
+		const {resolver} = await createFactory(config, false, resolve, fetch);
       resolver.should.be.defined;
       resolver._declarationFiles.should.have.length(1);
 	});
 
 	it('adds declaration files into resolver', async () => {
-		let config = {
+		const config = {
 			tsconfig: declarationFile,
 			typeCheck: true
 		};
-		let {resolver} = await createFactory(config, false, resolve, fetch);
+		const {resolver} = await createFactory(config, false, resolve, fetch);
       resolver.should.be.defined;
       resolver._declarationFiles.should.have.length(2);
       resolver._declarationFiles[0].should.be.equal(defaultLib);
@@ -164,11 +164,11 @@ describe('Factory', () => {
 	});
 
 	it('observes the noLib option', async () => {
-		let config = {
+		const config = {
 			noLib: true,
 			typeCheck: true
 		};
-		let {resolver} = await createFactory(config, false, resolve, fetch);
+		const {resolver} = await createFactory(config, false, resolve, fetch);
       resolver.should.be.defined;
       resolver._declarationFiles.should.have.length(0);
 	});

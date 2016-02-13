@@ -54,7 +54,7 @@ export function translate(load: Module): Promise<string> {
       if (host.options.typeCheck && isTypescript(load.address)) {
          return resolver.resolve(load.address)
             .then(deps => {
-               var diags = typeChecker.check();
+               const diags = typeChecker.check();
                formatErrors(diags, logger);
                   
                // this makes SystemJS fetch any declaration files 

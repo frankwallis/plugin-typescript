@@ -68,14 +68,14 @@ describe('Resolver', () => {
 
 	it('resolves successfully', async () => {
       host.addFile(ANYFILE_NAME, "export = 42;");
-		let deps = await resolver.resolve(ANYFILE_NAME);
+		const deps = await resolver.resolve(ANYFILE_NAME);
       deps.list.should.have.length(0);
 	});
 
 	it('adds declaration files', async () => {
       resolver.registerDeclarationFile("declarations.d.ts");
       host.addFile(ANYFILE_NAME, "export = 42;");
-		let deps = await resolver.resolve(ANYFILE_NAME);
+		const deps = await resolver.resolve(ANYFILE_NAME);
       deps.list.should.have.length(1);
       deps.list[0].should.equal("declarations.d.ts");
 	});
@@ -84,7 +84,7 @@ describe('Resolver', () => {
       const defaultLibName = require.resolve(host.getDefaultLibFileName());
       const defaultLibSource = fs.readFileSync(defaultLibName, 'utf8');
       const file = host.addFile(defaultLibName, defaultLibSource);
-		let deps = await resolver.resolve(defaultLibName);
+		const deps = await resolver.resolve(defaultLibName);
       deps.list.should.have.length(0);
       file.isLibFile.should.be.true;
 	});
@@ -93,7 +93,7 @@ describe('Resolver', () => {
       const source = 'import "ambient";'
       host.addFile(AMBIENT_NAME, source);
             
-		let deps = await resolver.resolve(AMBIENT_NAME);
+		const deps = await resolver.resolve(AMBIENT_NAME);
       deps.list.should.have.length(0);
 	});
 
@@ -103,13 +103,13 @@ describe('Resolver', () => {
       
       host.addFile(AMBIENT_NAME, source);
             
-		let deps = await resolver.resolve(AMBIENT_NAME);
+		const deps = await resolver.resolve(AMBIENT_NAME);
       deps.list.should.have.length(1);
       deps.list[0].should.equal(expected);
 	});
 
 	it('resolves ambient references when resolveAmbientRefs option is true', async () => {
-		let options = {
+		const options = {
 			resolveAmbientRefs: true
 		};      
 		host = new CompilerHost(options);
@@ -120,13 +120,13 @@ describe('Resolver', () => {
 
       host.addFile(AMBIENT_NAME, source);
       
-		let deps = await resolver.resolve(AMBIENT_NAME);
+		const deps = await resolver.resolve(AMBIENT_NAME);
       deps.list.should.have.length(1);
       deps.list[0].should.equal(expected);
 	});
 
 	it('ignores non ambient refs resolveAmbientRefs option is true', async () => {
-		let options = {
+		const options = {
 			resolveAmbientRefs: true
 		};      
 		host = new CompilerHost(options);
@@ -136,13 +136,13 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/ambients/not-ambient.d.ts');
       host.addFile(AMBIENT_NAME, source);
       
-		let deps = await resolver.resolve(AMBIENT_NAME);
+		const deps = await resolver.resolve(AMBIENT_NAME);
       deps.list.should.have.length(1);
       deps.list[0].should.equal(expected);
 	});
 
 	it('resolves typings files from package.json when resolveTypings is true', async () => {
-		let options = {
+		const options = {
 			resolveTypings: true
 		};
 		host = new CompilerHost(options);
@@ -152,13 +152,13 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2/angular2.d.ts');
       host.addFile(TYPINGS_NAME, source);
       
-		let deps = await resolver.resolve(TYPINGS_NAME);
+		const deps = await resolver.resolve(TYPINGS_NAME);
       deps.list.should.have.length(1);
       deps.list[0].should.equal(expected);
 	});
 
 	it('doesnt resolve typings files when resolveTypings is false', async () => {
-		let options = {
+		const options = {
 			resolveTypings: false
 		};
 		host = new CompilerHost(options);
@@ -168,13 +168,13 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2.js');
       host.addFile(TYPINGS_NAME, source);
 
-		let deps = await resolver.resolve(TYPINGS_NAME);
+		const deps = await resolver.resolve(TYPINGS_NAME);
       deps.list.should.have.length(0);
       deps.mappings["angular2"].should.equal(expected);
 	});
 
 	it('handles missing typings field in package.json', async () => {
-		let options = {
+		const options = {
 			resolveTypings: true
 		};
 		host = new CompilerHost(options);
@@ -184,13 +184,13 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/missing/missing.js');
       host.addFile(TYPINGS_NAME, source);
 
-		let deps = await resolver.resolve(TYPINGS_NAME);
+		const deps = await resolver.resolve(TYPINGS_NAME);
       deps.list.should.have.length(0);
       deps.mappings["missing"].should.equal(expected);
 	});
 
 	it('handles non-relative typings field in package.json', async () => {
-		let options = {
+		const options = {
 			resolveTypings: true
 		};
 		host = new CompilerHost(options);
@@ -200,13 +200,13 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/rxjs/Rx.d.ts');
       host.addFile(TYPINGS_NAME, source);
 
-		let deps = await resolver.resolve(TYPINGS_NAME);
+		const deps = await resolver.resolve(TYPINGS_NAME);
       deps.list.should.have.length(1);
       deps.list[0].should.equal(expected);
 	});
 
 	it('handles package.json not found', async () => {
-		let options = {
+		const options = {
 			resolveTypings: true
 		};
 		host = new CompilerHost(options);
@@ -216,7 +216,7 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/missing_package/missing_package.js');
       host.addFile(TYPINGS_NAME, source);
 
-		let deps = await resolver.resolve(TYPINGS_NAME);
+		const deps = await resolver.resolve(TYPINGS_NAME);
       deps.list.should.have.length(0);
       deps.mappings["missing_package"].should.equal(expected);
 	});

@@ -40,30 +40,30 @@ describe('Transpiler', () => {
    });
 
    it('removes SourceMappingURL', () => {
-      let output = transpile('one-import.ts', oneImport);
+      const output = transpile('one-import.ts', oneImport);
       output.js.should.not.contain("SourceMappingURL");
    });
 
    it('returns sourceMap', () => {
-      let output = transpile('one-import.ts', oneImport);
+      const output = transpile('one-import.ts', oneImport);
       output.should.have.property('sourceMap').with.lengthOf(145);
    });
 
    it('catches syntax errors', () => {
-      let output = transpile('syntax-error.ts', syntaxError);
+      const output = transpile('syntax-error.ts', syntaxError);
       //formatErrors(output.errors, console as any);
       output.should.have.property('failure', true);
       output.should.have.property('errors').with.lengthOf(1);
    });
 
    it('catches configuation errors', () => {
-      let options = {
+      const options = {
          emitDecoratorMetadata: true,
          experimentalDecorators: false
       };
-      let host = new CompilerHost(options);
+      const host = new CompilerHost(options);
 
-      let output = transpile('one-import.ts', oneImport, host);
+      const output = transpile('one-import.ts', oneImport, host);
       //formatErrors(output.errors, console as any);
       output.should.have.property('failure', true);
       output.should.have.property('errors').with.lengthOf(1);
@@ -71,16 +71,16 @@ describe('Transpiler', () => {
    });
 
    it('overrides invalid config options', () => {
-      let options = {
+      const options = {
          noEmitOnError: true,
          out: "somefile.js",
          declaration: true,
          noLib: false,
          noEmit: true
       };
-      let host = new CompilerHost(options);
+      const host = new CompilerHost(options);
 
-      let output = transpile('one-import.ts', oneImport, host);
+      const output = transpile('one-import.ts', oneImport, host);
       formatErrors(output.errors, console as any);
       output.should.have.property('failure', false);
       output.should.have.property('errors').with.lengthOf(0);
@@ -88,18 +88,18 @@ describe('Transpiler', () => {
    });
 
    xit('errors on const enums', () => {
-      let output = transpile('const-enums.ts', constEnums);
+      const output = transpile('const-enums.ts', constEnums);
       //formatErrors(output.errors, console as any);
       output.should.have.property('failure', true);
       output.should.have.property('errors').with.lengthOf(1);
    });
 
    it('uses sourceMap option', () => {
-      let options = {
+      const options = {
          sourceMap: false
       };
-      let host = new CompilerHost(options);
-      let output = transpile('symbol.ts', es6Symbol, host);
+      const host = new CompilerHost(options);
+      const output = transpile('symbol.ts', es6Symbol, host);
       (output.sourceMap === undefined).should.be.true;
    });
 
@@ -107,12 +107,12 @@ describe('Transpiler', () => {
       let host = new CompilerHost({
          target: "es3"
       });
-      let es3output = transpile('trailing-comma.ts', trailingComma, host);
+      const es3output = transpile('trailing-comma.ts', trailingComma, host);
 
       host = new CompilerHost({
          target: "es5"
       });
-      let es5output = transpile('trailing-comma.ts', trailingComma, host);
+      const es5output = transpile('trailing-comma.ts', trailingComma, host);
       es3output.should.not.be.equal(es5output);
    });
 });

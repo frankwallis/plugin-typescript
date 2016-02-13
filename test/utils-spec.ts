@@ -164,21 +164,20 @@ describe( 'Utils', () => {
 		});
 	});
 
-	describe( 'sanitizeFilename', () => {
+	describe('stripDoubleExtension', () => {
 		it('strips double extension', () => {
-			let filename = stripDoubleExtension("a.js.ts");
+			const filename = stripDoubleExtension("a.js.ts");
 			filename.should.equal("a.js");
 		});
 
 		it('ignores non-extension', () => {
-			let filename = stripDoubleExtension("amodule.core.ts");
+			const filename = stripDoubleExtension("amodule.core.ts");
 			filename.should.equal("amodule.core.ts");
 		});
 
 		it('handles normal names', () => {
-			let filename = stripDoubleExtension("amodule.ts");
+			const filename = stripDoubleExtension("amodule.ts");
 			filename.should.equal("amodule.ts");
 		});
 	});
-
 });

@@ -6,7 +6,7 @@ import {Transpiler} from './transpiler';
 import {Resolver} from './resolver';
 import {TypeChecker} from './type-checker';
 import {formatErrors} from './format-errors';
-import {isTypescriptDeclaration} from "./utils";
+import {isTypescriptDeclaration} from './utils';
 
 const logger = new Logger({ debug: false });
 
@@ -37,7 +37,7 @@ export function createFactory(sjsconfig: PluginOptions = {},
 				return resolveDeclarationFiles(services.options, _resolve)
 					.then(resolvedFiles => {
 						resolvedFiles.forEach(resolvedFile => {
-							services.resolver.registerDeclarationFile(resolvedFile, false);
+							services.resolver.registerDeclarationFile(resolvedFile);
 						});
 						return services;
 					});
@@ -76,7 +76,7 @@ function loadOptions(sjsconfig: PluginOptions, _resolve: ResolveFunction, _fetch
 function resolveDeclarationFiles(options: PluginOptions, _resolve: ResolveFunction): Promise<string[]> {
 	const files = options.files || [];
 
-	let declarationFiles = files
+	const declarationFiles = files
 		.filter(filename => isTypescriptDeclaration(filename))
 		.map(filename => _resolve(filename, options.tsconfigAddress));
 
@@ -87,8 +87,8 @@ function createServices(options: PluginOptions, builder: boolean, _resolve: Reso
 	const host = new CompilerHost(options, builder);
 	const transpiler = new Transpiler(host);
    
-   let resolver = undefined; 
-	let typeChecker = undefined;
+   let resolver: Resolver = undefined; 
+	let typeChecker: TypeChecker = undefined;
    
 	if (options.typeCheck) {
       resolver = new Resolver(host, _resolve, _fetch);
@@ -97,7 +97,7 @@ function createServices(options: PluginOptions, builder: boolean, _resolve: Reso
 		if (!host.options.noLib) {
          return _resolve(host.getDefaultLibFileName())
 				.then(defaultLibAddress => {
-					resolver.registerDeclarationFile(defaultLibAddress, true);
+					resolver.registerDeclarationFile(defaultLibAddress);
 					return {host, transpiler, resolver, typeChecker, options};
 				});
 		}

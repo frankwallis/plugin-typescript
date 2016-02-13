@@ -84,7 +84,7 @@ System.config({
     module: "system",
     noImplicitAny: true,
     typeCheck: true,				// also accepts "strict"
-    tsconfig: true				// also accepts a path
+    tsconfig: true               // also accepts a path
   }
 });
 ```

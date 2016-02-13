@@ -1,7 +1,7 @@
 /* */
 import * as ts from 'typescript';
 import {CompilerHost, CombinedOptions, TranspileResult} from './compiler-host';
-import {isJavaScript, isSourceMap, hasError} from "./utils";
+import {isJavaScript, isSourceMap, hasError} from './utils';
 import Logger from './logger';
 
 const logger = new Logger({ debug: false });
