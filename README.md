@@ -8,7 +8,7 @@ TypeScript loader for SystemJS
 
 A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to ```System.import``` TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
 
-plugin-typescript uses version 1.9.0-dev.20160206 of the typescript compiler.
+plugin-typescript uses version 1.9.0-dev.20160214 of the typescript compiler.
 
 For JSPM version 0.15 and below, use [plugin-typescript 1.0.x](https://github.com/frankwallis/plugin-typescript/tree/1.0).  
 For TypeScript 1.7.5 and below use [plugin-typescript 2.x.x](https://github.com/frankwallis/plugin-typescript/tree/2.0).
@@ -129,9 +129,11 @@ will resolve relative to the current directory because of the ```"./"```, but
 ```
 will resolve to ```jspm_packages/npm/angular2@2.0.0/bundles/typings/angular2/angular2.d.ts```
 
-This can be useful when compiling over multiple projects as all the projects can easily reference declaration files from their dependencies, and they will be automatically updated with new versions etc.  
-
 The default value is ```false```. As it is incompatible with other tools (editors etc), **this setting is deprecated** in favour of using ```typings``` as described above.
+
+#### supportHtmlImports ####
+When true, the type-checker will automatically resolve any file with a ```.html``` extension to have a default export which is a string. This enables importing of html templates using plugin-text with full type-checking and no errors.
+*(this feature will be removed when https://github.com/Microsoft/TypeScript/issues/6615 becomes available)*
 
 ## Features ##
 
@@ -139,15 +141,14 @@ The default value is ```false```. As it is incompatible with other tools (editor
 
 When compiling in the browser, compiler errors contain a link to the exact location of the error in the source. This is particularly helpful if you are using Chrome DevTools as your IDE.
 
+#### Hot-Reload Support ####
+
+This plugin provides incremental type-checking when using [systemjs-hot-reloader](https://github.com/capaj/systemjs-hot-reloader)
+See any of the example projects for a working hot-reloading setup.
+
 #### Type-checking over Multiple Packages ####
 
 The type-checker runs across multiple packages if the imported file resolves to a typescript file. This means that if you do ```import "mypackage/index"``` and that resolves to a typescript file then that import will be properly type-checked. You no longer have to handcraft an external declaration file for 'mypackage'! 
-
-See the angular2 example project for an example of this feature working.
-
-#### HTML Imports ####
-
-The type-checker automatically resolves any file with a .html extension to have a default export which is a string. This enables importing of html templates using plugin-text with full type-checking and no errors.
 
 See the angular2 example project for an example of this feature working.
 
@@ -163,7 +164,7 @@ To override the version of TypeScript used by the plugin, add an override to the
 	"overrides": {
 		"github:frankwallis/plugin-typescript@2.2.1": {
 	 		"dependencies": {
-	    		"typescript": "npm:typescript@1.8.0-dev.20160108"
+	    		"typescript": "npm:typescript@1.8.0-dev.20160208"
 	  		}
 		}
 	}

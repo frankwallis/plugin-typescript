@@ -32,11 +32,11 @@ function resolve(dep, parent) {
 		else {
          result = path.join(path.dirname(parent), "resolved", dep);
          
-         if (path.extname(result) == "")
+         if ((path.extname(result) === "") || (dep.indexOf('/') < 0))
             result = result + ".js";
       }
       
-		if (path.extname(result) == "")
+		if (path.extname(result) === "")
 			result = result + ".ts";
 
 		//console.log("resolved " + parent + " -> " + result);

@@ -1,8 +1,8 @@
 declare type Module = {
-	name: string;
-	address: string;
-	source?: string;
-	metadata?: any;
+   name: string;
+   address: string;
+   source?: string;
+   metadata?: any;
 }
 
 interface SystemJS {
@@ -10,7 +10,7 @@ interface SystemJS {
    fetch(load: Module): Promise<string>;
    import(modname: string): Promise<any>;
    builder?: boolean;
-   
+
    typescriptOptions?: PluginOptions;
    transpiler?: string;
 }
@@ -22,19 +22,24 @@ declare type ResolveFunction = (dep: string, parent?: string) => Promise<string>
 declare type FetchFunction = (address: string) => Promise<string>;
 
 interface PluginOptions {
-	tsconfig?: boolean | string;
-	typeCheck?: boolean | string;
-	resolveAmbientRefs?: boolean;
-	resolveTypings?: boolean;
+   tsconfig?: boolean | string;
+   typeCheck?: boolean | string;
    targetLib?: number;
-   typingsMap?: { [s: string]: string | boolean };
-   
-	/* private */
-	files?: string[];
-	tsconfigAddress?: string;
 
-	/* reveal some hidden typescript options */
-	skipDefaultLibCheck?: boolean;
+   /* beta */
+   typingsMap?: { [s: string]: string | boolean };
+   resolveTypings?: boolean;
+   
+   /* deprecated */
+   supportHtmlImports?: boolean;
+   resolveAmbientRefs?: boolean;
+
+   /* private */
+   files?: string[];
+   tsconfigAddress?: string;
+      
+   /* reveal some hidden typescript options */
+   skipDefaultLibCheck?: boolean;
    suppressOutputPathCheck?: boolean;
 }
 

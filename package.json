@@ -25,7 +25,7 @@
     "url": "https://github.com/frankwallis/plugin-typescript.git"
   },
   "dependencies": {
-    "typescript": "^1.9.0-dev.20160206"
+    "typescript": "^1.9.0-dev.20160214"
   },
   "devDependencies": {
     "chai": "^3.4.1",
@@ -48,7 +48,7 @@
     "registry": "github",
     "name": "frankwallis/plugin-typescript",
     "dependencies": {
-      "typescript": "npm:typescript@^1.9.0-dev.20160206"
+      "typescript": "npm:typescript@1.9.0-dev.20160214"
     },
     "directories": {
       "lib": "lib",

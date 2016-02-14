@@ -11,10 +11,15 @@ System.config({
   typescriptOptions: {
     "module": "commonjs",
     "target": "es6",
-    "noImplicitAny": false,
-    "typeCheck": false,
+    "targetLib": "es6",
+    "typeCheck": true,
     "tsconfig": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "supportHtmlImports": true,
+    "typingsMap": {
+      "angular2": true,
+      "rxjs": true
+    }
   },
   paths: {
     "github:*": "jspm_packages/github/*",

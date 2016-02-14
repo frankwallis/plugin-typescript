@@ -25,7 +25,7 @@ export interface SourceFile extends ts.SourceFile {
 }
 
 export class CompilerHost implements ts.CompilerHost {
-	private _options: any;
+	private _options: CombinedOptions;
 	private _files: { [s: string]: SourceFile; };
 
 	constructor(options: any, builder: boolean = false) {
@@ -36,8 +36,8 @@ export class CompilerHost implements ts.CompilerHost {
 		this._options.jsx = this.getEnum(this._options.jsx, ts.JsxEmit, ts.JsxEmit.None);
 		this._options.allowNonTsExtensions = (this._options.allowNonTsExtensions !== false);
 		this._options.skipDefaultLibCheck = (this._options.skipDefaultLibCheck !== false);
+      this._options.supportHtmlImports = (options.supportHtmlImports !== false);
 		this._options.noResolve = true;
-      this._options.typingsMap = options.typingsMap || {};
 
 		// Force module resolution into 'classic' mode, to prevent node module resolution from kicking in
 		this._options.moduleResolution = ts.ModuleResolutionKind.Classic;
@@ -55,7 +55,7 @@ export class CompilerHost implements ts.CompilerHost {
 		// support for importing html templates until
 		// https://github.com/Microsoft/TypeScript/issues/2709#issuecomment-91968950 gets implemented
 		// note - this only affects type-checking, not runtime!
-		const file = this.addFile(__HTML_MODULE__, "var __html__: string = ''; export default __html__;");
+		const file = this.addFile(__HTML_MODULE__, "var __html__: string = ''; export default __html__; export = __html__;");
       file.dependencies = { list: [], mappings: {} };
       file.checked = true;
       file.errors = [];
@@ -174,7 +174,7 @@ export class CompilerHost implements ts.CompilerHost {
 		return moduleNames.map((modName) => {
 			const dependencies = this._files[containingFile].dependencies;
 
-			if (isHtml(modName)) {
+			if (isHtml(modName) && this._options.supportHtmlImports) {
 				return { resolvedFileName: __HTML_MODULE__ };
 			}
 			else if (dependencies) {

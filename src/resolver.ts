@@ -1,6 +1,5 @@
 /* */
 import * as ts from 'typescript';
-import * as path from 'path';
 import Logger from './logger';
 import {CompilerHost} from './compiler-host';
 import {
@@ -110,39 +109,43 @@ export class Resolver {
 		return this._resolve(importName, sourceName)
 			.then(resolvedImport => {
             if (isAmbientImport(importName) && isJavaScript(resolvedImport)) {
-               if (this._host.options.typingsMap) {
-                  const mappedTyping = this.resolveMappedTyping(importName, resolvedImport);
-                  if (mappedTyping) return mappedTyping;
-               }
-
-               if (this._host.options.resolveTypings) {
-                  if (!this._typings[resolvedImport]) {
+               if (!this._typings[resolvedImport]) {
+                  if (this._host.options.typingsMap) {
+                     this._typings[resolvedImport] = this.resolveMappedTyping(importName, resolvedImport)
+                        .then(resolvedTyping => {
+                           return resolvedTyping ? resolvedTyping : resolvedImport;
+                        });
+                  }
+                  else if (this._host.options.resolveTypings) {
                      this._typings[resolvedImport] = this.resolveTyping(importName, sourceName)
                         .then(resolvedTyping => {
                            return resolvedTyping ? resolvedTyping : resolvedImport;
                         });
                   }
-
-                  return this._typings[resolvedImport];
+                  else {
+                     this._typings[resolvedImport] = Promise.resolve(resolvedImport); 
+                  }
                }
+
+               return this._typings[resolvedImport];
             }
             
             return resolvedImport;
   			});
 	}
 
-	private resolveMappedTyping(importName: string, resolvedImportName: string): string {
-      return Object.keys(this._host.options.typingsMap).reduce((result, key) => {
+	private resolveMappedTyping(importName: string, resolvedImportName: string): Promise<string> {
+      return Promise.resolve(Object.keys(this._host.options.typingsMap).reduce((result, key) => {
          if (this._host.options.typingsMap[key] === true) {
             if (importName.indexOf(key) === 0) {
                return jsToDts(resolvedImportName);
             }
          }
          else if (key === importName) {
-            return path.join(path.dirname(resolvedImportName), importName, this._host.options.typingsMap[key]);
-         }
+            return this._resolve("./" + this._host.options.typingsMap[key] as string, resolvedImportName.slice(0, -3) + '/index.js');
+         }         
          return result;
-      }, undefined);      
+      }, undefined));
    }
    
 	private resolveTyping(importName: string, sourceName: string): Promise<string> {
@@ -151,7 +154,7 @@ export class Resolver {
 
 		return this._resolve(packageName, sourceName)
 			.then(exported => {
-				return path.join(exported.slice(0, -3), "package.json");
+				return exported.slice(0, -3) + "/package.json";
 			})
 			.then(address => {
 				return this._fetch(address)
