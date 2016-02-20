@@ -14,20 +14,16 @@ const logger = new Logger({ debug: false });
 export class Resolver {
 	private _host: CompilerHost;
 	private _resolve: ResolveFunction;
-	private _fetch: FetchFunction;
+   private _lookup: LookupFunction;
 	private _declarationFiles: string[];
-	private _typings: { [s: string]: Promise<string>; };
 
-	constructor(host: CompilerHost, resolve: ResolveFunction, fetch: FetchFunction) {
+	constructor(host: CompilerHost, resolve: ResolveFunction, lookup: LookupFunction) {
 		this._host = host;
 		this._resolve = resolve;
-		this._fetch = fetch;
+		this._lookup = lookup;
 
 		// list of all registered declaration files
 		this._declarationFiles = [];
-
-		// map of external modules to their typings
-		this._typings = {};
 	}
 
 	/*
@@ -107,6 +103,40 @@ export class Resolver {
 			importName = importName + ".d.ts";
 
 		return this._resolve(importName, sourceName)
+			.then(address => {
+            if (isAmbientImport(importName) && isJavaScript(address)) {
+               return this.lookupTyping(address)
+                  .then(typingAddress => {
+                     return typingAddress ? typingAddress : address;
+                  });
+            }
+
+            return address;
+  			});
+	}
+
+	private lookupTyping(address: string): Promise<string> {
+      return this._lookup(address)
+         .then(metadata => {
+            if (metadata.typings === true) {
+               return jsToDts(address);               
+            }
+            else if (metadata.typings) {
+               throw new Error("unimplemented"); 
+            }
+            else {
+               return undefined;
+            }
+         })
+   }
+
+/*
+
+	private resolveImport(importName: string, sourceName: string): Promise<string> {
+		if (isRelative(importName) && isTypescriptDeclaration(sourceName) && !isTypescriptDeclaration(importName))
+			importName = importName + ".d.ts";
+
+		return this._resolve(importName, sourceName)
 			.then(resolvedImport => {
             if (isAmbientImport(importName) && isJavaScript(resolvedImport)) {
                if (!this._typings[resolvedImport]) {
@@ -123,7 +153,10 @@ export class Resolver {
                         });
                   }
                   else {
-                     this._typings[resolvedImport] = Promise.resolve(resolvedImport); 
+                     this._typings[resolvedImport] = this.lookupTyping(importName, sourceName)
+                        .then(resolvedTyping => {
+                           return resolvedTyping ? resolvedTyping : resolvedImport;
+                        });
                   }
                }
 
@@ -167,5 +200,5 @@ export class Resolver {
 						return undefined;
 					});
 			});
-	}
+	}*/
 }

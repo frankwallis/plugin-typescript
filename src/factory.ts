@@ -24,13 +24,14 @@ type FactoryOutput = {
 export function createFactory(sjsconfig: PluginOptions = {},
                               builder: boolean, 
                               _resolve: ResolveFunction, 
-                              _fetch: FetchFunction): Promise<FactoryOutput> {
+                              _fetch: FetchFunction,
+                              _lookup: LookupFunction): Promise<FactoryOutput> {
 	const tsconfigFiles = [];
 	const typingsFiles = [];
 
 	return loadOptions(sjsconfig, _resolve, _fetch)
 		.then(options => {
-			return createServices(options, builder, _resolve, _fetch);
+			return createServices(options, builder, _resolve, _lookup);
 		})
 		.then(services => {
 			if (services.options.typeCheck) {
@@ -83,7 +84,7 @@ function resolveDeclarationFiles(options: PluginOptions, _resolve: ResolveFuncti
 	return Promise.all<string>(declarationFiles);
 }
 
-function createServices(options: PluginOptions, builder: boolean, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<FactoryOutput> {
+function createServices(options: PluginOptions, builder: boolean, _resolve: ResolveFunction, _lookup: LookupFunction): Promise<FactoryOutput> {
 	const host = new CompilerHost(options, builder);
 	const transpiler = new Transpiler(host);
    
@@ -91,7 +92,7 @@ function createServices(options: PluginOptions, builder: boolean, _resolve: Reso
 	let typeChecker: TypeChecker = undefined;
    
 	if (options.typeCheck) {
-      resolver = new Resolver(host, _resolve, _fetch);
+      resolver = new Resolver(host, _resolve, _lookup);
 		typeChecker = new TypeChecker(host);
 
 		if (!host.options.noLib) {

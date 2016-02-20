@@ -37,16 +37,9 @@ const rxjsTypings = require.resolve('./fixtures-es6/typings/rxjs-typings.ts');
 const missingTypings = require.resolve('./fixtures-es6/typings/missing-typings.ts');
 const missingPackage = require.resolve('./fixtures-es6/typings/missing-package.ts');
 
-let filelist = [];
-function fetch(filename) {
-	//console.log("fetching " + filename);
-	filelist.push(filename);
-   try {
-      return Promise.resolve(fs.readFileSync(filename, 'utf8'));   
-   }
-   catch (err) {
-      return Promise.reject(err);
-   }
+let metadata = {};
+function lookup(address: string): any {
+   return Promise.resolve(metadata[address] || {});
 }
 
 function resolve(dep, parent) {
@@ -95,13 +88,13 @@ describe('TypeChecker', () => {
          });
       
       const resolved = await Promise.all(resolutions);
-      const unfetched = resolved.reduce((result, deps) => {
+      const unlookuped = resolved.reduce((result, deps) => {
          const files = deps.list.filter(dep => !host.fileExists(dep) && (result.indexOf(dep) < 0));
          return result.concat(files);
       }, []);
             
-      if (unfetched.length > 0) {
-         await resolveAll(unfetched);
+      if (unlookuped.length > 0) {
+         await resolveAll(unlookuped);
       }
    }
    
@@ -117,10 +110,9 @@ describe('TypeChecker', () => {
 	}
 
 	beforeEach(() => {
-		filelist = [];
 		host = new CompilerHost({});
 		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+      resolver = new Resolver(host, resolve, lookup);
 	});
 
 	it('compiles successfully', async () => {
@@ -135,7 +127,7 @@ describe('TypeChecker', () => {
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+      resolver = new Resolver(host, resolve, lookup);
 
 		const diags = await typecheckAll(oneImport);
       diags.should.have.length(1);
@@ -160,7 +152,7 @@ describe('TypeChecker', () => {
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+      resolver = new Resolver(host, resolve, lookup);
       host.addFile("declaration.d.ts", "export var a: string = 10;");
 
       await resolver.resolve("declaration.d.ts");
@@ -206,7 +198,7 @@ describe('TypeChecker', () => {
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+      resolver = new Resolver(host, resolve, lookup);
 
 		const diags = await typecheckAll(ambientReference);
       diags.should.have.length(0);
@@ -230,7 +222,7 @@ describe('TypeChecker', () => {
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+      resolver = new Resolver(host, resolve, lookup);
 		
       const diags = await typecheckAll(ambientImportTs);
       diags.should.have.length(0);
@@ -248,7 +240,7 @@ describe('TypeChecker', () => {
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+      resolver = new Resolver(host, resolve, lookup);
 
 		const diags = await typecheckAll(ambientDuplicate);
       diags.should.have.length(0);
@@ -281,49 +273,27 @@ describe('TypeChecker', () => {
 		};
 		host = new CompilerHost(options);
 		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+      resolver = new Resolver(host, resolve, lookup);
 		
 		const diags = await typecheckAll(noImports);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});   
 
-   it('resolve typings files when resolveTypings is true', async () => {
-		const options = {
-			resolveTypings: true
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+   it('resolve typings files when typings meta is present', async () => {
+      const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2.js');
+      metadata = {};
+      metadata[jsfile] = {
+         typings: true
+      };
 		
       const diags = await typecheckAll(angular2Typings);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});
 
-   it('uses typingsMap when present', async () => {
-		const options = {
-			resolveTypings: false,
-         typingsMap: {
-            "angular2": true
-         }
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
-		
-      const diags = await typecheckAll(angular2Typings);
-      formatErrors(diags, console as any);
-      diags.should.have.length(0);
-	});
-
-   it('doesnt resolve typings files when resolveTypings is false', async () => {
-		const options = {
-			resolveTypings: false
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+   it('doesnt resolve typings files when typings meta not present', async () => {
+      metadata = {};
 
 		const diags = await typecheckAll(angular2Typings);
       //formatErrors(diags, console as any);
@@ -331,41 +301,14 @@ describe('TypeChecker', () => {
       diags[0].code.should.be.equal(2307);
 	});
 
-	it('handles missing typings field in package.json', async () => {
-		const options = {
-			resolveTypings: true
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
-
-		const diags = await typecheckAll(missingTypings);
-      formatErrors(diags, console as any);
-      diags.should.have.length(0);
-	});
-
-	it('handles non-relative typings field in package.json', async () => {
-		const options = {
-			resolveTypings: true
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
+	xit('resolves typings when typings is non-relative path', async () => {
+      const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs.js');
+      metadata = {};
+      metadata[jsfile] = {
+         typings: "Rx.d.ts"  
+      };
 
 		const diags = await typecheckAll(rxjsTypings);
-      formatErrors(diags, console as any);
-      diags.should.have.length(0);
-	});
-
-	it('handles package.json not found', async () => {
-		const options = {
-			resolveTypings: true
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, fetch);
-
-		const diags = await typecheckAll(missingPackage);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
 	});

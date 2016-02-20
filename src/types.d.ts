@@ -8,6 +8,7 @@ declare type Module = {
 interface SystemJS {
    normalize(dep: string, parent: string): Promise<string>;
    fetch(load: Module): Promise<string>;
+   locate(load: Module): Promise<string>;
    import(modname: string): Promise<any>;
    builder?: boolean;
 
@@ -20,6 +21,7 @@ declare var __moduleName: string;
 
 declare type ResolveFunction = (dep: string, parent?: string) => Promise<string>;
 declare type FetchFunction = (address: string) => Promise<string>;
+declare type LookupFunction = (address: string) => Promise<any>;
 
 interface PluginOptions {
    tsconfig?: boolean | string;

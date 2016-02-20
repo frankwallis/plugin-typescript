@@ -11,15 +11,10 @@ System.config({
   typescriptOptions: {
     "module": "commonjs",
     "target": "es6",
-    "targetLib": "es6",
     "typeCheck": true,
     "tsconfig": true,
     "sourceMap": true,
-    "supportHtmlImports": true,
-    "typingsMap": {
-      "angular2": true,
-      "rxjs": true
-    }
+    "supportHtmlImports": true
   },
   paths: {
     "github:*": "jspm_packages/github/*",
@@ -48,6 +43,20 @@ System.config({
       "meta": {
         "*.ts": {
           "loader": "ts"
+        }
+      }
+    },
+    "angular2": {
+      "meta": {
+        "*.js": {
+          "typings": true
+        }
+      }
+    },
+    "rxjs": {
+      "meta": {
+        "*.js": {
+          "typings": true
         }
       }
     }

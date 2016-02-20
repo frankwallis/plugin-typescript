@@ -17,7 +17,7 @@ let factory = undefined;
 export function translate(load: Module): Promise<string> {
 	logger.debug(`systemjs translating ${load.address}`);
 
-   factory = factory || createFactory(System.typescriptOptions, this.builder, _resolve, _fetch)
+   factory = factory || createFactory(System.typescriptOptions, this.builder, _resolve, _fetch, _lookup)
       .then((output) => {
          validateOptions(output.host.options);
          return output;
@@ -122,9 +122,23 @@ function _resolve(dep: string, parent: string): Promise<string> {
  * called by the factory/resolver when it needs to fetch a file
  */
 function _fetch(address: string): Promise<string> {
-	return System.fetch({ address: address, name: address, metadata: {} })
+	return System.fetch({ name: address, address, metadata: {} })
 		.then(text => {
 			logger.debug(`fetched ${address}`);
 			return text;
 		});
+}
+
+/*
+ * called by the resolver when it needs to get metadata for a file
+ */
+function _lookup(address: string): Promise<any> {
+   const metadata = {};
+   return System.locate({ name: address, address, metadata })
+      .then(() => {
+         // metadata.typings, metadata.typescriptOptions etc should all now be populated correctly,
+         // respecting the composition of all global metadata, wildcard metadata and package metadata correctly
+         logger.debug(`located ${address}`);  
+         return metadata;
+      });
 }

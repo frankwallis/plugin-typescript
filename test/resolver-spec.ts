@@ -8,16 +8,9 @@ import {formatErrors} from '../src/format-errors';
 
 const should = chai.should();
 
-let filelist = [];
-function fetch(filename) {
-	//console.log("fetching " + filename);
-	filelist.push(filename);
-   try {
-      return Promise.resolve(fs.readFileSync(filename, 'utf8'));   
-   }
-   catch (err) {
-      return Promise.reject(err);
-   }
+let metadata = {};
+function lookup(address: string): any {
+   return Promise.resolve(metadata[address] || {});
 }
 
 function resolve(dep, parent) {
@@ -58,9 +51,8 @@ describe('Resolver', () => {
 	let host;
 
 	beforeEach(() => {
-		filelist = [];
 		host = new CompilerHost({});
-		resolver = new Resolver(host, resolve, fetch);
+		resolver = new Resolver(host, resolve, lookup);
 	});
 
 	it('resolves successfully', async () => {
@@ -110,7 +102,7 @@ describe('Resolver', () => {
 			resolveAmbientRefs: true
 		};      
 		host = new CompilerHost(options);
-		resolver = new Resolver(host, resolve, fetch);
+		resolver = new Resolver(host, resolve, lookup);
       
       const source = '/// <reference path="ambient/ambient.d.ts" />';
       const expected = path.resolve(__dirname, './fixtures-es6/ambients/resolved/ambient/ambient.d.ts');
@@ -127,7 +119,7 @@ describe('Resolver', () => {
 			resolveAmbientRefs: true
 		};      
 		host = new CompilerHost(options);
-		resolver = new Resolver(host, resolve, fetch);
+		resolver = new Resolver(host, resolve, lookup);
       
       const source = '/// <reference path="not-ambient.d.ts" />';
       const expected = path.resolve(__dirname, './fixtures-es6/ambients/not-ambient.d.ts');
@@ -138,15 +130,16 @@ describe('Resolver', () => {
       deps.list[0].should.equal(expected);
 	});
 
-	it('resolves typings files from package.json when resolveTypings is true', async () => {
-		const options = {
-			resolveTypings: true
-		};
-		host = new CompilerHost(options);
-		resolver = new Resolver(host, resolve, fetch);
+	it('resolves typings files when typings is true', async () => {
+      const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2.js');
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2.d.ts');
       
+      metadata = {};
+      metadata[jsfile] = {
+         typings: true
+      };
+
       const source = 'import {bootstrap} from "angular2";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2.d.ts');
       host.addFile(TYPINGS_NAME, source);
       
 		const deps = await resolver.resolve(TYPINGS_NAME);
@@ -154,17 +147,16 @@ describe('Resolver', () => {
       deps.list[0].should.equal(expected);
 	});
 
-	it('resolves using entry in typingsMap of true', async () => {
-		const options = {
-			typingsMap: {
-            "angular2": true
-         }
-		};
-		host = new CompilerHost(options);
-		resolver = new Resolver(host, resolve, fetch);
-      
-      const source = 'import {bootstrap} from "angular2/router";';
+	it('resolves nested typings when typings is true', async () => {      
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/router.d.ts');
+      const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/router.js');
+
+      metadata = {};
+      metadata[jsfile] = {
+         typings: true  
+      };
+
+      const source = 'import {bootstrap} from "angular2/router";';
       host.addFile(TYPINGS_NAME, source);
 
 		const deps = await resolver.resolve(TYPINGS_NAME);
@@ -172,17 +164,16 @@ describe('Resolver', () => {
       deps.mappings["angular2/router"].should.equal(expected);
 	});
 
-	it('resolves using entry in typingsMap with string path', async () => {
-		const options = {
-			typingsMap: {
-            "zone.js": "./dist/core.d.ts"
-         }
-		};
-		host = new CompilerHost(options);
-		resolver = new Resolver(host, resolve, fetch);
+	xit('resolves typings when typings is string path', async () => {
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/zone.js/dist/core.d.ts');
+      const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/zone.js');
+
+      metadata = {};
+      metadata[jsfile] = {
+         typings: "./dist/core.d.ts"
+      };
       
       const source = 'import Zone from "zone.js";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/zone.js/dist/core.d.ts');
       host.addFile(TYPINGS_NAME, source);
 
 		const deps = await resolver.resolve(TYPINGS_NAME);
@@ -190,67 +181,21 @@ describe('Resolver', () => {
       deps.mappings["zone.js"].should.equal(expected);
 	});
 
-	it('doesnt resolve typings files when resolveTypings is false', async () => {
-		const options = {
-			resolveTypings: false
-		};
-		host = new CompilerHost(options);
-		resolver = new Resolver(host, resolve, fetch);
+	xit('resolves typings when typings is non-relative path', async () => {
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/Rx.d.ts');
+      const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs.js');
       
-      const source = 'import {bootstrap} from "angular2";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2.js');
-      host.addFile(TYPINGS_NAME, source);
-
-		const deps = await resolver.resolve(TYPINGS_NAME);
-      deps.list.should.have.length(0);
-      deps.mappings["angular2"].should.equal(expected);
-	});
-
-	it('handles missing typings field in package.json', async () => {
-		const options = {
-			resolveTypings: true
-		};
-		host = new CompilerHost(options);
-		resolver = new Resolver(host, resolve, fetch);
-      
-      const source = 'import * as missing from "missing";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/missing.js');
-      host.addFile(TYPINGS_NAME, source);
-
-		const deps = await resolver.resolve(TYPINGS_NAME);
-      deps.list.should.have.length(0);
-      deps.mappings["missing"].should.equal(expected);
-	});
-
-	it('handles non-relative typings field in package.json', async () => {
-		const options = {
-			resolveTypings: true
-		};
-		host = new CompilerHost(options);
-		resolver = new Resolver(host, resolve, fetch);
+      metadata = {};
+      metadata[jsfile] = {
+         typings: "Rx.d.ts"  
+      };
       
       const source = 'import {Observable} from "rxjs";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/Rx.d.ts');
       host.addFile(TYPINGS_NAME, source);
 
 		const deps = await resolver.resolve(TYPINGS_NAME);
       deps.list.should.have.length(1);
       deps.list[0].should.equal(expected);
 	});
-
-	it('handles package.json not found', async () => {
-		const options = {
-			resolveTypings: true
-		};
-		host = new CompilerHost(options);
-		resolver = new Resolver(host, resolve, fetch);
       
-      const source = 'import * as missing from "missing_package";';
-      const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/missing_package.js');
-      host.addFile(TYPINGS_NAME, source);
-
-		const deps = await resolver.resolve(TYPINGS_NAME);
-      deps.list.should.have.length(0);
-      deps.mappings["missing_package"].should.equal(expected);
-	});
 });
