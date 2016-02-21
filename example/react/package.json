@@ -14,7 +14,7 @@
       "clean-css": "^3.4.3",
       "css": "github:frankwallis/plugin-css@master",
       "systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@^0.5.3",
-      "ts": "github:frankwallis/plugin-typescript@^3.0.0"
+      "ts": "github:frankwallis/plugin-typescript@^4.0.0"
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "plugin-typescript",
-  "version": "3.0.2",
+  "version": "4.0.0",
   "description": "TypeScript loader for SystemJS",
   "main": "lib/plugin.js",
   "homepage": "https://github.com/frankwallis/plugin-typescript",
@@ -34,7 +34,8 @@
     "jspm": "^0.16.27",
     "mocha": "^2.2.5",
     "open": "0.0.5",
-    "ts-node": "^0.5.5"
+    "ts-node": "^0.5.5",
+    "typescript": "^1.9.0-dev.20160221"
   },
   "scripts": {
     "build": "tsc",
@@ -48,7 +49,7 @@
     "registry": "github",
     "name": "frankwallis/plugin-typescript",
     "dependencies": {
-      "typescript": "npm:typescript@1.9.0-dev.20160214"
+      "typescript": "npm:typescript@1.9.0-dev.20160221"
     },
     "directories": {
       "lib": "lib",
