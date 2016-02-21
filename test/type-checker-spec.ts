@@ -301,7 +301,7 @@ describe('TypeChecker', () => {
       diags[0].code.should.be.equal(2307);
 	});
 
-	xit('resolves typings when typings is non-relative path', async () => {
+	it('resolves typings when typings is non-relative path', async () => {
       const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs.js');
       metadata = {};
       metadata[jsfile] = {

@@ -164,9 +164,9 @@ describe('Resolver', () => {
       deps.mappings["angular2/router"].should.equal(expected);
 	});
 
-	xit('resolves typings when typings is string path', async () => {
+	it('resolves typings when typings is string path', async () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/zone.js/dist/core.d.ts');
-      const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/zone.js');
+      const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/zone.js.js');
 
       metadata = {};
       metadata[jsfile] = {
@@ -181,7 +181,7 @@ describe('Resolver', () => {
       deps.mappings["zone.js"].should.equal(expected);
 	});
 
-	xit('resolves typings when typings is non-relative path', async () => {
+	it('resolves typings when typings is non-relative path', async () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/Rx.d.ts');
       const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs.js');
       

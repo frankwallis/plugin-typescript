@@ -105,7 +105,7 @@ export class Resolver {
 		return this._resolve(importName, sourceName)
 			.then(address => {
             if (isAmbientImport(importName) && isJavaScript(address)) {
-               return this.lookupTyping(address)
+               return this.lookupTyping(importName, sourceName, address)
                   .then(typingAddress => {
                      return typingAddress ? typingAddress : address;
                   });
@@ -115,14 +115,19 @@ export class Resolver {
   			});
 	}
 
-	private lookupTyping(address: string): Promise<string> {
+	private lookupTyping(importName: string, sourceName: string, address: string): Promise<string> {
       return this._lookup(address)
          .then(metadata => {
             if (metadata.typings === true) {
                return jsToDts(address);               
             }
+            else if (typeof(metadata.typings) === 'string') {
+               const packageName = importName.split('/')[0];
+               const typingsName = isRelative(metadata.typings) ? metadata.typings.slice(2) : metadata.typings;
+               return this._resolve(`${packageName}/${typingsName}`, sourceName);
+            }
             else if (metadata.typings) {
-               throw new Error("unimplemented"); 
+               throw new Error("invalid 'typings' value [" + metadata.typings + "] [" + address + "]"); 
             }
             else {
                return undefined;

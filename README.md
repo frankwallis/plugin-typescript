@@ -9,9 +9,7 @@ TypeScript loader for SystemJS
 A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to ```System.import``` TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
 
 plugin-typescript uses version 1.9.0-dev.20160214 of the typescript compiler.
-
-For JSPM version 0.15 and below, use [plugin-typescript 1.0.x](https://github.com/frankwallis/plugin-typescript/tree/1.0).  
-For TypeScript 1.7.5 and below use [plugin-typescript 2.x.x](https://github.com/frankwallis/plugin-typescript/tree/2.0).
+For TypeScript 1.7.5 and below use plugin-typescript 2.x.x
 
 ## Installation ##
 
@@ -107,14 +105,6 @@ Compiler options which do not conflict with those required by plugin-typescript 
 
 Specify whether to use lib.d.ts ```targetLib: "es5"``` or lib.es6.d.ts ```targetLib: "es6"``` (default) 
 
-#### resolveTypings ####
-
-In TypeScript 1.6.2 the ```typings``` field was introduced in package.json to enable delivery of type declaration files alongside javascript libraries. This boolean flag controls whether the type-checker will look for the ```typings``` field in package.json when importing external dependencies, and load the declaration file when it is present. For more information see [here](https://github.com/Microsoft/TypeScript/wiki/Typings-for-npm-packages).
-
-The default value is ```false```. See the angular2 example project for an example of this feature working.
-
-*(this feature is "under improvement")*
-
 #### resolveAmbientRefs ####
 *(deprecated)*
 
@@ -146,11 +136,28 @@ When compiling in the browser, compiler errors contain a link to the exact locat
 This plugin provides incremental type-checking when using [systemjs-hot-reloader](https://github.com/capaj/systemjs-hot-reloader)
 See any of the example projects for a working hot-reloading setup.
 
+#### Typings Support ####
+
+The plugin will automatically load typings for packages if it knows that they are present. In order tell the plugin that a package contains typings, use SystemJS metadata configuration which can be specified in ```packages``` configuration or in the jspm registry.
+
+```js
+  packages: {
+    "angular2": {
+      "meta": {
+        "*.js": {
+          "typings": true     // can also be path of a typings bundle 
+        }
+      }
+    }
+  }
+```
+
+If all js files have typings files typings are present for all js files in the package set ```"typings": true```. If typings are in a single bundled file then specify the path of that file, relative to the root of the project.   
+For more information on setting SystemJS metadata, see [here](https://github.com/systemjs/systemjs/blob/master/docs/config-api.md#packages)
+
 #### Type-checking over Multiple Packages ####
 
-The type-checker runs across multiple packages if the imported file resolves to a typescript file. This means that if you do ```import "mypackage/index"``` and that resolves to a typescript file then that import will be properly type-checked. You no longer have to handcraft an external declaration file for 'mypackage'! 
-
-See the angular2 example project for an example of this feature working.
+The type-checker runs across multiple packages if the imported file resolves to a typescript file. This means that if you do ```import "mypackage/index"``` and that resolves to a typescript file then that import will be properly type-checked. You no longer have to handcraft an external declaration file for 'mypackage'.
 
 #### Override TypeScript Version ####
 

@@ -99,7 +99,7 @@ function validateOptions(options) {
    /* The only time you don't want to output in system format is when you are using babel 
       downstream to compile es6 output (e.g. for async/await support) */      
    if ((options.module != ts.ModuleKind.System) && (options.module != ts.ModuleKind.ES6)) {
-      logger.warn(`transpiling to ${(<any>ts).ModuleKind[options.module]}, consider setting module: "system" in typescriptOptions to transpile directly to System.register format`);
+      logger.warn(`transpiling to ${ts.ModuleKind[options.module]}, consider setting module: "system" in typescriptOptions to transpile directly to System.register format`);
    }
 }
 
