@@ -48,7 +48,7 @@ export class Transpiler {
       if (!file) throw new Error(`file [${sourceName}] has not been added`);
       
       if (!file.output) {
-         let program = ts.createProgram([sourceName], this._options, this._host);
+         const program = ts.createProgram([sourceName], this._options, this._host);
 
          let jstext: string = undefined;
          let maptext: string = undefined;

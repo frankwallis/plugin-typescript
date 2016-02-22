@@ -8,7 +8,7 @@ TypeScript loader for SystemJS
 
 A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to ```System.import``` TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
 
-plugin-typescript uses version 1.9.0-dev.20160221 of the typescript compiler.
+plugin-typescript uses version 1.8.2 of the typescript compiler.
 For TypeScript 1.7.5 and below use plugin-typescript 2.x.x
 
 ## Installation ##
