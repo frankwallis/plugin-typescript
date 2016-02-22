@@ -8,7 +8,7 @@ TypeScript loader for SystemJS
 
 A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to ```System.import``` TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
 
-plugin-typescript uses version 1.8.2 of the typescript compiler.
+plugin-typescript uses TypeScript 1.8.2  
 For TypeScript 1.7.5 and below use plugin-typescript 2.x.x
 
 ## Installation ##
@@ -122,7 +122,7 @@ will resolve to ```jspm_packages/npm/angular2@2.0.0/bundles/typings/angular2/ang
 The default value is ```false```. As it is incompatible with other tools (editors etc), **this setting is deprecated** in favour of using ```typings``` as described above.
 
 #### supportHtmlImports ####
-When true, the type-checker will automatically resolve any file with a ```.html``` extension to have a default export which is a string. This enables importing of html templates using plugin-text with full type-checking and no errors.
+When true, the type-checker will automatically resolve any file with a ```.html``` extension to have a default export which is a string. This enables importing of html templates using plugin-text with full type-checking and no errors.  
 *(this feature will be removed when https://github.com/Microsoft/TypeScript/issues/6615 becomes available)*
 
 ## Features ##
