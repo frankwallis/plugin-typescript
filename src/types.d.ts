@@ -25,13 +25,9 @@ declare type LookupFunction = (address: string) => Promise<any>;
 
 interface PluginOptions {
    tsconfig?: boolean | string;
-   typeCheck?: boolean | string;
+   typeCheck?: boolean | "strict";
    targetLib?: number;
 
-   /* beta */
-   typingsMap?: { [s: string]: string | boolean };
-   resolveTypings?: boolean;
-   
    /* deprecated */
    supportHtmlImports?: boolean;
    resolveAmbientRefs?: boolean;

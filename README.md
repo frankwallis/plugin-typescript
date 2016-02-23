@@ -56,7 +56,7 @@ This will tell SystemJS to load all modules (.js and .ts) through plugin-typescr
 System.config({
   transpiler: "plugin-babel",
   packages: {
-    "app": {
+    "src": {
       "defaultExtension": "ts",
       "meta": {
         "*.ts": {
@@ -91,7 +91,7 @@ All the usual TypeScript compiler options are supported, as well as these additi
 
 #### typeCheck ####
 
-A boolean flag which controls whether the files are type-checked or simply transpiled. Type-checking does add some overhead to the build process as reference files need to be loaded and the compiler has more work to do. 
+A boolean flag which controls whether the files are type-checked or simply transpiled. Type-checking does add some overhead to the build process as typings need to be loaded and the compiler has more work to do. 
 
 By default compiler errors are written to the console but the build is allowed to continue. To change this behaviour you can use ```typeCheck: "strict"``` in which case the build will be failed when compiler errors are encountered.
 
@@ -108,7 +108,7 @@ Specify whether to use lib.d.ts ```targetLib: "es5"``` or lib.es6.d.ts ```target
 #### resolveAmbientRefs ####
 *(deprecated)*
 
-A boolean flag which controls how reference files are resolved. When it is set then SystemJS will be used to resolve references, so
+A boolean flag which controls how triple-slash references are resolved. When it is set then SystemJS will be used to resolve reference files, so
 
 ```
 /// <reference path="./common/angular.d.ts" />

@@ -1,9 +1,19 @@
 {
 	"compilerOptions": {
-		"target": "es5",
+		"target": "es6",
+      "module":  "commonjs",
 		"emitDecoratorMetadata": true,
-    	"experimentalDecorators": true
-	},
+    	"experimentalDecorators": true,
+      "baseUrl": ".",
+      "paths": {
+         "angular2/*": [
+            "jspm_packages/npm/angular2@2.0.0-beta.7/*"
+         ],
+         "rxjs/*": [
+            "jspm_packages/npm/rxjs@5.0.0-beta.2/*"
+         ]
+      }
+   },
 	"files": [
 		"./src/index.ts",
 		"./src/_references.d.ts"
