@@ -8,25 +8,34 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<meta name="fragment" content="!" />
 
-	<title>plugin-typescript react example</title>
+	<title>plugin-typescript angular example</title>
 	<base href="/">
 	<script src="jspm_packages/system.src.js"></script>
-	<script src="config.js"></script>
-</head>
-
-<body>
-	<div id="body"></div>
-
+	<script src="jspm.browser.js"></script>
+	<script src="jspm.config.js"></script>
 	<script>
 		System.import('src')
 			.then(function() {
+				return System.import('angular');
+			})
+			.then(function(angular) {
 				console.log('running');
+				angular.bootstrap(document, ['example']);
+				console.log(JSON.stringify(System.typescriptOptions));
 			})
 			.catch(function(err) {
-				console.log('Error: ', err);
+				console.log('Error: ', err.stack);
 			});
    </script>
+</head>
 
+<body ng-cloak>
+   <div ng-controller="exampleController as cx">
+		<label>Enter your name</label>
+		<input type="text" ng-model="cx.name"></input>
+		<button ng-click="cx.greet()">Press Me</button>
+		<p>{{cx.greeting}}</p>
+	</div>
 </body>
 
 </html>

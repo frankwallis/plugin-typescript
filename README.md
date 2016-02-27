@@ -184,7 +184,7 @@ To run the example projects:
 > git clone https://github.com/frankwallis/plugin-typescript.git
 > cd plugin-typescript
 > npm install
-> cd example/react  		// or example/angular2 or example/angular
+> cd examples/react  		// or example/angular2 or example/angular
 > jspm install
 > npm start
 ```

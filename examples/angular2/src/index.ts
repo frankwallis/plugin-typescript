@@ -1,4 +1,4 @@
-import "../shims";
+import "../shims.js";
 import {bootstrap} from 'angular2/bootstrap';
 import {Component, Directive, View} from 'angular2/core';
 import {CalculatorComponent} from './calculator-component';
@@ -11,5 +11,5 @@ import "./index.css";
   template: '<calculator-component></calculator-component>',
   directives: [CalculatorComponent] 
 })
-export class CalculatorApp {}
+class CalculatorApp {}
 bootstrap(CalculatorApp);

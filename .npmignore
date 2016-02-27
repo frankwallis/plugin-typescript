@@ -1,7 +1,7 @@
 *.log
 .*
 *.json
-example/
+examples/
 node_modules/
 src/
 test/
