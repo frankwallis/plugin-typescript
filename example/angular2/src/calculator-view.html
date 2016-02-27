@@ -1,0 +1,32 @@
+<ul class="adder-container">
+   <li class="adder-row">
+      <span class="adder-operand adder-display">
+         {{ operand }}         
+      </span>
+   </li>
+   <li class="adder-row">
+      <span class="adder-total adder-display">
+         {{ total }}
+      </span>
+   </li>
+   <li class="adder-row">
+      <button class="adder-button adder-button-digit" (click)="input(1)">1</button>
+      <button class="adder-button adder-button-digit" (click)="input(2)">2</button>
+      <button class="adder-button adder-button-digit" (click)="input(3)">3</button>
+   </li>
+   <li class="adder-row">
+      <button class="adder-button adder-button-digit" (click)="input(4)">4</button>
+      <button class="adder-button adder-button-digit" (click)="input(5)">5</button>
+      <button class="adder-button adder-button-digit" (click)="input(6)">6</button>
+   </li>
+   <li class="adder-row">
+      <button class="adder-button adder-button-digit" (click)="input(7)">7</button>
+      <button class="adder-button adder-button-digit" (click)="input(8)">8</button>
+      <button class="adder-button adder-button-digit" (click)="input(9)">9</button>
+   </li>
+   <li class="adder-row">
+      <button class="adder-button adder-button-sum" (click)="sum()">+</button>
+      <button class="adder-button adder-button-digit" (click)="input(0)">0</button>
+      <button class="adder-button adder-button-clear" (click)="clear">C</button>
+   </li>
+</ul>

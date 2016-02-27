@@ -1,15 +1,15 @@
 import "../shims";
 import {bootstrap} from 'angular2/bootstrap';
 import {Component, Directive, View} from 'angular2/core';
-import {ExampleComponent} from './example-component';
+import {CalculatorComponent} from './calculator-component';
 import "./index.css";
 
 @Component({
-  selector: 'example-app',
+  selector: 'calculator-app',
 })
 @View({
-  template: '<example-component></example-component>',
-  directives: [ExampleComponent] 
+  template: '<calculator-component></calculator-component>',
+  directives: [CalculatorComponent] 
 })
-export class ExampleApp {}
-bootstrap(ExampleApp);
+export class CalculatorApp {}
+bootstrap(CalculatorApp);

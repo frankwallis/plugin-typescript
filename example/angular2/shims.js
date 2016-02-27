@@ -1,5 +1,4 @@
-import 'reflect-metadata';
-import Zone from 'zone.js';
-
-// workaround for https://github.com/angular/angular/issues/6007
-window.Zone = Zone;
+// Need to set global.Promise before loading zone.js for async/await to work
+global.Promise = require("babel-runtime/core-js/promise").default;
+require('reflect-metadata');
+var Zone = require('zone.js');
