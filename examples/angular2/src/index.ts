@@ -5,11 +5,11 @@ import {CalculatorComponent} from './calculator-component';
 import "./index.css";
 
 @Component({
-  selector: 'calculator-app',
+   selector: 'calculator-app',
 })
 @View({
-  template: '<calculator-component></calculator-component>',
-  directives: [CalculatorComponent] 
+   template: '<calculator-component></calculator-component>',
+   directives: [CalculatorComponent]
 })
-class CalculatorApp {}
+class CalculatorApp { }
 bootstrap(CalculatorApp);
