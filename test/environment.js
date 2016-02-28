@@ -1,6 +1,6 @@
-require('ts-node').register({ 
+require('ts-node').register({
    project: __dirname,
-   ignoreWarnings: [ 2341 ], // access private members
+   ignoreWarnings: [2341], // access private members
    disableWarnings: false
 });
  

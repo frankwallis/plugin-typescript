@@ -43,242 +43,242 @@ function lookup(address: string): any {
 }
 
 function resolve(dep, parent) {
-	//console.log("resolving " + parent + " -> " + dep);
-	let result = "";
+   //console.log("resolving " + parent + " -> " + dep);
+   let result = "";
 
-	try {
+   try {
       if (dep[0] === '/')
-			result = dep;
-		else if (dep[0] === '.')
-			result = path.join(path.dirname(parent), dep);
-		else {
+         result = dep;
+      else if (dep[0] === '.')
+         result = path.join(path.dirname(parent), dep);
+      else {
          result = path.join(path.dirname(parent), "resolved", dep);
 
          if (dep === "ambient/ambient")
             result = result + ".ts";
-            
+
          if (path.extname(result) === "")
             result = result + ".js";
       }
-      
-		if (path.extname(result) === "")
-			result = result + ".ts";
 
-		//console.log("resolved " + parent + " -> " + result);
-		return Promise.resolve((ts as any).normalizePath(result));
-	}
-	catch (err) {
-		console.error(err);
-		return Promise.reject(err)
-	}
+      if (path.extname(result) === "")
+         result = result + ".ts";
+
+      //console.log("resolved " + parent + " -> " + result);
+      return Promise.resolve((ts as any).normalizePath(result));
+   }
+   catch (err) {
+      console.error(err);
+      return Promise.reject(err)
+   }
 }
 
 describe('TypeChecker', () => {
 
-	let typeChecker;
+   let typeChecker;
    let resolver;
-	let host;
+   let host;
 
    async function resolveAll(filelist: string[]) {
       const resolutions = filelist.map((filename) => {
          filename = (ts as any).normalizePath(filename);
-            let text = fs.readFileSync(filename, 'utf8');
-            host.addFile(filename, text);
-            return resolver.resolve(filename);
-         });
-      
+         let text = fs.readFileSync(filename, 'utf8');
+         host.addFile(filename, text);
+         return resolver.resolve(filename);
+      });
+
       const resolved = await Promise.all(resolutions);
       const unlookuped = resolved.reduce((result, deps) => {
          const files = deps.list.filter(dep => !host.fileExists(dep) && (result.indexOf(dep) < 0));
          return result.concat(files);
       }, []);
-            
+
       if (unlookuped.length > 0) {
          await resolveAll(unlookuped);
       }
    }
-   
-	async function typecheckAll(filename: string) {
-		resolver.registerDeclarationFile((ts as any).normalizePath(require.resolve(host.getDefaultLibFileName())));
+
+   async function typecheckAll(filename: string) {
+      resolver.registerDeclarationFile((ts as any).normalizePath(require.resolve(host.getDefaultLibFileName())));
       await resolveAll([filename]);
       let result = typeChecker.check();
-      
+
       if (result.length == 0)
          result = typeChecker.forceCheck();
-         
-      return result;         
-	}
 
-	beforeEach(() => {
-		host = new CompilerHost({});
-		typeChecker = new TypeChecker(host);
+      return result;
+   }
+
+   beforeEach(() => {
+      host = new CompilerHost({});
+      typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
-	});
+   });
 
-	it('compiles successfully', async () => {
-		const diags = await typecheckAll(noImports);
+   it('compiles successfully', async () => {
+      const diags = await typecheckAll(noImports);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
-	});
+   });
 
-	it('uses config options', async () => {
-		const options = {
-			noImplicitAny: true
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host);
+   it('uses config options', async () => {
+      const options = {
+         noImplicitAny: true
+      };
+      host = new CompilerHost(options);
+      typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
-		const diags = await typecheckAll(oneImport);
+      const diags = await typecheckAll(oneImport);
       diags.should.have.length(1);
       diags[0].code.should.be.equal(7005);
-	});
+   });
 
-	it('compiles ambient imports', async () => {
-		const diags = await typecheckAll(ambientImportJs);
+   it('compiles ambient imports', async () => {
+      const diags = await typecheckAll(ambientImportJs);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
-	});
+   });
 
-	it('catches type errors', async () => {
-		const diags = await typecheckAll(typeError);
+   it('catches type errors', async () => {
+      const diags = await typecheckAll(typeError);
       diags.should.have.length(1);
       diags[0].code.should.be.equal(2322);
-	});
+   });
 
-	it('only checks fully resolved typescript files', async () => {
-		const options = {
-			noImplicitAny: true
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host);
+   it('only checks fully resolved typescript files', async () => {
+      const options = {
+         noImplicitAny: true
+      };
+      host = new CompilerHost(options);
+      typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
       host.addFile("declaration.d.ts", "export var a: string = 10;");
 
       await resolver.resolve("declaration.d.ts");
       let diags = typeChecker.check();
       diags.should.have.length(0);
-            
+
       host.addFile("index.ts", '/// <reference path="declaration.d.ts" />');
       await resolver.resolve("index.ts")
-      diags = typeChecker.check(); 
-      diags.should.not.have.length(0);                  
-	});
+      diags = typeChecker.check();
+      diags.should.not.have.length(0);
+   });
 
-	it('handles backslash in references', async () => {
-		const diags = await typecheckAll(backslashReference);
+   it('handles backslash in references', async () => {
+      const diags = await typecheckAll(backslashReference);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
-	});
+   });
 
-	it('loads nested reference files', async () => {
-		const diags = await typecheckAll(nestedReference)
+   it('loads nested reference files', async () => {
+      const diags = await typecheckAll(nestedReference)
       formatErrors(diags, console as any);
       diags.should.have.length(0);
-	});
+   });
 
-	it('catches syntax errors', async () => {
-		const diags = await typecheckAll(syntaxError);
+   it('catches syntax errors', async () => {
+      const diags = await typecheckAll(syntaxError);
       diags.should.have.length(3);
-	});
+   });
 
-	it('catches syntax errors in reference files', async () => {
-		const diags = await typecheckAll(referenceSyntaxError);
+   it('catches syntax errors in reference files', async () => {
+      const diags = await typecheckAll(referenceSyntaxError);
       diags.should.have.length(8);
-	});
+   });
 
-	it('handles ambient references when resolveAmbientRefs option is false', async () => {
-		const diags = await typecheckAll(ambientReferenceDisabled);
+   it('handles ambient references when resolveAmbientRefs option is false', async () => {
+      const diags = await typecheckAll(ambientReferenceDisabled);
       diags.should.have.length(0);
-	});
+   });
 
-	it('resolves ambient references when resolveAmbientRefs option is true', async () => {
-		const options = {
-			resolveAmbientRefs: true
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host);
+   it('resolves ambient references when resolveAmbientRefs option is true', async () => {
+      const options = {
+         resolveAmbientRefs: true
+      };
+      host = new CompilerHost(options);
+      typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
-		const diags = await typecheckAll(ambientReference);
+      const diags = await typecheckAll(ambientReference);
       diags.should.have.length(0);
-	});
+   });
 
-	it('handles ambient javascript imports', async () => {
-		const diags = await typecheckAll(ambientImportJs);
+   it('handles ambient javascript imports', async () => {
+      const diags = await typecheckAll(ambientImportJs);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
-	});
+   });
 
-	it('handles circular references', async () => {
-		const diags = await typecheckAll(circularFile);
+   it('handles circular references', async () => {
+      const diags = await typecheckAll(circularFile);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
-	});
+   });
 
-	it('handles ambient typescript imports', async () => {
-		const options = {
-			resolveAmbientRefs: true
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host);
+   it('handles ambient typescript imports', async () => {
+      const options = {
+         resolveAmbientRefs: true
+      };
+      host = new CompilerHost(options);
+      typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
-		
+
       const diags = await typecheckAll(ambientImportTs);
       diags.should.have.length(0);
-	});
+   });
 
-	it('resolves ambient typescript imports', async () => {
-		const diags = await typecheckAll(ambientResolveTs);
+   it('resolves ambient typescript imports', async () => {
+      const diags = await typecheckAll(ambientResolveTs);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
-	});
+   });
 
-	it('handles ambients with subset names', async () => {
-		const options = {
-			resolveAmbientRefs: true
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host);
+   it('handles ambients with subset names', async () => {
+      const options = {
+         resolveAmbientRefs: true
+      };
+      host = new CompilerHost(options);
+      typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
-		const diags = await typecheckAll(ambientDuplicate);
+      const diags = await typecheckAll(ambientDuplicate);
       diags.should.have.length(0);
-	});
+   });
 
-	it('handles ambients with internal requires', async () => {
-		const diags = await typecheckAll(ambientRequires);
+   it('handles ambients with internal requires', async () => {
+      const diags = await typecheckAll(ambientRequires);
       diags.should.have.length(0);
-	});
+   });
 
-	it('handles external imports', async () => {
-		const diags = await typecheckAll(externalEntry);
+   it('handles external imports', async () => {
+      const diags = await typecheckAll(externalEntry);
       diags.should.have.length(0);
-	});
+   });
 
-	it('imports .css files', async () => {
-		const diags = await typecheckAll(importCss);
+   it('imports .css files', async () => {
+      const diags = await typecheckAll(importCss);
       diags.should.have.length(0);
-	});
+   });
 
-	it('imports .html files', async () => {
-		const diags = await typecheckAll(importHtml);
+   it('imports .html files', async () => {
+      const diags = await typecheckAll(importHtml);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
-	});
+   });
 
-	it('loads lib.d.ts', async () => {
-		const options = {
-         targetLib: "es5"			
-		};
-		host = new CompilerHost(options);
-		typeChecker = new TypeChecker(host);
+   it('loads lib.d.ts', async () => {
+      const options = {
+         targetLib: "es5"
+      };
+      host = new CompilerHost(options);
+      typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
-		
-		const diags = await typecheckAll(noImports);
+
+      const diags = await typecheckAll(noImports);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
-	});   
+   });
 
    it('resolve typings files when typings meta is present', async () => {
       const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2.js');
@@ -286,30 +286,30 @@ describe('TypeChecker', () => {
       metadata[jsfile] = {
          typings: true
       };
-		
+
       const diags = await typecheckAll(angular2Typings);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
-	});
+   });
 
    it('doesnt resolve typings files when typings meta not present', async () => {
       metadata = {};
 
-		const diags = await typecheckAll(angular2Typings);
+      const diags = await typecheckAll(angular2Typings);
       //formatErrors(diags, console as any);
       diags.should.have.length(1);
       diags[0].code.should.be.equal(2307);
-	});
+   });
 
-	it('resolves typings when typings is non-relative path', async () => {
+   it('resolves typings when typings is non-relative path', async () => {
       const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs.js');
       metadata = {};
       metadata[jsfile] = {
-         typings: "Rx.d.ts"  
+         typings: "Rx.d.ts"
       };
 
-		const diags = await typecheckAll(rxjsTypings);
+      const diags = await typecheckAll(rxjsTypings);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
-	});
+   });
 });

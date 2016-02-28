@@ -17,8 +17,8 @@ const trailingComma = fs.readFileSync(require.resolve('./fixtures-es6/es3/traili
 describe('Transpiler', () => {
 
    function transpile(sourceName, source, host?) {
-      host = host || new CompilerHost({}); 
-	   const transpiler = new Transpiler(host);
+      host = host || new CompilerHost({});
+      const transpiler = new Transpiler(host);
       host.addFile(sourceName, source);
       return transpiler.transpile(sourceName);
    }

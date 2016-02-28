@@ -15,15 +15,15 @@ let factory = undefined;
  * load.source: the fetched source
  */
 export function translate(load: Module): Promise<string> {
-	logger.debug(`systemjs translating ${load.address}`);
+   logger.debug(`systemjs translating ${load.address}`);
 
    factory = factory || createFactory(System.typescriptOptions, this.builder, _resolve, _fetch, _lookup)
       .then((output) => {
          validateOptions(output.host.options);
          return output;
       });
-   
-	return factory.then(({transpiler, resolver, typeChecker, host}) => {            
+
+   return factory.then(({transpiler, resolver, typeChecker, host}) => {
       host.addFile(load.address, load.source);
 
       // transpile
@@ -38,14 +38,14 @@ export function translate(load: Module): Promise<string> {
             throw new Error("TypeScript transpilation failed");
 
          load.source = result.js;
-         
+
          if (result.sourceMap)
             load.metadata.sourceMap = JSON.parse(result.sourceMap);
-         
+
          if (host.options.module === ts.ModuleKind.System)
             load.metadata.format = 'register';
          else if (host.options.module === ts.ModuleKind.ES6)
-            load.metadata.format = 'esm';			
+            load.metadata.format = 'esm';
          else if (host.options.module === ts.ModuleKind.CommonJS)
             load.metadata.format = 'cjs';
       }
@@ -65,24 +65,24 @@ export function translate(load: Module): Promise<string> {
                      System.import(d + "!" + __moduleName)
                         .catch(err => { throw err });
                   });
-                  
+
                return load.source;
             });
       }
       else {
-         return load.source;                  
+         return load.source;
       }
    });
 }
 
 export function bundle() {
    if (!factory) return [];
-   
+
    return factory.then(({typeChecker, host}) => {
-      
+
       if (host.options.typeCheck) {
          const errors = typeChecker.forceCheck();
-         
+
          if (errors.length > 0) {
             formatErrors(errors, logger);
 
@@ -90,14 +90,14 @@ export function bundle() {
                throw new Error("Typescript compilation failed");
          }
       }
-                     
+
       return [];
    });
 }
 
 function validateOptions(options) {
    /* The only time you don't want to output in system format is when you are using babel 
-      downstream to compile es6 output (e.g. for async/await support) */      
+      downstream to compile es6 output (e.g. for async/await support) */
    if ((options.module != ts.ModuleKind.System) && (options.module != ts.ModuleKind.ES6)) {
       logger.warn(`transpiling to ${ts.ModuleKind[options.module]}, consider setting module: "system" in typescriptOptions to transpile directly to System.register format`);
    }
@@ -107,26 +107,26 @@ function validateOptions(options) {
  * called by the factory/resolver when it needs to resolve a file
  */
 function _resolve(dep: string, parent: string): Promise<string> {
-	if (!parent) parent = __moduleName;
+   if (!parent) parent = __moduleName;
 
-	return System.normalize(dep, parent)
-		.then(normalized => {
-			normalized = stripDoubleExtension(normalized);
+   return System.normalize(dep, parent)
+      .then(normalized => {
+         normalized = stripDoubleExtension(normalized);
 
-			logger.debug(`resolved ${normalized} (${parent} -> ${dep})`);
+         logger.debug(`resolved ${normalized} (${parent} -> ${dep})`);
          return (ts as any).normalizePath(normalized);
-		});
+      });
 }
 
 /*
  * called by the factory/resolver when it needs to fetch a file
  */
 function _fetch(address: string): Promise<string> {
-	return System.fetch({ name: address, address, metadata: {} })
-		.then(text => {
-			logger.debug(`fetched ${address}`);
-			return text;
-		});
+   return System.fetch({ name: address, address, metadata: {} })
+      .then(text => {
+         logger.debug(`fetched ${address}`);
+         return text;
+      });
 }
 
 /*
@@ -138,7 +138,7 @@ function _lookup(address: string): Promise<any> {
       .then(() => {
          // metadata.typings, metadata.typescriptOptions etc should all now be populated correctly,
          // respecting the composition of all global metadata, wildcard metadata and package metadata correctly
-         logger.debug(`located ${address}`);  
+         logger.debug(`located ${address}`);
          return metadata;
       });
 }

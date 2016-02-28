@@ -20,8 +20,8 @@ declare var System: SystemJS;
 declare var __moduleName: string;
 
 declare type ResolveFunction = (dep: string, parent?: string) => Promise<string>;
-declare type FetchFunction = (address: string) => Promise<string>;
 declare type LookupFunction = (address: string) => Promise<any>;
+declare type FetchFunction = (address: string) => Promise<string>;
 
 interface PluginOptions {
    tsconfig?: boolean | string;

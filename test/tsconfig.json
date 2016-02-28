@@ -1,13 +1,19 @@
 {
-	"compilerOptions": {
-		"module": "commonjs",
-		"target": "es6",
-		"noLib": true,
-		"moduleResolution": "node"
-	},
-	"files": [
-		"../node_modules/typescript/lib/lib.es6.d.ts",
-		"../src/types.d.ts",
-		"../typings/tsd.d.ts"
-	]
+   "compilerOptions": {
+      "module": "commonjs",
+      "target": "es6",
+      "noLib": true,
+      "moduleResolution": "node"
+   },
+   "files": [      
+      "../node_modules/typescript/lib/lib.es6.d.ts",
+      "../src/types.d.ts",
+      "../typings/tsd.d.ts",
+      "./compiler-host-spec.ts",
+      "./factory-spec.ts",
+      "./resolver-spec.ts",
+      "./transpiler-spec.ts",
+      "./type-checker-spec.ts",
+      "./utils-spec.ts"
+   ]
 }
