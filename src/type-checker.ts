@@ -45,26 +45,12 @@ export class TypeChecker {
    }
 
 	/*
-		throws if there are compiler errors or unresolved files
+		type-checks any unchecked files even if all dependencies have not been loaded
 	*/
    public forceCheck(): ts.Diagnostic[] {
-      const files = this._host.getAllFiles()
-         .filter(file => file.fileName != __HTML_MODULE__);
-      const unchecked = files.filter(file => !file.checked);
-      const errored = files.filter(file => file.checked && hasError(file.errors));
-
-      if ((errored.length > 0) || (unchecked.length > 0)) {
-         return [{
-            file: undefined,
-            start: undefined,
-            length: undefined,
-            code: 9999,
-            category: ts.DiagnosticCategory.Error,
-            messageText: `compilation failed [${files.length} files, ${errored.length} failed, ${unchecked.length} unchecked]`
-         }];
-      }
-
-      return [];
+      const candidates = this.getCandidates();
+      candidates.forEach(candidate => candidate.checkable = true);
+      return this.getAllDiagnostics(candidates);
    }
 
    private getCandidates() {

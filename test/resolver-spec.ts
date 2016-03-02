@@ -197,5 +197,4 @@ describe('Resolver', () => {
       deps.list.should.have.length(1);
       deps.list[0].should.equal(expected);
    });
-
 });

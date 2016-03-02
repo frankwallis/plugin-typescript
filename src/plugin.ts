@@ -63,7 +63,10 @@ export function translate(load: Module): Promise<string> {
                   .filter(isTypescriptDeclaration)
                   .forEach(d => {
                      System.import(d + "!" + __moduleName)
-                        .catch(err => { throw err });
+                        .catch(err => { 
+                           logger.error(err);
+                           throw err;
+                        });
                   });
 
                return load.source;

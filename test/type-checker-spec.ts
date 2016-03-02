@@ -165,6 +165,34 @@ describe('TypeChecker', () => {
       diags.should.not.have.length(0);
    });
 
+   it('forceChecks files even if dependencies have not been loaded', async () => {
+      const options = {
+         noImplicitAny: true
+      };
+      host = new CompilerHost(options);
+      typeChecker = new TypeChecker(host);
+      resolver = new Resolver(host, resolve, lookup);
+      
+      const libName = (ts as any).normalizePath(require.resolve(host.getDefaultLibFileName()));
+      resolver.registerDeclarationFile(libName);
+      host.addFile(libName, fs.readFileSync(libName, 'utf8'));
+
+      // should pass normal check and fail forceCheck      
+      host.addFile("index.ts", '/// <reference path="declaration.d.ts" />\n import a from "amodule"; export = a;');
+      await resolver.resolve("index.ts")
+      let diags = typeChecker.check();
+      diags.should.have.length(0);      
+      diags = typeChecker.forceCheck();
+      diags.should.not.have.length(0);
+      
+      // now passes forceCheck
+      host.addFile("declaration.d.ts", "declare module 'amodule' { export var a: number; }");
+      await resolver.resolve("declaration.d.ts");
+      diags = typeChecker.forceCheck();
+      formatErrors(diags, console as any);
+      diags.should.have.length(0);            
+   });
+
    it('handles backslash in references', async () => {
       const diags = await typecheckAll(backslashReference);
       formatErrors(diags, console as any);
