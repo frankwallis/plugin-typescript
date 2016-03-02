@@ -43,7 +43,7 @@ SystemJS.config({
     "string_decoder": "github:jspm/nodelibs-string_decoder@0.2.0-alpha",
     "systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@0.5.6",
     "text": "github:systemjs/plugin-text@0.0.2",
-    "ts": "github:frankwallis/plugin-typescript@4.0.1",
+    "ts": "github:frankwallis/plugin-typescript@4.0.2",
     "tty": "github:jspm/nodelibs-tty@0.2.0-alpha",
     "url": "github:jspm/nodelibs-url@0.2.0-alpha",
     "util": "github:jspm/nodelibs-util@0.2.0-alpha",
@@ -88,7 +88,7 @@ SystemJS.config({
         "weakee": "npm:weakee@1.0.0"
       }
     },
-    "github:frankwallis/plugin-typescript@4.0.1": {
+    "github:frankwallis/plugin-typescript@4.0.2": {
       "map": {
         "typescript": "npm:typescript@1.8.2"
       }
