@@ -309,7 +309,9 @@ describe('TypeChecker', () => {
    });
 
    it('resolve typings files when typings meta is present', async () => {
-      const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2.js');
+      let jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2.js');
+      jsfile = (ts as any).normalizePath(jsfile);
+      
       metadata = {};
       metadata[jsfile] = {
          typings: true
@@ -330,7 +332,9 @@ describe('TypeChecker', () => {
    });
 
    it('resolves typings when typings is non-relative path', async () => {
-      const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs.js');
+      let  jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs.js');
+      jsfile = (ts as any).normalizePath(jsfile);
+      
       metadata = {};
       metadata[jsfile] = {
          typings: "Rx.d.ts"
