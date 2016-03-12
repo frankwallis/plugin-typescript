@@ -1,6 +1,7 @@
-var jspm = require("jspm");
+var Builder = require('jspm').Builder;
+var builder = new Builder();
 
-jspm.build("src", "build/build.js")
+builder.buildStatic("src", "build/build.js")
    .then(function() {
       console.log('Build complete, go to http://127.0.0.1:8080/index-bundle.html');
    })

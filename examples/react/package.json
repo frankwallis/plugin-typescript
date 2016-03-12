@@ -40,7 +40,7 @@
           "test.js"
         ]
       },
-      "npm:typescript@1.8.2": {
+      "npm:typescript@1.8.7": {
         "browser": {},
         "map": {
           "buffer": "@empty",
