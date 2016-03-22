@@ -1,12 +1,10 @@
-import {Component, View, ChangeDetectionStrategy} from 'angular2/core';
+import {Component} from 'angular2/core';
 import {CalculatorStore, CalculatorState} from "./calculator-store";
 import calculatorTemplate from "./calculator-view.html";
 
 @Component({
    selector: 'calculator-component',
-   viewBindings: [CalculatorStore]
-})
-@View({
+   viewBindings: [CalculatorStore],
    template: calculatorTemplate,
    directives: []
 })
@@ -15,6 +13,7 @@ export class CalculatorComponent {
    constructor(private calculatorStore: CalculatorStore) {
       console.log('constructing CalculatorComponent');
       this.clear();
+      var [x, y] = [1, 2];
    }
 
    private state: CalculatorState;

@@ -38,7 +38,7 @@ SystemJS.config({
           "typings": true
         }
       }
-    }
+    }    
   }
 });
 
@@ -49,7 +49,7 @@ SystemJS.config({
     "github:*/*.json"
   ],
   map: {
-    "angular2": "npm:angular2@2.0.0-beta.9",
+    "angular2": "npm:angular2@2.0.0-beta.11",
     "assert": "github:jspm/nodelibs-assert@0.2.0-alpha",
     "buffer": "github:jspm/nodelibs-buffer@0.2.0-alpha",
     "child_process": "github:jspm/nodelibs-child_process@0.2.0-alpha",
@@ -81,7 +81,7 @@ SystemJS.config({
     "url": "github:jspm/nodelibs-url@0.2.0-alpha",
     "util": "github:jspm/nodelibs-util@0.2.0-alpha",
     "vm": "github:jspm/nodelibs-vm@0.2.0-alpha",
-    "zone.js": "npm:zone.js@0.5.15"
+    "zone.js": "npm:zone.js@0.6.5"
   },
   packages: {
     "github:capaj/systemjs-hot-reloader@0.5.6": {
@@ -93,7 +93,7 @@ SystemJS.config({
     },
     "github:frankwallis/plugin-typescript@4.0.2": {
       "map": {
-        "typescript": "npm:typescript@1.8.7"
+        "typescript": "npm:typescript@1.8.9"
       }
     },
     "github:jspm/nodelibs-buffer@0.2.0-alpha": {
@@ -300,11 +300,11 @@ SystemJS.config({
         "randombytes": "npm:randombytes@2.0.3"
       }
     },
-    "npm:readable-stream@2.0.5": {
+    "npm:readable-stream@2.0.6": {
       "map": {
         "core-util-is": "npm:core-util-is@1.0.2",
         "inherits": "npm:inherits@2.0.1",
-        "isarray": "npm:isarray@0.0.1",
+        "isarray": "npm:isarray@1.0.0",
         "process-nextick-args": "npm:process-nextick-args@1.0.6",
         "string_decoder": "npm:string_decoder@0.10.31",
         "util-deprecate": "npm:util-deprecate@1.0.2"
@@ -323,7 +323,7 @@ SystemJS.config({
     "npm:stream-browserify@2.0.1": {
       "map": {
         "inherits": "npm:inherits@2.0.1",
-        "readable-stream": "npm:readable-stream@2.0.5"
+        "readable-stream": "npm:readable-stream@2.0.6"
       }
     },
     "npm:stream-http@2.2.0": {
@@ -340,9 +340,11 @@ SystemJS.config({
         "querystring": "npm:querystring@0.2.0"
       }
     },
-    "npm:zone.js@0.5.15": {
-      "map": {
-        "es6-promise": "npm:es6-promise@3.1.2"
+    "npm:angular2@2.0.0-beta.11": {
+      "meta": {
+        "*.js": {
+          "typings": true
+        }
       }
     }
   }

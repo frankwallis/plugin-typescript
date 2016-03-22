@@ -3,7 +3,7 @@ SystemJS.config({
   typescriptOptions: {
     "module": "system",
     "noImplicitAny": false,
-    "typeCheck": true,
+    "typeCheck": "strict",
     "tsconfig": true
   },
   packages: {
