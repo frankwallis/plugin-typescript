@@ -359,4 +359,18 @@ describe('TypeChecker', () => {
       formatErrors(diags, console as any);
       diags.should.have.length(0);
    });
+   
+   it('hasErrors returns true when errors are present', async () => {
+      const diags = await typecheckAll(syntaxError);
+      diags.should.have.length(3);
+      typeChecker.hasErrors().should.be.true;
+   });
+
+   it('hasErrors returns false when errors are not present', async () => {
+      const diags = await typecheckAll(noImports);
+      formatErrors(diags, console as any);
+      diags.should.have.length(0);
+      typeChecker.hasErrors().should.be.false;
+   });
+
 });

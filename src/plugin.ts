@@ -85,13 +85,10 @@ export function bundle() {
 
       if (host.options.typeCheck) {
          const errors = typeChecker.forceCheck();
+         formatErrors(errors, logger);
 
-         if (errors.length > 0) {
-            formatErrors(errors, logger);
-
-            if (host.options.typeCheck === "strict")
-               throw new Error("Typescript compilation failed");
-         }
+         if ((host.options.typeCheck === "strict") && typeChecker.hasErrors())
+            throw new Error("Typescript compilation failed");
       }
 
       return [];

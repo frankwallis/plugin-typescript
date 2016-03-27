@@ -20,7 +20,7 @@
       "css": "frankwallis/plugin-css@master",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.2",
-      "ts": "frankwallis/plugin-typescript@^4.0.4"
+      "ts": "frankwallis/plugin-typescript@^4.0.5"
     },
     "peerDependencies": {
       "assert": "jspm/nodelibs-assert@^0.2.0-alpha",

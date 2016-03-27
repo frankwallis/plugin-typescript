@@ -53,6 +53,12 @@ export class TypeChecker {
       return this.getAllDiagnostics(candidates);
    }
 
+   public hasErrors(): boolean {
+      return this._host.getAllFiles()
+         .filter(file => file.fileName != __HTML_MODULE__)
+         .some(file => file.checked && hasError(file.errors));
+   }
+
    private getCandidates() {
       const candidates = this._host.getAllFiles()
          .filter(file => file.fileName != __HTML_MODULE__)
