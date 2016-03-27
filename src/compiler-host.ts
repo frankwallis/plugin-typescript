@@ -55,7 +55,11 @@ export class CompilerHost implements ts.CompilerHost {
       // support for importing html templates until
       // https://github.com/Microsoft/TypeScript/issues/2709#issuecomment-91968950 gets implemented
       // note - this only affects type-checking, not runtime!
-      const file = this.addFile(__HTML_MODULE__, "var __html__: string = ''; export default __html__; export = __html__;");
+      let source = "var __html__: string = ''; export default __html__;";
+      if (this._options.module != ts.ModuleKind.ES6)
+         source = source + "export = __html__;";
+         
+      const file = this.addFile(__HTML_MODULE__, source);
       file.dependencies = { list: [], mappings: {} };
       file.checked = true;
       file.errors = [];

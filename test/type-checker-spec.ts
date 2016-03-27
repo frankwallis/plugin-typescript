@@ -32,6 +32,7 @@ const externalEntry = require.resolve('./fixtures-es6/external/entry.ts');
 const circularFile = require.resolve('./fixtures-es6/circular/circular.ts');
 const importCss = require.resolve('./fixtures-es6/css/import-css.ts');
 const importHtml = require.resolve('./fixtures-es6/html/import-html.ts');
+const importHtmlCjs = require.resolve('./fixtures-es6/html/import-html-cjs.ts');
 const angular2Typings = require.resolve('./fixtures-es6/typings/angular2-typings.ts');
 const rxjsTypings = require.resolve('./fixtures-es6/typings/rxjs-typings.ts');
 const missingTypings = require.resolve('./fixtures-es6/typings/missing-typings.ts');
@@ -290,6 +291,20 @@ describe('TypeChecker', () => {
    });
 
    it('imports .html files', async () => {
+      const diags = await typecheckAll(importHtmlCjs);
+      formatErrors(diags, console as any);
+      diags.should.have.length(0);
+   });
+
+   it('imports es6 .html files', async () => {
+      const options = {
+         supportHtmlImports: true,
+         module: "es6"
+      };
+      host = new CompilerHost(options);
+      typeChecker = new TypeChecker(host);
+      resolver = new Resolver(host, resolve, lookup);
+
       const diags = await typecheckAll(importHtml);
       formatErrors(diags, console as any);
       diags.should.have.length(0);
