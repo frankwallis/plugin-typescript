@@ -24,21 +24,7 @@ SystemJS.config({
           "loader": "text"
         }
       }
-    },
-    "npm:angular2@2.0.0-beta.12": {
-      "meta": {
-        "*.js": {
-          "typings": true
-        }
-      }
-    },
-    "npm:rxjs@5.0.0-beta.2": {
-      "meta": {
-        "*.js": {
-          "typings": true
-        }
-      }
-    }    
+    }
   }
 });
 
@@ -76,7 +62,7 @@ SystemJS.config({
     "string_decoder": "github:jspm/nodelibs-string_decoder@0.2.0-alpha",
     "systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@0.5.6",
     "text": "github:systemjs/plugin-text@0.0.2",
-    "ts": "github:frankwallis/plugin-typescript@4.0.2",
+    "ts": "github:frankwallis/plugin-typescript@4.0.4",
     "tty": "github:jspm/nodelibs-tty@0.2.0-alpha",
     "url": "github:jspm/nodelibs-url@0.2.0-alpha",
     "util": "github:jspm/nodelibs-util@0.2.0-alpha",
@@ -84,6 +70,25 @@ SystemJS.config({
     "zone.js": "npm:zone.js@0.6.6"
   },
   packages: {
+    "npm:angular2@2.0.0-beta.12": {
+      "map": {
+        "reflect-metadata": "npm:reflect-metadata@0.1.3",
+        "rxjs": "npm:rxjs@5.0.0-beta.2",
+        "zone.js": "npm:zone.js@0.5.15"
+      },
+      "meta": {
+        "*.js": {
+          "typings": true
+        }
+      }
+    },
+    "npm:rxjs@5.0.0-beta.2": {
+      "meta": {
+        "*.js": {
+          "typings": true
+        }
+      }
+    },
     "github:capaj/systemjs-hot-reloader@0.5.6": {
       "map": {
         "debug": "npm:debug@2.2.0",
@@ -91,7 +96,7 @@ SystemJS.config({
         "weakee": "npm:weakee@1.0.0"
       }
     },
-    "github:frankwallis/plugin-typescript@4.0.2": {
+    "github:frankwallis/plugin-typescript@4.0.4": {
       "map": {
         "typescript": "npm:typescript@1.8.9"
       }

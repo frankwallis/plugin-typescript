@@ -20,7 +20,7 @@
       "css": "frankwallis/plugin-css@master",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.2",
-      "ts": "frankwallis/plugin-typescript@^4.0.0"
+      "ts": "frankwallis/plugin-typescript@^4.0.4"
     },
     "peerDependencies": {
       "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
@@ -47,6 +47,27 @@
       "vm": "jspm/nodelibs-vm@^0.2.0-alpha"
     },
     "overrides": {
+      "npm:angular2@2.0.0-beta.12": {
+        "main": false,
+        "dependencies": {
+          "reflect-metadata": "npm:reflect-metadata@^0.1.3",
+          "rxjs": "npm:rxjs@^5.0.0-beta.2",
+          "zone.js": "npm:zone.js@^0.5.15"
+        },
+        "peerDependencies": {
+          "reflect-metadata": "npm:reflect-metadata@^0.1.3",
+          "rxjs": "npm:rxjs@^5.0.0-beta.2",
+          "zone.js": "npm:zone.js@^0.5.15"
+        },
+        "jspmNodeConversion": false,
+        "meta": {
+          "src/core/util/decorators.js": {
+            "deps": [
+              "reflect-metadata"
+            ]
+          }
+        }
+      },
       "npm:inherits@2.0.1": {
         "ignore": [
           "test.js"
@@ -67,6 +88,21 @@
           "path": "@empty",
           "process": "@empty",
           "readline": "@empty"
+        }
+      },
+      "npm:zone.js@0.5.15": {
+        "main": "dist/zone.js",
+        "directories": {},
+        "jspmNodeConversion": false,
+        "dependencies": {},
+        "meta": {
+          "dist/zone.js": {
+            "exports": [
+              "Zone",
+              "zone"
+            ],
+            "format": "global"
+          }
         }
       }
     }
