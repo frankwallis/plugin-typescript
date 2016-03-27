@@ -27,7 +27,7 @@ export class Resolver {
    }
 
 	/*
-		returns a promise to an array of typescript errors for this file
+		returns a promise to he dependency information for this file
 	*/
    public resolve(sourceName: string): Promise<DependencyInfo> {
       const file = this._host.getSourceFile(sourceName);
@@ -60,6 +60,7 @@ export class Resolver {
 
 	/*
 		register declaration files from config
+      these will be included as dependencies for every file
 	*/
    public registerDeclarationFile(sourceName: string) {
       this._declarationFiles.push(sourceName);
@@ -67,7 +68,7 @@ export class Resolver {
 	
 	/*
 		process the source to get its dependencies and resolve and register them
-		returns a promise to the list of registered dependency files
+		returns a promise to a map of import/reference name  -> resolved file
 	*/
    private resolveDependencies(sourceName: string, info: ts.PreProcessedFileInfo): Promise<{ [s: string]: string; }> {
       /* build the list of file resolutions */

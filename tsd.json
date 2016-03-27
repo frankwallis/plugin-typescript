@@ -16,9 +16,6 @@
     },
     "node/node.d.ts": {
       "commit": "fab683ca77d0286b9d51aba6375deaceb41b22f5"
-    },
-    "bluebird/bluebird.d.ts": {
-      "commit": "fab683ca77d0286b9d51aba6375deaceb41b22f5"
     }
   }
 }

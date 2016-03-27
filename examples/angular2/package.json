@@ -8,10 +8,10 @@
   "jspm": {
     "registry": "github",
     "dependencies": {
-      "angular2": "npm:angular2@2.0.0-beta.11",
+      "angular2": "npm:angular2@2.0.0-beta.12",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0",
       "rxjs": "npm:rxjs@5.0.0-beta.2",
-      "zone.js": "npm:zone.js@^0.6.4"
+      "zone.js": "npm:zone.js@^0.6.6"
     },
     "devDependencies": {
       "plugin-babel": "npm:systemjs-plugin-babel@^0.0.6",

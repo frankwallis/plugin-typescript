@@ -25,7 +25,7 @@ SystemJS.config({
         }
       }
     },
-    "npm:angular2@2.0.0-beta.9": {
+    "npm:angular2@2.0.0-beta.12": {
       "meta": {
         "*.js": {
           "typings": true
@@ -49,7 +49,7 @@ SystemJS.config({
     "github:*/*.json"
   ],
   map: {
-    "angular2": "npm:angular2@2.0.0-beta.11",
+    "angular2": "npm:angular2@2.0.0-beta.12",
     "assert": "github:jspm/nodelibs-assert@0.2.0-alpha",
     "buffer": "github:jspm/nodelibs-buffer@0.2.0-alpha",
     "child_process": "github:jspm/nodelibs-child_process@0.2.0-alpha",
@@ -81,7 +81,7 @@ SystemJS.config({
     "url": "github:jspm/nodelibs-url@0.2.0-alpha",
     "util": "github:jspm/nodelibs-util@0.2.0-alpha",
     "vm": "github:jspm/nodelibs-vm@0.2.0-alpha",
-    "zone.js": "npm:zone.js@0.6.5"
+    "zone.js": "npm:zone.js@0.6.6"
   },
   packages: {
     "github:capaj/systemjs-hot-reloader@0.5.6": {
@@ -338,13 +338,6 @@ SystemJS.config({
       "map": {
         "punycode": "npm:punycode@1.3.2",
         "querystring": "npm:querystring@0.2.0"
-      }
-    },
-    "npm:angular2@2.0.0-beta.11": {
-      "meta": {
-        "*.js": {
-          "typings": true
-        }
       }
     }
   }

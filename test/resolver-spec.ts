@@ -17,28 +17,22 @@ function resolve(dep, parent) {
    //console.log("resolving " + parent + " -> " + dep);
    let result = "";
 
-   try {
-      if (dep[0] === '/')
-         result = dep;
-      else if (dep[0] === '.')
-         result = path.join(path.dirname(parent), dep);
-      else {
-         result = path.join(path.dirname(parent), "resolved", dep);
+   if (dep[0] === '/')
+      result = dep;
+   else if (dep[0] === '.')
+      result = path.join(path.dirname(parent), dep);
+   else {
+      result = path.join(path.dirname(parent), "resolved", dep);
 
-         if ((path.extname(result) === "") || (dep.indexOf('/') < 0))
-            result = result + ".js";
-      }
-
-      if (path.extname(result) === "")
-         result = result + ".ts";
-
-      //console.log("resolved " + parent + " -> " + result);
-      return Promise.resolve(result);
+      if ((path.extname(result) === "") || (dep.indexOf('/') < 0))
+         result = result + ".js";
    }
-   catch (err) {
-      console.error(err);
-      return Promise.reject(err)
-   }
+
+   if (path.extname(result) === "")
+      result = result + ".ts";
+
+   //console.log("resolved " + parent + " -> " + result);
+   return Promise.resolve(result);
 }
 
 describe('Resolver', () => {

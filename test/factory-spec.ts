@@ -15,7 +15,7 @@ const theirModuleFile = require.resolve('./fixtures-es6/tsconfig/theirmodule.d.t
 const defaultLib = require.resolve('typescript/lib/lib.es6.d.ts');
 
 let filelist = [];
-function fetch(filename) {
+function fetch(filename): Promise<any> {
    //console.log("fetching " + filename);
    filelist.push(filename);
    try {
