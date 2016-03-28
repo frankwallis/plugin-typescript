@@ -136,7 +136,7 @@ When compiling in the browser, compiler errors contain a link to the exact locat
 This plugin provides incremental type-checking when using [systemjs-hot-reloader](https://github.com/capaj/systemjs-hot-reloader)
 See any of the example projects for a working hot-reloading setup.
 
-#### Typings Support ####
+#### External Typings Support ####
 
 The plugin will automatically load typings for packages if it knows that they are present. In order tell the plugin that a package contains typings, use SystemJS metadata configuration which can be specified in ```packages``` configuration or in the jspm registry.
 
