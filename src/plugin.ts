@@ -57,10 +57,10 @@ export function translate(load: Module): Promise<string> {
                const diags = typeChecker.check();
                formatErrors(diags, logger);
                   
-               // this makes SystemJS fetch any declaration files 
+               // this makes SystemJS fetch any dependencies 
                // and feed them back through the plugin
                deps.list
-                  .filter(isTypescriptDeclaration)
+                  .filter(isTypescript)
                   .forEach(d => {
                      System.import(d + "!" + __moduleName)
                         .catch(err => { 

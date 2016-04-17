@@ -140,7 +140,7 @@ See any of the example projects for a working hot-reloading setup.
 
 #### External Typings Support ####
 
-The plugin will automatically load typings for packages if it knows that they are present. In order tell the plugin that a package contains typings, use SystemJS metadata configuration which can be specified in ```packages``` configuration or in the jspm registry.
+The plugin will automatically load typings for packages if it knows that they are present. In order tell the plugin that a package exposes external typings, use SystemJS metadata configuration which can be specified in ```packages``` configuration or in the jspm registry.
 
 ```js
   packages: {
@@ -154,7 +154,7 @@ The plugin will automatically load typings for packages if it knows that they ar
   }
 ```
 
-If all js files have typings files typings are present for all js files in the package set ```"typings": true```. If typings are in a single bundled file then specify the path of that file, relative to the root of the project.   
+If external typings are present for all js files in the package set ```"typings": true```. If external typings are in a single bundled file then specify the path of that file, relative to the root of the project.   
 For more information on setting SystemJS metadata, see [here](https://github.com/systemjs/systemjs/blob/master/docs/config-api.md#packages)
 
 #### Type-checking over Multiple Packages ####
