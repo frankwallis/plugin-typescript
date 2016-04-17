@@ -1,5 +1,5 @@
 import "../shims.js";
-import {bootstrap} from 'angular2/bootstrap';
+import {bootstrap} from 'angular2/platform/browser';
 import {Component} from 'angular2/core';
 import {CalculatorComponent} from './calculator-component';
 import "./index.css";

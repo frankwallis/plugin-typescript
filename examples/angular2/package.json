@@ -8,28 +8,15 @@
   "jspm": {
     "registry": "github",
     "dependencies": {
-      "angular2": "npm:angular2@2.0.0-beta.12",
+      "angular2": "npm:angular2@2.0.0-beta.15",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0",
       "rxjs": "npm:rxjs@5.0.0-beta.2",
       "zone.js": "npm:zone.js@^0.6.6"
     },
     "devDependencies": {
-      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.6",
-      "clean-css": "npm:clean-css@^3.4.3",
-      "core-js": "npm:core-js@^1.1.4",
-      "css": "frankwallis/plugin-css@master",
-      "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
-      "text": "systemjs/plugin-text@^0.0.2",
-      "ts": "frankwallis/plugin-typescript@^4.0.5"
-    },
-    "peerDependencies": {
       "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
       "buffer": "jspm/nodelibs-buffer@^0.2.0-alpha",
       "child_process": "jspm/nodelibs-child_process@^0.2.0-alpha",
-      "constants": "jspm/nodelibs-constants@^0.2.0-alpha",
-      "crypto": "jspm/nodelibs-crypto@^0.2.0-alpha",
-      "es6-promise": "npm:es6-promise@^3.0.2",
-      "es6-shim": "npm:es6-shim@^0.33.3",
       "events": "jspm/nodelibs-events@^0.2.0-alpha",
       "fs": "jspm/nodelibs-fs@^0.2.0-alpha",
       "http": "jspm/nodelibs-http@^0.2.0-alpha",
@@ -38,71 +25,86 @@
       "net": "jspm/nodelibs-net@^0.2.0-alpha",
       "os": "jspm/nodelibs-os@^0.2.0-alpha",
       "path": "jspm/nodelibs-path@^0.2.0-alpha",
+      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.6",
+      "clean-css": "npm:clean-css@^3.4.3",
+      "css": "frankwallis/plugin-css@master",
       "process": "jspm/nodelibs-process@^0.2.0-alpha",
       "stream": "jspm/nodelibs-stream@^0.2.0-alpha",
-      "string_decoder": "jspm/nodelibs-string_decoder@^0.2.0-alpha",
+      "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
+      "text": "systemjs/plugin-text@^0.0.2",
+      "ts": "frankwallis/plugin-typescript@^4.0.5",
       "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
       "url": "jspm/nodelibs-url@^0.2.0-alpha",
       "util": "jspm/nodelibs-util@^0.2.0-alpha",
       "vm": "jspm/nodelibs-vm@^0.2.0-alpha"
     },
     "overrides": {
-      "npm:angular2@2.0.0-beta.12": {
+      "npm:angular2@2.0.0-beta.15": {
         "main": false,
         "dependencies": {
-          "reflect-metadata": "npm:reflect-metadata@^0.1.3",
+          "reflect-metadata": "npm:reflect-metadata@0.1.2",
           "rxjs": "npm:rxjs@^5.0.0-beta.2",
-          "zone.js": "npm:zone.js@^0.5.15"
+          "zone.js": "npm:zone.js@^0.6.6"
         },
         "peerDependencies": {
-          "reflect-metadata": "npm:reflect-metadata@^0.1.3",
+          "reflect-metadata": "npm:reflect-metadata@0.1.2",
           "rxjs": "npm:rxjs@^5.0.0-beta.2",
-          "zone.js": "npm:zone.js@^0.5.15"
+          "zone.js": "npm:zone.js@^0.6.6"
         },
         "jspmNodeConversion": false,
+        "map": {
+          "crypto": "@empty"
+        },
         "meta": {
-          "src/core/util/decorators.js": {
+          "src/*.js": {
             "deps": [
-              "reflect-metadata"
+              "reflect-metadata",
+              "zone.js"
             ]
           }
         }
+      },
+      "npm:esprima@2.7.2": {
+        "jspmNodeConversion": false
       },
       "npm:inherits@2.0.1": {
         "ignore": [
           "test.js"
         ]
       },
-      "npm:reflect-metadata@0.1.3": {
+      "npm:readable-stream@1.0.34": {
         "map": {
-          "crypto": "@empty"
+          "stream": "stream-browserify/index"
+        },
+        "systemjs": {
+          "main": "readable.js"
+        },
+        "dependencies": {
+          "core-util-is": "~1.0.0",
+          "isarray": "0.0.1",
+          "string_decoder": "~0.10.0",
+          "inherits": "~2.0.1",
+          "stream-browserify": "~1.0.0"
         }
       },
-      "npm:typescript@1.8.9": {
+      "npm:reflect-metadata@0.1.3": {
+        "jspmNodeConversion": false,
+        "map": {
+          "crypto": {
+            "node": "@node/crypto",
+            "default": "@empty"
+          }
+        }
+      },
+      "npm:typescript@1.8.10": {
         "browser": {},
         "map": {
           "buffer": "@empty",
           "child_process": "@empty",
           "fs": "@empty",
-          "os": "@empty",
           "path": "@empty",
           "process": "@empty",
           "readline": "@empty"
-        }
-      },
-      "npm:zone.js@0.5.15": {
-        "main": "dist/zone.js",
-        "directories": {},
-        "jspmNodeConversion": false,
-        "dependencies": {},
-        "meta": {
-          "dist/zone.js": {
-            "exports": [
-              "Zone",
-              "zone"
-            ],
-            "format": "global"
-          }
         }
       }
     }
