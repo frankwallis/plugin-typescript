@@ -62,11 +62,14 @@ export function translate(load: Module): Promise<string> {
                deps.list
                   .filter(isTypescript)
                   .forEach(d => {
-                     System.import(d + "!" + __moduleName)
+                     // prevents typescript modules from being evaluated twice
+                     const name = isTypescriptDeclaration(d) ? d + "!" + __moduleName : d;
+
+                     System.import(name)
                         .catch(err => { 
                            logger.error(err);
                            throw err;
-                        });
+                         });
                   });
 
                return load.source;
