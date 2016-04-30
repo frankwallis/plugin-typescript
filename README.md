@@ -37,7 +37,7 @@ jspm install ts
 
 ## Setup ##
 
-#### Either: make plugin-typescript the default transpiler ####
+#### Optionally: Make plugin-typescript the default transpiler for js and ts files ####
 
 ```js
 System.config({
@@ -50,9 +50,9 @@ System.config({
 });
 ```
 
-This will tell SystemJS to load all modules (.js and .ts) through plugin-typescript.
+This will tell SystemJS to transpile all modules (.js and .ts) using plugin-typescript.
 
-#### Or: target specific files, using ```packages``` configuration ####
+#### Also: For full type-checking add ```packages``` configuration ####
 
 ```js
 System.config({

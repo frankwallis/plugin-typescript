@@ -29,6 +29,7 @@ export function translate(load: Module): Promise<string> {
       // transpile
       if (isTypescriptDeclaration(load.address)) {
          load.source = "";
+         load.metadata.format = 'cjs'; // make sure deps gets handled below.
       }
       else {
          const result = transpiler.transpile(load.address);
@@ -59,19 +60,22 @@ export function translate(load: Module): Promise<string> {
                   
                // this makes SystemJS fetch any dependencies 
                // and feed them back through the plugin
-               deps.list
-                  .filter(isTypescript)
-                  .forEach(d => {
-                     // prevents typescript modules from being evaluated twice
-                     const name = isTypescriptDeclaration(d) ? d + "!" + __moduleName : d;
+               load.metadata.deps = deps.list
+                  .filter(d => isTypescript(d))
+                  .map(d => isTypescriptDeclaration(d) ? d + "!" + __moduleName : d);                    
 
-                     System.import(name)
-                        .catch(err => { 
-                           logger.error(err);
-                           throw err;
-                         });
-                  });
-
+               // this is needed because es6 modules don't support deps until 
+               // https://github.com/systemjs/systemjs/issues/1248 is implemented
+               if ((host.options.module === ts.ModuleKind.ES6) && !isTypescriptDeclaration(load.address)) {
+                  const importSource = deps.list
+                     .filter(d => isTypescript(d))
+                     .map(d => isTypescriptDeclaration(d) ? d + "!" + __moduleName : d)
+                     .map(d => 'import "' + d + '"')
+                     .join(';');
+                        
+                  load.source = load.source + '\n' + importSource;
+               }
+               
                return load.source;
             });
       }
