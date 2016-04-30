@@ -84,7 +84,7 @@ System.config({
     module: "system",
     noImplicitAny: true,
     typeCheck: true,				// also accepts "strict"
-    tsconfig: true               // also accepts a path
+    tsconfig: true                  // also accepts a path
   }
 });
 ```
@@ -121,7 +121,7 @@ will resolve relative to the current directory because of the ```"./"```, but
 ```
 will resolve to ```jspm_packages/npm/angular2@2.0.0/bundles/typings/angular2/angular2.d.ts```
 
-The default value is ```false```. As it is incompatible with other tools (editors etc), **this setting is deprecated** in favour of using ```typings``` as described above.
+The default value is ```false```. As it is incompatible with other tools (editors etc), **this setting is deprecated** in favour of using ```typings``` as described below.
 
 #### supportHtmlImports ####
 When true, the type-checker will automatically resolve any file with a ```.html``` extension to have a default export which is a string. This enables importing of html templates using plugin-text with full type-checking and no errors.  
@@ -168,12 +168,12 @@ To override the version of TypeScript used by the plugin, add an override to the
 ```json
 	"devDependencies": {
 		"css": "systemjs/plugin-css@0.1.10",
-		"ts": "frankwallis/plugin-typescript@^2.2.0"
+		"ts": "frankwallis/plugin-typescript@^4.0.5"
 	},
 	"overrides": {
-		"github:frankwallis/plugin-typescript@2.2.1": {
+		"github:frankwallis/plugin-typescript@4.0.5": {
 	 		"dependencies": {
-	    		"typescript": "npm:typescript@1.8.0-dev.20160208"
+	    		"typescript": "npm:typescript@1.9.0-dev.20160430"
 	  		}
 		}
 	}

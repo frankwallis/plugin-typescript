@@ -13,24 +13,28 @@
     "devDependencies": {
       "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
       "buffer": "jspm/nodelibs-buffer@^0.2.0-alpha",
+      "child_process": "jspm/nodelibs-child_process@^0.2.0-alpha",
       "clean-css": "npm:clean-css@^3.4.3",
       "css": "frankwallis/plugin-css@master",
       "events": "jspm/nodelibs-events@^0.2.0-alpha",
       "fs": "jspm/nodelibs-fs@^0.2.0-alpha",
       "http": "jspm/nodelibs-http@^0.2.0-alpha",
       "https": "jspm/nodelibs-https@^0.2.0-alpha",
+      "module": "jspm/nodelibs-module@^0.2.0-alpha",
+      "net": "jspm/nodelibs-net@^0.2.0-alpha",
       "os": "jspm/nodelibs-os@^0.2.0-alpha",
       "path": "jspm/nodelibs-path@^0.2.0-alpha",
       "process": "jspm/nodelibs-process@^0.2.0-alpha",
       "stream": "jspm/nodelibs-stream@^0.2.0-alpha",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "ts": "frankwallis/plugin-typescript@^4.0.8",
+      "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
       "url": "jspm/nodelibs-url@^0.2.0-alpha",
       "util": "jspm/nodelibs-util@^0.2.0-alpha",
       "vm": "jspm/nodelibs-vm@^0.2.0-alpha"
     },
     "overrides": {
-      "github:angular/bower-angular@1.5.4": {
+      "github:angular/bower-angular@1.5.5": {
         "main": "angular",
         "meta": {
           "angular.js": {
@@ -39,28 +43,10 @@
           }
         }
       },
-      "npm:esprima@2.7.2": {
-        "jspmNodeConversion": false
-      },
       "npm:inherits@2.0.1": {
         "ignore": [
           "test.js"
         ]
-      },
-      "npm:readable-stream@1.0.34": {
-        "map": {
-          "stream": "stream-browserify/index"
-        },
-        "systemjs": {
-          "main": "readable.js"
-        },
-        "dependencies": {
-          "core-util-is": "~1.0.0",
-          "isarray": "0.0.1",
-          "string_decoder": "~0.10.0",
-          "inherits": "~2.0.1",
-          "stream-browserify": "~1.0.0"
-        }
       },
       "npm:typescript@1.8.10": {
         "browser": {},
