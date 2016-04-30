@@ -13,6 +13,9 @@ SystemJS.config({
       "meta": {
         "*.css": {
           "loader": "css"
+        },
+        "*.ts": {
+          "loader": "ts"
         }
       }
     }
@@ -40,7 +43,7 @@ SystemJS.config({
     "process": "github:jspm/nodelibs-process@0.2.0-alpha",
     "stream": "github:jspm/nodelibs-stream@0.2.0-alpha",
     "systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@0.5.7",
-    "ts": "github:frankwallis/plugin-typescript@4.0.6",
+    "ts": "github:frankwallis/plugin-typescript@4.0.8",
     "url": "github:jspm/nodelibs-url@0.2.0-alpha",
     "util": "github:jspm/nodelibs-util@0.2.0-alpha",
     "vm": "github:jspm/nodelibs-vm@0.2.0-alpha"
@@ -53,7 +56,7 @@ SystemJS.config({
         "weakee": "npm:weakee@1.0.0"
       }
     },
-    "github:frankwallis/plugin-typescript@4.0.6": {
+    "github:frankwallis/plugin-typescript@4.0.8": {
       "map": {
         "typescript": "npm:typescript@1.8.10"
       }

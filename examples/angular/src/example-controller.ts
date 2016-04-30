@@ -1,8 +1,10 @@
+import {IExampleService} from './example-types'
+
 export class ExampleController {
 
 	public static $inject = ['exampleService'];
 
-	constructor(private exampleService: example.IExampleService) {
+	constructor(private exampleService: IExampleService) {
 		console.log('constructing ExampleController');
 		try {
 			console.log('moduleName is ' + __moduleName);

@@ -8,14 +8,13 @@
   "jspm": {
     "registry": "github",
     "dependencies": {
-      "angular2": "npm:angular2@2.0.0-beta.15",
+      "angular2": "npm:angular2@2.0.0-beta.17",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0",
-      "rxjs": "npm:rxjs@5.0.0-beta.2",
-      "zone.js": "npm:zone.js@^0.6.6"
+      "rxjs": "npm:rxjs@5.0.0-beta.6",
+      "zone.js": "npm:zone.js@^0.6.12"
     },
     "devDependencies": {
       "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
-      "events": "jspm/nodelibs-events@^0.2.0-alpha",
       "http": "jspm/nodelibs-http@^0.2.0-alpha",
       "https": "jspm/nodelibs-https@^0.2.0-alpha",
       "module": "jspm/nodelibs-module@^0.2.0-alpha",
@@ -28,23 +27,24 @@
       "text": "systemjs/plugin-text@^0.0.2",
       "ts": "frankwallis/plugin-typescript@^4.0.5",
       "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
-      "url": "jspm/nodelibs-url@^0.2.0-alpha",
-      "util": "jspm/nodelibs-util@^0.2.0-alpha"
+      "url": "jspm/nodelibs-url@^0.2.0-alpha"
     },
     "peerDependencies": {
       "buffer": "jspm/nodelibs-buffer@^0.2.0-alpha",
       "child_process": "jspm/nodelibs-child_process@^0.2.0-alpha",
       "constants": "jspm/nodelibs-constants@^0.2.0-alpha",
       "crypto": "jspm/nodelibs-crypto@^0.2.0-alpha",
+      "events": "jspm/nodelibs-events@^0.2.0-alpha",
       "fs": "jspm/nodelibs-fs@^0.2.0-alpha",
       "path": "jspm/nodelibs-path@^0.2.0-alpha",
       "process": "jspm/nodelibs-process@^0.2.0-alpha",
       "stream": "jspm/nodelibs-stream@^0.2.0-alpha",
       "string_decoder": "jspm/nodelibs-string_decoder@^0.2.0-alpha",
+      "util": "jspm/nodelibs-util@^0.2.0-alpha",
       "vm": "jspm/nodelibs-vm@^0.2.0-alpha"
     },
     "overrides": {
-      "npm:angular2@2.0.0-beta.15": {
+      "npm:angular2@2.0.0-beta.17": {
         "main": false,
         "dependencies": {
           "reflect-metadata": "npm:reflect-metadata@0.1.2",
@@ -69,28 +69,10 @@
           }
         }
       },
-      "npm:esprima@2.7.2": {
-        "jspmNodeConversion": false
-      },
       "npm:inherits@2.0.1": {
         "ignore": [
           "test.js"
         ]
-      },
-      "npm:readable-stream@1.0.34": {
-        "map": {
-          "stream": "stream-browserify/index"
-        },
-        "systemjs": {
-          "main": "readable.js"
-        },
-        "dependencies": {
-          "core-util-is": "~1.0.0",
-          "isarray": "0.0.1",
-          "string_decoder": "~0.10.0",
-          "inherits": "~2.0.1",
-          "stream-browserify": "~1.0.0"
-        }
       },
       "npm:reflect-metadata@0.1.3": {
         "jspmNodeConversion": true,

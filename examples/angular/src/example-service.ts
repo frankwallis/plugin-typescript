@@ -1,4 +1,6 @@
-export class ExampleService implements example.IExampleService {
+import {IExampleService} from './example-types'
+
+export class ExampleService implements IExampleService {
 
 	constructor() {
 		this.cache = new Map<string, string>();

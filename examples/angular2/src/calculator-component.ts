@@ -12,7 +12,10 @@ export class CalculatorComponent {
 
    constructor(private calculatorStore: CalculatorStore) {
       console.log('constructing CalculatorComponent');
-      this.clear();
+      this.state = {
+         total: 0.0,
+         operand: 0.0
+      };
       var [x, y] = [1, 2];
    }
 
