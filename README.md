@@ -3,6 +3,7 @@ plugin-typescript
 TypeScript loader for SystemJS
 
 [![build status](https://secure.travis-ci.org/frankwallis/plugin-typescript.png?branch=master)](http://travis-ci.org/frankwallis/plugin-typescript)
+[![Support](https://supporterhq.com/api/b/6nfr47qjvmqc3inntlc9em5az/plugin-typescript)](https://supporterhq.com/support/6nfr47qjvmqc3inntlc9em5az/plugin-typescript)
 
 ## Overview ##
 
