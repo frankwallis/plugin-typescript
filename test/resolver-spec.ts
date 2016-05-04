@@ -28,9 +28,13 @@ function resolve(dep, parent) {
          result = result + ".js";
    }
 
-   if (path.extname(result) === "")
-      result = result + ".ts";
-
+   if (path.extname(result) === "") {
+      if (result.indexOf("/js/") >= 0)
+         result = result + ".js";
+      else
+         result = result + ".ts";
+   }
+   
    //console.log("resolved " + parent + " -> " + result);
    return Promise.resolve(result);
 }
@@ -141,6 +145,23 @@ describe('Resolver', () => {
       deps.list[0].should.equal(expected);
    });
 
+   it('resolves typings for relative imports when typings is true', async () => {
+      const expected = path.resolve(__dirname, './fixtures-es6/typings/js/relative-import.d.ts');
+      const jsfile = path.resolve(__dirname, './fixtures-es6/typings/js/relative-import.js');
+
+      metadata = {};
+      metadata[jsfile] = {
+         typings: true
+      };
+
+      const source = 'import {bootstrap} from "./js/relative-import";';
+      host.addFile(TYPINGS_NAME, source);
+
+      const deps = await resolver.resolve(TYPINGS_NAME);
+      deps.list.should.have.length(1);
+      deps.mappings["./js/relative-import"].should.equal(expected);
+   });
+
    it('resolves nested typings when typings is true', async () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/router.d.ts');
       const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/router.js');
@@ -175,7 +196,7 @@ describe('Resolver', () => {
       deps.mappings["zone.js"].should.equal(expected);
    });
 
-   it('resolves typings when typings is non-relative path', async () => {
+   it('resolves typings when typings meta is non-relative path', async () => {
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/Rx.d.ts');
       const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs.js');
 

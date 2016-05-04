@@ -5,8 +5,7 @@ import {CompilerHost} from './compiler-host';
 import {
    isTypescript, isTypescriptDeclaration,
    isJavaScript, isRelative,
-   isAmbient, isAbsolute,
-   jsToDts
+   isAmbient, jsToDts
 } from './utils';
 
 const logger = new Logger({ debug: false });
@@ -105,7 +104,7 @@ export class Resolver {
 
       return this._resolve(importName, sourceName)
          .then(address => {
-            if (!isAbsolute(importName) && isJavaScript(address)) {
+            if (isJavaScript(address)) {
                return this.lookupTyping(importName, sourceName, address)
                   .then(typingAddress => {
                      return typingAddress ? typingAddress : address;
