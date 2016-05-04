@@ -42,7 +42,7 @@ export class Resolver {
                const deps = Object.keys(mappings)
                   .map((key) => mappings[key])
                   .filter((res) => isTypescript(res)) // ignore e.g. js, css files
-					
+
                /* add the fixed declaration files */
                const refs = this._declarationFiles.filter(decl => {
                   return (decl != sourceName) && (deps.indexOf(decl) < 0);
@@ -65,7 +65,7 @@ export class Resolver {
    public registerDeclarationFile(sourceName: string) {
       this._declarationFiles.push(sourceName);
    }
-	
+
 	/*
 		process the source to get its dependencies and resolve and register them
 		returns a promise to a map of import/reference name  -> resolved file
