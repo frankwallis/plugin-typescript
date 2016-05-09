@@ -78,8 +78,16 @@ export class Resolver {
       const resolvedImports = info.importedFiles
          .map((imp) => this.resolveImport(imp.fileName, sourceName));
 
-      const refs = [].concat(info.referencedFiles).concat(info.importedFiles).map(pre => pre.fileName);
-      const deps = resolvedReferences.concat(resolvedImports);
+      const resolvedExternals = info.ambientExternalModules && info.ambientExternalModules
+         .map((ext) => this.resolveImport(ext, sourceName));
+
+      const refs = []
+			.concat(info.referencedFiles)
+			.concat(info.importedFiles)
+			.map(pre => pre.fileName)
+			.concat(info.ambientExternalModules);
+
+      const deps = resolvedReferences.concat(resolvedImports).concat(resolvedExternals);
 
       /* and convert to promise to a map of local reference to resolved dependency */
       return Promise.all(deps)

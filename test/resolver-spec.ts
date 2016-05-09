@@ -34,7 +34,7 @@ function resolve(dep, parent) {
       else
          result = result + ".ts";
    }
-   
+
    //console.log("resolved " + parent + " -> " + result);
    return Promise.resolve(result);
 }
@@ -128,6 +128,17 @@ describe('Resolver', () => {
       deps.list[0].should.equal(expected);
    });
 
+   it('resolves ambient external modules', async () => {
+      const source = 'declare module "../../Observable" { interface a {} }';
+      const sourceName = path.resolve(__dirname, './fixtures-es6/resolved/rxjs/add/operator/do.d.ts');
+      const expected = path.resolve(__dirname, './fixtures-es6/resolved/rxjs/Observable.d.ts');
+      host.addFile(sourceName, source);
+
+      const deps = await resolver.resolve(sourceName);
+      deps.list.should.have.length(1);
+      deps.list[0].should.equal(expected);
+   });
+
    it('resolves typings files when typings is true', async () => {
       const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2.js');
       const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2.d.ts');
@@ -212,4 +223,5 @@ describe('Resolver', () => {
       deps.list.should.have.length(1);
       deps.list[0].should.equal(expected);
    });
+
 });
