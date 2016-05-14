@@ -24,7 +24,8 @@
 				console.log(JSON.stringify(System.typescriptOptions));
 			})
 			.catch(function(err) {
-				console.log('Error: ', err.stack);
+				console.log(err);
+				console.log(err.originalErr);
 			});
    </script>
 </head>

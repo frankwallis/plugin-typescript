@@ -22,9 +22,22 @@ Add SystemJS map configuration for plugin-typescript and typescript:
 
 ```js
 SystemJS.config({
+  packages: {
+    "ts": {
+      "main": "plugin.js"
+    },
+    "typescript": {
+      "main": "lib/typescript.js",
+      "meta": {
+        "lib/typescript.js": {
+          "exports": "ts"
+        }
+      }
+    }
+  },
   map: {
-    "ts": "path/to/plugin-typescript/lib/plugin.js",
-    "typescript": "path/to/typescript/lib/typescript.js"
+    "ts": "path/to/plugin-typescript/lib/",
+    "typescript": "path/to/typescript/lib/"
   }
 });
 ```
