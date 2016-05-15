@@ -17,6 +17,7 @@ describe('Builder', () => {
 			transpiler: "plugin",
 			typescriptOptions: {
 				"module": "system",
+				"target": "es5",
 				"noImplicitAny": false,
 				"typeCheck": "strict",
 				"tsconfig": false
@@ -64,6 +65,22 @@ describe('Builder', () => {
       it('brings in elided import files', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions";
+			builder.config(config);
+			return builder.bundle('testsrc')
+				.catch(err => {
+					console.log(err.originalErr);
+					true.should.be.false;
+				})
+				.then(result => {
+					result.should.be.defined;
+				})
+      });
+
+      it('brings in elided import files when outputting to es6', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions";
+			config.typescriptOptions.module = "es6";
+			config.typescriptOptions.target = "es6";
 			builder.config(config);
 			return builder.bundle('testsrc')
 				.catch(err => {

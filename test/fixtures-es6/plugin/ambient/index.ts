@@ -1,3 +1,3 @@
 import a from 'external';
 
-if (a) console.log(a);
+if (!a) console.log(a);

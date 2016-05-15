@@ -15,7 +15,8 @@ let factory = undefined;
  * load.source: the fetched source
  */
 export function translate(load: Module): Promise<string> {
-   console.log(`systemjs translating ${load.address}`);
+	const loader = this;
+   logger.debug(`systemjs translating ${load.address}`);
 
    factory = factory || createFactory(System.typescriptOptions, this.builder, _resolve, _fetch, _lookup)
       .then((output) => {
@@ -51,97 +52,39 @@ export function translate(load: Module): Promise<string> {
             load.metadata.format = 'cjs';
       }
 
-      // type-check?
-      if (host.options.typeCheck && isTypescript(load.address)) {
-         return resolver.resolve(load.address)
-            .then(deps => {
-               const diags = typeChecker.check();
-               formatErrors(diags, logger);
-
-               // this makes SystemJS fetch any dependencies
-               // and feed them back through the plugin
-               load.metadata.deps = deps.list
-                  .filter(d => isTypescript(d))
-                  .map(d => isTypescriptDeclaration(d) ? d + "!" + __moduleName : d);
-
-               // this is needed because es6 modules don't support deps until
-               // https://github.com/systemjs/systemjs/issues/1248 is implemented
-               if ((host.options.module === ts.ModuleKind.ES6) && !isTypescriptDeclaration(load.address)) {
-                  const importSource = deps.list
-                     .filter(d => isTypescript(d))
-                     .map(d => isTypescriptDeclaration(d) ? d + "!" + __moduleName : d)
-                     .map(d => 'import "' + d + '"')
-                     .join(';');
-
-                  load.source = load.source + '\n' + importSource;
-               }
-
-               return load.source;
-            });
-      }
-      else {
-         return load.source;
-      }
+		// builder doesn't call instantiate so type-check now
+		if (loader.builder)
+			return typeCheck(load).then(() => load.source);
+		else
+			return Promise.resolve(load.source);
    });
 }
 
-export function instantiate1(load, systemInstantiate) {
-   return factory.then(({typeChecker, resolver, host}) => {
-      // if (host.options.typeCheck) {
-      //    const errors = typeChecker.forceCheck();
-      //    formatErrors(errors, logger);
-
-      //    if ((host.options.typeCheck === "strict") && typeChecker.hasErrors())
-      //       throw new Error("Typescript compilation failed");
-		// }
-
-		return systemInstantiate(load)
-			.then(() => {
-			//.then(() => resolver.resolve(load.address)
-				resolver.resolve(load.address)
-				.then(deps => Promise.all(deps.list.filter(d => isTypescript(d))))
-				.then(() => {
-					console.log("instantiating " + load.address);
-					if (host.options.typeCheck) {
-						const errors = typeChecker.check();
-						formatErrors(errors, logger);
-
-						if ((host.options.typeCheck === "strict") && typeChecker.hasErrors())
-							throw new Error("Typescript compilation failed");
-					}
-				});
-				//return load;
-			});
-	});
-}
-
-var current = null;
-export function instantiate4(load, systemInstantiate) {
-   return factory.then(({typeChecker, resolver, host}) => {
-		return systemInstantiate(load)
-			.then((entry) => {
-				if (current === null) {
-					current = {
-						deps: entry.deps,
-						execute: function() {
-							console.log('here');
-					if (host.options.typeCheck) {
-						const errors = typeChecker.forceCheck();
-						formatErrors(errors, logger);
-
-						if ((host.options.typeCheck === "strict") && typeChecker.hasErrors())
-							throw new Error("Typescript compilation failed");
-					}
-
-							var result = entry.execute.apply(this, arguments);
-							current = null;
-							return result;
-						}
-					}
-					return current;
-				}
+export function instantiate(load, systemInstantiate) {
+	return systemInstantiate(load)
+		.then(entry => {
+			return typeCheck(load).then(() => {
+				entry.deps = entry.deps.concat(load.metadata.deps);
 				return entry;
 			});
+		});
+}
+
+function typeCheck(load: Module): Promise<any> {
+   return factory.then(({typeChecker, resolver, host}) => {
+		if (host.options.typeCheck && isTypescript(load.address)) {
+			return resolver.resolve(load.address)
+				.then(deps => {
+					const errors = typeChecker.check();
+					formatErrors(errors, logger);
+
+					const depslist = deps.list
+						.filter(d => isTypescript(d))
+						.map(d => isTypescriptDeclaration(d) ? d + "!" + __moduleName : d);
+
+					load.metadata.deps = depslist;
+				});
+		}
 	});
 }
 
@@ -149,7 +92,6 @@ export function bundle() {
    if (!factory) return [];
 
    return factory.then(({typeChecker, host}) => {
-
       if (host.options.typeCheck) {
          const errors = typeChecker.forceCheck();
          formatErrors(errors, logger);

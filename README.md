@@ -154,18 +154,18 @@ See any of the example projects for a working hot-reloading setup.
 
 #### External Typings Support ####
 
-The plugin will automatically load typings for packages if it knows that they are present. In order tell the plugin that a package exposes external typings, use SystemJS metadata configuration which can be specified in ```packages``` configuration or in the jspm registry.
+The plugin will automatically load typings for packages if it knows that they are present. In order tell the plugin that a package exposes external typings, use SystemJS metadata configuration which can be specified in ```packages``` configuration or in package.json overrides, or in the jspm registry.
 
 ```js
-  packages: {
-    "angular2": {
-      "meta": {
-        "*.js": {
-          "typings": true     // can also be path of a typings bundle 
+    "overrides": {
+      "npm:@angular/core@2.0.0-rc.1": {
+        "meta": {
+          "*.js": {
+            "typings": true      // can also be path of a typings bundle
+          }
         }
       }
-    }
-  }
+	 }
 ```
 
 If external typings are present for all js files in the package set ```"typings": true```. If external typings are in a single bundled file then specify the path of that file, relative to the root of the project.   
