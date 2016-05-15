@@ -5,7 +5,7 @@ import {createFactory} from './factory';
 import {formatErrors} from './format-errors';
 import {isTypescript, isTypescriptDeclaration, stripDoubleExtension} from './utils';
 
-const logger = new Logger({ debug: !false });
+const logger = new Logger({ debug: false });
 let factory = undefined;
 
 /*
