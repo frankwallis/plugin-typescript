@@ -8,11 +8,14 @@
       "rootDir": ".",
       "baseUrl": ".",
       "paths": {
-         "angular2/*": [
-            "jspm_packages/npm/angular2@2.0.0-beta.12/*"
+         "@angular/core": [
+            "jspm_packages/npm/@angular/core@2.0.0-rc.1"
+         ],
+         "@angular/platform-browser-dynamic": [
+            "jspm_packages/npm/@angular/platform-browser-dynamic@2.0.0-rc.1"
          ],
          "rxjs/*": [
-            "jspm_packages/npm/rxjs@5.0.0-beta.2/*"
+            "jspm_packages/npm/rxjs@5.0.0-beta.6/*"
          ]
       }
    },
