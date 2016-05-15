@@ -89,7 +89,7 @@ describe('Plugin', () => {
 				})
       });
 
-      xit('handles elided files which have exports', () => {
+      it('handles elided files which have exports', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions-exports";
 			System.config(config);
@@ -100,6 +100,37 @@ describe('Plugin', () => {
 				})
 				.then(result => {
 					result.should.be.defined;
+				})
+      });
+
+      it('only executes modules once', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/execute";
+			System.config(config);
+			return System.import('testsrc')
+				.catch(err => {
+					console.log(err.originalErr);
+					true.should.be.false;
+				})
+				.then(result => {
+					result.should.be.defined;
+					result.counter.index.should.equal(1);
+					result.counter.imported.should.equal(1);
+				})
+      });
+
+      it('does not execute elided modules', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/execute";
+			System.config(config);
+			return System.import('testsrc')
+				.catch(err => {
+					console.log(err.originalErr);
+					true.should.be.false;
+				})
+				.then(result => {
+					result.should.be.defined;
+					result.counter.elided.should.equal(0);
 				})
       });
 	});

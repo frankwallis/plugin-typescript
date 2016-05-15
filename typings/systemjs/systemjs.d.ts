@@ -5,19 +5,20 @@
 
 interface ISystem {
 	constructor: any;
-  import(name: string): any;
-  defined: any;
-  amdDefine: () => void;
-  amdRequire: () => void;
-  baseURL: string;
-  paths: { [key: string]: string };
-  meta: { [key: string]: Object };
-  config: any;
-  _nodeRequire: (name: string) => any;
+	import(name: string): any;
+	load(name: string): any;
+	defined: any;
+	amdDefine: () => void;
+	amdRequire: () => void;
+	baseURL: string;
+	paths: { [key: string]: string };
+	meta: { [key: string]: Object };
+	config: any;
+	_nodeRequire: (name: string) => any;
 }
 
 declare var SystemJS: ISystem;
 
 declare module "systemjs" {
-  export = SystemJS;
+	export = SystemJS;
 }
