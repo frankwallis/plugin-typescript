@@ -1,14 +1,14 @@
 import chai = require('chai');
 import * as ts from 'typescript';
-import SystemJS = require('systemjs');
+import {Builder} from 'jspm';
 
 const should = chai.should();
 
-describe('Plugin', () => {
-	let System = null;
+describe('Builder', () => {
+	let builder = null;
 
 	beforeEach(() => {
-		System = new SystemJS.constructor();
+		builder = new Builder('./');
 	})
 
 	function defaultConfig() {
@@ -64,8 +64,8 @@ describe('Plugin', () => {
       it('brings in elided import files', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions";
-			System.config(config);
-			return System.import('testsrc')
+			builder.config(config);
+			return builder.bundle('testsrc')
 				.catch(err => {
 					console.log(err.originalErr);
 					true.should.be.false;
@@ -78,8 +78,8 @@ describe('Plugin', () => {
       it('brings in ambient external typings', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/ambient";
-			System.config(config);
-			return System.import('testsrc')
+			builder.config(config);
+			return builder.bundle('testsrc')
 				.catch(err => {
 					console.log(err.originalErr);
 					true.should.be.false;
@@ -92,55 +92,24 @@ describe('Plugin', () => {
       it('handles elided files which have exports', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions-exports";
-			System.config(config);
-			return System.import('testsrc')
+			builder.config(config);
+			return builder.bundle('testsrc')
 				.catch(err => {
 					console.log(err.originalErr);
 					true.should.be.false;
 				})
 				.then(result => {
 					result.should.be.defined;
-				})
-      });
-
-      it('only executes modules once', () => {
-			const config = defaultConfig();
-			config.map["testsrc"] = "test/fixtures-es6/plugin/execute";
-			System.config(config);
-			return System.import('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-					result.counter.index.should.equal(1);
-					result.counter.imported.should.equal(1);
-				})
-      });
-
-      it('does not execute elided modules', () => {
-			const config = defaultConfig();
-			config.map["testsrc"] = "test/fixtures-es6/plugin/execute";
-			System.config(config);
-			return System.import('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-					result.counter.elided.should.equal(0);
 				})
       });
 	});
 
    describe('strict mode', () => {
-      xit('fails build when enabled', () => {
+      it('fails build when enabled', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
-			System.config(config);
-			return System.import('testsrc/fail.ts')
+			builder.config(config);
+			return builder.bundle('testsrc/fail')
 				.catch(err => {
 					console.log(err.originalErr);
 					err.should.be.defined;
@@ -154,8 +123,8 @@ describe('Plugin', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
 			config.typescriptOptions.typeCheck = true as any;
-			System.config(config);
-			return System.import('testsrc/fail.ts')
+			builder.config(config);
+			return builder.bundle('testsrc/fail')
 				.catch(err => {
 					console.log(err.originalErr);
 					true.should.be.false;
@@ -168,8 +137,8 @@ describe('Plugin', () => {
       it('detects missing files', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
-			System.config(config);
-			return System.import('testsrc/missing.ts')
+			builder.config(config);
+			return builder.bundle('testsrc/missing')
 				.catch(err => {
 					console.log(err.originalErr);
 					err.should.be.defined;
@@ -185,8 +154,8 @@ describe('Plugin', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/commonjs";
 			config.typescriptOptions.module = "commonjs";
-			System.config(config);
-			return System.import('testsrc')
+			builder.config(config);
+			return builder.bundle('testsrc')
 				.catch(err => {
 					console.log(err.originalErr);
 					true.should.be.false;
@@ -202,8 +171,8 @@ describe('Plugin', () => {
 			config.packages["testsrc"].main = "index.js";
 			config.packages["testsrc"].defaultExtension = "js";
 			config.typescriptOptions.module = "commonjs";
-			System.config(config);
-			return System.import('testsrc')
+			builder.config(config);
+			return builder.bundle('testsrc')
 				.catch(err => {
 					console.log(err.originalErr);
 					true.should.be.false;

@@ -35,7 +35,7 @@ interface PluginOptions {
    /* private */
    files?: string[];
    tsconfigAddress?: string;
-      
+
    /* reveal some hidden typescript options */
    skipDefaultLibCheck?: boolean;
    suppressOutputPathCheck?: boolean;
@@ -44,7 +44,7 @@ interface PluginOptions {
 declare type DependencyInfo = {
    /* list of all typescript files required to compile this one */
    list: string[];
-   
+
    /* map of imports/references used by this file to their resolved locations.
 		These will include any redirections to a typings file if one is present. */
    mappings: { [s: string]: string; }
@@ -54,4 +54,8 @@ declare module Chai {
    interface Assertion {
       defined: any;
    }
+}
+
+declare module "jspm" {
+	export var Builder: any;
 }
