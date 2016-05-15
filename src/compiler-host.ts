@@ -56,9 +56,9 @@ export class CompilerHost implements ts.CompilerHost {
       // https://github.com/Microsoft/TypeScript/issues/2709#issuecomment-91968950 gets implemented
       // note - this only affects type-checking, not runtime!
       let source = "var __html__: string = ''; export default __html__;";
-      if (this._options.module != ts.ModuleKind.ES6)
+		if ((this._options.target != ts.ScriptTarget.ES6) && (this._options.module != ts.ModuleKind.ES6))
          source = source + "export = __html__;";
-         
+
       const file = this.addFile(__HTML_MODULE__, source);
       file.dependencies = { list: [], mappings: {} };
       file.checked = true;
@@ -168,7 +168,7 @@ export class CompilerHost implements ts.CompilerHost {
             });
       }
    }
-   
+
 	/*
 		Overrides the standard resolution algorithm used by the compiler so that we can use systemjs
 		resolution. Because TypeScript requires synchronous resolution, everything is pre-resolved
