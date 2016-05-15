@@ -17,6 +17,7 @@ describe('Plugin', () => {
 			transpiler: "plugin",
 			typescriptOptions: {
 				"module": "system",
+				"target": "es5",
 				"noImplicitAny": false,
 				"typeCheck": "strict",
 				"tsconfig": false
@@ -73,6 +74,22 @@ describe('Plugin', () => {
 				.then(result => {
 					// elided files are brought in, but this build still passes
 					(result == undefined).should.be.true;
+				})
+      });
+
+      xit('brings in elided import files when outputting to es6', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions";
+			config.typescriptOptions.module = "es6";
+			config.typescriptOptions.target = "es6";
+			System.config(config);
+			return System.import('testsrc')
+				.catch(err => {
+					console.log(err.originalErr);
+					true.should.be.false;
+				})
+				.then(result => {
+					result.should.be.defined;
 				})
       });
 

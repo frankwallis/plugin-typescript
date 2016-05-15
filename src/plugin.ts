@@ -29,15 +29,15 @@ export function translate(load: Module): Promise<string> {
 
       // transpile
       if (isTypescriptDeclaration(load.address)) {
-         load.source = "";
-         load.metadata.format = 'cjs'; // make sure deps gets handled below.
+         load.source = '';
+         load.metadata.format = 'defined'; // make sure deps gets handled below.
       }
       else {
          const result = transpiler.transpile(load.address);
          formatErrors(result.errors, logger);
 
          if (result.failure)
-            throw new Error("TypeScript transpilation failed");
+            throw new Error('TypeScript transpilation failed');
 
          load.source = result.js;
 
@@ -80,9 +80,16 @@ function typeCheck(load: Module): Promise<any> {
 
 					const depslist = deps.list
 						.filter(d => isTypescript(d))
-						.map(d => isTypescriptDeclaration(d) ? d + "!" + __moduleName : d);
+						.map(d => isTypescriptDeclaration(d) ? d + '!' + __moduleName : d);
 
 					load.metadata.deps = depslist;
+
+					// this is needed because es6 modules don't support deps until
+               // https://github.com/systemjs/systemjs/issues/1248 is implemented
+               if ((host.options.module === ts.ModuleKind.ES6) && !isTypescriptDeclaration(load.address)) {
+                  const importSource = depslist.map(d => 'import "' + d + '"').join(';');
+                  load.source = load.source + '\n' + importSource;
+               }
 				});
 		}
 	});
@@ -107,7 +114,7 @@ export function bundle() {
 function validateOptions(options) {
    /* The only time you don't want to output in system format is when you are using babel
       downstream to compile es6 output (e.g. for async/await support) */
-   if ((options.module != ts.ModuleKind.System) && (options.module != ts.ModuleKind.ES6)) {
+   if ((options.module != ts.ModuleKind.System) && (options.target != ts.ScriptTarget.ES6)) {
       logger.warn(`transpiling to ${ts.ModuleKind[options.module]}, consider setting module: "system" in typescriptOptions to transpile directly to System.register format`);
    }
 }
