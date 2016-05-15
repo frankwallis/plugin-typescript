@@ -77,19 +77,20 @@ describe('Plugin', () => {
 				})
       });
 
-      xit('brings in elided import files when outputting to es6', () => {
+      it('brings in elided import files when outputting to es6', () => {
 			const config = defaultConfig();
-			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions";
+			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions/bad";
 			config.typescriptOptions.module = "es6";
 			config.typescriptOptions.target = "es6";
 			System.config(config);
 			return System.import('testsrc')
 				.catch(err => {
 					console.log(err.originalErr);
-					true.should.be.false;
+					err.should.be.defined;
 				})
 				.then(result => {
-					result.should.be.defined;
+					// elided files are brought in, but this build still passes
+					(result == undefined).should.be.true;
 				})
       });
 

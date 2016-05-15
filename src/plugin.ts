@@ -5,7 +5,7 @@ import {createFactory} from './factory';
 import {formatErrors} from './format-errors';
 import {isTypescript, isTypescriptDeclaration, stripDoubleExtension} from './utils';
 
-const logger = new Logger({ debug: false });
+const logger = new Logger({ debug: !false });
 let factory = undefined;
 
 /*
@@ -30,7 +30,7 @@ export function translate(load: Module): Promise<string> {
       // transpile
       if (isTypescriptDeclaration(load.address)) {
          load.source = '';
-         load.metadata.format = 'defined'; // make sure deps gets handled below.
+         load.metadata.format = 'cjs'; // make sure deps gets handled below.
       }
       else {
          const result = transpiler.transpile(load.address);
