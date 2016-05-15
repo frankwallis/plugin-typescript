@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 import {CalculatorStore, CalculatorState} from "./calculator-store";
 import calculatorTemplate from "./calculator-view.html";
 
