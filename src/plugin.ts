@@ -127,6 +127,7 @@ function _resolve(dep: string, parent: string): Promise<string> {
 
    return System.normalize(dep, parent)
       .then(normalized => {
+			normalized = normalized.split('!')[0];
          normalized = stripDoubleExtension(normalized);
 
          logger.debug(`resolved ${normalized} (${parent} -> ${dep})`);
