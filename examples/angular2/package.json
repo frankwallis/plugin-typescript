@@ -12,7 +12,7 @@
       "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.0.0-rc.1",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0",
       "rxjs": "npm:rxjs@5.0.0-beta.6",
-      "zone.js": "npm:zone.js@^0.6.12"
+      "zone.js": "npm:zone.js@^0.6.6"
     },
     "devDependencies": {
       "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
@@ -28,7 +28,8 @@
       "text": "systemjs/plugin-text@^0.0.2",
       "ts": "frankwallis/plugin-typescript@^4.0.5",
       "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
-      "url": "jspm/nodelibs-url@^0.2.0-alpha"
+      "url": "jspm/nodelibs-url@^0.2.0-alpha",
+      "util": "jspm/nodelibs-util@^0.2.0-alpha"
     },
     "peerDependencies": {
       "@angular/common": "npm:@angular/common@2.0.0-rc.1",
@@ -44,21 +45,55 @@
       "process": "jspm/nodelibs-process@^0.2.0-alpha",
       "stream": "jspm/nodelibs-stream@^0.2.0-alpha",
       "string_decoder": "jspm/nodelibs-string_decoder@^0.2.0-alpha",
-      "util": "jspm/nodelibs-util@^0.2.0-alpha",
       "vm": "jspm/nodelibs-vm@^0.2.0-alpha"
     },
     "overrides": {
-      "npm:@angular/core@2.0.0-rc.1": {
+      "npm:@angular/common@2.0.0-rc.1": {
+        "main": "common.umd.js",
         "meta": {
-          "*.js": {
-            "typings": true
+          "src/*.js": {
+            "deps": [
+              "reflect-metadata",
+              "zone.js"
+            ]
+          }
+        }
+      },
+      "npm:@angular/compiler@2.0.0-rc.1": {
+        "main": "compiler.umd.js",
+        "meta": {
+          "src/*.js": {
+            "deps": [
+              "reflect-metadata",
+              "zone.js"
+            ]
+          }
+        }
+      },
+      "npm:@angular/core@2.0.0-rc.1": {
+        "main": "core.umd.js",
+        "meta": {
+          "core.umd.js": {
+            "typings": "core/index.d.ts"
           }
         }
       },
       "npm:@angular/platform-browser-dynamic@2.0.0-rc.1": {
+        "main": "platform-browser-dynamic.umd.js",
         "meta": {
-          "*.js": {
-            "typings": true
+          "platform-browser-dynamic.umd.js": {
+            "typings": "platform-browser-dynamic/index.d.ts"
+          }
+        }
+      },
+      "npm:@angular/platform-browser@2.0.0-rc.1": {
+        "main": "platform-browser.umd.js",
+        "meta": {
+          "src/*.js": {
+            "deps": [
+              "reflect-metadata",
+              "zone.js"
+            ]
           }
         }
       },
@@ -68,7 +103,11 @@
         ]
       },
       "npm:rxjs@5.0.0-beta.6": {
+        "main": "bundles/Rx.js",
         "meta": {
+          "bundles/Rx.js": {
+            "typings": "Rx.d.ts"
+          },
           "*.js": {
             "typings": true
           }
