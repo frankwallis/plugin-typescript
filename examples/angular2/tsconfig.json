@@ -1,23 +1,10 @@
 {
    // N.B. requires typescript@next !!
    "compilerOptions": {
-      "target": "es6",
-      "module": "commonjs",
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "rootDir": ".",
-      "baseUrl": ".",
-      "paths": {
-         "@angular/core": [
-            "jspm_packages/npm/@angular/core@2.0.0-rc.1"
-         ],
-         "@angular/platform-browser-dynamic": [
-            "jspm_packages/npm/@angular/platform-browser-dynamic@2.0.0-rc.1"
-         ],
-         "rxjs/*": [
-            "jspm_packages/npm/rxjs@5.0.0-beta.6/*"
-         ]
-      }
+      "baseUrl": "."
    },
    "files": [
       "./src/index.ts"
