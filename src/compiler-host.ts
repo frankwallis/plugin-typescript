@@ -128,6 +128,10 @@ export class CompilerHost implements ts.CompilerHost {
       return !!this.getSourceFile(fileName);
    }
 
+   public getDirectories(): string[] {
+		throw new Error("Not implemented");
+   }
+
    public addFile(fileName: string, text: string): SourceFile {
       fileName = this.getCanonicalFileName(fileName);
       const file = this._files[fileName];
