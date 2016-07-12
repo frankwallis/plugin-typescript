@@ -83,13 +83,6 @@ function typeCheck(load: Module): Promise<any> {
 						.map(d => isTypescriptDeclaration(d) ? d + '!' + __moduleName : d);
 
 					load.metadata.deps = depslist;
-
-					// this is needed because es6 modules don't support deps until
-               // https://github.com/systemjs/systemjs/issues/1248 is implemented
-               if ((host.options.module === ts.ModuleKind.ES6) && !isTypescriptDeclaration(load.address)) {
-                  const importSource = depslist.map(d => 'import "' + d + '"').join(';');
-                  load.source = load.source + '\n' + importSource;
-               }
 				});
 		}
 	});
