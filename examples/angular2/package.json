@@ -26,7 +26,7 @@
       "css": "frankwallis/plugin-css@master",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.2",
-      "ts": "frankwallis/plugin-typescript@^4.0.5",
+      "ts": "frankwallis/plugin-typescript@^5.0.0",
       "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
       "url": "jspm/nodelibs-url@^0.2.0-alpha",
       "util": "jspm/nodelibs-util@^0.2.0-alpha"
@@ -117,7 +117,7 @@
         "jspmNodeConversion": true,
         "map": {}
       },
-      "npm:typescript@1.8.10": {
+      "npm:typescript@2.0.0": {
         "browser": {},
         "map": {
           "buffer": "@empty",
