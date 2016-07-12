@@ -36,8 +36,9 @@ export class CompilerHost implements ts.CompilerHost {
       this._options.jsx = this.getEnum(this._options.jsx, ts.JsxEmit, ts.JsxEmit.None);
       this._options.allowNonTsExtensions = (this._options.allowNonTsExtensions !== false);
       this._options.skipDefaultLibCheck = (this._options.skipDefaultLibCheck !== false);
-      this._options.supportHtmlImports = (options.supportHtmlImports !== false);
-      this._options.noResolve = true;
+      this._options.supportHtmlImports = (options.supportHtmlImports === true);
+      this._options.resolveAmbientRefs = (options.resolveAmbientRefs === true);
+		this._options.noResolve = true;
 
       // Force module resolution into 'classic' mode, to prevent node module resolution from kicking in
       this._options.moduleResolution = ts.ModuleResolutionKind.Classic;
@@ -63,6 +64,16 @@ export class CompilerHost implements ts.CompilerHost {
       file.dependencies = { list: [], mappings: {} };
       file.checked = true;
       file.errors = [];
+
+		if (this._options.supportHtmlImports) {
+			logger.warn("The 'supportHtmlImports' option is deprecated and will shortly be removed");
+			logger.warn("Please use TypeScript's new 'wildcard declarations' feature instead");
+		}
+
+		if (this._options.resolveAmbientRefs) {
+			logger.warn("The 'resolveAmbientRefs' option is deprecated and will shortly be removed");
+			logger.warn("Please use External Typings support instead");
+		}
    }
 
    private getEnum<T>(enumValue: any, enumType: any, defaultValue: T): T {

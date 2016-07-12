@@ -8,7 +8,7 @@
   "jspm": {
     "registry": "github",
     "dependencies": {
-      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.0.0-rc.1",
+      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.0.0-rc.4",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0"
     },
     "devDependencies": {

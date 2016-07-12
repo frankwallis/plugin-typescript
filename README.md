@@ -9,7 +9,8 @@ TypeScript loader for SystemJS
 
 A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to ```System.import``` TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
 
-plugin-typescript uses TypeScript 1.8.x  
+plugin-typescript uses TypeScript 2.0.0
+For TypeScript 1.8.1 use plugin-typescript 4.0.16
 For TypeScript 1.7.5 and below use plugin-typescript 2.x.x
 
 Starting with JSPM 0.17.0 (currently in beta) this plugin will be the officially supported mechanism for transpiling TypeScript. It provides the ability to type-check files while loading them, which is not currently possible with the built-in SystemJS TypeScript transpiler.
@@ -137,10 +138,6 @@ will resolve to ```jspm_packages/npm/angular2@2.0.0/bundles/typings/angular2/ang
 
 The default value is ```false```. As it is incompatible with other tools (editors etc), **this setting is deprecated** in favour of using ```typings``` as described below.
 
-#### supportHtmlImports ####
-When true, the type-checker will automatically resolve any file with a ```.html``` extension to have a default export which is a string. This enables importing of html templates using plugin-text with full type-checking and no errors.  
-*(this feature will be removed when https://github.com/Microsoft/TypeScript/issues/6615 becomes available)*
-
 ## Features ##
 
 #### Link to source from compiler errors ####
@@ -182,12 +179,12 @@ To override the version of TypeScript used by the plugin, add an override to the
 ```json
 	"devDependencies": {
 		"css": "systemjs/plugin-css@0.1.10",
-		"ts": "frankwallis/plugin-typescript@^4.0.5"
+		"ts": "frankwallis/plugin-typescript@^5.0.1"
 	},
 	"overrides": {
-		"github:frankwallis/plugin-typescript@4.0.5": {
+		"github:frankwallis/plugin-typescript@5.0.1": {
 	 		"dependencies": {
-	    		"typescript": "npm:typescript@1.9.0-dev.20160430"
+	    		"typescript": "npm:typescript@2.1.0-dev.20160730"
 	  		}
 		}
 	}
