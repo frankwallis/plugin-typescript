@@ -9,9 +9,9 @@ TypeScript loader for SystemJS
 
 A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to ```System.import``` TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
 
-plugin-typescript uses TypeScript 2.0.0
-For TypeScript 1.8.1 use plugin-typescript 4.0.16
-For TypeScript 1.7.5 and below use plugin-typescript 2.x.x
+plugin-typescript uses TypeScript 2.0.0  
+For TypeScript 1.8.1 use plugin-typescript 4.0.16  
+For TypeScript 1.7.5 and below use plugin-typescript 2.x.x  
 
 Starting with JSPM 0.17.0 (currently in beta) this plugin will be the officially supported mechanism for transpiling TypeScript. It provides the ability to type-check files while loading them, which is not currently possible with the built-in SystemJS TypeScript transpiler.
 
@@ -121,22 +121,6 @@ Compiler options which do not conflict with those required by plugin-typescript 
 #### targetLib ####
 
 Specify whether to use lib.d.ts ```targetLib: "es5"``` or lib.es6.d.ts ```targetLib: "es6"``` (default) 
-
-#### resolveAmbientRefs ####
-*(deprecated)*
-
-A boolean flag which controls how triple-slash references are resolved. When it is set then SystemJS will be used to resolve reference files, so
-
-```
-/// <reference path="./common/angular.d.ts" />
-```
-will resolve relative to the current directory because of the ```"./"```, but
-```
-/// <reference path="angular2/bundles/typings/angular2/angular2.d.ts" />
-```
-will resolve to ```jspm_packages/npm/angular2@2.0.0/bundles/typings/angular2/angular2.d.ts```
-
-The default value is ```false```. As it is incompatible with other tools (editors etc), **this setting is deprecated** in favour of using ```typings``` as described below.
 
 ## Features ##
 
