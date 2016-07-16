@@ -198,9 +198,15 @@ export class CompilerHost implements ts.CompilerHost {
          }
          else if (dependencies) {
             const resolvedFileName = dependencies.mappings[modName];
-            const isExternalLibraryImport = isTypescriptDeclaration(resolvedFileName);
 
-            return { resolvedFileName, isExternalLibraryImport };
+				if (!resolvedFileName) {
+					logger.warn(containingFile + ' -> ' + modName + ' could not be resolved');
+					return undefined;
+				}
+				else {
+            	const isExternalLibraryImport = isTypescriptDeclaration(resolvedFileName);
+            	return { resolvedFileName, isExternalLibraryImport };
+				}
          }
          else {
             return ts.resolveModuleName(modName, containingFile, this._options, this).resolvedModule;
