@@ -218,6 +218,22 @@ describe('Builder', () => {
 				})
       });
 
+      it('bundles without rollup when outputting commonjs', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
+			config.typescriptOptions.module = "commonjs";
+			builder.config(config);
+			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
+				.catch(err => {
+					console.log(err);
+					true.should.be.false;
+				})
+				.then(result => {
+					//console.log(result.source);
+					result.source.length.should.equal(5242);
+				})
+      });
+
       it('automatically changes module from system -> es6 when building', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";

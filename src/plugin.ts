@@ -29,9 +29,16 @@ export function translate(load: Module): Promise<string> {
 
       // transpile
       if (isTypescriptDeclaration(load.address)) {
-			// rollup support needs null/esm runtime needs ''/cjs
-			load.source = loader.builder ? null : '';
-			load.metadata.format = loader.builder ? 'esm' : 'cjs';
+			// rollup support needs null/esm to strip out the empty modules,
+			// for non-rollup & runtime use ''/cjs
+			if (loader.builder && (host.options.module == ts.ModuleKind.ES6)) {
+				load.source = null;
+				load.metadata.format = 'esm';
+			}
+			else {
+				load.source = '';
+				load.metadata.format = 'cjs';
+			}
       }
       else {
          const result = transpiler.transpile(load.address);
@@ -61,11 +68,13 @@ export function translate(load: Module): Promise<string> {
    });
 }
 
+// instantiate hook is only called in browser
 export function instantiate(load, systemInstantiate) {
 	return factory.then(({typeChecker, resolver, host}) => {
 		return systemInstantiate(load)
 			.then(entry => {
 				return typeCheck(load).then((errors) => {
+					// at runtime the bundle hook is not called so fail the build immediately
 					if ((host.options.typeCheck === "strict") && hasError(errors))
 						throw new Error("Typescript compilation failed");
 

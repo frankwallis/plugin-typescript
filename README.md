@@ -52,7 +52,7 @@ jspm install ts
 
 ## Setup ##
 
-#### Optionally: Make plugin-typescript the default transpiler for js and ts files ####
+#### Make plugin-typescript the default transpiler for js and ts files ####
 
 ```js
 System.config({
@@ -67,11 +67,11 @@ System.config({
 
 This will tell SystemJS to transpile all modules (.js and .ts) using plugin-typescript.
 
-#### Also: For full type-checking add ```packages``` configuration ####
+#### Plus: for full type-checking add ```packages``` configuration ####
 
 ```js
 System.config({
-  transpiler: "plugin-babel",
+  transpiler: "ts",
   packages: {
     "src": {
       "defaultExtension": "ts",
@@ -151,6 +151,10 @@ The plugin will automatically load typings for packages if it knows that they ar
 
 If external typings are present for all js files in the package set ```"typings": true```. If external typings are in a single bundled file then specify the path of that file, relative to the root of the project.   
 For more information on setting SystemJS metadata, see [here](https://github.com/systemjs/systemjs/blob/master/docs/config-api.md#packages)
+
+#### Rollup Support ####
+
+Rollup is supported when transpiling with ```module: "es6"``` or ```module: "system"```. It can help to reduce the size of your bundles by stripping out unused modules. For more information see [here](https://github.com/rollup/rollup)
 
 #### Type-checking over Multiple Packages ####
 
