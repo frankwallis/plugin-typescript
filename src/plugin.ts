@@ -3,7 +3,7 @@ import * as ts from 'typescript';
 import Logger from './logger';
 import {createFactory} from './factory';
 import {formatErrors} from './format-errors';
-import {isTypescript, isTypescriptDeclaration, stripDoubleExtension} from './utils';
+import {isTypescript, isTypescriptDeclaration, stripDoubleExtension, hasError} from './utils';
 
 const logger = new Logger({ debug: false });
 let factory = undefined;
@@ -77,6 +77,9 @@ function typeCheck(load: Module): Promise<any> {
 				.then(deps => {
 					const errors = typeChecker.check();
 					formatErrors(errors, logger);
+
+					if ((host.options.typeCheck === "strict") && hasError(errors))
+						throw new Error("Typescript compilation failed");
 
 					const depslist = deps.list
 						.filter(d => isTypescript(d))
