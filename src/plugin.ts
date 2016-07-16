@@ -62,11 +62,16 @@ export function translate(load: Module): Promise<string> {
 }
 
 export function instantiate(load, systemInstantiate) {
-	return systemInstantiate(load)
-		.then(entry => {
-			return typeCheck(load).then(() => {
-				entry.deps = entry.deps.concat(load.metadata.deps);
-				return entry;
+	return factory.then(({typeChecker, resolver, host}) => {
+		return systemInstantiate(load)
+			.then(entry => {
+				return typeCheck(load).then((errors) => {
+					if ((host.options.typeCheck === "strict") && hasError(errors))
+						throw new Error("Typescript compilation failed");
+
+					entry.deps = entry.deps.concat(load.metadata.deps);
+					return entry;
+				});
 			});
 		});
 }
@@ -79,15 +84,16 @@ function typeCheck(load: Module): Promise<any> {
 					const errors = typeChecker.check();
 					formatErrors(errors, logger);
 
-					if ((host.options.typeCheck === "strict") && hasError(errors))
-						throw new Error("Typescript compilation failed");
-
 					const depslist = deps.list
 						.filter(d => isTypescript(d))
 						.map(d => isTypescriptDeclaration(d) ? d + '!' + __moduleName : d);
 
 					load.metadata.deps = depslist;
+					return errors;
 				});
+		}
+		else {
+			return [];
 		}
 	});
 }
