@@ -29,8 +29,9 @@ export function translate(load: Module): Promise<string> {
 
       // transpile
       if (isTypescriptDeclaration(load.address)) {
-         load.source = '';
-         load.metadata.format = 'cjs'; // make sure deps gets handled below.
+			// rollup support needs null/esm runtime needs ''/cjs
+			load.source = loader.builder ? null : '';
+			load.metadata.format = loader.builder ? 'esm' : 'cjs';
       }
       else {
          const result = transpiler.transpile(load.address);
@@ -108,9 +109,9 @@ export function bundle() {
 }
 
 function validateOptions(options) {
-   /* The only time you don't want to output in system format is when you are using babel
+   /* The only time you don't want to output in system format is when you are using rollup or babel
       downstream to compile es6 output (e.g. for async/await support) */
-   if ((options.module != ts.ModuleKind.System) && (options.target != ts.ScriptTarget.ES6)) {
+   if ((options.module != ts.ModuleKind.System) && (options.module != ts.ModuleKind.ES6)) {
       logger.warn(`transpiling to ${ts.ModuleKind[options.module]}, consider setting module: "system" in typescriptOptions to transpile directly to System.register format`);
    }
 }

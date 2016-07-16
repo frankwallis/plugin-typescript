@@ -15,6 +15,7 @@ describe('Builder', () => {
 		return {
 			baseUrl: "../",
 			transpiler: "plugin",
+			rollup: false,
 			typescriptOptions: {
 				"module": "system",
 				"target": "es5",
@@ -198,5 +199,77 @@ describe('Builder', () => {
 					result.should.be.defined;
 				})
       });
+	});
+
+	describe('rollup', () => {
+      it('strips out reference files when rolled up', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
+			config.typescriptOptions.module = "es6";
+			builder.config(config);
+			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
+				.catch(err => {
+					console.log(err);
+					true.should.be.false;
+				})
+				.then(result => {
+					//console.log(result.source);
+					result.source.length.should.equal(494);
+				})
+      });
+
+      it('automatically changes module from system -> es6 when building', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
+			config.typescriptOptions.module = "system";
+			config.typescriptOptions.target = "es6";
+			builder.config(config);
+			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
+				.catch(err => {
+					console.log(err);
+					true.should.be.false;
+				})
+				.then(result => {
+					//console.log(result.source);
+					result.source.should.contain('const aconstant = 1234;');
+					result.source.length.should.equal(482);
+				})
+      });
+
+      it('supports es6 modules with target es5', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
+			config.typescriptOptions.module = "es6";
+			config.typescriptOptions.target = "es5";
+			builder.config(config);
+			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
+				.catch(err => {
+					console.log(err);
+					true.should.be.false;
+				})
+				.then(result => {
+					//console.log(result.source);
+					result.source.should.contain('var aconstant = 1234;');
+					result.source.length.should.equal(494);
+				})
+      });
+
+      it('strips out elided modules when rolled up', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions";
+			config.typescriptOptions.module = "es6";
+			config.typescriptOptions.target = "es5";
+			builder.config(config);
+			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
+				.catch(err => {
+					console.log(err);
+					true.should.be.false;
+				})
+				.then(result => {
+					//console.log(result.source);
+					result.source.length.should.equal(458);
+				})
+      });
+
 	});
 });

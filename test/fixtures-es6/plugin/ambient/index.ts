@@ -1,3 +1,3 @@
-import a from 'external';
+import {a1} from 'external';
 
-if (!a) console.log(a);
+if (!a1) console.log(a1);

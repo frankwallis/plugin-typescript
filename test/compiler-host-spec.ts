@@ -63,22 +63,18 @@ describe('Host', () => {
          host.options.moduleResolution.should.be.equal(ts.ModuleResolutionKind.Classic);
       });
 
-      it('switches from system output to es6 module output when building & targetting es6', () => {
+      it('switches from system output to es6 module output when building', () => {
          host = new CompilerHost({
-            module: "system",
-            target: "es6"
+            module: "system"
          }, true);
          host.options.module.should.be.equal(ts.ModuleKind.ES6);
-         host.options.target.should.be.equal(ts.ScriptTarget.ES6);
       });
 
-      it('doesnt switch from system output to es6 module output when building & targetting es5', () => {
+      it('doesnt switch from system output to es6 module output when not building', () => {
          host = new CompilerHost({
-            module: "system",
-            target: "es5"
-         }, true);
+            module: "system"
+         }, false);
          host.options.module.should.be.equal(ts.ModuleKind.System);
-         host.options.target.should.be.equal(ts.ScriptTarget.ES5);
       });
 
       it('defaults to lib.es6.d.ts', () => {
