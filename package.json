@@ -38,7 +38,7 @@
   },
   "scripts": {
     "compile": "tsc",
-    "test": "mocha --require ./test/environment ./test/*.ts"
+    "test": "mocha --require ./test/environment --timeout 5000 ./test/*.ts"
   },
   "bin": {},
   "license": "MIT",
