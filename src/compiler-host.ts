@@ -39,6 +39,7 @@ export class CompilerHost implements ts.CompilerHost {
       this._options.supportHtmlImports = (options.supportHtmlImports === true);
       this._options.resolveAmbientRefs = (options.resolveAmbientRefs === true);
 		this._options.noResolve = true;
+		this._options.allowSyntheticDefaultImports = (this._options.allowSyntheticDefaultImports !== false);
 
       // Force module resolution into 'classic' mode, to prevent node module resolution from kicking in
       this._options.moduleResolution = ts.ModuleResolutionKind.Classic;

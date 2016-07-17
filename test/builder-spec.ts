@@ -270,6 +270,26 @@ describe('Builder', () => {
 				})
       });
 
+      it('supports syntheticDefaultImports when outputting es6 modules', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/synthetic";
+			config.map["somelib"] = "test/fixtures-es6/plugin/js/somelib.js";
+			config.typescriptOptions.module = "es6";
+			config.typescriptOptions.target = "es5";
+
+			builder.config(config);
+			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
+				.catch(err => {
+					console.log(err);
+					true.should.be.false;
+				})
+				.then(result => {
+					//console.log(result.source);
+					result.source.should.contain('module.exports = 42;');
+					result.source.length.should.equal(4976);
+				})
+      });
+
       it('strips out elided modules when rolled up', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions";
