@@ -215,10 +215,12 @@ describe('Builder', () => {
 				.then(result => {
 					//console.log(result.source);
 					result.source.length.should.equal(494);
+					result.source.should.not.contain('test/fixtures-es6/plugin/reference/types.d.ts');
+
 				})
       });
 
-      it('bundles without rollup when outputting commonjs', () => {
+      it('bundles when outputting commonjs', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
 			config.typescriptOptions.module = "commonjs";
@@ -230,6 +232,7 @@ describe('Builder', () => {
 				})
 				.then(result => {
 					//console.log(result.source);
+					//result.source.should.contain('test/fixtures-es6/plugin/reference/types.d.ts');
 					result.source.length.should.equal(5242);
 				})
       });
@@ -246,7 +249,7 @@ describe('Builder', () => {
 				})
 				.then(result => {
 					//console.log(result.source);
-					result.source.length.should.equal(945);
+					result.source.should.contain('test/fixtures-es6/plugin/reference/types.d.ts');
 				})
       });
 
