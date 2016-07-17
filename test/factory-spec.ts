@@ -117,7 +117,7 @@ describe('Factory', () => {
       host.options.noImplicitAny.should.be.true;
    });
 
-   it('passes builder param to host', async () => {
+   xit('passes builder param to host', async () => {
       const config = {
          module: "system",
          target: "es6"

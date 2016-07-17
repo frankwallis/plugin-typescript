@@ -63,7 +63,7 @@ describe('Host', () => {
          host.options.moduleResolution.should.be.equal(ts.ModuleResolutionKind.Classic);
       });
 
-      it('switches from system output to es6 module output when building', () => {
+      xit('switches from system output to es6 module output when building', () => {
          host = new CompilerHost({
             module: "system"
          }, true);
