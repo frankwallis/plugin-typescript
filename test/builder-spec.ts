@@ -234,7 +234,23 @@ describe('Builder', () => {
 				})
       });
 
-      it('automatically changes module from system -> es6 when building', () => {
+      it('bundles without rollup when not building SFX', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
+			config.typescriptOptions.module = "system";
+			builder.config(config);
+			return builder.build('testsrc', { rollup: false })
+				.catch(err => {
+					console.log(err);
+					true.should.be.false;
+				})
+				.then(result => {
+					//console.log(result.source);
+					result.source.length.should.equal(945);
+				})
+      });
+
+      xit('automatically changes module from system -> es6 when building', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
 			config.typescriptOptions.module = "system";

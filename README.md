@@ -124,10 +124,6 @@ Specify whether to use lib.d.ts ```targetLib: "es5"``` or lib.es6.d.ts ```target
 
 ## Features ##
 
-#### Link to source from compiler errors ####
-
-When compiling in the browser, compiler errors contain a link to the exact location of the error in the source. This is particularly helpful if you are using Chrome DevTools as your IDE.
-
 #### Hot-Reload Support ####
 
 This plugin provides incremental type-checking when using [systemjs-hot-reloader](https://github.com/capaj/systemjs-hot-reloader)
@@ -154,7 +150,11 @@ For more information on setting SystemJS metadata, see [here](https://github.com
 
 #### Rollup Support ####
 
-Rollup is supported when transpiling with ```module: "es6"``` or ```module: "system"```. It can help to reduce the size of your bundles by stripping out unused modules. For more information see [here](https://github.com/rollup/rollup)
+Rollup is supported when transpiling with ```module: "es6"```. It can help to reduce the size of your bundles by stripping out unused modules. For more information see [here](https://github.com/rollup/rollup)
+
+#### Link to source from compiler errors ####
+
+When compiling in the browser, compiler errors contain a link to the exact location of the error in the source. This is particularly helpful if you are using Chrome DevTools as your IDE.
 
 #### Type-checking over Multiple Packages ####
 

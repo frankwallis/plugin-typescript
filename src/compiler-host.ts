@@ -44,13 +44,13 @@ export class CompilerHost implements ts.CompilerHost {
       // Force module resolution into 'classic' mode, to prevent node module resolution from kicking in
       this._options.moduleResolution = ts.ModuleResolutionKind.Classic;
 
-      // When bundling output es6 modules instead of system to enable rollup support
-      if (builder) {
-         if (this._options.module === ts.ModuleKind.System) {
-				logger.log('switching output from system.register -> es modules to support rollup');
-            this._options.module = ts.ModuleKind.ES6;
-         }
-      }
+      // When bundling automatically output es6 modules instead of system to enable rollup support
+      // if (builder) {
+      //    if (this._options.module === ts.ModuleKind.System) {
+		// 		logger.log('switching output from system.register -> es modules to support rollup');
+      //       this._options.module = ts.ModuleKind.ES6;
+      //    }
+      // }
 
       this._files = {};
 
