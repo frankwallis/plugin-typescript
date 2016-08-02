@@ -8,7 +8,7 @@
   "jspm": {
     "registry": "github",
     "dependencies": {
-      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.0.0-rc.1",
+      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.0.0-rc.4",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0"
     },
     "devDependencies": {
@@ -17,20 +17,20 @@
       "module": "jspm/nodelibs-module@^0.2.0-alpha",
       "net": "jspm/nodelibs-net@^0.2.0-alpha",
       "os": "jspm/nodelibs-os@^0.2.0-alpha",
-      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.6",
+      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.12",
       "clean-css": "npm:clean-css@^3.4.3",
       "css": "frankwallis/plugin-css@master",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.2",
-      "ts": "frankwallis/plugin-typescript@^4.0.5",
+      "ts": "frankwallis/plugin-typescript@^5.0.0",
       "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
       "url": "jspm/nodelibs-url@^0.2.0-alpha"
     },
     "peerDependencies": {
-      "@angular/common": "npm:@angular/common@2.0.0-rc.1",
-      "@angular/compiler": "npm:@angular/compiler@2.0.0-rc.1",
-      "@angular/core": "npm:@angular/core@2.0.0-rc.1",
-      "@angular/platform-browser": "npm:@angular/platform-browser@2.0.0-rc.1",
+      "@angular/common": "npm:@angular/common@^2.0.0-rc.4",
+      "@angular/compiler": "npm:@angular/compiler@^2.0.0-rc.4",
+      "@angular/core": "npm:@angular/core@^2.0.0-rc.4",
+      "@angular/platform-browser": "npm:@angular/platform-browser@^2.0.0-rc.4",
       "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
       "buffer": "jspm/nodelibs-buffer@^0.2.0-alpha",
       "child_process": "jspm/nodelibs-child_process@^0.2.0-alpha",
@@ -48,10 +48,10 @@
       "zone.js": "npm:zone.js@^0.6.6"
     },
     "overrides": {
-      "npm:@angular/common@2.0.0-rc.1": {
-        "main": "common.umd.js",
+      "npm:@angular/common@2.0.0-rc.4": {
         "meta": {
-          "src/*.js": {
+          "*.js": {
+            "typings": true,
             "deps": [
               "reflect-metadata",
               "zone.js"
@@ -59,10 +59,10 @@
           }
         }
       },
-      "npm:@angular/compiler@2.0.0-rc.1": {
-        "main": "compiler.umd.js",
+      "npm:@angular/compiler@2.0.0-rc.4": {
         "meta": {
-          "src/*.js": {
+          "*.js": {
+            "typings": true,
             "deps": [
               "reflect-metadata",
               "zone.js"
@@ -70,37 +70,57 @@
           }
         }
       },
-      "npm:@angular/core@2.0.0-rc.1": {
-        "main": "core.umd.js",
+      "npm:@angular/core@2.0.0-rc.4": {
         "meta": {
-          "core.umd.js": {
-            "typings": "core/index.d.ts"
-          }
-        }
-      },
-      "npm:@angular/platform-browser-dynamic@2.0.0-rc.1": {
-        "main": "platform-browser-dynamic.umd.js",
-        "meta": {
-          "platform-browser-dynamic.umd.js": {
-            "typings": "platform-browser-dynamic/index.d.ts"
-          }
-        }
-      },
-      "npm:@angular/platform-browser@2.0.0-rc.1": {
-        "main": "platform-browser.umd.js",
-        "meta": {
-          "src/*.js": {
+          "*.js": {
+            "typings": true,
             "deps": [
               "reflect-metadata",
               "zone.js"
             ]
           }
+        }
+      },
+      "npm:@angular/platform-browser-dynamic@2.0.0-rc.4": {
+        "meta": {
+          "*.js": {
+            "typings": true
+          }
+        }
+      },
+      "npm:@angular/platform-browser@2.0.0-rc.4": {
+        "meta": {
+          "*.js": {
+            "typings": true,
+            "deps": [
+              "reflect-metadata",
+              "zone.js"
+            ]
+          }
+        }
+      },
+      "npm:debug@2.2.0": {
+        "main": "browser.js",
+        "jspmNodeConversion": false,
+        "format": "cjs",
+        "map": {
+          "./browser.js": {
+            "node": "./node.js"
+          },
+          "fs": "@node/fs",
+          "net": "@node/net",
+          "tty": "@node/tty",
+          "util": "@node/util"
         }
       },
       "npm:inherits@2.0.1": {
         "ignore": [
           "test.js"
         ]
+      },
+      "npm:ms@0.7.1": {
+        "jspmNodeConversion": false,
+        "format": "cjs"
       },
       "npm:rxjs@5.0.0-beta.6": {
         "main": "bundles/Rx.js",
@@ -117,7 +137,7 @@
         "jspmNodeConversion": true,
         "map": {}
       },
-      "npm:typescript@1.8.10": {
+      "npm:typescript@2.0.0": {
         "browser": {},
         "map": {
           "buffer": "@empty",

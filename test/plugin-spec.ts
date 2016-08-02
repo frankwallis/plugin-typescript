@@ -62,22 +62,21 @@ describe('Plugin', () => {
    }
 
    describe('elided imports', () => {
-      xit('brings in elided import files', () => {
+      it('brings in elided import files', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions/bad";
 			System.config(config);
 			return System.import('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					err.should.be.defined;
-				})
 				.then(result => {
-					// elided files are brought in, but this build still passes
 					(result == undefined).should.be.true;
+				})
+				.catch(err => {
+					err.should.be.defined;
+					err.originalErr.toString().indexOf('compilation failed').should.not.be.equal(-1);
 				})
       });
 
-      it('brings in elided import files when outputting to es6', () => {
+      xit('brings in elided import files when outputting to es6', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions/bad";
 			config.typescriptOptions.module = "es6";
@@ -155,7 +154,7 @@ describe('Plugin', () => {
 	});
 
    describe('strict mode', () => {
-      xit('fails build when enabled', () => {
+      it('fails build when enabled', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
 			System.config(config);
@@ -232,4 +231,5 @@ describe('Plugin', () => {
 				})
       });
 	});
+
 });

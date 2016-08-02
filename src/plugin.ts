@@ -3,7 +3,7 @@ import * as ts from 'typescript';
 import Logger from './logger';
 import {createFactory} from './factory';
 import {formatErrors} from './format-errors';
-import {isTypescript, isTypescriptDeclaration, stripDoubleExtension} from './utils';
+import {isTypescript, isTypescriptDeclaration, stripDoubleExtension, hasError} from './utils';
 
 const logger = new Logger({ debug: false });
 let factory = undefined;
@@ -29,8 +29,16 @@ export function translate(load: Module): Promise<string> {
 
       // transpile
       if (isTypescriptDeclaration(load.address)) {
-         load.source = '';
-         load.metadata.format = 'cjs'; // make sure deps gets handled below.
+			// rollup support needs null/esm to strip out the empty modules,
+			// for non-rollup & runtime use ''/cjs
+			if (loader.builder && (host.options.module == ts.ModuleKind.ES6)) {
+				load.source = null;
+				load.metadata.format = 'esm';
+			}
+			else {
+				load.source = '';
+				load.metadata.format = 'cjs';
+			}
       }
       else {
          const result = transpiler.transpile(load.address);
@@ -60,12 +68,19 @@ export function translate(load: Module): Promise<string> {
    });
 }
 
+// instantiate hook is only called in browser
 export function instantiate(load, systemInstantiate) {
-	return systemInstantiate(load)
-		.then(entry => {
-			return typeCheck(load).then(() => {
-				entry.deps = entry.deps.concat(load.metadata.deps);
-				return entry;
+	return factory.then(({typeChecker, resolver, host}) => {
+		return systemInstantiate(load)
+			.then(entry => {
+				return typeCheck(load).then((errors) => {
+					// at runtime the bundle hook is not called so fail the build immediately
+					if ((host.options.typeCheck === "strict") && hasError(errors))
+						throw new Error("Typescript compilation failed");
+
+					entry.deps = entry.deps.concat(load.metadata.deps);
+					return entry;
+				});
 			});
 		});
 }
@@ -83,14 +98,11 @@ function typeCheck(load: Module): Promise<any> {
 						.map(d => isTypescriptDeclaration(d) ? d + '!' + __moduleName : d);
 
 					load.metadata.deps = depslist;
-
-					// this is needed because es6 modules don't support deps until
-               // https://github.com/systemjs/systemjs/issues/1248 is implemented
-               if ((host.options.module === ts.ModuleKind.ES6) && !isTypescriptDeclaration(load.address)) {
-                  const importSource = depslist.map(d => 'import "' + d + '"').join(';');
-                  load.source = load.source + '\n' + importSource;
-               }
+					return errors;
 				});
+		}
+		else {
+			return [];
 		}
 	});
 }
@@ -112,9 +124,9 @@ export function bundle() {
 }
 
 function validateOptions(options) {
-   /* The only time you don't want to output in system format is when you are using babel
+   /* The only time you don't want to output in system format is when you are using rollup or babel
       downstream to compile es6 output (e.g. for async/await support) */
-   if ((options.module != ts.ModuleKind.System) && (options.target != ts.ScriptTarget.ES6)) {
+   if ((options.module != ts.ModuleKind.System) && (options.module != ts.ModuleKind.ES6)) {
       logger.warn(`transpiling to ${ts.ModuleKind[options.module]}, consider setting module: "system" in typescriptOptions to transpile directly to System.register format`);
    }
 }

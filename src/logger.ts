@@ -9,15 +9,15 @@ class Logger {
    }
 
    public log(msg: string) {
-      console.log("TypeScript", msg);
+      console.log("TypeScript", "[Info]", msg);
    }
 
    public error(msg: string) {
-      console.error("TypeScript", msg);
+      console.error("TypeScript", "[Error]", msg);
    }
 
    public warn(msg: string) {
-      console.warn("TypeScript", msg);
+      console.warn("TypeScript", "[Warning]", msg);
    }
 
    public debug(msg: string) {

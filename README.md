@@ -9,8 +9,9 @@ TypeScript loader for SystemJS
 
 A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to ```System.import``` TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
 
-plugin-typescript uses TypeScript 1.8.x  
-For TypeScript 1.7.5 and below use plugin-typescript 2.x.x
+plugin-typescript uses TypeScript 2.0.0  
+For TypeScript 1.8.1 use plugin-typescript 4.0.16  
+For TypeScript 1.7.5 and below use plugin-typescript 2.x.x  
 
 Starting with JSPM 0.17.0 (currently in beta) this plugin will be the officially supported mechanism for transpiling TypeScript. It provides the ability to type-check files while loading them, which is not currently possible with the built-in SystemJS TypeScript transpiler.
 
@@ -51,7 +52,7 @@ jspm install ts
 
 ## Setup ##
 
-#### Optionally: Make plugin-typescript the default transpiler for js and ts files ####
+#### Make plugin-typescript the default transpiler for js and ts files ####
 
 ```js
 System.config({
@@ -66,11 +67,11 @@ System.config({
 
 This will tell SystemJS to transpile all modules (.js and .ts) using plugin-typescript.
 
-#### Also: For full type-checking add ```packages``` configuration ####
+#### Plus: for full type-checking add ```packages``` configuration ####
 
 ```js
 System.config({
-  transpiler: "plugin-babel",
+  transpiler: "ts",
   packages: {
     "src": {
       "defaultExtension": "ts",
@@ -121,31 +122,7 @@ Compiler options which do not conflict with those required by plugin-typescript 
 
 Specify whether to use lib.d.ts ```targetLib: "es5"``` or lib.es6.d.ts ```targetLib: "es6"``` (default) 
 
-#### resolveAmbientRefs ####
-*(deprecated)*
-
-A boolean flag which controls how triple-slash references are resolved. When it is set then SystemJS will be used to resolve reference files, so
-
-```
-/// <reference path="./common/angular.d.ts" />
-```
-will resolve relative to the current directory because of the ```"./"```, but
-```
-/// <reference path="angular2/bundles/typings/angular2/angular2.d.ts" />
-```
-will resolve to ```jspm_packages/npm/angular2@2.0.0/bundles/typings/angular2/angular2.d.ts```
-
-The default value is ```false```. As it is incompatible with other tools (editors etc), **this setting is deprecated** in favour of using ```typings``` as described below.
-
-#### supportHtmlImports ####
-When true, the type-checker will automatically resolve any file with a ```.html``` extension to have a default export which is a string. This enables importing of html templates using plugin-text with full type-checking and no errors.  
-*(this feature will be removed when https://github.com/Microsoft/TypeScript/issues/6615 becomes available)*
-
 ## Features ##
-
-#### Link to source from compiler errors ####
-
-When compiling in the browser, compiler errors contain a link to the exact location of the error in the source. This is particularly helpful if you are using Chrome DevTools as your IDE.
 
 #### Hot-Reload Support ####
 
@@ -171,6 +148,14 @@ The plugin will automatically load typings for packages if it knows that they ar
 If external typings are present for all js files in the package set ```"typings": true```. If external typings are in a single bundled file then specify the path of that file, relative to the root of the project.   
 For more information on setting SystemJS metadata, see [here](https://github.com/systemjs/systemjs/blob/master/docs/config-api.md#packages)
 
+#### Rollup Support ####
+
+Rollup is supported when transpiling with ```module: "es6"```. It can help to reduce the size of your bundles by stripping out unused modules. For more information see [here](https://github.com/rollup/rollup)
+
+#### Link to source from compiler errors ####
+
+When compiling in the browser, compiler errors contain a link to the exact location of the error in the source. This is particularly helpful if you are using Chrome DevTools as your IDE.
+
 #### Type-checking over Multiple Packages ####
 
 The type-checker runs across multiple packages if the imported file resolves to a typescript file. This means that if you do ```import "mypackage/index"``` and that resolves to a typescript file then that import will be properly type-checked. You no longer have to handcraft an external declaration file for 'mypackage'.
@@ -182,12 +167,12 @@ To override the version of TypeScript used by the plugin, add an override to the
 ```json
 	"devDependencies": {
 		"css": "systemjs/plugin-css@0.1.10",
-		"ts": "frankwallis/plugin-typescript@^4.0.5"
+		"ts": "frankwallis/plugin-typescript@^5.0.1"
 	},
 	"overrides": {
-		"github:frankwallis/plugin-typescript@4.0.5": {
+		"github:frankwallis/plugin-typescript@5.0.1": {
 	 		"dependencies": {
-	    		"typescript": "npm:typescript@1.9.0-dev.20160430"
+	    		"typescript": "npm:typescript@2.1.0-dev.20160730"
 	  		}
 		}
 	}

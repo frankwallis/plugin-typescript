@@ -87,9 +87,7 @@ SystemJS.config({
     "target": "es6",
     "typeCheck": "strict",
     "tsconfig": true,
-    "sourceMap": true,
-    "removeComments": false,
-    "supportHtmlImports": true
+    "sourceMap": true
   },
   packages: {
     "src": {

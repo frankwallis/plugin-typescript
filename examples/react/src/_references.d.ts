@@ -3,6 +3,9 @@ declare module "react" {
 		constructor(props: any);
 		protected forceUpdate();
 	}
+}
 
-	export function render(component: Component, element: any);
+declare module "react-dom" {
+	import * as React from "react";
+	export function render(component: React.Component, element: any);
 }
