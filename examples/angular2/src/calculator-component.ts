@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
 import {CalculatorStore, CalculatorState} from "./calculator-store";
-import calculatorTemplate from "./calculator-view.html";
+// import calculatorTemplate from "./calculator-view.html";
 
 @Component({
    selector: 'calculator-component',
    providers: [CalculatorStore],
-   template: calculatorTemplate,
+   // template: calculatorTemplate,
    directives: []
 })
 export class CalculatorComponent {
@@ -16,7 +16,7 @@ export class CalculatorComponent {
          total: 0.0,
          operand: 0.0
       };
-      var [x, y] = [1, 2];
+      // var [x, y] = [1, 2];
    }
 
    private state: CalculatorState;

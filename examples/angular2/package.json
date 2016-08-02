@@ -152,6 +152,6 @@
   },
   "devDependencies": {
     "gulp": "^3.9.1",
-    "jspm": "jspm/jspm-cli.git#0.17"
+    "jspm": "jspm/jspm-cli.git#0.17.0-beta.25"
   }
 }

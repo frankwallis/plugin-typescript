@@ -17,6 +17,9 @@ const builderOpts = {
 	},
 
 	packages: {
+		'src': {
+			'defaultExtension': 'ts'
+		},
 		'ts': {
 			main: 'plugin.js'
 		},
@@ -51,17 +54,17 @@ gulp.task('default', function(cb) {
 	}
 
 	builder
-		.buildStatic('src', 'build.js', buildStaticOpts)
-		.then(()=> {
-			buildCache = builder.getCache();
-		})
-		.catch(err => {
-			console.error('SystemJS Builder error:', err);
+	.buildStatic('src/index.ts', 'build.js', buildStaticOpts)
+	.then(()=> {
+		buildCache = builder.getCache();
+	})
+	.catch(err => {
+		console.error('SystemJS Builder error:', err);
 
-			builder.reset();
-		}).finally(()=> {
-			cb();
-		});
+		builder.reset();
+	}).finally(()=> {
+		cb();
+	});
 });
 
 gulp.task('watch', function() {
