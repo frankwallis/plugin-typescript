@@ -37,8 +37,9 @@ export class TypeChecker {
 		returns a promise to an array of typescript errors for this file
 	*/
    public check(): ts.Diagnostic[] {
-      const candidates = this.getCandidates();
-      if (candidates.some(candidate => candidate.checkable && !isTypescriptDeclaration(candidate.name)))
+      const candidates = this.getCandidates(false);
+
+      if (candidates.some(candidate => !candidate.file.checked && candidate.checkable && !isTypescriptDeclaration(candidate.name)))
          return this.getAllDiagnostics(candidates);
       else
          return [];
@@ -48,9 +49,13 @@ export class TypeChecker {
 		type-checks any unchecked files even if all dependencies have not been loaded
 	*/
    public forceCheck(): ts.Diagnostic[] {
-      const candidates = this.getCandidates();
-      candidates.forEach(candidate => candidate.checkable = true);
-      return this.getAllDiagnostics(candidates);
+      const candidates = this.getCandidates(true);
+
+		if (candidates.some(candidate => !candidate.file.checked))
+      	return this.getAllDiagnostics(candidates);
+		else
+			return [];
+
    }
 
    public hasErrors(): boolean {
@@ -59,7 +64,7 @@ export class TypeChecker {
          .some(file => file.checked && hasError(file.errors));
    }
 
-   private getCandidates() {
+   private getCandidates(force: boolean) {
       const candidates = this._host.getAllFiles()
          .filter(file => file.fileName != __HTML_MODULE__)
          .map(file => ({
@@ -67,16 +72,19 @@ export class TypeChecker {
             file: file,
             seen: false,
             resolved: !!file.dependencies,
-            checkable: undefined,
+            checkable: force || undefined,
             deps: file.dependencies && file.dependencies.list
          }));
 
-      const candidatesMap = candidates.reduce((result, candidate) => {
-         result[candidate.name] = candidate;
-         return result;
-      }, {} as CandidateMap);
+		if (!force) {
+			const candidatesMap = candidates.reduce((result, candidate) => {
+				result[candidate.name] = candidate;
+				return result;
+			}, {} as CandidateMap);
 
-      candidates.forEach(candidate => candidate.checkable = this.isCheckable(candidate, candidatesMap));
+			candidates.forEach(candidate => candidate.checkable = this.isCheckable(candidate, candidatesMap));
+		}
+
       return candidates;
    }
 
@@ -92,7 +100,7 @@ export class TypeChecker {
          return (candidate.checkable !== false); // handles circular graph because seen = true but checkable = undefined
       }
    }
-   
+
 	/*
 		Returns the diagnostics for this file and any files which it uses.
 		Each file is only checked once.

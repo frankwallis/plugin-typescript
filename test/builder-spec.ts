@@ -233,7 +233,7 @@ describe('Builder', () => {
 				.then(result => {
 					//console.log(result.source);
 					//result.source.should.contain('test/fixtures-es6/plugin/reference/types.d.ts');
-					result.source.length.should.equal(5242);
+					result.source.length.should.equal(5285);
 				})
       });
 
@@ -305,7 +305,7 @@ describe('Builder', () => {
 				.then(result => {
 					//console.log(result.source);
 					result.source.should.contain('module.exports = 42;');
-					result.source.length.should.equal(4976);
+					result.source.length.should.equal(4999);
 				})
       });
 
