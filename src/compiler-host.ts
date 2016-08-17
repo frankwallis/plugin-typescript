@@ -2,6 +2,7 @@
 import * as ts from 'typescript';
 import Logger from './logger';
 import {isHtml, isTypescriptDeclaration, isJavaScript} from './utils';
+import { getDefaultLibFilePaths } from './libFiles';
 
 const logger = new Logger({ debug: false });
 export const __HTML_MODULE__ = "__html_module__";
@@ -22,6 +23,7 @@ export interface SourceFile extends ts.SourceFile {
    errors?: ts.Diagnostic[];
    checked?: boolean;
    isLibFile?: boolean;
+   isDefaultLibFile?: boolean;
 }
 
 export class CompilerHost implements ts.CompilerHost {
@@ -32,7 +34,6 @@ export class CompilerHost implements ts.CompilerHost {
       this._options = options || {};
       this._options.module = this.getEnum(this._options.module, ts.ModuleKind, ts.ModuleKind.System);
       this._options.target = this.getEnum(this._options.target, ts.ScriptTarget, ts.ScriptTarget.ES5);
-      this._options.targetLib = this.getEnum(this._options.targetLib, ts.ScriptTarget, ts.ScriptTarget.ES6);
       this._options.jsx = this.getEnum(this._options.jsx, ts.JsxEmit, ts.JsxEmit.None);
       this._options.allowNonTsExtensions = (this._options.allowNonTsExtensions !== false);
       this._options.skipDefaultLibCheck = (this._options.skipDefaultLibCheck !== false);
@@ -97,10 +98,7 @@ export class CompilerHost implements ts.CompilerHost {
    }
 
    public getDefaultLibFileName(): string {
-      if (this._options.targetLib === ts.ScriptTarget.ES6)
-         return "typescript/lib/lib.es6.d.ts";
-      else
-         return "typescript/lib/lib.d.ts";
+     return getDefaultLibFilePaths(this._options)[0][0];
    }
 
    public useCaseSensitiveFileNames(): boolean {

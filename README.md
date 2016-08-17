@@ -118,9 +118,6 @@ A boolean flag which instructs the plugin to load configuration from "tsconfig.j
 
 Compiler options which do not conflict with those required by plugin-typescript will be loaded from the ```compilerOptions``` section of the file. Any declaration files contained in the ```files``` array will also be loaded if type-checking is enabled.
 
-#### targetLib ####
-
-Specify whether to use lib.d.ts ```targetLib: "es5"``` or lib.es6.d.ts ```targetLib: "es6"``` (default) 
 
 ## Features ##
 
