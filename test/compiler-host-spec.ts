@@ -77,15 +77,27 @@ describe('Host', () => {
          host.options.module.should.be.equal(ts.ModuleKind.System);
       });
 
-      it('defaults to lib.d.ts', () => {
-         host.getDefaultLibFileName().should.be.equal("typescript/lib/lib");
+      it('defaults to lib.es6.d.ts', () => {
+         host.getDefaultLibFilePaths().should.deep.equal(["typescript/lib/lib.es6.d.ts"]);
+         host.getDefaultLibFileName().should.be.equal("typescript/lib/lib.es6.d.ts");
       });
 
-      it('handles the target default lib proprely', () => {
+      it('handles the targetLib option', () => {
          host = new CompilerHost({
-            target: "es6"
+            targetLib: "es5"
          });
-         host.getDefaultLibFileName().should.be.equal("typescript/lib/es6");
+         host.getDefaultLibFilePaths().should.deep.equal(["typescript/lib/lib.d.ts"]);
+         host.getDefaultLibFileName().should.be.equal("typescript/lib/lib.d.ts");
+      });
+
+      it('handles the lib option', () => {
+         host = new CompilerHost({
+            lib: ["es5", "es2015.promise"]
+         });
+			const defaultLibPaths = host.getDefaultLibFilePaths();
+			defaultLibPaths.should.have.length(2);
+         defaultLibPaths[0].should.be.equal("typescript/lib/lib.es5.d.ts");
+			defaultLibPaths[1].should.be.equal("typescript/lib/lib.es2015.promise.d.ts");
       });
    });
 

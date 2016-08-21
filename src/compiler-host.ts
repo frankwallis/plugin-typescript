@@ -2,7 +2,6 @@
 import * as ts from 'typescript';
 import Logger from './logger';
 import {isHtml, isTypescriptDeclaration, isJavaScript} from './utils';
-import { getDefaultLibFilePaths } from './libFiles';
 
 const logger = new Logger({ debug: false });
 export const __HTML_MODULE__ = "__html_module__";
@@ -23,7 +22,6 @@ export interface SourceFile extends ts.SourceFile {
    errors?: ts.Diagnostic[];
    checked?: boolean;
    isLibFile?: boolean;
-   isDefaultLibFile?: boolean;
 }
 
 export class CompilerHost implements ts.CompilerHost {
@@ -76,6 +74,15 @@ export class CompilerHost implements ts.CompilerHost {
 			logger.warn("The 'resolveAmbientRefs' option is deprecated and will shortly be removed");
 			logger.warn("Please use External Typings support instead");
 		}
+
+		if (this._options.targetLib) {
+			logger.warn("The 'targetLib' option is deprecated and will shortly be removed");
+			logger.warn("Please use the 'lib' option instead");
+			this.options.targetLib = this.getEnum(this._options.targetLib, ts.ScriptTarget, ts.ScriptTarget.ES6);
+		}
+		else if (!this._options.lib) {
+			this._options.lib = ['es6'];
+		}
    }
 
    private getEnum<T>(enumValue: any, enumType: any, defaultValue: T): T {
@@ -98,8 +105,20 @@ export class CompilerHost implements ts.CompilerHost {
    }
 
    public getDefaultLibFileName(): string {
-     return getDefaultLibFilePaths(this._options)[0][0];
+		return this.getDefaultLibFilePaths()[0];
    }
+
+	/**
+	 * Based on the compiler options returns the lib files that should be included.
+	 */
+	public getDefaultLibFilePaths(): string[] {
+		if (this._options.targetLib === ts.ScriptTarget.ES5)
+			return ['typescript/lib/lib.d.ts'];
+		else if (this._options.targetLib === ts.ScriptTarget.ES5)
+			return ['typescript/lib/lib.es6.d.ts'];
+		else
+			return this._options.lib.map(libName => `typescript/lib/lib.${libName}.d.ts`);
+	}
 
    public useCaseSensitiveFileNames(): boolean {
       return false;
@@ -203,8 +222,8 @@ export class CompilerHost implements ts.CompilerHost {
 					return undefined;
 				}
 				else {
-            	const isExternalLibraryImport = isTypescriptDeclaration(resolvedFileName);
-            	return { resolvedFileName, isExternalLibraryImport };
+					const isExternalLibraryImport = isTypescriptDeclaration(resolvedFileName);
+					return { resolvedFileName, isExternalLibraryImport };
 				}
          }
          else {

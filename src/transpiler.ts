@@ -31,7 +31,11 @@ export class Transpiler {
       this._options.out = undefined;
       this._options.outFile = undefined;
 
-      /* without this we get 'cannot overwrite existing file' when transpiling js files */
+		/* without this we get a 'lib.d.ts not found' error */
+ 		this._options.noLib = true;
+		this._options.lib = undefined; // incompatible with noLib
+
+       /* without this we get 'cannot overwrite existing file' when transpiling js files */
       this._options.suppressOutputPathCheck = true;
 
       /* with this we don't get any files */

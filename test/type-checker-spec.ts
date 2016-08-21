@@ -7,7 +7,6 @@ import {Resolver} from '../src/resolver';
 import {TypeChecker} from '../src/type-checker';
 import {CompilerHost} from '../src/compiler-host';
 import {formatErrors} from '../src/format-errors';
-import { addLibFiles } from './libTestUtils';
 
 const should = chai.should();
 
@@ -105,6 +104,9 @@ describe('TypeChecker', () => {
    }
 
    async function typecheckAll(filename: string) {
+		host.getDefaultLibFilePaths().forEach(libFile => {
+			resolver.registerDeclarationFile((ts as any).normalizePath(require.resolve(libFile)));
+		});
       await resolveAll([filename]);
       let result = typeChecker.check();
 
@@ -115,7 +117,7 @@ describe('TypeChecker', () => {
    }
 
    beforeEach(() => {
-      host = addLibFiles(new CompilerHost({}));
+      host = new CompilerHost({});
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
    });
@@ -130,7 +132,7 @@ describe('TypeChecker', () => {
       const options = {
          noImplicitAny: true
       };
-      host = addLibFiles(new CompilerHost(options));
+      host = new CompilerHost(options);
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
@@ -155,7 +157,7 @@ describe('TypeChecker', () => {
       const options = {
          noImplicitAny: true
       };
-      host = addLibFiles(new CompilerHost(options));
+      host = new CompilerHost(options);
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
       host.addFile("declaration.d.ts", "export var a: string = 10;");
@@ -174,9 +176,13 @@ describe('TypeChecker', () => {
       const options = {
          noImplicitAny: true
       };
-      host = addLibFiles(new CompilerHost(options));
+      host = new CompilerHost(options);
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
+
+		const libName = (ts as any).normalizePath(require.resolve(host.getDefaultLibFileName()));
+		resolver.registerDeclarationFile(libName);
+		host.addFile(libName, fs.readFileSync(libName, 'utf8'));
 
       // should pass normal check and fail forceCheck
       host.addFile("index.ts", '/// <reference path="declaration.d.ts" />\n import a from "amodule"; export = a;');
@@ -225,7 +231,7 @@ describe('TypeChecker', () => {
       const options = {
          resolveAmbientRefs: true
       };
-      host = addLibFiles(new CompilerHost(options));
+      host = new CompilerHost(options);
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
@@ -249,7 +255,7 @@ describe('TypeChecker', () => {
       const options = {
          resolveAmbientRefs: true
       };
-      host = addLibFiles(new CompilerHost(options));
+      host = new CompilerHost(options);
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
@@ -267,7 +273,7 @@ describe('TypeChecker', () => {
       const options = {
          resolveAmbientRefs: true
       };
-      host = addLibFiles(new CompilerHost(options));
+      host = new CompilerHost(options);
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
@@ -294,7 +300,7 @@ describe('TypeChecker', () => {
       const options = {
          supportHtmlImports: true
       };
-      host = addLibFiles(new CompilerHost(options));
+      host = new CompilerHost(options);
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
@@ -308,7 +314,7 @@ describe('TypeChecker', () => {
          supportHtmlImports: true,
          module: "es6"
       };
-      host = addLibFiles(new CompilerHost(options));
+      host = new CompilerHost(options);
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
@@ -317,9 +323,9 @@ describe('TypeChecker', () => {
       diags.should.have.length(0);
    });
 
-   it('loads lib.d.ts', async () => {
+   it('loads lib.es6.d.ts', async () => {
       const options = {};
-      host = addLibFiles(new CompilerHost(options));
+      host = new CompilerHost(options);
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
@@ -327,6 +333,20 @@ describe('TypeChecker', () => {
       formatErrors(diags, console as any);
       diags.should.have.length(0);
    });
+
+   it('loads es5, es2015.promise', async () => {
+      const options = {
+			lib: ['es5', 'es2015.promise']
+		};
+      host = new CompilerHost(options);
+      typeChecker = new TypeChecker(host);
+      resolver = new Resolver(host, resolve, lookup);
+
+      const diags = await typecheckAll(noImports);
+      formatErrors(diags, console as any);
+      diags.should.have.length(0);
+   });
+
 
    it('hasErrors returns true when errors are present', async () => {
       const diags = await typecheckAll(syntaxError);

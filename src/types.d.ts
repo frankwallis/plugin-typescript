@@ -30,6 +30,7 @@ interface PluginOptions {
    /* deprecated */
    supportHtmlImports?: boolean;
    resolveAmbientRefs?: boolean;
+	targetLib?: number;
 
    /* private */
    files?: string[];

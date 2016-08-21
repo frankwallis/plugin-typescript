@@ -13,6 +13,8 @@ const alternateFile = require.resolve('./fixtures-es6/tsconfig/alternate.json');
 const declarationFile = require.resolve('./fixtures-es6/tsconfig/declaration.json');
 const theirModuleFile = require.resolve('./fixtures-es6/tsconfig/theirmodule.d.ts');
 const defaultLib = require.resolve('typescript/lib/lib.es6.d.ts');
+const defaultLibEs5 = require.resolve('typescript/lib/lib.es5.d.ts');
+const defaultLibEs2015Promise = require.resolve('typescript/lib/lib.es2015.promise.d.ts');
 
 let filelist = [];
 function fetch(filename): Promise<any> {
@@ -153,7 +155,21 @@ describe('Factory', () => {
       };
       const {resolver} = await createFactory(config, false, resolve, fetch, lookup);
       resolver.should.be.defined;
-      resolver._declarationFiles.should.have.length(1);
-      resolver._declarationFiles[0].should.be.equal(theirModuleFile);
+      resolver._declarationFiles.should.have.length(2);
+		resolver._declarationFiles[0].should.be.equal(defaultLib);
+      resolver._declarationFiles[1].should.be.equal(theirModuleFile);
    });
+
+   it('adds multiple lib files into resolver', async () => {
+      const config = {
+			lib: ['es5', 'es2015.promise'],
+         typeCheck: true
+      };
+      const {resolver} = await createFactory(config, false, resolve, fetch, lookup);
+      resolver.should.be.defined;
+      resolver._declarationFiles.should.have.length(2);
+		resolver._declarationFiles[0].should.be.equal(defaultLibEs5);
+      resolver._declarationFiles[1].should.be.equal(defaultLibEs2015Promise);
+   });
+
 });
