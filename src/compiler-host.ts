@@ -202,6 +202,7 @@ export class CompilerHost implements ts.CompilerHost {
       }
    }
 
+	private _reportedFiles = [];
 	/*
 		Overrides the standard resolution algorithm used by the compiler so that we can use systemjs
 		resolution. Because TypeScript requires synchronous resolution, everything is pre-resolved
@@ -218,7 +219,11 @@ export class CompilerHost implements ts.CompilerHost {
             const resolvedFileName = dependencies.mappings[modName];
 
 				if (!resolvedFileName) {
-					logger.warn(containingFile + ' -> ' + modName + ' could not be resolved');
+					// don't spam the console, only show one error per file.
+					if (this._reportedFiles.indexOf(resolvedFileName) < 0) {
+						logger.warn(containingFile + ' -> ' + modName + ' could not be resolved');
+						this._reportedFiles.push(resolvedFileName);
+					}
 					return undefined;
 				}
 				else {
