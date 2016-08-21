@@ -2,15 +2,14 @@
 	"compilerOptions": {
 		"module": "system",
 		"outDir": "lib",
+    "lib": ["es6"],
 		"target": "es5",
-		"noLib": true,
 		"removeComments": true,
 		"moduleResolution": "node",
 		"inlineSourceMap": false,
 		"rootDir": "./src"
 	},
 	"files": [
-		"./node_modules/typescript/lib/lib.es6.d.ts",
 		"./src/plugin.ts",
 		"./src/type-checker.ts",
 		"./src/transpiler.ts",

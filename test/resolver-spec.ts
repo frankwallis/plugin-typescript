@@ -67,15 +67,6 @@ describe('Resolver', () => {
       deps.list[0].should.equal("declarations.d.ts");
    });
 
-   it('flags the default library', async () => {
-      const defaultLibName = require.resolve(host.getDefaultLibFileName());
-      const defaultLibSource = fs.readFileSync(defaultLibName, 'utf8');
-      const file = host.addFile(defaultLibName, defaultLibSource);
-      const deps = await resolver.resolve(defaultLibName);
-      deps.list.should.have.length(0);
-      file.isLibFile.should.be.true;
-   });
-
    it('resolves ambient imports', async () => {
       const source = 'import "ambient";'
       host.addFile(AMBIENT_NAME, source);

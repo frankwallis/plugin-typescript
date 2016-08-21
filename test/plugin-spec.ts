@@ -196,6 +196,17 @@ describe('Plugin', () => {
 					(result == undefined).should.be.true;
 				})
       });
+
+     it('complie with custom lib', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/es6";
+      config.typescriptOptions['lib'] = ["es5", "es2015.promise"];
+			System.config(config);
+			return System.import('testsrc/promise.ts')
+				.then(result => {
+					(result == undefined).should.be.false;
+				})
+      });
 	});
 
    describe('commonjs', () => {

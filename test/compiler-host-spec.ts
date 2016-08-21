@@ -77,15 +77,15 @@ describe('Host', () => {
          host.options.module.should.be.equal(ts.ModuleKind.System);
       });
 
-      it('defaults to lib.es6.d.ts', () => {
-         host.getDefaultLibFileName().should.be.equal("typescript/lib/lib.es6.d.ts");
+      it('defaults to lib.d.ts', () => {
+         host.getDefaultLibFileName().should.be.equal("typescript/lib/lib");
       });
 
-      it('handles the targetLib option', () => {
+      it('handles the target default lib proprely', () => {
          host = new CompilerHost({
-            targetLib: "Es5"
+            target: "es6"
          });
-         host.getDefaultLibFileName().should.be.equal("typescript/lib/lib.d.ts");
+         host.getDefaultLibFileName().should.be.equal("typescript/lib/es6");
       });
    });
 

@@ -1,12 +1,13 @@
 /* */
 import * as ts from 'typescript';
 import Logger from './logger';
-import {CompilerHost} from './compiler-host';
+import {CompilerHost, CombinedOptions} from './compiler-host';
 import {Transpiler} from './transpiler';
 import {Resolver} from './resolver';
 import {TypeChecker} from './type-checker';
 import {formatErrors} from './format-errors';
 import {isTypescriptDeclaration} from './utils';
+import { getDefaultLibFilePaths } from './libFiles';
 
 const logger = new Logger({ debug: false });
 
@@ -33,7 +34,7 @@ export function createFactory(
 
    return loadOptions(sjsconfig, _resolve, _fetch)
       .then(options => {
-         return createServices(options, builder, _resolve, _lookup);
+          return createServices(options, builder, _resolve, _lookup, _fetch);
       })
       .then(services => {
          if (services.options.typeCheck) {
@@ -86,7 +87,10 @@ function resolveDeclarationFiles(options: PluginOptions, _resolve: ResolveFuncti
    return Promise.all<string>(declarationFiles);
 }
 
-function createServices(options: PluginOptions, builder: boolean, _resolve: ResolveFunction, _lookup: LookupFunction): Promise<FactoryOutput> {
+function createServices(
+  options: PluginOptions, builder: boolean, _resolve: ResolveFunction, _lookup: LookupFunction,
+  _fetch: FetchFunction
+): Promise<FactoryOutput> {
    const host = new CompilerHost(options, builder);
    const transpiler = new Transpiler(host);
 
@@ -97,14 +101,34 @@ function createServices(options: PluginOptions, builder: boolean, _resolve: Reso
       resolver = new Resolver(host, _resolve, _lookup);
       typeChecker = new TypeChecker(host);
 
-      if (!host.options.noLib) {
-         return _resolve(host.getDefaultLibFileName())
-            .then(defaultLibAddress => {
-               resolver.registerDeclarationFile(defaultLibAddress);
-               return { host, transpiler, resolver, typeChecker, options };
-            });
-      }
+      return addLibFilesToHost(host, _resolve, _fetch).then(
+        () => ({ host, transpiler, resolver, typeChecker, options })
+      );
    }
 
    return Promise.resolve({ host, transpiler, resolver, typeChecker, options });
+}
+
+
+/**
+ * To support ts 'lib' compiler option we need to add corresponding lib files to CompilerHost.
+ */
+function addLibFilesToHost(
+  host: CompilerHost, _resolve: ResolveFunction, _fetch: FetchFunction
+): Promise<any> {
+  const allLibs =
+    getDefaultLibFilePaths(host.options).map(
+      ([libRef, libFile]) => _resolve(libFile).then(
+        libAddress =>
+          _fetch(libAddress).then(
+            libSource => {
+              const file = host.addFile(libRef, libSource);
+              file.isLibFile = true;
+              file.isDefaultLibFile = true;
+              return file;
+            }
+          )
+      )
+    );
+  return Promise.all(allLibs);
 }

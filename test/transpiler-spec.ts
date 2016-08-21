@@ -5,6 +5,7 @@ import chai = require('chai');
 import {CompilerHost} from '../src/compiler-host';
 import {Transpiler} from '../src/transpiler';
 import {formatErrors} from '../src/format-errors';
+import { addLibFiles } from './libTestUtils';
 
 const should = chai.should();
 
@@ -19,6 +20,7 @@ describe('Transpiler', () => {
    function transpile(sourceName, source, host?) {
       host = host || new CompilerHost({});
       const transpiler = new Transpiler(host);
+      addLibFiles(host);
       host.addFile(sourceName, source);
       return transpiler.transpile(sourceName);
    }

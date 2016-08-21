@@ -7,6 +7,7 @@ import {Resolver} from '../src/resolver';
 import {TypeChecker} from '../src/type-checker';
 import {CompilerHost} from '../src/compiler-host';
 import {formatErrors} from '../src/format-errors';
+import { addLibFiles } from './libTestUtils';
 
 const should = chai.should();
 
@@ -104,7 +105,6 @@ describe('TypeChecker', () => {
    }
 
    async function typecheckAll(filename: string) {
-      resolver.registerDeclarationFile((ts as any).normalizePath(require.resolve(host.getDefaultLibFileName())));
       await resolveAll([filename]);
       let result = typeChecker.check();
 
@@ -115,7 +115,7 @@ describe('TypeChecker', () => {
    }
 
    beforeEach(() => {
-      host = new CompilerHost({});
+      host = addLibFiles(new CompilerHost({}));
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
    });
@@ -130,7 +130,7 @@ describe('TypeChecker', () => {
       const options = {
          noImplicitAny: true
       };
-      host = new CompilerHost(options);
+      host = addLibFiles(new CompilerHost(options));
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
@@ -155,7 +155,7 @@ describe('TypeChecker', () => {
       const options = {
          noImplicitAny: true
       };
-      host = new CompilerHost(options);
+      host = addLibFiles(new CompilerHost(options));
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
       host.addFile("declaration.d.ts", "export var a: string = 10;");
@@ -174,13 +174,9 @@ describe('TypeChecker', () => {
       const options = {
          noImplicitAny: true
       };
-      host = new CompilerHost(options);
+      host = addLibFiles(new CompilerHost(options));
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
-
-      const libName = (ts as any).normalizePath(require.resolve(host.getDefaultLibFileName()));
-      resolver.registerDeclarationFile(libName);
-      host.addFile(libName, fs.readFileSync(libName, 'utf8'));
 
       // should pass normal check and fail forceCheck
       host.addFile("index.ts", '/// <reference path="declaration.d.ts" />\n import a from "amodule"; export = a;');
@@ -229,7 +225,7 @@ describe('TypeChecker', () => {
       const options = {
          resolveAmbientRefs: true
       };
-      host = new CompilerHost(options);
+      host = addLibFiles(new CompilerHost(options));
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
@@ -253,7 +249,7 @@ describe('TypeChecker', () => {
       const options = {
          resolveAmbientRefs: true
       };
-      host = new CompilerHost(options);
+      host = addLibFiles(new CompilerHost(options));
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
@@ -271,7 +267,7 @@ describe('TypeChecker', () => {
       const options = {
          resolveAmbientRefs: true
       };
-      host = new CompilerHost(options);
+      host = addLibFiles(new CompilerHost(options));
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
@@ -298,7 +294,7 @@ describe('TypeChecker', () => {
       const options = {
          supportHtmlImports: true
       };
-      host = new CompilerHost(options);
+      host = addLibFiles(new CompilerHost(options));
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
@@ -312,7 +308,7 @@ describe('TypeChecker', () => {
          supportHtmlImports: true,
          module: "es6"
       };
-      host = new CompilerHost(options);
+      host = addLibFiles(new CompilerHost(options));
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
@@ -322,10 +318,8 @@ describe('TypeChecker', () => {
    });
 
    it('loads lib.d.ts', async () => {
-      const options = {
-         targetLib: "es5"
-      };
-      host = new CompilerHost(options);
+      const options = {};
+      host = addLibFiles(new CompilerHost(options));
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 

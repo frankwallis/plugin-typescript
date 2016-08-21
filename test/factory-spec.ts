@@ -146,15 +146,6 @@ describe('Factory', () => {
       filelist[0].should.be.equal(alternateFile);
    });
 
-   it('adds the default library', async () => {
-      const config = {
-         typeCheck: true
-      };
-      const {resolver} = await createFactory(config, false, resolve, fetch, lookup);
-      resolver.should.be.defined;
-      resolver._declarationFiles.should.have.length(1);
-   });
-
    it('adds declaration files into resolver', async () => {
       const config = {
          tsconfig: declarationFile,
@@ -162,18 +153,7 @@ describe('Factory', () => {
       };
       const {resolver} = await createFactory(config, false, resolve, fetch, lookup);
       resolver.should.be.defined;
-      resolver._declarationFiles.should.have.length(2);
-      resolver._declarationFiles[0].should.be.equal(defaultLib);
-      resolver._declarationFiles[1].should.be.equal(theirModuleFile);
-   });
-
-   it('observes the noLib option', async () => {
-      const config = {
-         noLib: true,
-         typeCheck: true
-      };
-      const {resolver} = await createFactory(config, false, resolve, fetch, lookup);
-      resolver.should.be.defined;
-      resolver._declarationFiles.should.have.length(0);
+      resolver._declarationFiles.should.have.length(1);
+      resolver._declarationFiles[0].should.be.equal(theirModuleFile);
    });
 });
