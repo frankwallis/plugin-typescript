@@ -19,6 +19,7 @@ describe('Host', () => {
          options.target.should.be.equal(ts.ScriptTarget.ES5);
          options.jsx.should.be.equal(ts.JsxEmit.None);
          options.allowNonTsExtensions.should.be.true;
+			options.attypes.should.deep.equal([]);
          options.should.not.have.property("noImplicitAny");
       });
 

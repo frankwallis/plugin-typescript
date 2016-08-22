@@ -19,16 +19,21 @@ describe('Builder', () => {
 			typescriptOptions: {
 				"module": "system",
 				"target": "es5",
+				"jsx": "react",
 				"noImplicitAny": false,
 				"typeCheck": "strict",
-				"tsconfig": false
+				"tsconfig": false,
+				"attypes": undefined
 			},
 			packages: {
 				"testsrc": {
-					"main": "index.ts",
+					"main": "index",
 					"defaultExtension": "ts",
 					"meta": {
 						"*.ts": {
+							"loader": "plugin"
+						},
+						"*.tsx": {
 							"loader": "plugin"
 						}
 					}
@@ -51,13 +56,21 @@ describe('Builder', () => {
 							"exports": "ts"
 						}
 					}
+				},
+				"reacty": {
+					"main": "index.js",
+				},
+				"@types/reacty": {
+					"main": "index.d.ts",
 				}
 			},
 			map: {
 				"testsrc": "test/fixtures-es6/plugin/elisions/",
 				"external": "test/fixtures-es6/plugin/external/",
 				"plugin": "lib/",
-				"typescript": "node_modules/typescript/"
+				"typescript": "node_modules/typescript/",
+				"reacty": "test/fixtures-es6/plugin/attypes/reacty/",
+				"@types/reacty": "test/fixtures-es6/plugin/attypes/@types/reacty/"
 			}
 		};
    }
@@ -163,6 +176,25 @@ describe('Builder', () => {
 				})
 				.then(result => {
 					(result == undefined).should.be.true;
+				})
+      });
+	});
+
+   describe('attypes', () => {
+      it('supports attypes', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/attypes";
+			config.packages["testsrc"].main = "index.tsx";
+			config.packages["testsrc"].defaultExtension = "tsx";
+			config.typescriptOptions.attypes = ["reacty"];
+			builder.config(config);
+			return builder.bundle('testsrc')
+				.catch(err => {
+					console.log(err);
+					true.should.be.false;
+				})
+				.then(result => {
+					result.should.be.defined;
 				})
       });
 	});

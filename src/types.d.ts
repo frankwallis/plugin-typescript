@@ -26,6 +26,8 @@ declare type FetchFunction = (address: string) => Promise<string>;
 interface PluginOptions {
    tsconfig?: boolean | string;
    typeCheck?: boolean | "strict";
+	typings?: string[];
+	attypes?: string[];
 
    /* deprecated */
    supportHtmlImports?: boolean;

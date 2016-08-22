@@ -18,9 +18,11 @@ describe('Plugin', () => {
 			typescriptOptions: {
 				"module": "system",
 				"target": "es5",
+				"jsx": "react",
 				"noImplicitAny": false,
 				"typeCheck": "strict",
-				"tsconfig": false
+				"tsconfig": false,
+				"attypes": undefined
 			},
 			packages: {
 				"testsrc": {
@@ -28,6 +30,9 @@ describe('Plugin', () => {
 					"defaultExtension": "ts",
 					"meta": {
 						"*.ts": {
+							"loader": "plugin"
+						},
+						"*.tsx": {
 							"loader": "plugin"
 						}
 					}
@@ -50,13 +55,21 @@ describe('Plugin', () => {
 							"exports": "ts"
 						}
 					}
+				},
+				"reacty": {
+					"main": "index.js",
+				},
+				"@types/reacty": {
+					"main": "index.d.ts",
 				}
 			},
 			map: {
 				"testsrc": "test/fixtures-es6/plugin/elisions/",
 				"external": "test/fixtures-es6/plugin/external/",
 				"plugin": "lib/",
-				"typescript": "node_modules/typescript/"
+				"typescript": "node_modules/typescript/",
+				"reacty": "test/fixtures-es6/plugin/attypes/reacty/",
+				"@types/reacty": "test/fixtures-es6/plugin/attypes/@types/reacty/"
 			}
 		};
    }
@@ -197,14 +210,33 @@ describe('Plugin', () => {
 				})
       });
 
-     it('complie with custom lib', () => {
+		it('compile with custom lib', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/es6";
-      config.typescriptOptions['lib'] = ["es5", "es2015.promise"];
+			config.typescriptOptions['lib'] = ["es5", "es2015.promise"];
 			System.config(config);
 			return System.import('testsrc/promise.ts')
 				.then(result => {
 					(result == undefined).should.be.false;
+				})
+      });
+	});
+
+   describe('attypes', () => {
+      it('supports attypes', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/attypes";
+			config.packages["testsrc"].main = "index.tsx";
+			config.packages["testsrc"].defaultExtension = "tsx";
+			config.typescriptOptions.attypes = ["reacty"];
+			System.config(config);
+			return System.import('testsrc')
+				.catch(err => {
+					console.log(err.originalErr);
+					true.should.be.false;
+				})
+				.then(result => {
+					result.should.be.defined;
 				})
       });
 	});

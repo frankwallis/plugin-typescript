@@ -113,10 +113,15 @@ export class Resolver {
       return this._resolve(importName, sourceName)
          .then(address => {
             if (isJavaScript(address)) {
-               return this.lookupTyping(importName, sourceName, address)
-                  .then(typingAddress => {
-                     return typingAddress ? typingAddress : address;
-                  });
+					return this.lookupAtType(importName, sourceName)
+						.then(atTypeAddress => {
+							if (atTypeAddress) return atTypeAddress;
+
+							return this.lookupTyping(importName, sourceName, address)
+								.then(typingAddress => {
+									return typingAddress ? typingAddress : address;
+								});
+						});
             }
 
             return address;
@@ -142,4 +147,9 @@ export class Resolver {
             }
          });
    }
+
+   private lookupAtType(importName: string, sourceName: string): Promise<string> {
+		return Promise.resolve(this._host.options.attypes.indexOf(importName) >= 0 ?
+			this._resolve('@types/' + importName, sourceName) : undefined);
+	}
 }

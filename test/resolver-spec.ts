@@ -24,7 +24,9 @@ function resolve(dep, parent) {
    else {
       result = path.join(path.dirname(parent), "resolved", dep);
 
-      if ((path.extname(result) === "") || (dep.indexOf('/') < 0))
+		if (result.indexOf('@types') >= 0)
+			result = result + "/index.d.ts";
+      else if ((path.extname(result) === "") || (dep.indexOf('/') < 0))
          result = result + ".js";
    }
 
@@ -125,6 +127,24 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/resolved/rxjs/Observable.d.ts');
       host.addFile(sourceName, source);
 
+      const deps = await resolver.resolve(sourceName);
+      deps.list.should.have.length(1);
+      deps.list[0].should.equal(expected);
+   });
+
+   it('resolves attypes files when configured', async () => {
+      const source = 'import * as React from "react"; export class MyComponent extends React.Component {}';
+      const sourceName = path.resolve(__dirname, './fixtures-es6/attypes/index.ts');
+      const jsfile = path.resolve(__dirname, './fixtures-es6/attypes/resolved/react.js');
+      const expected = path.resolve(__dirname, './fixtures-es6/attypes/resolved/@types/react/index.d.ts');
+
+      const options = {
+         attypes: ["react"]
+      };
+      host = new CompilerHost(options);
+      resolver = new Resolver(host, resolve, lookup);
+
+      host.addFile(sourceName, source);
       const deps = await resolver.resolve(sourceName);
       deps.list.should.have.length(1);
       deps.list[0].should.equal(expected);

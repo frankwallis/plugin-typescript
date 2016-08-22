@@ -118,6 +118,18 @@ A boolean flag which instructs the plugin to load configuration from "tsconfig.j
 
 Compiler options which do not conflict with those required by plugin-typescript will be loaded from the ```compilerOptions``` section of the file. Any declaration files contained in the ```files``` array will also be loaded if type-checking is enabled.
 
+#### attypes (@types support) ####
+
+A string array containing package names for which typings are available in '@types', for example if you have installed typings using ```jspm install npm:@types/react``` then you should add this to your config:
+
+```json{
+	typescriptOptions: {
+		attypes: ['react, react-dom']
+	}
+}
+
+and those typings will then be used by the type-checker.
+
 ## Features ##
 
 #### Hot-Reload Support ####
