@@ -149,7 +149,14 @@ export class Resolver {
    }
 
    private lookupAtType(importName: string, sourceName: string): Promise<string> {
-		return Promise.resolve(this._host.options.attypes.indexOf(importName) >= 0 ?
-			this._resolve('@types/' + importName, sourceName) : undefined);
+		if (this._host.options.attypes.indexOf(importName) < 0)
+			return Promise.resolve();
+
+		return this._resolve('@types/' + importName, sourceName)
+			.then(resolved => {
+				if (!isTypescriptDeclaration(resolved))
+					resolved = resolved + '/index.d.ts';
+				return resolved;
+			})
 	}
 }
