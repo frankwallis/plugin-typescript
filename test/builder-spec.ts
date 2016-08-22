@@ -23,7 +23,7 @@ describe('Builder', () => {
 				"noImplicitAny": false,
 				"typeCheck": "strict",
 				"tsconfig": false,
-				"attypes": undefined
+				"types": undefined
 			},
 			packages: {
 				"testsrc": {
@@ -180,13 +180,13 @@ describe('Builder', () => {
       });
 	});
 
-   describe('attypes', () => {
-      it('supports attypes', () => {
+   describe('types', () => {
+      it('supports types config option', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/attypes";
 			config.packages["testsrc"].main = "index.tsx";
 			config.packages["testsrc"].defaultExtension = "tsx";
-			config.typescriptOptions.attypes = ["reacty"];
+			config.typescriptOptions.types = ["reacty"];
 			builder.config(config);
 			return builder.bundle('testsrc')
 				.catch(err => {

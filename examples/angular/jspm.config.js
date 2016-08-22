@@ -5,7 +5,7 @@ SystemJS.config({
     "noImplicitAny": false,
     "typeCheck": "strict",
     "tsconfig": "src/another-tsconfig.json",
-    "attypes": [
+    "types": [
       "angular",
       "jquery"
     ]

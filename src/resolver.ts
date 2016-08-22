@@ -161,7 +161,9 @@ export class Resolver {
    }
 
    private lookupAtType(importName: string, sourceName: string): Promise<string> {
-		if (this._host.options.attypes.indexOf(importName) < 0)
+		console.log('here', importName, this._host.options.types);
+
+		if (this._host.options.types.indexOf(importName) < 0)
 			return Promise.resolve();
 
 		return this._resolve('@types/' + importName, sourceName)

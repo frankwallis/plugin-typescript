@@ -35,7 +35,10 @@ export class Transpiler {
  		this._options.noLib = true;
 		this._options.lib = undefined; // incompatible with noLib
 
-       /* without this we get 'cannot overwrite existing file' when transpiling js files */
+		/* without this we get a 'cannot find type-reference' error */
+ 		this._options.types = [];
+
+      /* without this we get 'cannot overwrite existing file' when transpiling js files */
       this._options.suppressOutputPathCheck = true;
 
       /* with this we don't get any files */

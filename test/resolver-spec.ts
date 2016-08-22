@@ -142,7 +142,7 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/attypes/resolved/@types/reacty/index.d.ts');
 
       const options = {
-         attypes: ["reacty"]
+         types: ["reacty"]
       };
       host = new CompilerHost(options);
       resolver = new Resolver(host, resolve, lookup);
@@ -160,7 +160,7 @@ describe('Resolver', () => {
       const expected = path.resolve(__dirname, './fixtures-es6/attypes/resolved/@types/react/index.d.ts');
 
       const options = {
-         attypes: ["react"]
+         types: ["react"]
       };
       host = new CompilerHost(options);
       resolver = new Resolver(host, resolve, lookup);

@@ -5,7 +5,7 @@ SystemJS.config({
     "noImplicitAny": false,
     "typeCheck": "strict",
     "tsconfig": true,
-    "attypes": [
+    "types": [
       "react",
       "react-dom"
     ]
