@@ -4,20 +4,27 @@ SystemJS.config({
     "module": "system",
     "noImplicitAny": false,
     "typeCheck": "strict",
-    "tsconfig": "src/another-tsconfig.json"
+    "tsconfig": "src/another-tsconfig.json",
+	 "attypes": ["angular"]
   },
   packages: {
     "src": {
       "main": "index",
       "defaultExtension": "ts",
       "meta": {
+        "*.ts": {
+          "loader": "ts"
+        },
         "*.css": {
           "loader": "css"
         },
-        "*.ts": {
-          "loader": "ts"
+        "*.html": {
+          "loader": "text"
         }
       }
     }
+  },
+  map: {
+    "angular": "github:angular/bower-angular@1.5.8"
   }
 });

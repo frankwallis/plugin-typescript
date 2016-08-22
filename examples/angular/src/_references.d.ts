@@ -1,4 +1,6 @@
-declare module "angular" {
-   export function module(name: string, deps: Array<string>);
-}
 declare var __moduleName;
+
+declare module "*.html" {
+	var a: string;
+	export default a;
+}
