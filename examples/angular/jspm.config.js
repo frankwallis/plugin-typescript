@@ -5,7 +5,10 @@ SystemJS.config({
     "noImplicitAny": false,
     "typeCheck": "strict",
     "tsconfig": "src/another-tsconfig.json",
-	 "attypes": ["angular"]
+    "attypes": [
+      "angular",
+      "jquery"
+    ]
   },
   packages: {
     "src": {
@@ -23,8 +26,5 @@ SystemJS.config({
         }
       }
     }
-  },
-  map: {
-    "angular": "github:angular/bower-angular@1.5.8"
   }
 });

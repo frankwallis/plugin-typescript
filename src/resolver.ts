@@ -76,7 +76,7 @@ export class Resolver {
          .map((ref) => this.resolveReference(ref.fileName, sourceName));
 
       const resolvedTypes = info.typeReferenceDirectives
-         .map((typ) => this.resolveImport(typ.fileName, sourceName));
+         .map((typ) => this.resolveTypeReference(typ.fileName, sourceName));
 
       const resolvedImports = info.importedFiles
          .map((imp) => this.resolveImport(imp.fileName, sourceName));
@@ -112,6 +112,10 @@ export class Resolver {
          referenceName = "./" + referenceName;
 
       return this._resolve(referenceName, sourceName);
+   }
+
+   private resolveTypeReference(referenceName: string, sourceName: string): Promise<string> {
+		return this.lookupAtType(referenceName, sourceName)
    }
 
    private resolveImport(importName: string, sourceName: string): Promise<string> {
