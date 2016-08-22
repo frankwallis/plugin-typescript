@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {CalculatorStore} from "./calculator-store";
 
-export class Calculator extends React.Component {
+export class Calculator extends React.Component<any, any> {
    constructor(props) {
       super(props);
       this.calculatorStore = new CalculatorStore();

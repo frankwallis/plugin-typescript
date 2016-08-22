@@ -4,7 +4,11 @@ SystemJS.config({
     "module": "system",
     "noImplicitAny": false,
     "typeCheck": "strict",
-    "tsconfig": true
+    "tsconfig": true,
+    "attypes": [
+      "react",
+      "react-dom"
+    ]
   },
   packages: {
     "src": {

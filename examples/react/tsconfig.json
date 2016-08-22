@@ -5,7 +5,6 @@
 		"module": "system"
 	},
 	"files": [
-		"./src/_references.d.ts",
 		"./src/index.tsx"
 	]
 }

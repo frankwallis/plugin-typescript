@@ -8,8 +8,10 @@
   "jspm": {
     "registry": "npm",
     "dependencies": {
+      "@types/react": "^0.14.32",
+      "@types/react-dom": "^0.14.15",
       "react-dom": "^15.2.1",
-      "ts": "github:frankwallis/plugin-typescript@^5.0.11"
+      "ts": "github:frankwallis/plugin-typescript@^5.0.14"
     },
     "devDependencies": {
       "clean-css": "^3.4.3",
