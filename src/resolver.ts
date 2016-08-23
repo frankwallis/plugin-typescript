@@ -166,8 +166,12 @@ export class Resolver {
 
 		return this._resolve('@types/' + importName, sourceName)
 			.then(resolved => {
+				if (isJavaScript(resolved))
+					resolved = resolved.slice(0, -3);
+
 				if (!isTypescriptDeclaration(resolved))
 					resolved = resolved + '/index.d.ts';
+
 				return resolved;
 			})
 	}
