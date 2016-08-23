@@ -122,12 +122,13 @@ Compiler options which do not conflict with those required by plugin-typescript 
 
 A string array containing package names for which typings are available in '@types', for example if you have installed typings using ```jspm install npm:@types/react``` then you should add this to your config:
 
-```json{
+```json
+{
 	typescriptOptions: {
 		types: ['react, react-dom']
 	}
 }
-
+```
 and those typings will then be used by the type-checker.
 
 ## Features ##
