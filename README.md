@@ -124,8 +124,8 @@ A string array containing package names for which typings are available in '@typ
 
 ```json
 {
-	typescriptOptions: {
-		types: ['react, react-dom']
+	"typescriptOptions": {
+		"types": ["react", "react-dom"]
 	}
 }
 ```
