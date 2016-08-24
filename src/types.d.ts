@@ -51,6 +51,12 @@ declare type DependencyInfo = {
    mappings: { [s: string]: string; }
 }
 
+declare module Chai {
+   interface Assertion {
+      defined: any;
+   }
+}
+
 declare module "jspm" {
 	export const Builder: any;
 }
