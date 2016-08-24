@@ -8,7 +8,8 @@ describe('Plugin', () => {
 	let System = null;
 
 	beforeEach(() => {
-		System = new SystemJS.constructor();
+		var constructor = SystemJS['constructor'] as () => void;
+		System = new constructor();
 	})
 
 	function defaultConfig() {
@@ -224,7 +225,9 @@ describe('Plugin', () => {
 
    describe('types', () => {
       it('supports types config option', () => {
-			const config = defaultConfig();
+			const config = defaultConfig() as any;
+			config.defaultJsExtensions = true;
+			config.defaultJSExtensions = true;
 			config.map["testsrc"] = "test/fixtures-es6/plugin/attypes";
 			config.packages["testsrc"].main = "index.tsx";
 			config.packages["testsrc"].defaultExtension = "tsx";

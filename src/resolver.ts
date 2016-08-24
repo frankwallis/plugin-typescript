@@ -166,6 +166,7 @@ export class Resolver {
 
 		return this._resolve('@types/' + importName, sourceName)
 			.then(resolved => {
+				// needed for jspm@0.16
 				if (isJavaScript(resolved))
 					resolved = resolved.slice(0, -3);
 

@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"module": "system",
 		"outDir": "lib",
-    "lib": ["es6"],
+    	"lib": ["es6"],
 		"target": "es5",
 		"removeComments": true,
 		"moduleResolution": "node",
@@ -19,7 +19,6 @@
 		"./src/format-errors.ts",
 		"./src/logger.ts",
 		"./src/utils.ts",
-		"./src/types.d.ts",
-		"./typings/tsd.d.ts"
+		"./src/types.d.ts"
 	]
 }
