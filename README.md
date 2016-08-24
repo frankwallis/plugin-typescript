@@ -9,11 +9,11 @@ TypeScript loader for SystemJS
 
 A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to ```System.import``` TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
 
+Starting with JSPM 0.17.0 (currently in beta) this plugin will be the officially supported mechanism for transpiling TypeScript. It provides the ability to type-check files while loading them, which is not currently possible with the built-in SystemJS TypeScript transpiler.
+
 plugin-typescript uses TypeScript 2.0.0  
 For TypeScript 1.8.1 use plugin-typescript 4.0.16  
 For TypeScript 1.7.5 and below use plugin-typescript 2.x.x  
-
-Starting with JSPM 0.17.0 (currently in beta) this plugin will be the officially supported mechanism for transpiling TypeScript. It provides the ability to type-check files while loading them, which is not currently possible with the built-in SystemJS TypeScript transpiler.
 
 ## Installation ##
 
@@ -118,25 +118,25 @@ A boolean flag which instructs the plugin to load configuration from "tsconfig.j
 
 Compiler options which do not conflict with those required by plugin-typescript will be loaded from the ```compilerOptions``` section of the file. Any declaration files contained in the ```files``` array will also be loaded if type-checking is enabled.
 
-#### types (@types support) ####
-
-A string array containing package names for which typings are available in '@types', for example if you have installed typings using ```jspm install npm:@types/react``` then you should add this to your config:
-
-```json
-{
-	"typescriptOptions": {
-		"types": ["react", "react-dom"]
-	}
-}
-```
-and those typings will then be used by the type-checker.
-
 ## Features ##
 
 #### Hot-Reload Support ####
 
 This plugin provides incremental type-checking when using [systemjs-hot-reloader](https://github.com/capaj/systemjs-hot-reloader)
 See any of the example projects for a working hot-reloading setup.
+
+#### @types support ####
+
+The ```types``` compiler option is a string array containing package names for which typings are available in '@types', for example if you have installed typings using ```jspm install npm:@types/react``` then you should add ```types: ["react"]``` to your config:
+
+```json
+{
+	"typescriptOptions": {
+		"types": ["react"]
+	}
+}
+```
+and the installed typings will then be used by the type-checker.
 
 #### External Typings Support ####
 
