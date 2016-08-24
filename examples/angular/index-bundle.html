@@ -14,12 +14,7 @@
 </head>
 
 <body ng-cloak ng-app="example">
-	<div ng-controller="exampleController as cx">
-		<label>Enter your name</label>
-		<input type="text" ng-model="cx.name"></input>
-		<button ng-click="cx.greet()">Press Me</button>
-		<p>{{cx.greeting}}</p>
-	</div>
+	<example-form />
 </body>
 
 </html>

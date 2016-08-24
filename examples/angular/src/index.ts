@@ -1,12 +1,16 @@
 import {module} from "angular";
 import "./index.css";
 
-export var Module = module("example", [
-
-]);
-
+import exampleTemplate from './example-template.html';
 import {ExampleService} from './example-service';
 import {ExampleController} from './example-controller';
 
+export var Module = module("example", []);
+
 Module.service("exampleService", ExampleService);
-Module.controller("exampleController", ExampleController);
+
+Module.component('exampleForm', {
+	template: exampleTemplate,
+	controller: ExampleController,
+	controllerAs: 'cx'
+});
