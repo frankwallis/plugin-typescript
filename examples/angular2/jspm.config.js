@@ -3,7 +3,7 @@ SystemJS.config({
   typescriptOptions: {
     "module": "es6",
     "target": "es6",
-    "typeCheck": "strict",
+    "typeCheck": true,
     "tsconfig": true,
     "sourceMap": true
   },

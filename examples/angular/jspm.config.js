@@ -3,7 +3,7 @@ SystemJS.config({
   typescriptOptions: {
     "module": "system",
     "noImplicitAny": false,
-    "typeCheck": "strict",
+    "typeCheck": true,
     "tsconfig": "src/another-tsconfig.json",
     "types": [
       "angular",
