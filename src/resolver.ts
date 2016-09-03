@@ -147,9 +147,17 @@ export class Resolver {
                return jsToDts(address);
             }
             else if (typeof (metadata.typings) === 'string') {
-               const packageName = importName.split('/')[0];
-               const typingsName = isRelative(metadata.typings) ? metadata.typings.slice(2) : metadata.typings;
-               return this._resolve(`${packageName}/${typingsName}`, sourceName);
+					let packageName = undefined;
+
+					const packageParts = importName.split('/');
+					if ((packageParts[0].indexOf('@') === 0) && (packageParts.length > 1))
+               	packageName = packageParts[0] + '/' + packageParts[1];
+					else
+						packageName = packageParts[0];
+
+               const typingsName = isRelative(metadata.typings) ?
+						metadata.typings.slice(2) : metadata.typings;
+               return this._resolve(packageName + '/' + typingsName, sourceName);
             }
             else if (metadata.typings) {
                throw new Error("invalid 'typings' value [" + metadata.typings + "] [" + address + "]");

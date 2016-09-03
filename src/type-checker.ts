@@ -65,7 +65,8 @@ export class TypeChecker {
    }
 
    private getCandidates(force: boolean) {
-      const candidates = this._host.getAllFiles()
+      const candidates: Candidate[] = this._host
+			.getAllFiles()
          .filter(file => file.fileName != __HTML_MODULE__)
          .map(file => ({
             name: file.fileName,
