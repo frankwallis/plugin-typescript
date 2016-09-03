@@ -4,9 +4,7 @@ import calculatorTemplate from "./calculator-view.html";
 
 @Component({
    selector: 'calculator-component',
-   providers: [CalculatorStore],
-   template: calculatorTemplate,
-   directives: []
+   template: calculatorTemplate
 })
 export class CalculatorComponent {
 

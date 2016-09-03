@@ -8,7 +8,7 @@
   "jspm": {
     "registry": "github",
     "dependencies": {
-      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.0.0-rc.4",
+      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.0.0-rc.6",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0"
     },
     "devDependencies": {
@@ -16,21 +16,20 @@
       "https": "jspm/nodelibs-https@^0.2.0-alpha",
       "module": "jspm/nodelibs-module@^0.2.0-alpha",
       "net": "jspm/nodelibs-net@^0.2.0-alpha",
-      "os": "jspm/nodelibs-os@^0.2.0-alpha",
       "plugin-babel": "npm:systemjs-plugin-babel@^0.0.12",
       "clean-css": "npm:clean-css@^3.4.3",
       "css": "frankwallis/plugin-css@master",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.2",
-      "ts": "frankwallis/plugin-typescript@^5.0.0",
+      "ts": "frankwallis/plugin-typescript@^5.0.20",
       "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
       "url": "jspm/nodelibs-url@^0.2.0-alpha"
     },
     "peerDependencies": {
-      "@angular/common": "npm:@angular/common@^2.0.0-rc.4",
-      "@angular/compiler": "npm:@angular/compiler@^2.0.0-rc.4",
-      "@angular/core": "npm:@angular/core@^2.0.0-rc.4",
-      "@angular/platform-browser": "npm:@angular/platform-browser@^2.0.0-rc.4",
+      "@angular/common": "npm:@angular/common@^2.0.0-rc.6",
+      "@angular/compiler": "npm:@angular/compiler@^2.0.0-rc.6",
+      "@angular/core": "npm:@angular/core@^2.0.0-rc.6",
+      "@angular/platform-browser": "npm:@angular/platform-browser@^2.0.0-rc.6",
       "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
       "buffer": "jspm/nodelibs-buffer@^0.2.0-alpha",
       "child_process": "jspm/nodelibs-child_process@^0.2.0-alpha",
@@ -38,20 +37,21 @@
       "crypto": "jspm/nodelibs-crypto@^0.2.0-alpha",
       "events": "jspm/nodelibs-events@^0.2.0-alpha",
       "fs": "jspm/nodelibs-fs@^0.2.0-alpha",
+      "os": "jspm/nodelibs-os@^0.2.0-alpha",
       "path": "jspm/nodelibs-path@^0.2.0-alpha",
       "process": "jspm/nodelibs-process@^0.2.0-alpha",
-      "rxjs": "npm:rxjs@5.0.0-beta.6",
+      "rxjs": "npm:rxjs@5.0.0-beta.11",
       "stream": "jspm/nodelibs-stream@^0.2.0-alpha",
       "string_decoder": "jspm/nodelibs-string_decoder@^0.2.0-alpha",
       "util": "jspm/nodelibs-util@^0.2.0-alpha",
       "vm": "jspm/nodelibs-vm@^0.2.0-alpha",
-      "zone.js": "npm:zone.js@^0.6.6"
+      "zone.js": "npm:zone.js@^0.6.17"
     },
     "overrides": {
-      "npm:@angular/common@2.0.0-rc.4": {
+      "npm:@angular/common@2.0.0-rc.6": {
         "meta": {
           "*.js": {
-            "typings": true,
+            "typings": "index.d.ts",
             "deps": [
               "reflect-metadata",
               "zone.js"
@@ -59,10 +59,10 @@
           }
         }
       },
-      "npm:@angular/compiler@2.0.0-rc.4": {
+      "npm:@angular/compiler@2.0.0-rc.6": {
         "meta": {
           "*.js": {
-            "typings": true,
+            "typings": "index.d.ts",
             "deps": [
               "reflect-metadata",
               "zone.js"
@@ -70,10 +70,10 @@
           }
         }
       },
-      "npm:@angular/core@2.0.0-rc.4": {
+      "npm:@angular/core@2.0.0-rc.6": {
         "meta": {
           "*.js": {
-            "typings": true,
+            "typings": "index.d.ts",
             "deps": [
               "reflect-metadata",
               "zone.js"
@@ -81,17 +81,17 @@
           }
         }
       },
-      "npm:@angular/platform-browser-dynamic@2.0.0-rc.4": {
+      "npm:@angular/platform-browser-dynamic@2.0.0-rc.6": {
         "meta": {
           "*.js": {
-            "typings": true
+            "typings": "index.d.ts"
           }
         }
       },
-      "npm:@angular/platform-browser@2.0.0-rc.4": {
+      "npm:@angular/platform-browser@2.0.0-rc.6": {
         "meta": {
           "*.js": {
-            "typings": true,
+            "typings": "index.d.ts",
             "deps": [
               "reflect-metadata",
               "zone.js"
@@ -122,7 +122,11 @@
         "jspmNodeConversion": false,
         "format": "cjs"
       },
-      "npm:rxjs@5.0.0-beta.6": {
+      "npm:reflect-metadata@0.1.8": {
+        "jspmNodeConversion": true,
+        "map": {}
+      },
+      "npm:rxjs@5.0.0-beta.11": {
         "main": "bundles/Rx.js",
         "meta": {
           "bundles/Rx.js": {
@@ -133,11 +137,7 @@
           }
         }
       },
-      "npm:reflect-metadata@0.1.3": {
-        "jspmNodeConversion": true,
-        "map": {}
-      },
-      "npm:typescript@2.0.0": {
+      "npm:typescript@2.0.2": {
         "browser": {},
         "map": {
           "buffer": "@empty",

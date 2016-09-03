@@ -12,12 +12,13 @@
 	<base href="/">
 
 	<script src="jspm_packages/system.src.js"></script>
+	<script>System.packageWithIndex = true;</script>
 	<script src="jspm.browser.js"></script>
 	<script src="jspm.config.js"></script>
 </head>
 
 <body>
-	<calculator-app></calculator-app>
+	<calculator-component></calculator-component>
 
 	<script>
       System.trace = true
@@ -25,7 +26,7 @@
          new HotReloader.default('http://localhost:8080')  // chokidar-socket-emitter port
       });
 
-      System.import("src")				
+      System.import("src")
 			.then(function() {
 				console.log('running');
 			})
