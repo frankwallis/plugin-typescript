@@ -118,46 +118,60 @@ A boolean flag which instructs the plugin to load configuration from "tsconfig.j
 
 Compiler options which do not conflict with those required by plugin-typescript will be loaded from the ```compilerOptions``` section of the file. Any declaration files contained in the ```files``` array will also be loaded if type-checking is enabled.
 
+#### types ####
+
+The ```types``` compiler option tells the type-checker which packages have typings available under the *@types* scoped package. It is an array of strings. As an example if you have installed typings at ```@types/react``` then add ```react``` to the array:
+```json
+{
+  "typescriptOptions": {
+    "types": ["react"]
+  }
+}
+```
+To install typings from @types using jspm:
+```sh
+jspm install npm:@types/react
+```
+
+#### typings ####
+
+The ```types``` compiler option tells the type-checker which packages contain their own typings and where they are located, it is an object map:
+
+```json
+"typescriptOptions": {
+  "typings": {
+    "rxjs": "Rx.d.ts",			// relative to root of package
+    "myownpackage": true			// all js files have typings with the same name
+  }
+}
+```
+
+If a package contains typings for *all* js files in the package then the value should be set to ```true```, otherwise it should contain the pach of the bundled typings file, relative to the root of the project. 
+
+It is also possible to configure this using SystemJS metadata which can be configured in ```packages``` configuration, or in package.json overrides, or in the jspm registry.
+
+```json
+  "overrides": {
+    "npm:@angular/core@2.0.0-rc.6": {
+      "meta": {
+        "bundles/core.umd.js": {
+        "typings": "index.d.ts"
+      }
+    }
+  }
+}
+```
+  
+For more information on setting SystemJS metadata, see [here](https://github.com/systemjs/systemjs/blob/master/docs/config-api.md#packages)
+
 ## Features ##
 
-#### Hot-Reload Support ####
+#### Hot-Reload support ####
 
 This plugin provides incremental type-checking when using [systemjs-hot-reloader](https://github.com/capaj/systemjs-hot-reloader)
 See any of the example projects for a working hot-reloading setup.
 
-#### @types support ####
-
-The ```types``` compiler option is a string array containing package names for which typings are available in '@types', for example if you have installed typings using ```jspm install npm:@types/react``` then you should add ```types: ["react"]``` to your config:
-
-```json
-{
-	"typescriptOptions": {
-		"types": ["react"]
-	}
-}
-```
-and the installed typings will then be used by the type-checker.
-
-#### External Typings Support ####
-
-The plugin will automatically load typings for packages if it knows that they are present. In order tell the plugin that a package exposes external typings, use SystemJS metadata configuration which can be specified in ```packages``` configuration or in package.json overrides, or in the jspm registry.
-
-```js
-    "overrides": {
-      "npm:@angular/core@2.0.0-rc.1": {
-        "meta": {
-          "*.js": {
-            "typings": true      // can also be path of a typings bundle
-          }
-        }
-      }
-	 }
-```
-
-If external typings are present for all js files in the package set ```"typings": true```. If external typings are in a single bundled file then specify the path of that file, relative to the root of the project.   
-For more information on setting SystemJS metadata, see [here](https://github.com/systemjs/systemjs/blob/master/docs/config-api.md#packages)
-
-#### Rollup Support ####
+#### Rollup support ####
 
 Rollup is supported when transpiling with ```module: "es6"```. It can help to reduce the size of your bundles by stripping out unused modules. For more information see [here](https://github.com/rollup/rollup)
 
@@ -165,11 +179,11 @@ Rollup is supported when transpiling with ```module: "es6"```. It can help to re
 
 When compiling in the browser, compiler errors contain a link to the exact location of the error in the source. This is particularly helpful if you are using Chrome DevTools as your IDE.
 
-#### Type-checking over Multiple Packages ####
+#### Type-checking over multiple packages ####
 
 The type-checker runs across multiple packages if the imported file resolves to a typescript file. This means that if you do ```import "mypackage/index"``` and that resolves to a typescript file then that import will be properly type-checked. You no longer have to handcraft an external declaration file for 'mypackage'.
 
-#### Override TypeScript Version ####
+#### Override TypeScript version ####
 
 To override the version of TypeScript used by the plugin, add an override to the ```jspm``` section of your package.json
 

@@ -54,8 +54,8 @@ describe('Resolver', () => {
    const TYPINGS_NAME = path.join(path.resolve(__dirname, "./fixtures-es6/typings"), "somefile.ts");
    const ANYFILE_NAME = "somefile.ts";
 
-   let resolver;
-   let host;
+   let resolver: Resolver;
+   let host: CompilerHost;
 
    beforeEach(() => {
       host = new CompilerHost({});
@@ -254,6 +254,51 @@ describe('Resolver', () => {
 			metadata[jsfile] = {
 				typings: "index.d.ts"
 			};
+
+			const source = 'import {bootstrap} from "@angular/core";';
+			host.addFile(TYPINGS_NAME, source);
+
+			const deps = await resolver.resolve(TYPINGS_NAME);
+			deps.list.should.have.length(1);
+			deps.mappings["@angular/core"].should.equal(expected);
+		});
+
+		it('resolves typings using "typings" option in typescriptOptions', async () => {
+			const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/@angular/core/index.d.ts');
+			const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/@angular/core/bundles/index.umd.js');
+
+			const options = {
+				typings: {
+					"@angular/core": "index.d.ts"
+				}
+			};
+			host = new CompilerHost(options);
+			resolver = new Resolver(host, resolve, lookup);
+
+			const source = 'import {bootstrap} from "@angular/core";';
+			host.addFile(TYPINGS_NAME, source);
+
+			const deps = await resolver.resolve(TYPINGS_NAME);
+			deps.list.should.have.length(1);
+			deps.mappings["@angular/core"].should.equal(expected);
+		});
+
+		it('"typings" option in typescriptOptions takes precedence over metadata', async () => {
+			const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/@angular/core/index.d.ts');
+			const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/@angular/core/bundles/index.umd.js');
+
+			metadata = {};
+			metadata[jsfile] = {
+				typings: "some/other/file.d.ts"
+			};
+
+			const options = {
+				typings: {
+					"@angular/core": "index.d.ts"
+				}
+			};
+			host = new CompilerHost(options);
+			resolver = new Resolver(host, resolve, lookup);
 
 			const source = 'import {bootstrap} from "@angular/core";';
 			host.addFile(TYPINGS_NAME, source);

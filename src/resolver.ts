@@ -140,32 +140,40 @@ export class Resolver {
          });
    }
 
-   private lookupTyping(importName: string, sourceName: string, address: string): Promise<string> {
-      return this._lookup(address)
-         .then(metadata => {
-            if (metadata.typings === true) {
-               return jsToDts(address);
-            }
-            else if (typeof (metadata.typings) === 'string') {
-					let packageName = undefined;
+	private lookupTyping(importName: string, sourceName: string, address: string): Promise<string> {
+		let typings = this._host.options.typings[importName];
 
-					const packageParts = importName.split('/');
-					if ((packageParts[0].indexOf('@') === 0) && (packageParts.length > 1))
-               	packageName = packageParts[0] + '/' + packageParts[1];
-					else
-						packageName = packageParts[0];
+		if (typings) {
+			return this.resolveTyping(typings, importName, sourceName, address);
+		}
+		else {
+	      return this._lookup(address)
+   	      .then(metadata => this.resolveTyping(metadata.typings, importName, sourceName, address));
+		}
+	}
 
-               const typingsName = isRelative(metadata.typings) ?
-						metadata.typings.slice(2) : metadata.typings;
-               return this._resolve(packageName + '/' + typingsName, sourceName);
-            }
-            else if (metadata.typings) {
-               throw new Error("invalid 'typings' value [" + metadata.typings + "] [" + address + "]");
-            }
-            else {
-               return undefined;
-            }
-         });
+   private resolveTyping(typings: boolean | string, importName: string, sourceName: string, address: string): Promise<string> {
+		if (typings === true) {
+			return Promise.resolve(jsToDts(address));
+		}
+		else if (typeof (typings) === 'string') {
+			let packageName = undefined;
+
+			const packageParts = importName.split('/');
+			if ((packageParts[0].indexOf('@') === 0) && (packageParts.length > 1))
+				packageName = packageParts[0] + '/' + packageParts[1];
+			else
+				packageName = packageParts[0];
+
+			const typingsName = isRelative(typings) ? typings.slice(2) : typings;
+			return this._resolve(packageName + '/' + typingsName, sourceName);
+		}
+		else if (typings) {
+			throw new Error("invalid 'typings' value [" + typings + "] [" + address + "]");
+		}
+		else {
+			return Promise.resolve(undefined);
+		}
    }
 
    private lookupAtType(importName: string, sourceName: string): Promise<string> {

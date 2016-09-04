@@ -43,6 +43,7 @@ export class CompilerHost implements ts.CompilerHost {
       // Force module resolution into 'classic' mode, to prevent node module resolution from kicking in
       this._options.moduleResolution = ts.ModuleResolutionKind.Classic;
 		this._options.types = this._options.types || [];
+		this._options.typings = this._options.typings || {};
 
       // When bundling automatically output es6 modules instead of system to enable rollup support
       // if (builder) {
