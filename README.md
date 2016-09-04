@@ -120,7 +120,7 @@ Compiler options which do not conflict with those required by plugin-typescript 
 
 #### types ####
 
-The ```types``` compiler option tells the type-checker which packages have typings available under the *@types* scoped package. It is an array of strings. As an example if you have installed typings at ```@types/react``` then add ```react``` to the array:
+The ```types``` compiler option tells the type-checker which packages have typings available under the *@types* scoped package. As an example if you have installed typings at ```@types/react``` then add ```react``` to the array of strings:
 ```json
 {
   "typescriptOptions": {
@@ -137,7 +137,7 @@ jspm install npm:@types/react
 
 The ```types``` compiler option tells the type-checker which packages contain their own typings and where they are located, it is an object map:
 
-```json
+```js
 "typescriptOptions": {
   "typings": {
     "rxjs": "Rx.d.ts",			// relative to root of package
