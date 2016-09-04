@@ -10,7 +10,7 @@
 
 
 <a name="5.0.20"></a>
-## [5.0.20](https://github.com/frankwallis/plugin-typescript/compare/5.0.19...5.0.20) (2016-09-03)
+## [5.0.20](https://github.com/frankwallis/plugin-typescript/compare/5.0.19...5.0.20) <sub>(2016-09-03)</sub>
 
 
 ### Bug Fixes
@@ -21,7 +21,7 @@
 
 
 <a name="5.0.18"></a>
-## [5.0.18](https://github.com/frankwallis/plugin-typescript/compare/5.0.17...5.0.18) (2016-08-23)
+## [5.0.18](https://github.com/frankwallis/plugin-typescript/compare/5.0.17...5.0.18) <sub>(2016-08-23)</sub>
 
 
 ### Bug Fixes
@@ -31,7 +31,7 @@
 
 
 <a name="5.0.17"></a>
-## [5.0.17](https://github.com/frankwallis/plugin-typescript/compare/5.0.16...5.0.17) (2016-08-22)
+## [5.0.17](https://github.com/frankwallis/plugin-typescript/compare/5.0.16...5.0.17) <sub>(2016-08-22)</sub>
 
 
 ### Features
@@ -45,7 +45,7 @@
 
 
 <a name="5.0.11"></a>
-## [5.0.11](https://github.com/frankwallis/plugin-typescript/compare/5.0.9...5.0.11) (2016-08-21)
+## [5.0.11](https://github.com/frankwallis/plugin-typescript/compare/5.0.9...5.0.11) <sub>(2016-08-21)</sub>
 
 
 ### Bug Fixes
@@ -60,7 +60,7 @@
 
 
 <a name="5.0.9"></a>
-## [5.0.9](https://github.com/frankwallis/plugin-typescript/compare/5.0.8...5.0.9) (2016-08-03)
+## [5.0.9](https://github.com/frankwallis/plugin-typescript/compare/5.0.8...5.0.9) <sub>(2016-08-03)</sub>
 
 
 ### Features
@@ -73,7 +73,7 @@
 
 
 <a name="5.0.8"></a>
-## [5.0.8](https://github.com/frankwallis/plugin-typescript/compare/5.0.6...5.0.8) (2016-07-17)
+## [5.0.8](https://github.com/frankwallis/plugin-typescript/compare/5.0.6...5.0.8) <sub>(2016-07-17)</sub>
 
 
 ### Features
@@ -84,7 +84,7 @@
 
 
 <a name="5.0.6"></a>
-## [5.0.6](https://github.com/frankwallis/plugin-typescript/compare/5.0.4...5.0.6) (2016-07-16)
+## [5.0.6](https://github.com/frankwallis/plugin-typescript/compare/5.0.4...5.0.6) <sub>(2016-07-16)</sub>
 
 
 ### Features
@@ -95,7 +95,7 @@
 
 
 <a name="5.0.4"></a>
-## [5.0.4](https://github.com/frankwallis/plugin-typescript/compare/5.0.1...5.0.4) (2016-07-16)
+## [5.0.4](https://github.com/frankwallis/plugin-typescript/compare/5.0.1...5.0.4) <sub>(2016-07-16)</sub>
 
 
 ### Features
@@ -112,7 +112,7 @@
 
 
 <a name="5.0.1"></a>
-## [5.0.1](https://github.com/frankwallis/plugin-typescript/compare/5.0.0...5.0.1) (2016-07-12)
+## [5.0.1](https://github.com/frankwallis/plugin-typescript/compare/5.0.0...5.0.1) <sub>(2016-07-12)</sub>
 
 
 ### Features
@@ -124,7 +124,7 @@
 
 
 <a name="4.0.16"></a>
-## [4.0.16](https://github.com/frankwallis/plugin-typescript/compare/4.0.15...4.0.16) (2016-05-16)
+## [4.0.16](https://github.com/frankwallis/plugin-typescript/compare/4.0.15...4.0.16) <sub>(2016-05-16)</sub>
 
 
 ### Bug Fixes
@@ -134,7 +134,7 @@
 
 
 <a name="4.0.15"></a>
-## [4.0.15](https://github.com/frankwallis/plugin-typescript/compare/4.0.10...4.0.15) (2016-05-15)
+## [4.0.15](https://github.com/frankwallis/plugin-typescript/compare/4.0.10...4.0.15) <sub>(2016-05-15)</sub>
 
 
 ### Bug Fixes
@@ -153,7 +153,7 @@
 
 
 <a name="4.0.10"></a>
-## [4.0.10](https://github.com/frankwallis/plugin-typescript/compare/4.0.9...4.0.10) (2016-05-09)
+## [4.0.10](https://github.com/frankwallis/plugin-typescript/compare/4.0.9...4.0.10) <sub>(2016-05-09)</sub>
 
 
 ### Bug Fixes
@@ -163,7 +163,7 @@
 
 
 <a name="4.0.9"></a>
-## [4.0.9](https://github.com/frankwallis/plugin-typescript/compare/4.0.8...4.0.9) (2016-05-04)
+## [4.0.9](https://github.com/frankwallis/plugin-typescript/compare/4.0.8...4.0.9) <sub>(2016-05-04)</sub>
 
 
 ### Bug Fixes
@@ -173,7 +173,7 @@
 
 
 <a name="4.0.8"></a>
-## [4.0.8](https://github.com/frankwallis/plugin-typescript/compare/4.0.7...4.0.8) (2016-04-30)
+## [4.0.8](https://github.com/frankwallis/plugin-typescript/compare/4.0.7...4.0.8) <sub>(2016-04-30)</sub>
 
 
 ### Bug Fixes
@@ -183,7 +183,7 @@
 
 
 <a name="4.0.7"></a>
-## [4.0.7](https://github.com/frankwallis/plugin-typescript/compare/4.0.6...4.0.7) (2016-04-22)
+## [4.0.7](https://github.com/frankwallis/plugin-typescript/compare/4.0.6...4.0.7) <sub>(2016-04-22)</sub>
 
 
 ### Bug Fixes
@@ -193,7 +193,7 @@
 
 
 <a name="4.0.6"></a>
-## [4.0.6](https://github.com/frankwallis/plugin-typescript/compare/4.0.5...4.0.6) (2016-04-17)
+## [4.0.6](https://github.com/frankwallis/plugin-typescript/compare/4.0.5...4.0.6) <sub>(2016-04-17)</sub>
 
 
 ### Bug Fixes
@@ -203,7 +203,7 @@
 
 
 <a name="4.0.5"></a>
-## [4.0.5](https://github.com/frankwallis/plugin-typescript/compare/4.0.4...4.0.5) (2016-03-27)
+## [4.0.5](https://github.com/frankwallis/plugin-typescript/compare/4.0.4...4.0.5) <sub>(2016-03-27)</sub>
 
 
 ### Bug Fixes
@@ -213,7 +213,7 @@
 
 
 <a name="4.0.4"></a>
-## [4.0.4](https://github.com/frankwallis/plugin-typescript/compare/4.0.2...4.0.4) (2016-03-27)
+## [4.0.4](https://github.com/frankwallis/plugin-typescript/compare/4.0.2...4.0.4) <sub>(2016-03-27)</sub>
 
 ### Bug Fixes
 
@@ -223,7 +223,7 @@
 
 
 <a name="4.0.2"></a>
-## [4.0.2](https://github.com/frankwallis/plugin-typescript/compare/4.0.1...4.0.2) (2016-03-02)
+## [4.0.2](https://github.com/frankwallis/plugin-typescript/compare/4.0.1...4.0.2) <sub>(2016-03-02)</sub>
 
 
 ### Bug Fixes
@@ -239,7 +239,7 @@
 
 
 <a name="4.0.1"></a>
-## [4.0.1](https://github.com/frankwallis/plugin-typescript/compare/4.0.0...4.0.1) (2016-02-22)
+## [4.0.1](https://github.com/frankwallis/plugin-typescript/compare/4.0.0...4.0.1) <sub>(2016-02-22)</sub>
 
 ### Features
 
@@ -249,7 +249,7 @@
 
 
 <a name="3.0.3"></a>
-## [3.0.3](https://github.com/frankwallis/plugin-typescript/compare/3.0.2...3.0.3) (2016-02-14)
+## [3.0.3](https://github.com/frankwallis/plugin-typescript/compare/3.0.2...3.0.3) <sub>(2016-02-14)</sub>
 
 
 ### Features
@@ -260,7 +260,7 @@
 
 
 <a name="3.0.2"></a>
-## [3.0.2](https://github.com/frankwallis/plugin-typescript/compare/3.0.1...3.0.2) (2016-02-08)
+## [3.0.2](https://github.com/frankwallis/plugin-typescript/compare/3.0.1...3.0.2) <sub>(2016-02-08)</sub>
 
 
 ### Bug Fixes
@@ -270,7 +270,7 @@
 
 
 <a name="3.0.1"></a>
-## [3.0.1](https://github.com/frankwallis/plugin-typescript/compare/2.6.0...3.0.1) (2016-02-06)
+## [3.0.1](https://github.com/frankwallis/plugin-typescript/compare/2.6.0...3.0.1) <sub>(2016-02-06)</sub>
 
 
 ### Bug Fixes
@@ -284,7 +284,7 @@
 
 
 <a name="2.6.0"></a>
-# [2.6.0](https://github.com/frankwallis/plugin-typescript/compare/2.5.11...2.6.0) (2016-02-04)
+# [2.6.0](https://github.com/frankwallis/plugin-typescript/compare/2.5.11...2.6.0) <sub>(2016-02-04)</sub>
 
 
 ### Bug Fixes
@@ -294,7 +294,7 @@
 
 
 <a name="2.5.11"></a>
-## [2.5.11](https://github.com/frankwallis/plugin-typescript/compare/2.5.10...2.5.11) (2016-02-04)
+## [2.5.11](https://github.com/frankwallis/plugin-typescript/compare/2.5.10...2.5.11) <sub>(2016-02-04)</sub>
 
 
 ### Features
@@ -304,7 +304,7 @@
 
 
 <a name="2.5.10"></a>
-## [2.5.10](https://github.com/frankwallis/plugin-typescript/compare/2.5.8...2.5.10) (2016-02-03)
+## [2.5.10](https://github.com/frankwallis/plugin-typescript/compare/2.5.8...2.5.10) <sub>(2016-02-03)</sub>
 
 
 ### Bug Fixes
@@ -315,7 +315,7 @@
 
 
 <a name="2.5.8"></a>
-## [2.5.8](https://github.com/frankwallis/plugin-typescript/compare/2.5.3...2.5.8) (2016-01-31)
+## [2.5.8](https://github.com/frankwallis/plugin-typescript/compare/2.5.3...2.5.8) <sub>(2016-01-31)</sub>
 
 
 ### Bug Fixes
@@ -327,7 +327,7 @@
 
 
 <a name="2.5.3"></a>
-## [2.5.3](https://github.com/frankwallis/plugin-typescript/compare/2.5.1...2.5.3) (2016-01-26)
+## [2.5.3](https://github.com/frankwallis/plugin-typescript/compare/2.5.1...2.5.3) <sub>(2016-01-26)</sub>
 
 
 ### Bug Fixes
@@ -349,7 +349,7 @@
 
 
 <a name="2.5.1"></a>
-## [2.5.1](https://github.com/frankwallis/plugin-typescript/compare/2.5.0...2.5.1) (2016-01-23)
+## [2.5.1](https://github.com/frankwallis/plugin-typescript/compare/2.5.0...2.5.1) <sub>(2016-01-23)</sub>
 
 
 ### Bug Fixes
@@ -360,7 +360,7 @@
 
 
 <a name="2.5.0"></a>
-# [2.5.0](https://github.com/frankwallis/plugin-typescript/compare/2.4.9...2.5.0) (2016-01-23)
+# [2.5.0](https://github.com/frankwallis/plugin-typescript/compare/2.4.9...2.5.0) <sub>(2016-01-23)</sub>
 
 
 ### Features
@@ -371,7 +371,7 @@
 
 
 <a name="2.4.9"></a>
-## [2.4.9](https://github.com/frankwallis/plugin-typescript/compare/2.4.8...2.4.9) (2016-01-20)
+## [2.4.9](https://github.com/frankwallis/plugin-typescript/compare/2.4.8...2.4.9) <sub>(2016-01-20)</sub>
 
 
 ### Bug Fixes
@@ -381,7 +381,7 @@
 
 
 <a name="2.4.8"></a>
-## [2.4.8](https://github.com/frankwallis/plugin-typescript/compare/2.4.7...2.4.8) (2016-01-20)
+## [2.4.8](https://github.com/frankwallis/plugin-typescript/compare/2.4.7...2.4.8) <sub>(2016-01-20)</sub>
 
 
 ### Bug Fixes
@@ -391,7 +391,7 @@
 
 
 <a name="2.4.7"></a>
-## [2.4.7](https://github.com/frankwallis/plugin-typescript/compare/2.4.6...2.4.7) (2016-01-16)
+## [2.4.7](https://github.com/frankwallis/plugin-typescript/compare/2.4.6...2.4.7) <sub>(2016-01-16)</sub>
 
 
 ### Bug Fixes
@@ -402,7 +402,7 @@
 
 
 <a name="2.4.6"></a>
-## [2.4.6](https://github.com/frankwallis/plugin-typescript/compare/2.4.5...2.4.6) (2016-01-09)
+## [2.4.6](https://github.com/frankwallis/plugin-typescript/compare/2.4.5...2.4.6) <sub>(2016-01-09)</sub>
 
 
 ### Bug Fixes
@@ -413,7 +413,7 @@
 
 
 <a name="2.4.5"></a>
-## [2.4.5](https://github.com/frankwallis/plugin-typescript/compare/2.4.4...2.4.5) (2016-01-02)
+## [2.4.5](https://github.com/frankwallis/plugin-typescript/compare/2.4.4...2.4.5) <sub>(2016-01-02)</sub>
 
 
 ### Bug Fixes
@@ -423,7 +423,7 @@
 
 
 <a name="2.4.4"></a>
-## [2.4.4](https://github.com/frankwallis/plugin-typescript/compare/2.4.3...2.4.4) (2015-12-23)
+## [2.4.4](https://github.com/frankwallis/plugin-typescript/compare/2.4.3...2.4.4) <sub>(2015-12-23)</sub>
 
 
 ### Bug Fixes
@@ -433,7 +433,7 @@
 
 
 <a name="2.4.3"></a>
-## [2.4.3](https://github.com/frankwallis/plugin-typescript/compare/2.4.2...2.4.3) (2015-12-12)
+## [2.4.3](https://github.com/frankwallis/plugin-typescript/compare/2.4.2...2.4.3) <sub>(2015-12-12)</sub>
 
 
 ### Bug Fixes
@@ -443,7 +443,7 @@
 
 
 <a name="2.4.2"></a>
-## [2.4.2](https://github.com/frankwallis/plugin-typescript/compare/2.4.1...2.4.2) (2015-12-10)
+## [2.4.2](https://github.com/frankwallis/plugin-typescript/compare/2.4.1...2.4.2) <sub>(2015-12-10)</sub>
 
 
 ### Bug Fixes
@@ -453,7 +453,7 @@
 
 
 <a name="2.4.1"></a>
-## [2.4.1](https://github.com/frankwallis/plugin-typescript/compare/2.4.0...2.4.1) (2015-12-10)
+## [2.4.1](https://github.com/frankwallis/plugin-typescript/compare/2.4.0...2.4.1) <sub>(2015-12-10)</sub>
 
 
 ### Bug Fixes
@@ -463,7 +463,7 @@
 
 
 <a name="2.4.0"></a>
-# [2.4.0](https://github.com/frankwallis/plugin-typescript/compare/2.3.2...2.4.0) (2015-12-05)
+# [2.4.0](https://github.com/frankwallis/plugin-typescript/compare/2.3.2...2.4.0) <sub>(2015-12-05)</sub>
 
 
 ### Bug Fixes
@@ -473,7 +473,7 @@
 
 
 <a name="2.3.2"></a>
-## [2.3.2](https://github.com/frankwallis/plugin-typescript/compare/2.3.0...2.3.2) (2015-12-01)
+## [2.3.2](https://github.com/frankwallis/plugin-typescript/compare/2.3.0...2.3.2) <sub>(2015-12-01)</sub>
 
 
 ### Bug Fixes
@@ -484,12 +484,12 @@
 
 
 <a name="2.3.0"></a>
-# [2.3.0](https://github.com/frankwallis/plugin-typescript/compare/2.2.3...2.3.0) (2015-12-01)
+# [2.3.0](https://github.com/frankwallis/plugin-typescript/compare/2.2.3...2.3.0) <sub>(2015-12-01)</sub>
 
 
 
 <a name="2.2.3"></a>
-## [2.2.3](https://github.com/frankwallis/plugin-typescript/compare/2.2.2...2.2.3) (2015-11-29)
+## [2.2.3](https://github.com/frankwallis/plugin-typescript/compare/2.2.2...2.2.3) <sub>(2015-11-29)</sub>
 
 
 ### Bug Fixes
@@ -499,7 +499,7 @@
 
 
 <a name="2.2.2"></a>
-## [2.2.2](https://github.com/frankwallis/plugin-typescript/compare/2.2.0...2.2.2) (2015-11-15)
+## [2.2.2](https://github.com/frankwallis/plugin-typescript/compare/2.2.0...2.2.2) <sub>(2015-11-15)</sub>
 
 
 ### Features
@@ -509,7 +509,7 @@
 
 
 <a name="2.2.0"></a>
-# [2.2.0](https://github.com/frankwallis/plugin-typescript/compare/2.1.6...2.2.0) (2015-11-04)
+# [2.2.0](https://github.com/frankwallis/plugin-typescript/compare/2.1.6...2.2.0) <sub>(2015-11-04)</sub>
 
 
 ### Bug Fixes
@@ -526,7 +526,7 @@
 
 
 <a name="2.1.6"></a>
-## [2.1.6](https://github.com/frankwallis/plugin-typescript/compare/2.1.5...2.1.6) (2015-11-03)
+## [2.1.6](https://github.com/frankwallis/plugin-typescript/compare/2.1.5...2.1.6) <sub>(2015-11-03)</sub>
 
 
 ### Bug Fixes
@@ -545,7 +545,7 @@
 
 
 <a name="2.1.5"></a>
-## [2.1.5](https://github.com/frankwallis/plugin-typescript/compare/2.1.4...2.1.5) (2015-11-01)
+## [2.1.5](https://github.com/frankwallis/plugin-typescript/compare/2.1.4...2.1.5) <sub>(2015-11-01)</sub>
 
 
 ### Bug Fixes
@@ -556,7 +556,7 @@
 
 
 <a name="2.1.4"></a>
-## [2.1.4](https://github.com/frankwallis/plugin-typescript/compare/2.1.3...2.1.4) (2015-10-26)
+## [2.1.4](https://github.com/frankwallis/plugin-typescript/compare/2.1.3...2.1.4) <sub>(2015-10-26)</sub>
 
 
 ### Features
@@ -566,7 +566,7 @@
 
 
 <a name="2.1.3"></a>
-## [2.1.3](https://github.com/frankwallis/plugin-typescript/compare/2.1.2...2.1.3) (2015-10-26)
+## [2.1.3](https://github.com/frankwallis/plugin-typescript/compare/2.1.2...2.1.3) <sub>(2015-10-26)</sub>
 
 
 ### Bug Fixes
@@ -576,7 +576,7 @@
 
 
 <a name="2.1.2"></a>
-## [2.1.2](https://github.com/frankwallis/plugin-typescript/compare/2.1.1...2.1.2) (2015-10-21)
+## [2.1.2](https://github.com/frankwallis/plugin-typescript/compare/2.1.1...2.1.2) <sub>(2015-10-21)</sub>
 
 
 ### Bug Fixes
@@ -587,7 +587,7 @@
 
 
 <a name="2.1.0"></a>
-# [2.1.0](https://github.com/frankwallis/plugin-typescript/compare/2.0.17...2.1.0) (2015-10-14)
+# [2.1.0](https://github.com/frankwallis/plugin-typescript/compare/2.0.17...2.1.0) <sub>(2015-10-14)</sub>
 
 
 ### Features
@@ -600,7 +600,7 @@
 
 
 <a name="2.0.17"></a>
-## [2.0.17](https://github.com/frankwallis/plugin-typescript/compare/2.0.11...2.0.17) (2015-09-19)
+## [2.0.17](https://github.com/frankwallis/plugin-typescript/compare/2.0.11...2.0.17) <sub>(2015-09-19)</sub>
 
 
 ### Bug Fixes
@@ -613,7 +613,7 @@
 
 
 <a name="2.0.11"></a>
-## [2.0.11](https://github.com/frankwallis/plugin-typescript/compare/2.0.10...2.0.11) (2015-09-01)
+## [2.0.11](https://github.com/frankwallis/plugin-typescript/compare/2.0.10...2.0.11) <sub>(2015-09-01)</sub>
 
 
 ### Features
@@ -624,7 +624,7 @@
 
 
 <a name="2.0.10"></a>
-## [2.0.10](https://github.com/frankwallis/plugin-typescript/compare/2.0.9...2.0.10) (2015-08-31)
+## [2.0.10](https://github.com/frankwallis/plugin-typescript/compare/2.0.9...2.0.10) <sub>(2015-08-31)</sub>
 
 
 ### Features
@@ -636,7 +636,7 @@
 
 
 <a name="2.0.9"></a>
-## [2.0.9](https://github.com/frankwallis/plugin-typescript/compare/2.0.8...2.0.9) (2015-08-27)
+## [2.0.9](https://github.com/frankwallis/plugin-typescript/compare/2.0.8...2.0.9) <sub>(2015-08-27)</sub>
 
 
 ### Features
@@ -647,7 +647,7 @@
 
 
 <a name="2.0.8"></a>
-## [2.0.8](https://github.com/frankwallis/plugin-typescript/compare/2.0.7...2.0.8) (2015-08-27)
+## [2.0.8](https://github.com/frankwallis/plugin-typescript/compare/2.0.7...2.0.8) <sub>(2015-08-27)</sub>
 
 
 ### Bug Fixes
@@ -665,7 +665,7 @@
 
 
 <a name="2.0.7"></a>
-## [2.0.7](https://github.com/frankwallis/plugin-typescript/compare/2.0.0...2.0.7) (2015-08-24)
+## [2.0.7](https://github.com/frankwallis/plugin-typescript/compare/2.0.0...2.0.7) <sub>(2015-08-24)</sub>
 
 
 ### Bug Fixes
@@ -679,7 +679,7 @@
 
 
 <a name="2.0.0"></a>
-# [2.0.0](https://github.com/frankwallis/plugin-typescript/compare/2.0.0-beta...2.0.0) (2015-07-02)
+# [2.0.0](https://github.com/frankwallis/plugin-typescript/compare/2.0.0-beta...2.0.0) <sub>(2015-07-02)</sub>
 
 
 ### Bug Fixes
@@ -699,7 +699,7 @@
 
 
 <a name="1.0.5"></a>
-## [1.0.5](https://github.com/frankwallis/plugin-typescript/compare/1.0.4...1.0.5) (2015-06-08)
+## [1.0.5](https://github.com/frankwallis/plugin-typescript/compare/1.0.4...1.0.5) <sub>(2015-06-08)</sub>
 
 
 ### Features
@@ -711,7 +711,7 @@
 
 
 <a name="1.0.4"></a>
-## [1.0.4](https://github.com/frankwallis/plugin-typescript/compare/1.0.0...1.0.4) (2015-05-19)
+## [1.0.4](https://github.com/frankwallis/plugin-typescript/compare/1.0.0...1.0.4) <sub>(2015-05-19)</sub>
 
 
 ### Bug Fixes
@@ -723,7 +723,7 @@
 
 
 <a name="1.0.0"></a>
-# [1.0.0](https://github.com/frankwallis/plugin-typescript/compare/0.6.7...1.0.0) (2015-04-20)
+# [1.0.0](https://github.com/frankwallis/plugin-typescript/compare/0.6.7...1.0.0) <sub>(2015-04-20)</sub>
 
 
 ### Features
@@ -734,7 +734,7 @@
 
 
 <a name="0.6.7"></a>
-## [0.6.7](https://github.com/frankwallis/plugin-typescript/compare/0.6.4...0.6.7) (2015-04-09)
+## [0.6.7](https://github.com/frankwallis/plugin-typescript/compare/0.6.4...0.6.7) <sub>(2015-04-09)</sub>
 
 
 ### Bug Fixes
@@ -746,7 +746,7 @@
 
 
 <a name="0.6.4"></a>
-## [0.6.4](https://github.com/frankwallis/plugin-typescript/compare/0.6.3...0.6.4) (2015-04-02)
+## [0.6.4](https://github.com/frankwallis/plugin-typescript/compare/0.6.3...0.6.4) <sub>(2015-04-02)</sub>
 
 
 ### Bug Fixes
@@ -763,7 +763,7 @@
 
 
 <a name="0.6.2"></a>
-## [0.6.2](https://github.com/frankwallis/plugin-typescript/compare/0.6.1...0.6.2) (2015-03-26)
+## [0.6.2](https://github.com/frankwallis/plugin-typescript/compare/0.6.1...0.6.2) <sub>(2015-03-26)</sub>
 
 
 ### Bug Fixes
@@ -776,7 +776,7 @@
 
 
 <a name="0.6.1"></a>
-## [0.6.1](https://github.com/frankwallis/plugin-typescript/compare/0.5.10...0.6.1) (2015-03-24)
+## [0.6.1](https://github.com/frankwallis/plugin-typescript/compare/0.5.10...0.6.1) <sub>(2015-03-24)</sub>
 
 
 ### Bug Fixes
@@ -795,7 +795,7 @@
 
 
 <a name="0.5.10"></a>
-## [0.5.10](https://github.com/frankwallis/plugin-typescript/compare/0.5.7...0.5.10) (2015-02-22)
+## [0.5.10](https://github.com/frankwallis/plugin-typescript/compare/0.5.7...0.5.10) <sub>(2015-02-22)</sub>
 
 
 ### Bug Fixes
@@ -815,7 +815,7 @@
 
 
 <a name="0.5.7"></a>
-## [0.5.7](https://github.com/frankwallis/plugin-typescript/compare/0.5.5...0.5.7) (2015-02-06)
+## [0.5.7](https://github.com/frankwallis/plugin-typescript/compare/0.5.5...0.5.7) <sub>(2015-02-06)</sub>
 
 
 ### Features
