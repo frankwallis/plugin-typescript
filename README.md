@@ -135,12 +135,12 @@ jspm install npm:@types/react
 
 #### typings ####
 
-The ```types``` compiler option tells the type-checker which packages contain their own typings and where they are located, it is an object map:
+The ```typings``` compiler option tells the type-checker which packages contain their own typings and where they are located, it is an object map:
 
 ```js
 "typescriptOptions": {
   "typings": {
-    "rxjs": "Rx.d.ts",			// relative to root of package
+    "rxjs": "Rx.d.ts",				// relative to root of package
     "myownpackage": true			// all js files have typings with the same name
   }
 }
