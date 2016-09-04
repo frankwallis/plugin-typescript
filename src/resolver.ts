@@ -141,30 +141,34 @@ export class Resolver {
    }
 
 	private lookupTyping(importName: string, sourceName: string, address: string): Promise<string> {
-		let typings = this._host.options.typings[importName];
+		const packageName = this.getPackageName(importName);
+		const typingsOption = this._host.options.typings[packageName];
 
-		if (typings) {
-			return this.resolveTyping(typings, importName, sourceName, address);
+		if (typingsOption) {
+			const typings = (importName === packageName) ? typingsOption : true;
+			return this.resolveTyping(typings, packageName, sourceName, address);
 		}
 		else {
 	      return this._lookup(address)
-   	      .then(metadata => this.resolveTyping(metadata.typings, importName, sourceName, address));
+   	      .then(metadata => this.resolveTyping(metadata.typings, packageName, sourceName, address));
 		}
 	}
 
-   private resolveTyping(typings: boolean | string, importName: string, sourceName: string, address: string): Promise<string> {
+	private getPackageName(importName: string): string {
+		const packageParts = importName.split('/');
+		if ((packageParts[0].indexOf('@') === 0) && (packageParts.length > 1)) {
+			return packageParts[0] + '/' + packageParts[1];
+		}
+		else {
+			return packageParts[0];
+		}
+	}
+
+   private resolveTyping(typings: boolean | string, packageName: string, sourceName: string, address: string): Promise<string> {
 		if (typings === true) {
 			return Promise.resolve(jsToDts(address));
 		}
 		else if (typeof (typings) === 'string') {
-			let packageName = undefined;
-
-			const packageParts = importName.split('/');
-			if ((packageParts[0].indexOf('@') === 0) && (packageParts.length > 1))
-				packageName = packageParts[0] + '/' + packageParts[1];
-			else
-				packageName = packageParts[0];
-
 			const typingsName = isRelative(typings) ? typings.slice(2) : typings;
 			return this._resolve(packageName + '/' + typingsName, sourceName);
 		}

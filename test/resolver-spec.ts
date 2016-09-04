@@ -324,5 +324,25 @@ describe('Resolver', () => {
 			deps.list.should.have.length(1);
 			deps.list[0].should.equal(expected);
 		});
+
+		it('resolves typings for files in package when typings are present', async () => {
+			const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/Observable.d.ts');
+			const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs.js');
+
+			const options = {
+				typings: {
+					"rxjs": "Rx.d.ts"
+				}
+			};
+			host = new CompilerHost(options);
+			resolver = new Resolver(host, resolve, lookup);
+
+			const source = 'import {Observable} from "rxjs/Observable";';
+			host.addFile(TYPINGS_NAME, source);
+
+			const deps = await resolver.resolve(TYPINGS_NAME);
+			deps.list.should.have.length(1);
+			deps.list[0].should.equal(expected);
+		});
 	});
 });

@@ -21,7 +21,7 @@
       "css": "frankwallis/plugin-css@master",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.2",
-      "ts": "frankwallis/plugin-typescript@^5.0.20",
+      "ts": "frankwallis/plugin-typescript@^5.1.0",
       "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
       "url": "jspm/nodelibs-url@^0.2.0-alpha"
     },
@@ -50,8 +50,7 @@
     "overrides": {
       "npm:@angular/common@2.0.0-rc.6": {
         "meta": {
-          "*.js": {
-            "typings": "index.d.ts",
+          "src/*.js": {
             "deps": [
               "reflect-metadata",
               "zone.js"
@@ -61,8 +60,7 @@
       },
       "npm:@angular/compiler@2.0.0-rc.6": {
         "meta": {
-          "*.js": {
-            "typings": "index.d.ts",
+          "src/*.js": {
             "deps": [
               "reflect-metadata",
               "zone.js"
@@ -72,8 +70,7 @@
       },
       "npm:@angular/core@2.0.0-rc.6": {
         "meta": {
-          "*.js": {
-            "typings": "index.d.ts",
+          "src/*.js": {
             "deps": [
               "reflect-metadata",
               "zone.js"
@@ -83,15 +80,17 @@
       },
       "npm:@angular/platform-browser-dynamic@2.0.0-rc.6": {
         "meta": {
-          "*.js": {
-            "typings": "index.d.ts"
+          "src/*.js": {
+            "deps": [
+              "reflect-metadata",
+              "zone.js"
+            ]
           }
         }
       },
       "npm:@angular/platform-browser@2.0.0-rc.6": {
         "meta": {
-          "*.js": {
-            "typings": "index.d.ts",
+          "src/*.js": {
             "deps": [
               "reflect-metadata",
               "zone.js"
@@ -123,17 +122,11 @@
         "format": "cjs"
       },
       "npm:reflect-metadata@0.1.8": {
-        "jspmNodeConversion": true,
-        "map": {}
-      },
-      "npm:rxjs@5.0.0-beta.11": {
-        "main": "bundles/Rx.js",
-        "meta": {
-          "bundles/Rx.js": {
-            "typings": "Rx.d.ts"
-          },
-          "*.js": {
-            "typings": true
+        "jspmNodeConversion": false,
+        "map": {
+          "crypto": {
+            "node": "@node/crypto",
+            "default": "@empty"
           }
         }
       },
