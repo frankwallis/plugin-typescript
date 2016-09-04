@@ -9,6 +9,7 @@
     "registry": "github",
     "dependencies": {
       "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.0.0-rc.6",
+      "frankwallis/plugin-typescript": "5.1.1",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0"
     },
     "devDependencies": {
