@@ -151,10 +151,10 @@ If a package contains typings for *all* js files in the package then the value s
 It is also possible to configure this using SystemJS metadata which can be configured in ```packages``` configuration, or in package.json overrides, or in the jspm registry.
 
 ```json
-  "overrides": {
-    "npm:@angular/core@2.0.0-rc.6": {
-      "meta": {
-        "bundles/core.umd.js": {
+"overrides": {
+  "npm:@angular/core@2.0.0-rc.6": {
+    "meta": {
+      "bundles/core.umd.js": {
         "typings": "index.d.ts"
       }
     }
