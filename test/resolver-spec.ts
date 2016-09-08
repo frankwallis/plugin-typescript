@@ -344,5 +344,27 @@ describe('Resolver', () => {
 			deps.list.should.have.length(1);
 			deps.list[0].should.equal(expected);
 		});
+
+		it('typings for specific file take precedence over package typings', async () => {
+			const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/testing/index.d.ts');
+			const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/testing.js');
+
+			const options = {
+				typings: {
+					"rxjs": "Rx.d.ts",
+					"rxjs/testing": "testing/index.d.ts",
+				}
+			};
+			host = new CompilerHost(options);
+			resolver = new Resolver(host, resolve, lookup);
+
+			const source = 'import * as Testing from "rxjs/testing";';
+			host.addFile(TYPINGS_NAME, source);
+
+			const deps = await resolver.resolve(TYPINGS_NAME);
+			deps.list.should.have.length(1);
+			deps.list[0].should.equal(expected);
+		});
+
 	});
 });

@@ -142,11 +142,17 @@ export class Resolver {
 
 	private lookupTyping(importName: string, sourceName: string, address: string): Promise<string> {
 		const packageName = this.getPackageName(importName);
-		const typingsOption = this._host.options.typings[packageName];
+		const packageTypings = this._host.options.typings[packageName];
+		const importTypings = this._host.options.typings[importName];
 
-		if (typingsOption) {
-			const typings = (importName === packageName) ? typingsOption : true;
-			return this.resolveTyping(typings, packageName, sourceName, address);
+		if (importTypings) {
+			return this.resolveTyping(importTypings, packageName, sourceName, address);
+		}
+		else if (packageTypings) {
+			// if typings are available for the entry point of the package, we
+			// assume that all other files have typings with the same name
+			// (this is for rxjs specifically)
+			return this.resolveTyping(true, packageName, sourceName, address);
 		}
 		else {
 	      return this._lookup(address)
