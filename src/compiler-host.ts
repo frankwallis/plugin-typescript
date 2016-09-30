@@ -4,7 +4,7 @@ import Logger from './logger';
 import {isHtml, isTypescriptDeclaration, isJavaScript} from './utils';
 
 const logger = new Logger({ debug: false });
-export const __HTML_MODULE__ = "__html_module__";
+export const HTML_MODULE = "__html_module__";
 
 export type CombinedOptions = PluginOptions & ts.CompilerOptions;
 
@@ -59,10 +59,10 @@ export class CompilerHost implements ts.CompilerHost {
       // https://github.com/Microsoft/TypeScript/issues/2709#issuecomment-91968950 gets implemented
       // note - this only affects type-checking, not runtime!
       let source = "var __html__: string = ''; export default __html__;";
-		if ((this._options.target != ts.ScriptTarget.ES6) && (this._options.module != ts.ModuleKind.ES6))
+		if ((this._options.target !== ts.ScriptTarget.ES6) && (this._options.module !== ts.ModuleKind.ES6))
          source = source + "export = __html__;";
 
-      const file = this.addFile(__HTML_MODULE__, source);
+      const file = this.addFile(HTML_MODULE, source);
       file.dependencies = { list: [], mappings: {} };
       file.checked = true;
       file.errors = [];
@@ -87,7 +87,7 @@ export class CompilerHost implements ts.CompilerHost {
 		}
    }
 
-   private getEnum<T>(enumValue: any, enumType: any, defaultValue: T): T {
+   private getEnum(enumValue: any, enumType: any, defaultValue: number): number {
       if (enumValue == undefined) return defaultValue;
 
       for (var enumProp in enumType) {
@@ -215,7 +215,7 @@ export class CompilerHost implements ts.CompilerHost {
          const dependencies = this._files[containingFile].dependencies;
 
          if (isHtml(modName) && this._options.supportHtmlImports) {
-            return { resolvedFileName: __HTML_MODULE__ };
+            return { resolvedFileName: HTML_MODULE };
          }
          else if (dependencies) {
             const resolvedFileName = dependencies.mappings[modName];

@@ -3,7 +3,7 @@ import * as ts from 'typescript';
 import Logger from './logger';
 import {isTypescriptDeclaration, hasError} from './utils';
 import {CompilerHost, CombinedOptions, SourceFile} from './compiler-host';
-import {__HTML_MODULE__} from "./compiler-host";
+import {HTML_MODULE} from "./compiler-host";
 
 const logger = new Logger({ debug: false });
 
@@ -34,7 +34,7 @@ export class TypeChecker {
    }
 
 	/*
-		returns a promise to an array of typescript errors for this file
+		returns an array of typescript errors for this file
 	*/
    public check(): ts.Diagnostic[] {
       const candidates = this.getCandidates(false);
@@ -60,14 +60,14 @@ export class TypeChecker {
 
    public hasErrors(): boolean {
       return this._host.getAllFiles()
-         .filter(file => file.fileName != __HTML_MODULE__)
+         .filter(file => file.fileName != HTML_MODULE)
          .some(file => file.checked && hasError(file.errors));
    }
 
    private getCandidates(force: boolean) {
       const candidates: Candidate[] = this._host
 			.getAllFiles()
-         .filter(file => file.fileName != __HTML_MODULE__)
+         .filter(file => file.fileName != HTML_MODULE)
          .map(file => ({
             name: file.fileName,
             file: file,
@@ -108,7 +108,7 @@ export class TypeChecker {
 	*/
    private getAllDiagnostics(candidates: Candidate[]): ts.Diagnostic[] {
       // hack to support html imports
-      const filelist = candidates.map((dep) => dep.name).concat([__HTML_MODULE__]);
+      const filelist = candidates.map((dep) => dep.name).concat([HTML_MODULE]);
       const program = ts.createProgram(filelist, this._options, this._host);
 
       return candidates.reduce((errors, candidate) => {

@@ -28,7 +28,7 @@ describe('Transpiler', () => {
       formatErrors(output.errors, console as any);
       output.should.have.property('failure', false);
       output.should.have.property('errors').with.lengthOf(0);
-      output.should.have.property('js').with.lengthOf(401);
+      output.should.have.property('js').with.lengthOf(407);
    });
 
    it('transpiles javascript successfully', () => {
@@ -36,7 +36,7 @@ describe('Transpiler', () => {
       formatErrors(output.errors, console as any);
       output.should.have.property('failure', false);
       output.should.have.property('errors').with.lengthOf(0);
-      output.should.have.property('js').with.lengthOf(271);
+      output.should.have.property('js').with.lengthOf(276);
    });
 
    it('removes SourceMappingURL', () => {
@@ -46,7 +46,7 @@ describe('Transpiler', () => {
 
    it('returns sourceMap', () => {
       const output = transpile('one-import.ts', oneImport);
-      output.should.have.property('sourceMap').with.lengthOf(145);
+      output.should.have.property('sourceMap').with.lengthOf(137);
    });
 
    it('catches syntax errors', () => {

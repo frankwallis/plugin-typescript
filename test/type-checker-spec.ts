@@ -219,7 +219,7 @@ describe('TypeChecker', () => {
 
    it('catches syntax errors in reference files', async () => {
       const diags = await typecheckAll(referenceSyntaxError);
-      diags.should.have.length(8);
+      diags.should.have.length(9);
    });
 
    it('handles ambient references when resolveAmbientRefs option is false', async () => {

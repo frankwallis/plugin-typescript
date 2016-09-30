@@ -246,7 +246,7 @@ describe('Builder', () => {
 				})
 				.then(result => {
 					//console.log(result.source);
-					result.source.length.should.equal(494);
+					result.source.length.should.equal(454);
 					result.source.should.not.contain('test/fixtures-es6/plugin/reference/types.d.ts');
 
 				})
@@ -265,7 +265,7 @@ describe('Builder', () => {
 				.then(result => {
 					//console.log(result.source);
 					//result.source.should.contain('test/fixtures-es6/plugin/reference/types.d.ts');
-					result.source.length.should.equal(5306);
+					result.source.length.should.equal(5322);
 				})
       });
 
@@ -317,7 +317,7 @@ describe('Builder', () => {
 				.then(result => {
 					//console.log(result.source);
 					result.source.should.contain('var aconstant = 1234;');
-					result.source.length.should.equal(494);
+					result.source.length.should.equal(454);
 				})
       });
 
@@ -353,7 +353,7 @@ describe('Builder', () => {
 				})
 				.then(result => {
 					//console.log(result.source);
-					result.source.length.should.equal(458);
+					result.source.length.should.equal(441);
 				})
       });
 

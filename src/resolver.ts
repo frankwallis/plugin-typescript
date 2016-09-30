@@ -118,29 +118,24 @@ export class Resolver {
 		return this.lookupAtType(referenceName, sourceName)
    }
 
-   private resolveImport(importName: string, sourceName: string): Promise<string> {
+   private async resolveImport(importName: string, sourceName: string): Promise<string> {
       if (isRelative(importName) && isTypescriptDeclaration(sourceName) && !isTypescriptDeclaration(importName))
          importName = importName + ".d.ts";
 
-      return this._resolve(importName, sourceName)
-         .then(address => {
-            if (isJavaScript(address)) {
-					return this.lookupAtType(importName, sourceName)
-						.then(atTypeAddress => {
-							if (atTypeAddress) return atTypeAddress;
+		const address = await this._resolve(importName, sourceName);
 
-							return this.lookupTyping(importName, sourceName, address)
-								.then(typingAddress => {
-									return typingAddress ? typingAddress : address;
-								});
-						});
-            }
+		if (isJavaScript(address)) {
+			const atTypeAddress = await this.lookupAtType(importName, sourceName);
+			if (atTypeAddress) return atTypeAddress;
 
-            return address;
-         });
+			const typingAddress = await this.lookupTyping(importName, sourceName, address);
+			if (typingAddress) return typingAddress;
+		}
+
+		return address;
    }
 
-	private lookupTyping(importName: string, sourceName: string, address: string): Promise<string> {
+	private async lookupTyping(importName: string, sourceName: string, address: string): Promise<string> {
 		const packageName = this.getPackageName(importName);
 		const packageTypings = this._host.options.typings[packageName];
 		const importTypings = this._host.options.typings[importName];
@@ -155,8 +150,8 @@ export class Resolver {
 			return this.resolveTyping(true, packageName, sourceName, address);
 		}
 		else {
-	      return this._lookup(address)
-   	      .then(metadata => this.resolveTyping(metadata.typings, packageName, sourceName, address));
+			const metadata = await this._lookup(address);
+   	   return this.resolveTyping(metadata.typings, packageName, sourceName, address);
 		}
 	}
 
@@ -170,9 +165,9 @@ export class Resolver {
 		}
 	}
 
-   private resolveTyping(typings: boolean | string, packageName: string, sourceName: string, address: string): Promise<string> {
+   private async resolveTyping(typings: boolean | string, packageName: string, sourceName: string, address: string): Promise<string> {
 		if (typings === true) {
-			return Promise.resolve(jsToDts(address));
+			return jsToDts(address);
 		}
 		else if (typeof (typings) === 'string') {
 			const typingsName = isRelative(typings) ? typings.slice(2) : typings;
@@ -182,24 +177,23 @@ export class Resolver {
 			throw new Error("invalid 'typings' value [" + typings + "] [" + address + "]");
 		}
 		else {
-			return Promise.resolve(undefined);
+			return undefined;
 		}
    }
 
-   private lookupAtType(importName: string, sourceName: string): Promise<string> {
+   private async lookupAtType(importName: string, sourceName: string): Promise<string> {
 		if (this._host.options.types.indexOf(importName) < 0)
-			return Promise.resolve();
+			return undefined;
 
-		return this._resolve('@types/' + importName, sourceName)
-			.then(resolved => {
-				// needed for jspm@0.16
-				if (isJavaScript(resolved))
-					resolved = resolved.slice(0, -3);
+		let resolved = await this._resolve('@types/' + importName, sourceName);
 
-				if (!isTypescriptDeclaration(resolved))
-					resolved = resolved + '/index.d.ts';
+		// needed for jspm@0.16
+		if (isJavaScript(resolved))
+			resolved = resolved.slice(0, -3);
 
-				return resolved;
-			})
+		if (!isTypescriptDeclaration(resolved))
+			resolved = resolved + '/index.d.ts';
+
+		return resolved;
 	}
 }

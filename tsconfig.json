@@ -1,11 +1,12 @@
 {
 	"compilerOptions": {
-		"module": "system",
-		"outDir": "lib",
+		"outDir": "tmp/es6",
     	"lib": ["es6"],
 		"target": "es5",
+		"module": "es2015",
 		"removeComments": true,
 		"moduleResolution": "node",
+		"importHelpers": true,
 		"inlineSourceMap": false,
 		"rootDir": "./src"
 	},
