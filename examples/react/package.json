@@ -67,7 +67,7 @@
           "util": "@node/util"
         }
       },
-      "npm:inherits@2.0.1": {
+      "npm:inherits@2.0.3": {
         "ignore": [
           "test.js"
         ]
@@ -76,7 +76,7 @@
         "jspmNodeConversion": false,
         "format": "cjs"
       },
-      "npm:typescript@2.0.0": {
+      "npm:typescript@2.0.3": {
         "browser": {},
         "map": {
           "buffer": "@empty",
