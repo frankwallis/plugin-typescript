@@ -1,6 +1,6 @@
 {
   "name": "plugin-typescript",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "TypeScript loader for SystemJS",
   "main": "lib/plugin.js",
   "homepage": "https://github.com/frankwallis/plugin-typescript",
@@ -42,9 +42,9 @@
     "typescript": "^2.1.0-dev.20160929"
   },
   "scripts": {
-    "bundle": "tsc && rollup -c && tsc ./tmp/plugin.js -m system -lib es6 -allowJs -allowUnreachableCode -outDir ./lib",
+    "bundle": "tsc && rollup -c && tsc ./tmp/plugin.js -m system -lib es6 -allowJs -allowUnreachableCode -removeComments -outDir ./lib",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "test": "mocha --require ./test/environment --timeout 5000 ./test/*.ts"
+    "test": "mocha --require ./test/environment --timeout 10000 ./test/*.ts"
   },
   "bin": {},
   "license": "MIT",
