@@ -116,7 +116,7 @@ export class CompilerHost implements ts.CompilerHost {
 	public getDefaultLibFilePaths(): string[] {
 		if (this._options.targetLib === ts.ScriptTarget.ES5)
 			return ['typescript/lib/lib.d.ts'];
-		else if (this._options.targetLib === ts.ScriptTarget.ES5)
+		else if (this._options.targetLib === ts.ScriptTarget.ES6)
 			return ['typescript/lib/lib.es6.d.ts'];
 		else
 			return this._options.lib.map(libName => `typescript/lib/lib.${libName}.d.ts`);

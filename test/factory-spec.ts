@@ -172,4 +172,16 @@ describe('Factory', () => {
       resolver._declarationFiles[1].should.be.equal(defaultLibEs2015Promise);
    });
 
+   it('handles targetLib option', async () => {
+      const config = {
+			targetLib: ts.ScriptTarget.ES6,
+         typeCheck: true
+      };
+      const {resolver} = await createFactory(config, false, resolve, fetch, lookup);
+      resolver.should.be.defined;
+      resolver._declarationFiles.should.have.length(1);
+		//resolver._declarationFiles[0].should.be.equal(defaultLibEs5);
+      //resolver._declarationFiles[1].should.be.equal(defaultLibEs2015Promise);
+   });
+
 });
