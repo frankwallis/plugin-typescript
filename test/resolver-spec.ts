@@ -27,6 +27,9 @@ function resolve(dep, parent) {
 		if (dep === "@angular/core") {
 			result = result + '/bundles/index.umd.js';
 		}
+		else if (dep === "@angular/core/testing") {
+			result = result + '/bundles/core-testing.umd.js';
+		}
 
 		if ((result.indexOf('@types') < 0) &&
 			((path.extname(result) === "") || (dep.indexOf('/') < 0)))
@@ -175,6 +178,25 @@ describe('Resolver', () => {
 			deps.list.should.have.length(1);
 			deps.list[0].should.equal(expected);
 		});
+
+		it('resolves @types files for submodules', async () => {
+			const source = 'import map from "lodash/map"; export var a = map([1], n => n * 2);';
+			const sourceName = path.resolve(__dirname, './fixtures-es6/attypes/index.ts');
+			const jsfile = path.resolve(__dirname, './fixtures-es6/attypes/resolved/lodash/map.js');
+			const expected = path.resolve(__dirname, './fixtures-es6/attypes/resolved/@types/lodash/index.d.ts');
+
+			const options = {
+				types: ["lodash"]
+			};
+			host = new CompilerHost(options);
+			resolver = new Resolver(host, resolve, lookup);
+
+			host.addFile(sourceName, source);
+			const deps = await resolver.resolve(sourceName);
+			deps.list.should.have.length(1);
+			deps.list[0].should.equal(expected);
+		});
+
 	});
 
 	describe("typings", () => {
@@ -325,7 +347,28 @@ describe('Resolver', () => {
 			deps.list[0].should.equal(expected);
 		});
 
-		it('resolves typings for files in package when typings are present', async () => {
+		// it.only('specific typings for files in package are resolved relative to package root', async () => {
+		// 	const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/@angular/core/testing/index.d.ts');
+		// 	const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/@angular/core/bundles/core-testing.umd.js');
+
+		// 	const options = {
+		// 		typings: {
+		// 			"@angular/core/testing": "testing/index.d.ts"
+		// 		}
+		// 	};
+		// 	host = new CompilerHost(options);
+		// 	resolver = new Resolver(host, resolve, lookup);
+
+		// 	const source = 'import {bootstrap} from "@angular/core/testing";';
+		// 	host.addFile(TYPINGS_NAME, source);
+
+		// 	const deps = await resolver.resolve(TYPINGS_NAME);
+		// 	deps.list.should.have.length(1);
+		// 	console.log(JSON.stringify(deps))
+		// 	deps.mappings["@angular/core/testing"].should.equal(expected);
+		// });
+
+		it('resolves typings for files in package when typings are present for entry', async () => {
 			const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/Observable.d.ts');
 			const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs.js');
 

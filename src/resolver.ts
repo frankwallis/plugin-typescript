@@ -182,10 +182,12 @@ export class Resolver {
    }
 
    private async lookupAtType(importName: string, sourceName: string): Promise<string> {
-		if (this._host.options.types.indexOf(importName) < 0)
+		const packageName = this.getPackageName(importName);
+
+		if (this._host.options.types.indexOf(packageName) < 0)
 			return undefined;
 
-		let resolved = await this._resolve('@types/' + importName, sourceName);
+		let resolved = await this._resolve('@types/' + packageName, sourceName);
 
 		// needed for jspm@0.16
 		if (isJavaScript(resolved))
