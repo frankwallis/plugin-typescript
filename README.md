@@ -11,13 +11,23 @@ A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you 
 
 Starting with JSPM 0.17.0 (currently in beta) this plugin will be the officially supported mechanism for transpiling TypeScript. It provides the ability to type-check files while loading them, which is not currently possible with the built-in SystemJS TypeScript transpiler.
 
-plugin-typescript uses TypeScript 2.0.0  
+plugin-typescript uses TypeScript ^2.0.0  
 For TypeScript 1.8.1 use plugin-typescript 4.0.16  
 For TypeScript 1.7.5 and below use plugin-typescript 2.x.x  
 
 ## Installation ##
 
-#### SystemJS ####
+#### JSPM ####
+
+Install plugin-typescript like this:
+
+```sh
+jspm install ts
+```
+
+All the SystemJS configuration will be created automatically by JSPM.
+
+#### If you are using SystemJS without JSPM ####
 
 Add SystemJS map configuration for plugin-typescript and typescript:
 
@@ -41,13 +51,6 @@ SystemJS.config({
     "typescript": "path/to/typescript/lib/"
   }
 });
-```
-#### JSPM ####
-
-Install plugin-typescript like this:
-
-```sh
-jspm install ts
 ```
 
 ## Setup ##
@@ -146,7 +149,7 @@ The ```typings``` compiler option tells the type-checker which packages contain 
 }
 ```
 
-If a package contains typings for *all* js files in the package then the value should be set to ```true```, otherwise it should contain the pach of the bundled typings file, relative to the root of the project. 
+If a package contains typings for *all* js files in the package then the value should be set to ```true```, otherwise it should contain the path of the bundled typings file, relative to the root of the project. 
 
 It is also possible to configure this using SystemJS metadata which can be configured in ```packages``` configuration, or in package.json overrides, or in the jspm registry.
 
@@ -214,5 +217,5 @@ To run the example projects:
 ```
 To bundle each example project:
 ```
-> npm run build 			// or jspm bundle-sfx src build/build.js
+> npm run build 			// or jspm build src build/build.js
 ```
