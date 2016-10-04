@@ -6,7 +6,18 @@ import {formatErrors} from './format-errors';
 import {isTypescript, isTypescriptDeclaration, stripDoubleExtension, hasError} from './utils';
 
 const logger = new Logger({ debug: false });
-let factory = undefined;
+let factory = null;
+
+function getFactory() {
+	// persist factory between instantiations of the plugin and expose it to the world
+	const __global: any = typeof(window) !== 'undefined' ? window : global;
+	__global.tsfactory = __global.tsfactory || createFactory(System.typescriptOptions, false, _resolve, _fetch, _lookup)
+      .then((output) => {
+         validateOptions(output.host.options);
+         return output;
+      });
+	return __global.tsfactory;
+}
 
 /*
  * load.name
@@ -18,11 +29,7 @@ export function translate(load: Module): Promise<string> {
 	const loader = this;
    logger.debug(`systemjs translating ${load.address}`);
 
-   factory = factory || createFactory(System.typescriptOptions, this.builder, _resolve, _fetch, _lookup)
-      .then((output) => {
-         validateOptions(output.host.options);
-         return output;
-      });
+   factory = factory || getFactory();
 
    return factory.then(({transpiler, resolver, typeChecker, host}) => {
       host.addFile(load.address, load.source);

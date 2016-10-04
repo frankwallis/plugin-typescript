@@ -8,7 +8,9 @@ describe('Builder', () => {
 	let builder = null;
 
 	beforeEach(() => {
+		global['tsfactory'] = undefined;
 		builder = new Builder('./');
+		builder.reset();
 	})
 
 	function defaultConfig() {
