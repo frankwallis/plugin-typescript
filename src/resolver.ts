@@ -124,13 +124,11 @@ export class Resolver {
 
 		const address = await this._resolve(importName, sourceName);
 
-		if (isJavaScript(address)) {
-			const atTypeAddress = await this.lookupAtType(importName, sourceName);
-			if (atTypeAddress) return atTypeAddress;
+		const atTypeAddress = await this.lookupAtType(importName, sourceName);
+		if (atTypeAddress) return atTypeAddress;
 
-			const typingAddress = await this.lookupTyping(importName, sourceName, address);
-			if (typingAddress) return typingAddress;
-		}
+		const typingAddress = await this.lookupTyping(importName, sourceName, address);
+		if (typingAddress) return typingAddress;
 
 		return address;
    }
