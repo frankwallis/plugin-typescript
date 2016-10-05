@@ -36,6 +36,7 @@ const importHtmlCjs = require.resolve('./fixtures-es6/html/import-html-cjs.ts');
 const angular2Typings = require.resolve('./fixtures-es6/typings/angular2-typings.ts');
 const rxjsTypings = require.resolve('./fixtures-es6/typings/rxjs-typings.ts');
 const missingTypings = require.resolve('./fixtures-es6/typings/missing-typings.ts');
+const cssTypings = require.resolve('./fixtures-es6/typings/css-typings.ts');
 const missingPackage = require.resolve('./fixtures-es6/typings/missing-package.ts');
 const augGlobal = require.resolve('./fixtures-es6/augmentation/global.ts');
 const augAmbient = require.resolve('./fixtures-es6/augmentation/ambient.ts');
@@ -58,6 +59,10 @@ function resolve(dep, parent) {
          result = path.join(path.dirname(parent), dep);
       else {
          result = path.join(path.dirname(parent), "resolved", dep);
+
+			var name = dep[0] === '@' ? dep.slice(dep.indexOf('/') + 1) : dep;
+			if (name.indexOf('/') < 0)
+				result = result + '/' + name;
 
          if (dep === "ambient/ambient")
             result = result + ".ts";
@@ -363,7 +368,7 @@ describe('TypeChecker', () => {
 
 	describe("Typings", () => {
 		it('resolve typings files when typings meta is present', async () => {
-			let jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2/angular2.js');
+			let jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/@angular2/core/core.js');
 			jsfile = (ts as any).normalizePath(jsfile);
 
 			metadata = {};
@@ -386,7 +391,7 @@ describe('TypeChecker', () => {
 		});
 
 		it('resolves typings when typings is non-relative path', async () => {
-			let  jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs.js');
+			let  jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/rxjs.js');
 			jsfile = (ts as any).normalizePath(jsfile);
 
 			metadata = {};
@@ -395,6 +400,36 @@ describe('TypeChecker', () => {
 			};
 
 			const diags = await typecheckAll(rxjsTypings);
+			formatErrors(diags, console as any);
+			diags.should.have.length(0);
+		});
+
+		it('resolves typings for css files', async () => {
+			const options = {
+				typings: {
+					'cssmodules/mystyles.css': true
+				}
+			};
+			host = new CompilerHost(options);
+			typeChecker = new TypeChecker(host);
+			resolver = new Resolver(host, resolve, lookup);
+
+			const diags = await typecheckAll(cssTypings);
+			formatErrors(diags, console as any);
+			diags.should.have.length(0);
+		});
+
+		it('resolves string typings for css files', async () => {
+			const options = {
+				typings: {
+					'cssmodules/mystyles.css': 'mystyles.d.ts'
+				}
+			};
+			host = new CompilerHost(options);
+			typeChecker = new TypeChecker(host);
+			resolver = new Resolver(host, resolve, lookup);
+
+			const diags = await typecheckAll(cssTypings);
 			formatErrors(diags, console as any);
 			diags.should.have.length(0);
 		});
@@ -423,7 +458,7 @@ describe('TypeChecker', () => {
 		});
 
 		it('handles external augmentation', async () => {
-			let  jsfile = path.resolve(__dirname, './fixtures-es6/augmentation/resolved/somelib.js');
+			let  jsfile = path.resolve(__dirname, './fixtures-es6/augmentation/resolved/somelib/somelib.js');
 			jsfile = (ts as any).normalizePath(jsfile);
 
 			metadata = {};

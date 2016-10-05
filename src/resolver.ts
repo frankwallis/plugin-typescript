@@ -5,7 +5,7 @@ import {CompilerHost} from './compiler-host';
 import {
    isTypescript, isTypescriptDeclaration,
    isJavaScript, isRelative,
-   isAmbient, jsToDts
+   isAmbient, convertToDts
 } from './utils';
 
 const logger = new Logger({ debug: false });
@@ -124,11 +124,13 @@ export class Resolver {
 
 		const address = await this._resolve(importName, sourceName);
 
-		const atTypeAddress = await this.lookupAtType(importName, sourceName);
-		if (atTypeAddress) return atTypeAddress;
+		if (!isTypescript(address)) {
+			const atTypeAddress = await this.lookupAtType(importName, sourceName);
+			if (atTypeAddress) return atTypeAddress;
 
-		const typingAddress = await this.lookupTyping(importName, sourceName, address);
-		if (typingAddress) return typingAddress;
+			const typingAddress = await this.lookupTyping(importName, sourceName, address);
+			if (typingAddress) return typingAddress;
+		}
 
 		return address;
    }
@@ -165,7 +167,7 @@ export class Resolver {
 
    private async resolveTyping(typings: boolean | string, packageName: string, sourceName: string, address: string): Promise<string> {
 		if (typings === true) {
-			return jsToDts(address);
+			return convertToDts(address);
 		}
 		else if (typeof (typings) === 'string') {
 			const typingsName = isRelative(typings) ? typings.slice(2) : typings;
