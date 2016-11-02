@@ -19,6 +19,17 @@ function getFactory() {
 	return __global.tsfactory;
 }
 
+export function locate(load) : Promise<string> {
+      // tries tsx if ts failed, then tries jsx if ts failed, then tries js if jsx failed
+      if(/((\.ts)|(\.tsx)|(\.jsx))$/i.test(load.address)){
+            return _fetch(load.address).then(to=>load.address).catch(to=>locate({address:load.address
+                  .replace(/\.js$/i,".jsx")
+                  .replace(/\.tsx$/i,".js")
+                  .replace(/\.ts$/i,".tsx")
+            }))
+      } else return load.address;
+}
+
 /*
  * load.name
  * load.address
@@ -151,6 +162,8 @@ function _resolve(dep: string, parent: string): Promise<string> {
 
          logger.debug(`resolved ${normalized} (${parent} -> ${dep})`);
          return (ts as any).normalizePath(normalized);
+      }).then(normalized => {
+        return _fetch(normalized).then(to=>normalized).catch(to=>normalized.replace(".ts",".tsx"))    
       });
 }
 
