@@ -10,7 +10,7 @@ let factory = null;
 
 function getFactory() {
 	// persist factory between instantiations of the plugin and expose it to the world
-	const __global: any = typeof(window) !== 'undefined' ? window : global;
+	const __global: any = typeof(self) !== 'undefined' ? self : global;
 	__global.tsfactory = __global.tsfactory || createFactory(System.typescriptOptions, false, _resolve, _fetch, _lookup)
       .then((output) => {
          validateOptions(output.host.options);
