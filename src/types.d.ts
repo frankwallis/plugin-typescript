@@ -28,6 +28,7 @@ interface PluginOptions {
    tsconfig?: boolean | string;
    typeCheck?: boolean | "strict";
 	typings?: { [importName: string]: boolean | string };
+	autoDetectModule?: boolean;
 
    /* deprecated */
    supportHtmlImports?: boolean;

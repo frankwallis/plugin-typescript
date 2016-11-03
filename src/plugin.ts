@@ -59,12 +59,14 @@ export function translate(load: Module): Promise<string> {
          if (result.sourceMap)
             load.metadata.sourceMap = JSON.parse(result.sourceMap);
 
-         if (host.options.module === ts.ModuleKind.System)
-            load.metadata.format = 'register';
-         else if (host.options.module === ts.ModuleKind.ES6)
-            load.metadata.format = 'esm';
-         else if (host.options.module === ts.ModuleKind.CommonJS)
-            load.metadata.format = 'cjs';
+			if (!host.options.autoDetect) {
+				if (host.options.module === ts.ModuleKind.System)
+					load.metadata.format = 'register';
+				else if (host.options.module === ts.ModuleKind.ES6)
+					load.metadata.format = 'esm';
+				else if (host.options.module === ts.ModuleKind.CommonJS)
+					load.metadata.format = 'cjs';
+			}
       }
 
 		// builder doesn't call instantiate so type-check now

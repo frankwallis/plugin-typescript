@@ -167,6 +167,10 @@ It is also possible to configure this using SystemJS metadata which can be confi
   
 For more information on setting SystemJS metadata, see [here](https://github.com/systemjs/systemjs/blob/master/docs/config-api.md#packages)
 
+#### autoDetectModule ####
+
+If ```autoDetectModule``` is set then the plugin will allow SystemJS to detect the module system being used for individual source files. Without it is assumed that all ```.ts``` files are using the module system specified by the typescipt ```module``` setting. Set this if you are transpiling typescript files which are scripts rather than modules (ie they do not use ```import``` statements).
+
 ## Features ##
 
 #### Hot-Reload support ####
