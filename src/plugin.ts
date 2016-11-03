@@ -1,12 +1,12 @@
 /* */
 import * as ts from 'typescript';
 import Logger from './logger';
-import {createFactory} from './factory';
+import {createFactory, FactoryOutput} from './factory';
 import {formatErrors} from './format-errors';
 import {isTypescript, isTypescriptDeclaration, stripDoubleExtension, hasError} from './utils';
 
 const logger = new Logger({ debug: false });
-let factory = null;
+let factory: Promise<FactoryOutput> = null;
 
 function getFactory() {
 	// persist factory between instantiations of the plugin and expose it to the world
@@ -25,7 +25,7 @@ function getFactory() {
  * load.metadata
  * load.source: the fetched source
  */
-export function translate(load: Module): Promise<string> {
+export function translate(load: Module): Promise<any> {
 	const loader = this;
    logger.debug(`systemjs translating ${load.address}`);
 
@@ -59,7 +59,7 @@ export function translate(load: Module): Promise<string> {
          if (result.sourceMap)
             load.metadata.sourceMap = JSON.parse(result.sourceMap);
 
-			if (!host.options.autoDetect) {
+			if (!host.options.autoDetectModule) {
 				if (host.options.module === ts.ModuleKind.System)
 					load.metadata.format = 'register';
 				else if (host.options.module === ts.ModuleKind.ES6)

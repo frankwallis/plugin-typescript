@@ -10,7 +10,7 @@ import { isTypescriptDeclaration } from './utils';
 
 const logger = new Logger({ debug: false });
 
-type FactoryOutput = {
+export interface FactoryOutput {
 	host: CompilerHost;
 	transpiler: Transpiler;
 	resolver: Resolver;

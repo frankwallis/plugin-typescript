@@ -18,7 +18,7 @@ declare namespace SystemJSLoader {
 }
 
 declare var __moduleName: string;
-declare var window: any;
+declare var self: any;
 
 declare type ResolveFunction = (dep: string, parent?: string) => Promise<string>;
 declare type LookupFunction = (address: string) => Promise<any>;
