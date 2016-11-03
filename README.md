@@ -47,9 +47,10 @@ SystemJS.config({
     }
   },
   map: {
-    "ts": "path/to/plugin-typescript/lib/",
-    "typescript": "path/to/typescript/lib/"
-  }
+    "ts": "path/to/plugin-typescript/lib",
+    "typescript": "path/to/typescript"
+  },
+  transpiler: 'ts'
 });
 ```
 
@@ -111,7 +112,7 @@ All the usual TypeScript compiler options are supported, as well as these additi
 
 #### typeCheck ####
 
-A boolean flag which controls whether the files are type-checked or simply transpiled. Type-checking does add some overhead to the build process as typings need to be loaded and the compiler has more work to do. 
+A boolean flag which controls whether the files are type-checked or simply transpiled. Type-checking does add some overhead to the build process as typings need to be loaded and the compiler has more work to do.
 
 By default compiler errors are written to the console but the build is allowed to continue. To change this behaviour you can use ```typeCheck: "strict"``` in which case the build will be failed when compiler errors are encountered.
 
@@ -149,7 +150,7 @@ The ```typings``` compiler option tells the type-checker which packages contain 
 }
 ```
 
-If a package contains typings for *all* js files in the package then the value should be set to ```true```, otherwise it should contain the path of the bundled typings file, relative to the root of the project. 
+If a package contains typings for *all* js files in the package then the value should be set to ```true```, otherwise it should contain the path of the bundled typings file, relative to the root of the project.
 
 It is also possible to configure this using SystemJS metadata which can be configured in ```packages``` configuration, or in package.json overrides, or in the jspm registry.
 
@@ -164,7 +165,7 @@ It is also possible to configure this using SystemJS metadata which can be confi
   }
 }
 ```
-  
+
 For more information on setting SystemJS metadata, see [here](https://github.com/systemjs/systemjs/blob/master/docs/config-api.md#packages)
 
 #### autoDetectModule ####
