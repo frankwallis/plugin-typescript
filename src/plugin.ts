@@ -24,7 +24,8 @@ function tryExtensions(load, remaining): Promise<string> {
       remaining = remaining.slice();
       return new Promise((resolve,reject)=>{
             if(remaining.length == 0) {
-                  return load.address;
+                  resolve(load.address);
+                  return;
             }
             var originalExtensionLocation = load.address.lastIndexOf(".");
             var originalExtension = load.address.slice(originalExtensionLocation + 1);
