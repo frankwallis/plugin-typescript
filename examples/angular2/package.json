@@ -8,48 +8,51 @@
   "jspm": {
     "registry": "github",
     "dependencies": {
-      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.0.1",
+      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.2.0",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0"
     },
     "devDependencies": {
-      "http": "jspm/nodelibs-http@^0.2.0-alpha",
-      "https": "jspm/nodelibs-https@^0.2.0-alpha",
-      "module": "jspm/nodelibs-module@^0.2.0-alpha",
-      "net": "jspm/nodelibs-net@^0.2.0-alpha",
+      "http": "npm:jspm-nodelibs-http@^0.2.0",
+      "https": "npm:jspm-nodelibs-https@^0.2.0",
+      "module": "npm:jspm-nodelibs-module@^0.2.0",
+      "net": "npm:jspm-nodelibs-net@^0.2.0",
       "plugin-babel": "npm:systemjs-plugin-babel@^0.0.12",
       "clean-css": "npm:clean-css@^3.4.3",
       "css": "frankwallis/plugin-css@master",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.2",
       "ts": "frankwallis/plugin-typescript@^5.1.0",
-      "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
-      "url": "jspm/nodelibs-url@^0.2.0-alpha"
+      "tty": "npm:jspm-nodelibs-tty@^0.2.0",
+      "url": "npm:jspm-nodelibs-url@^0.2.0"
     },
     "peerDependencies": {
-      "@angular/common": "npm:@angular/common@2.0.1",
-      "@angular/compiler": "npm:@angular/compiler@^2.0.1",
-      "@angular/core": "npm:@angular/core@2.0.1",
-      "@angular/platform-browser": "npm:@angular/platform-browser@^2.0.1",
-      "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
-      "buffer": "jspm/nodelibs-buffer@^0.2.0-alpha",
-      "child_process": "jspm/nodelibs-child_process@^0.2.0-alpha",
-      "constants": "jspm/nodelibs-constants@^0.2.0-alpha",
-      "crypto": "jspm/nodelibs-crypto@^0.2.0-alpha",
-      "events": "jspm/nodelibs-events@^0.2.0-alpha",
-      "fs": "jspm/nodelibs-fs@^0.2.0-alpha",
-      "os": "jspm/nodelibs-os@^0.2.0-alpha",
-      "path": "jspm/nodelibs-path@^0.2.0-alpha",
-      "process": "jspm/nodelibs-process@^0.2.0-alpha",
+      "@angular/common": "npm:@angular/common@2.2.0",
+      "@angular/compiler": "npm:@angular/compiler@2.2.0",
+      "@angular/core": "npm:@angular/core@2.2.0",
+      "@angular/platform-browser": "npm:@angular/platform-browser@2.2.0",
+      "assert": "npm:jspm-nodelibs-assert@^0.2.0",
+      "buffer": "npm:jspm-nodelibs-buffer@^0.2.0",
+      "child_process": "npm:jspm-nodelibs-child_process@^0.2.0",
+      "constants": "npm:jspm-nodelibs-constants@^0.2.0",
+      "crypto": "npm:jspm-nodelibs-crypto@^0.2.0",
+      "events": "npm:jspm-nodelibs-events@^0.2.0",
+      "fs": "npm:jspm-nodelibs-fs@^0.2.0",
+      "os": "npm:jspm-nodelibs-os@^0.2.0",
+      "path": "npm:jspm-nodelibs-path@^0.2.0",
+      "process": "npm:jspm-nodelibs-process@^0.2.0",
       "rxjs": "npm:rxjs@5.0.0-beta.12",
-      "stream": "jspm/nodelibs-stream@^0.2.0-alpha",
-      "string_decoder": "jspm/nodelibs-string_decoder@^0.2.0-alpha",
-      "timers": "jspm/nodelibs-timers@^0.2.0-alpha",
-      "util": "jspm/nodelibs-util@^0.2.0-alpha",
-      "vm": "jspm/nodelibs-vm@^0.2.0-alpha",
+      "stream": "npm:jspm-nodelibs-stream@^0.2.0",
+      "string_decoder": "npm:jspm-nodelibs-string_decoder@^0.2.0",
+      "timers": "npm:jspm-nodelibs-timers@^0.2.0",
+      "util": "npm:jspm-nodelibs-util@^0.2.0",
+      "vm": "npm:jspm-nodelibs-vm@^0.2.0",
       "zone.js": "npm:zone.js@^0.6.21"
     },
     "overrides": {
-      "npm:@angular/common@2.0.1": {
+      "github:socketio/socket.io-client@1.5.1": {
+        "main": "socket.io.js"
+      },
+      "npm:@angular/common@2.2.0": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -57,9 +60,13 @@
               "zone.js"
             ]
           }
+        },
+        "map": {
+          "@angular/common": ".",
+          "./testing": "./bundles/common-testing.umd.js"
         }
       },
-      "npm:@angular/compiler@2.0.1": {
+      "npm:@angular/compiler@2.2.0": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -67,9 +74,13 @@
               "zone.js"
             ]
           }
+        },
+        "map": {
+          "@angular/compiler": ".",
+          "./testing": "./bundles/compiler-testing.umd.js"
         }
       },
-      "npm:@angular/core@2.0.1": {
+      "npm:@angular/core@2.2.0": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -77,9 +88,13 @@
               "zone.js"
             ]
           }
+        },
+        "map": {
+          "@angular/core": ".",
+          "./testing": "./bundles/core-testing.umd.js"
         }
       },
-      "npm:@angular/platform-browser-dynamic@2.0.1": {
+      "npm:@angular/platform-browser-dynamic@2.2.0": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -87,9 +102,13 @@
               "zone.js"
             ]
           }
+        },
+        "map": {
+          "@angular/platform-browser-dynamic": ".",
+          "./testing": "./bundles/platform-browser-dynamic-testing.umd.js"
         }
       },
-      "npm:@angular/platform-browser@2.0.1": {
+      "npm:@angular/platform-browser@2.2.0": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -97,9 +116,13 @@
               "zone.js"
             ]
           }
+        },
+        "map": {
+          "@angular/platform-browser": ".",
+          "./testing": "./bundles/platform-browser-testing.umd.js"
         }
       },
-      "npm:debug@2.2.0": {
+      "npm:debug@2.3.2": {
         "main": "browser.js",
         "jspmNodeConversion": false,
         "format": "cjs",
@@ -118,7 +141,7 @@
           "test.js"
         ]
       },
-      "npm:ms@0.7.1": {
+      "npm:ms@0.7.2": {
         "jspmNodeConversion": false,
         "format": "cjs"
       },
@@ -131,7 +154,7 @@
           }
         }
       },
-      "npm:typescript@2.0.3": {
+      "npm:typescript@2.1.1": {
         "browser": {},
         "map": {
           "buffer": "@empty",
@@ -140,6 +163,9 @@
           "path": "@empty",
           "process": "@empty",
           "readline": "@empty"
+        },
+        "dependencies": {
+          "source-map-support": "*"
         }
       }
     }
