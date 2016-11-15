@@ -35,7 +35,7 @@
     "chai": "^3.4.1",
     "chokidar-socket-emitter": "^0.5.0",
     "http-server": "^0.9.0",
-    "jspm": "^0.17.0-beta.22",
+    "jspm": "^0.17.0-beta.32",
     "mocha": "^3.0.2",
     "open": "^0.0.5",
     "rollup-plugin-includepaths": "^0.1.6",
