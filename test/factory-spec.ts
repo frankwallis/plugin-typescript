@@ -122,10 +122,10 @@ describe('Factory', () => {
    xit('passes builder param to host', async () => {
       const config = {
          module: "system",
-         target: "es6"
+         target: "es2015"
       };
       const {host} = await createFactory(config, true, resolve, fetch, lookup);
-      host.options.module.should.equal(ts.ModuleKind.ES6);
+      host.options.module.should.equal(ts.ModuleKind.ES2015);
    });
 
    it('SystemJS.typescriptOptions take precedence over tsconfig settings', async () => {
@@ -174,7 +174,7 @@ describe('Factory', () => {
 
    it('handles targetLib option', async () => {
       const config = {
-			targetLib: ts.ScriptTarget.ES6,
+			targetLib: ts.ScriptTarget.ES2015,
          typeCheck: true
       };
       const {resolver} = await createFactory(config, false, resolve, fetch, lookup);

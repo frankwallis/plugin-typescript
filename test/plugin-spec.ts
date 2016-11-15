@@ -91,11 +91,11 @@ describe('Plugin', () => {
 				})
       });
 
-      xit('brings in elided import files when outputting to es6', () => {
+      xit('brings in elided import files when outputting to es2015', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions/bad";
-			config.typescriptOptions.module = "es6";
-			config.typescriptOptions.target = "es6";
+			config.typescriptOptions.module = "es2015";
+			config.typescriptOptions.target = "es2015";
 			System.config(config);
 			return System.import('testsrc')
 				.catch(err => {

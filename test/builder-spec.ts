@@ -95,8 +95,8 @@ describe('Builder', () => {
       it('brings in elided import files when outputting to es6', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions";
-			config.typescriptOptions.module = "es6";
-			config.typescriptOptions.target = "es6";
+			config.typescriptOptions.module = "es2015";
+			config.typescriptOptions.target = "es2015";
 			builder.config(config);
 			return builder.bundle('testsrc')
 				.catch(err => {
@@ -239,7 +239,7 @@ describe('Builder', () => {
       it('strips out reference files when rolled up', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
-			config.typescriptOptions.module = "es6";
+			config.typescriptOptions.module = "es2015";
 			builder.config(config);
 			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
 				.catch(err => {
@@ -291,7 +291,7 @@ describe('Builder', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
 			config.typescriptOptions.module = "system";
-			config.typescriptOptions.target = "es6";
+			config.typescriptOptions.target = "es2015";
 			builder.config(config);
 			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
 				.catch(err => {
@@ -308,7 +308,7 @@ describe('Builder', () => {
       it('supports es6 modules with target es5', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
-			config.typescriptOptions.module = "es6";
+			config.typescriptOptions.module = "es2015";
 			config.typescriptOptions.target = "es5";
 			builder.config(config);
 			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
@@ -323,11 +323,11 @@ describe('Builder', () => {
 				})
       });
 
-      it('supports syntheticDefaultImports when outputting es6 modules', () => {
+      it('supports syntheticDefaultImports when outputting es2015 modules', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/synthetic";
 			config.map["somelib"] = "test/fixtures-es6/plugin/js/somelib.js";
-			config.typescriptOptions.module = "es6";
+			config.typescriptOptions.module = "es2015";
 			config.typescriptOptions.target = "es5";
 
 			builder.config(config);
@@ -345,7 +345,7 @@ describe('Builder', () => {
       it('strips out elided modules when rolled up', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions";
-			config.typescriptOptions.module = "es6";
+			config.typescriptOptions.module = "es2015";
 			config.typescriptOptions.target = "es5";
 			builder.config(config);
 			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })

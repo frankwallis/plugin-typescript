@@ -64,14 +64,14 @@ describe('Host', () => {
          host.options.moduleResolution.should.be.equal(ts.ModuleResolutionKind.Classic);
       });
 
-      xit('switches from system output to es6 module output when building', () => {
+      xit('switches from system output to es2015 module output when building', () => {
          host = new CompilerHost({
             module: "system"
          }, true);
-         host.options.module.should.be.equal(ts.ModuleKind.ES6);
+         host.options.module.should.be.equal(ts.ModuleKind.ES2015);
       });
 
-      it('doesnt switch from system output to es6 module output when not building', () => {
+      it('doesnt switch from system output to es2015 module output when not building', () => {
          host = new CompilerHost({
             module: "system"
          }, false);

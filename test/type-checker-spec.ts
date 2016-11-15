@@ -135,15 +135,17 @@ describe('TypeChecker', () => {
 
    it('uses config options', async () => {
       const options = {
-         noImplicitAny: true
+         noUnusedLocals: true
       };
       host = new CompilerHost(options);
       typeChecker = new TypeChecker(host);
       resolver = new Resolver(host, resolve, lookup);
 
       const diags = await typecheckAll(oneImport);
-      diags.should.have.length(1);
-      diags[0].code.should.be.equal(7005);
+      //formatErrors(diags, console as any);
+      diags.should.have.length(2);
+      diags[0].code.should.be.equal(6133);
+		diags[1].code.should.be.equal(6133);
    });
 
    it('compiles ambient imports', async () => {
@@ -317,7 +319,7 @@ describe('TypeChecker', () => {
    it('imports es6 .html files', async () => {
       const options = {
          supportHtmlImports: true,
-         module: "es6"
+         module: "es2015"
       };
       host = new CompilerHost(options);
       typeChecker = new TypeChecker(host);

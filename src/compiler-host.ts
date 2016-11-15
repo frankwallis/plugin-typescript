@@ -59,7 +59,7 @@ export class CompilerHost implements ts.CompilerHost {
       // https://github.com/Microsoft/TypeScript/issues/2709#issuecomment-91968950 gets implemented
       // note - this only affects type-checking, not runtime!
       let source = "var __html__: string = ''; export default __html__;";
-		if ((this._options.target !== ts.ScriptTarget.ES6) && (this._options.module !== ts.ModuleKind.ES6))
+		if ((this._options.target !== ts.ScriptTarget.ES2015) && (this._options.module !== ts.ModuleKind.ES2015))
          source = source + "export = __html__;";
 
       const file = this.addFile(HTML_MODULE, source);
@@ -80,7 +80,7 @@ export class CompilerHost implements ts.CompilerHost {
 		if (this._options.targetLib) {
 			logger.warn("The 'targetLib' option is deprecated and will shortly be removed");
 			logger.warn("Please use the 'lib' option instead");
-			this.options.targetLib = this.getEnum(this._options.targetLib, ts.ScriptTarget, ts.ScriptTarget.ES6);
+			this.options.targetLib = this.getEnum(this._options.targetLib, ts.ScriptTarget, ts.ScriptTarget.ES2015);
 		}
 		else if (!this._options.lib) {
 			this._options.lib = ['es6'];
@@ -116,7 +116,7 @@ export class CompilerHost implements ts.CompilerHost {
 	public getDefaultLibFilePaths(): string[] {
 		if (this._options.targetLib === ts.ScriptTarget.ES5)
 			return ['typescript/lib/lib.d.ts'];
-		else if (this._options.targetLib === ts.ScriptTarget.ES6)
+		else if (this._options.targetLib === ts.ScriptTarget.ES2015)
 			return ['typescript/lib/lib.es6.d.ts'];
 		else
 			return this._options.lib.map(libName => `typescript/lib/lib.${libName}.d.ts`);

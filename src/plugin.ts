@@ -38,7 +38,7 @@ export function translate(load: Module): Promise<any> {
       if (isTypescriptDeclaration(load.address)) {
 			// rollup support needs null/esm to strip out the empty modules,
 			// for non-rollup & runtime use ''/cjs
-			if (loader.builder && (host.options.module == ts.ModuleKind.ES6)) {
+			if (loader.builder && (host.options.module == ts.ModuleKind.ES2015)) {
 				load.source = null;
 				load.metadata.format = 'esm';
 			}
@@ -62,7 +62,7 @@ export function translate(load: Module): Promise<any> {
 			if (!host.options.autoDetectModule) {
 				if (host.options.module === ts.ModuleKind.System)
 					load.metadata.format = 'register';
-				else if (host.options.module === ts.ModuleKind.ES6)
+				else if (host.options.module === ts.ModuleKind.ES2015)
 					load.metadata.format = 'esm';
 				else if (host.options.module === ts.ModuleKind.CommonJS)
 					load.metadata.format = 'cjs';
@@ -135,7 +135,7 @@ export function bundle() {
 function validateOptions(options) {
    /* The only time you don't want to output in system format is when you are using rollup or babel
       downstream to compile es6 output (e.g. for async/await support) */
-   if ((options.module != ts.ModuleKind.System) && (options.module != ts.ModuleKind.ES6)) {
+   if ((options.module != ts.ModuleKind.System) && (options.module != ts.ModuleKind.ES2015)) {
       logger.warn(`transpiling to ${ts.ModuleKind[options.module]}, consider setting module: "system" in typescriptOptions to transpile directly to System.register format`);
    }
 }
