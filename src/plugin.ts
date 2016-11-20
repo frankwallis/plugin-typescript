@@ -104,6 +104,7 @@ function typeCheck(load: Module): Promise<any> {
 
 					const depslist = deps.list
 						.filter(d => isTypescript(d))
+						.filter(d => d !== load.address)
 						.map(d => isTypescriptDeclaration(d) ? d + '!' + __moduleName : d);
 
 					load.metadata.deps = depslist;
