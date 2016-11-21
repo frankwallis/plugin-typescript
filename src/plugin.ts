@@ -19,6 +19,40 @@ function getFactory() {
 	return __global.tsfactory;
 }
 
+function tryExtensions(load, remaining): Promise<string> {
+      //try each file extension, but try the load.address's file extension first, then the remaining file extensions in order
+      remaining = remaining.slice();
+      return new Promise((resolve,reject)=>{
+            if(remaining.length == 0) {
+                  resolve(load.address);
+                  return;
+            }
+            var originalExtensionLocation = load.address.lastIndexOf(".");
+            var originalExtension = load.address.slice(originalExtensionLocation + 1);
+            var extensionLess = load.address.slice(0,originalExtensionLocation);
+            var originalRemainingIndex = remaining.indexOf(originalExtension);
+            var extensionToTry;
+            if(originalRemainingIndex >= 0) {
+                  remaining.splice(originalRemainingIndex,1);
+                  extensionToTry = originalExtension;
+            } else {
+                  extensionToTry = remaining.shift();
+            }
+            var addressToTry = extensionLess + "." + extensionToTry;
+            resolve(_fetch(addressToTry).then(to=>addressToTry).catch(to=>tryExtensions(load,remaining)))
+      })
+}
+
+export function locate(load) : Promise<string> {
+      // if the user has set the fileExtensions option, figure out the real address of the file we are looking for
+      factory = factory || getFactory();
+      return factory.then(({transpiler, resolver, typeChecker, host}) => {
+            if(host.options.fileExtensions && Array.isArray(host.options.fileExtensions) && host.options.fileExtensions.length > 1){
+                  return tryExtensions(load, host.options.fileExtensions)
+            } else return Promise.resolve(load.address);
+      })
+}
+
 /*
  * load.name
  * load.address
@@ -154,7 +188,7 @@ function _resolve(dep: string, parent: string): Promise<string> {
 
          logger.debug(`resolved ${normalized} (${parent} -> ${dep})`);
          return (ts as any).normalizePath(normalized);
-      });
+      })
 }
 
 /*
