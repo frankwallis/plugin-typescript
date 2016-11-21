@@ -11,7 +11,8 @@ A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you 
 
 Starting with JSPM 0.17.0 (currently in beta) this plugin will be the officially supported mechanism for transpiling TypeScript. It provides the ability to type-check files while loading them, which is not currently possible with the built-in SystemJS TypeScript transpiler.
 
-plugin-typescript uses TypeScript ^2.0.0  
+plugin-typescript uses TypeScript ^2.1.0
+For TypeScript 2.0.x use plugin-typescript 5.2.9  
 For TypeScript 1.8.1 use plugin-typescript 4.0.16  
 For TypeScript 1.7.5 and below use plugin-typescript 2.x.x  
 

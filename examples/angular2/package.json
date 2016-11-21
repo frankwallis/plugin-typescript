@@ -16,7 +16,6 @@
       "https": "npm:jspm-nodelibs-https@^0.2.0",
       "module": "npm:jspm-nodelibs-module@^0.2.0",
       "net": "npm:jspm-nodelibs-net@^0.2.0",
-      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.12",
       "clean-css": "npm:clean-css@^3.4.3",
       "css": "frankwallis/plugin-css@master",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
