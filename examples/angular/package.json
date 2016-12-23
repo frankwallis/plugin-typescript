@@ -42,7 +42,7 @@
       "vm": "npm:jspm-nodelibs-vm@^0.2.0"
     },
     "overrides": {
-      "github:angular/bower-angular@1.5.8": {
+      "github:angular/bower-angular@1.6.1": {
         "main": "angular",
         "meta": {
           "angular.js": {
@@ -51,21 +51,18 @@
           }
         }
       },
-      "github:socketio/socket.io-client@1.5.1": {
-        "main": "socket.io.js"
+      "github:socketio/socket.io-client@1.7.2": {
+        "main": "dist/socket.io.js"
       },
-      "npm:debug@2.3.2": {
-        "main": "browser.js",
+      "npm:debug@2.5.1": {
+        "main": "src/browser.js",
         "jspmNodeConversion": false,
         "format": "cjs",
         "map": {
-          "./browser.js": {
-            "node": "./node.js"
-          },
-          "fs": "@node/fs",
-          "net": "@node/net",
-          "tty": "@node/tty",
-          "util": "@node/util"
+          "fs": "@empty",
+          "net": "@empty",
+          "tty": "@empty",
+          "util": "@empty"
         }
       },
       "npm:inherits@2.0.3": {
@@ -77,7 +74,7 @@
         "jspmNodeConversion": false,
         "format": "cjs"
       },
-      "npm:typescript@2.1.1": {
+      "npm:typescript@2.1.4": {
         "browser": {},
         "map": {
           "buffer": "@empty",
