@@ -7,6 +7,7 @@ import {
    isTypescript,
    isTypescriptDeclaration,
    isJavaScript,
+	isJSX,
    isSourceMap,
    tsToJs,
    tsToJsMap,
@@ -126,6 +127,15 @@ describe('Utils', () => {
          isJavaScript('a.js').should.be.true;
          isJavaScript('a.ts.js').should.be.true;
          isJavaScript('a.ts.ajs').should.be.false;
+      });
+   });
+
+   describe('isJSX', () => {
+      it('detects jsx source files', () => {
+         isJSX('a.tsx').should.be.false;
+         isJSX('a.jsx').should.be.true;
+         isJSX('a.ts.jsx').should.be.true;
+         isJSX('a.ts.ajsx').should.be.false;
       });
    });
 

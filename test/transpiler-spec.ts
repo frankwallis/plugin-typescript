@@ -9,6 +9,7 @@ import {formatErrors} from '../src/format-errors';
 const should = chai.should();
 
 const oneImport = fs.readFileSync(require.resolve('./fixtures-es6/program1/one-import.ts'), 'utf8');
+const jsxPreserve = fs.readFileSync(require.resolve('./fixtures-es6/program1/jsx-preserve.tsx'), 'utf8');
 const es6Symbol = fs.readFileSync(require.resolve('./fixtures-es6/program1/symbol.ts'), 'utf8');
 const syntaxError = fs.readFileSync(require.resolve('./fixtures-es6/program1/syntax-error.ts'), 'utf8');
 const constEnums = fs.readFileSync(require.resolve('./fixtures-es6/program1/const-enums.ts'), 'utf8');
@@ -39,8 +40,42 @@ describe('Transpiler', () => {
       output.should.have.property('js').with.lengthOf(276);
    });
 
+   it('supports jsx preserve', () => {
+      const options = {
+         jsx: 'preserve'
+      };
+      const host = new CompilerHost(options);
+      const output = transpile('jsx-preserve.tsx', jsxPreserve, host);
+      formatErrors(output.errors, console as any);
+      output.should.have.property('failure', false);
+      output.should.have.property('errors').with.lengthOf(0);
+      output.js.should.contain('<div>hello</div>');
+   });
+
+   it('supports jsx react', () => {
+      const options = {
+         jsx: 'react'
+      };
+      const host = new CompilerHost(options);
+      const output = transpile('jsx-preserve.tsx', jsxPreserve, host);
+      formatErrors(output.errors, console as any);
+      output.should.have.property('failure', false);
+      output.should.have.property('errors').with.lengthOf(0);
+      output.js.should.not.contain('<div>hello</div>');
+		output.js.should.contain('React.createElement');
+   });
+
    it('removes SourceMappingURL', () => {
       const output = transpile('one-import.ts', oneImport);
+      output.js.should.not.contain("SourceMappingURL");
+   });
+
+   it('removes SourceMappingURL from jsx output', () => {
+      const options = {
+         jsx: 'preserve'
+      };
+      const host = new CompilerHost(options);
+      const output = transpile('jsx-preserve.tsx', jsxPreserve, host);
       output.js.should.not.contain("SourceMappingURL");
    });
 
