@@ -64,6 +64,12 @@ export function convertToDts(anyFile: string) {
 	return anyFile.replace(convertRegex, '.d.ts');
 }
 
+export function getExtension(normalized: string) {
+	const baseName = (ts as any).getBaseFileName(normalized);
+	const parts = baseName.split('.');
+	return parts.length > 1 ? parts.pop() : undefined;
+}
+
 export function stripDoubleExtension(normalized: string) {
 	const parts = normalized.split('.');
 
