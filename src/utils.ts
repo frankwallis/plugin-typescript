@@ -31,6 +31,11 @@ export function isJavaScript(filename: string) {
 	return javascriptRegex.test(filename);
 }
 
+const jsxRegex = /\.jsx$/i;
+export function isJSX(filename: string) {
+	return jsxRegex.test(filename)
+}
+
 const mapRegex = /\.map$/i;
 export function isSourceMap(filename: string) {
 	return mapRegex.test(filename);

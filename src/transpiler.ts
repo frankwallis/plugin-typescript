@@ -1,7 +1,7 @@
 /* */
 import * as ts from 'typescript';
 import {CompilerHost, CombinedOptions, TranspileResult} from './compiler-host';
-import {isJavaScript, isSourceMap, hasError} from './utils';
+import {isJavaScript, isJSX, isSourceMap, hasError} from './utils';
 import Logger from './logger';
 
 const logger = new Logger({ debug: false });
@@ -59,7 +59,7 @@ export class Transpiler {
 
          // Emit
          const emitResult = program.emit(undefined, (outputName, output) => {
-            if (isJavaScript(outputName))
+            if (isJavaScript(outputName) || isJSX(outputName))
                jstext = output.slice(0, output.lastIndexOf("//#")); // remove sourceMappingURL
             else if (isSourceMap(outputName))
                maptext = output;
