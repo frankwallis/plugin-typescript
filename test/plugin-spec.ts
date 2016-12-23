@@ -9,7 +9,7 @@ describe('Plugin', () => {
 
 	beforeEach(() => {
 		global['tsfactory'] = undefined;
-		var constructor = SystemJS['constructor'] as () => void;
+		var constructor = SystemJS['constructor'] as any;
 		System = new constructor();
 	})
 

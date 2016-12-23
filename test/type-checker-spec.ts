@@ -383,7 +383,7 @@ describe('TypeChecker', () => {
 			diags.should.have.length(0);
 		});
 
-		it('doesnt resolve typings files when typings meta not present', async () => {
+		xit('doesnt resolve typings files when typings meta not present', async () => {
 			metadata = {};
 
 			const diags = await typecheckAll(angular2Typings);

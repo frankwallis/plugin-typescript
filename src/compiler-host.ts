@@ -1,7 +1,7 @@
 /* */
 import * as ts from 'typescript';
 import Logger from './logger';
-import {isHtml, isTypescriptDeclaration, isJavaScript} from './utils';
+import {isHtml, isTypescriptDeclaration, getExtension} from './utils';
 
 const logger = new Logger({ debug: false });
 export const HTML_MODULE = "__html_module__";
@@ -215,7 +215,7 @@ export class CompilerHost implements ts.CompilerHost {
          const dependencies = this._files[containingFile].dependencies;
 
          if (isHtml(modName) && this._options.supportHtmlImports) {
-            return { resolvedFileName: HTML_MODULE };
+            return { resolvedFileName: HTML_MODULE, extension: 'html' };
          }
          else if (dependencies) {
             const resolvedFileName = dependencies.mappings[modName];
@@ -230,7 +230,8 @@ export class CompilerHost implements ts.CompilerHost {
 				}
 				else {
 					const isExternalLibraryImport = isTypescriptDeclaration(resolvedFileName);
-					return { resolvedFileName, isExternalLibraryImport };
+					const extension = getExtension(resolvedFileName);
+					return { resolvedFileName, isExternalLibraryImport, extension };
 				}
          }
          else {
