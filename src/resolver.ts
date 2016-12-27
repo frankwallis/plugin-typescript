@@ -27,7 +27,7 @@ export class Resolver {
    }
 
 	/*
-		returns a promise to he dependency information for this file
+		returns a promise to the dependency information for this file
 	*/
    public resolve(sourceName: string, options: CombinedOptions): Promise<DependencyInfo> {
       const file = this._host.getSourceFile(sourceName);

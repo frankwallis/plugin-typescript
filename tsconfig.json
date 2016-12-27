@@ -8,7 +8,10 @@
 		"moduleResolution": "node",
 		"importHelpers": true,
 		"inlineSourceMap": false,
-		"rootDir": "./src"
+		"rootDir": "./src",
+		"noImplicitReturns": true,
+		"noImplicitThis": false,
+		"noFallthroughCasesInSwitch": true
 	},
 	"files": [
 		"./src/plugin.ts",

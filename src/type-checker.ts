@@ -58,7 +58,6 @@ export class TypeChecker {
       	return this.getAllDiagnostics(candidates, typeCheckOptions);
 		else
 			return [];
-
    }
 
    public hasErrors(): boolean {

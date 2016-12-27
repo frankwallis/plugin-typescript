@@ -390,6 +390,5 @@ describe('TypeChecker', () => {
 			diags.should.have.length(0);
 			typeChecker.hasErrors().should.be.false;
 		});
-
 	})
 });

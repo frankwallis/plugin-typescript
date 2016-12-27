@@ -7,11 +7,7 @@ import Logger from './logger';
 const logger = new Logger({ debug: false });
 
 export class Transpiler {
-   private _host: CompilerHost;
-
-   constructor(host: CompilerHost) {
-		this._host = host;
-	}
+	constructor(private _host: CompilerHost) { }
 
 	getTranspileOptions(options: ts.CompilerOptions): ts.CompilerOptions {
       const result = (<any>ts).clone(options);
@@ -52,12 +48,11 @@ export class Transpiler {
    public transpile(sourceName: string, options: ts.CompilerOptions): TranspileResult {
       logger.debug(`transpiling ${sourceName}`);
 
-		const transpileOptions = this.getTranspileOptions(options);
-
       const file = this._host.getSourceFile(sourceName);
       if (!file) throw new Error(`file [${sourceName}] has not been added`);
 
       if (!file.output) {
+			const transpileOptions = this.getTranspileOptions(options);
          const program = ts.createProgram([sourceName], transpileOptions, this._host);
 
          let jstext: string = undefined;
