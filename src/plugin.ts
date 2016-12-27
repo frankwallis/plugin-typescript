@@ -69,29 +69,14 @@ export function translate(load: Module): Promise<any> {
 			}
       }
 
-		// builder doesn't call instantiate so type-check now
-		if (loader.builder)
-			return typeCheck(load).then(() => load.source);
-		else
-			return Promise.resolve(load.source);
-   });
-}
+		return typeCheck(load).then(errors => {
+			// at runtime the bundle hook is not called so fail the build immediately
+			if (!loader.builder && (options.typeCheck === "strict") && hasError(errors))
+				throw new Error("Typescript compilation failed");
 
-// instantiate hook is only called in browser
-export function instantiate(load, systemInstantiate) {
-	return factory.then(({typeChecker, resolver, host, options}) => {
-		return systemInstantiate(load)
-			.then(entry => {
-				return typeCheck(load).then((errors) => {
-					// at runtime the bundle hook is not called so fail the build immediately
-					if ((options.typeCheck === "strict") && hasError(errors))
-						throw new Error("Typescript compilation failed");
-
-					entry.deps = entry.deps.concat(load.metadata.deps);
-					return entry;
-				});
-			});
+			return load.source;
 		});
+   });
 }
 
 function typeCheck(load: Module): Promise<any> {

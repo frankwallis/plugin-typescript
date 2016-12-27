@@ -151,8 +151,6 @@ export class CompilerHost implements ts.CompilerHost {
          }
          else {
 				return undefined;
-            //return ts.resolveModuleName(modName, containingFile, this._options, this).resolvedModule;
-          	//throw new Error(`containing file ${containingFile} has not been loaded`);
          }
       });
    }
