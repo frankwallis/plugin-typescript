@@ -30,11 +30,6 @@ interface PluginOptions {
 	typings?: { [importName: string]: boolean | string };
 	autoDetectModule?: boolean;
 
-   /* deprecated */
-   supportHtmlImports?: boolean;
-   resolveAmbientRefs?: boolean;
-	targetLib?: number;
-
    /* private */
    files?: string[];
    tsconfigAddress?: string;

@@ -1,3 +1,4 @@
+import * as ts from 'typescript';
 import fs = require('fs');
 import path = require('path');
 import chai = require('chai');
@@ -5,8 +6,10 @@ import chai = require('chai');
 import {CompilerHost} from '../src/compiler-host';
 import {Transpiler} from '../src/transpiler';
 import {formatErrors} from '../src/format-errors';
+import {parseConfig} from '../src/parse-config';
 
 const should = chai.should();
+const defaultOptions = parseConfig({});
 
 const oneImport = fs.readFileSync(require.resolve('./fixtures-es6/program1/one-import.ts'), 'utf8');
 const jsxPreserve = fs.readFileSync(require.resolve('./fixtures-es6/program1/jsx-preserve.tsx'), 'utf8');
@@ -17,11 +20,12 @@ const trailingComma = fs.readFileSync(require.resolve('./fixtures-es6/es3/traili
 
 describe('Transpiler', () => {
 
-   function transpile(sourceName, source, host?) {
-      host = host || new CompilerHost({});
+   function transpile(sourceName: string, source: string, options: ts.CompilerOptions = defaultOptions) {
+      const host = new CompilerHost();
       const transpiler = new Transpiler(host);
-      host.addFile(sourceName, source);
-      return transpiler.transpile(sourceName);
+
+      host.addFile(sourceName, source, options.target);
+      return transpiler.transpile(sourceName, options);
    }
 
    it('transpiles typescript successfully', () => {
@@ -41,11 +45,10 @@ describe('Transpiler', () => {
    });
 
    it('supports jsx preserve', () => {
-      const options = {
-         jsx: 'preserve'
-      };
-      const host = new CompilerHost(options);
-      const output = transpile('jsx-preserve.tsx', jsxPreserve, host);
+		const options = parseConfig({
+			jsx: 'preserve'
+		});
+		const output = transpile('jsx-preserve.tsx', jsxPreserve, options);
       formatErrors(output.errors, console as any);
       output.should.have.property('failure', false);
       output.should.have.property('errors').with.lengthOf(0);
@@ -53,11 +56,10 @@ describe('Transpiler', () => {
    });
 
    it('supports jsx react', () => {
-      const options = {
+		const options = parseConfig({
          jsx: 'react'
-      };
-      const host = new CompilerHost(options);
-      const output = transpile('jsx-preserve.tsx', jsxPreserve, host);
+		});
+      const output = transpile('jsx-preserve.tsx', jsxPreserve, options);
       formatErrors(output.errors, console as any);
       output.should.have.property('failure', false);
       output.should.have.property('errors').with.lengthOf(0);
@@ -71,11 +73,10 @@ describe('Transpiler', () => {
    });
 
    it('removes SourceMappingURL from jsx output', () => {
-      const options = {
-         jsx: 'preserve'
-      };
-      const host = new CompilerHost(options);
-      const output = transpile('jsx-preserve.tsx', jsxPreserve, host);
+		const options = parseConfig({
+			jsx: 'preserve'
+		})
+      const output = transpile('jsx-preserve.tsx', jsxPreserve, options);
       output.js.should.not.contain("SourceMappingURL");
    });
 
@@ -92,13 +93,11 @@ describe('Transpiler', () => {
    });
 
    it('catches configuation errors', () => {
-      const options = {
+		const options = parseConfig({
          emitDecoratorMetadata: true,
          experimentalDecorators: false
-      };
-      const host = new CompilerHost(options);
-
-      const output = transpile('one-import.ts', oneImport, host);
+		});
+      const output = transpile('one-import.ts', oneImport, options);
       //formatErrors(output.errors, console as any);
       output.should.have.property('failure', true);
       output.should.have.property('errors').with.lengthOf(1);
@@ -106,16 +105,14 @@ describe('Transpiler', () => {
    });
 
    it('overrides invalid config options', () => {
-      const options = {
+		const options = parseConfig({
          noEmitOnError: true,
          out: "somefile.js",
          declaration: true,
          noLib: false,
          noEmit: true
-      };
-      const host = new CompilerHost(options);
-
-      const output = transpile('one-import.ts', oneImport, host);
+		});
+      const output = transpile('one-import.ts', oneImport, options);
       formatErrors(output.errors, console as any);
       output.should.have.property('failure', false);
       output.should.have.property('errors').with.lengthOf(0);
@@ -130,24 +127,23 @@ describe('Transpiler', () => {
    });
 
    it('uses sourceMap option', () => {
-      const options = {
+		const options = parseConfig({
          sourceMap: false
-      };
-      const host = new CompilerHost(options);
-      const output = transpile('symbol.ts', es6Symbol, host);
+		});
+      const output = transpile('symbol.ts', es6Symbol, options);
       (output.sourceMap === undefined).should.be.true;
    });
 
    it('uses target option', () => {
-      let host = new CompilerHost({
+		let options = parseConfig({
          target: "es3"
       });
-      const es3output = transpile('trailing-comma.ts', trailingComma, host);
+      const es3output = transpile('trailing-comma.ts', trailingComma, options);
 
-      host = new CompilerHost({
+		options = parseConfig({
          target: "es5"
       });
-      const es5output = transpile('trailing-comma.ts', trailingComma, host);
+      const es5output = transpile('trailing-comma.ts', trailingComma, options);
       es3output.should.not.be.equal(es5output);
    });
 });

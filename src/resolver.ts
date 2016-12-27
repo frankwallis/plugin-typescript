@@ -7,6 +7,7 @@ import {
    isJavaScript, isRelative,
    isAmbient, convertToDts
 } from './utils';
+import {CombinedOptions} from './parse-config'
 
 const logger = new Logger({ debug: false });
 
@@ -28,7 +29,7 @@ export class Resolver {
 	/*
 		returns a promise to he dependency information for this file
 	*/
-   public resolve(sourceName: string): Promise<DependencyInfo> {
+   public resolve(sourceName: string, options: CombinedOptions): Promise<DependencyInfo> {
       const file = this._host.getSourceFile(sourceName);
       if (!file) throw new Error(`file [${sourceName}] has not been added`);
 
@@ -36,7 +37,7 @@ export class Resolver {
          const info = ts.preProcessFile(file.text, true);
          file.isLibFile = info.isLibFile;
 
-         file.pendingDependencies = this.resolveDependencies(sourceName, info)
+         file.pendingDependencies = this.resolveDependencies(sourceName, info, options)
             .then(mappings => {
                const deps = Object.keys(mappings)
                   .map((key) => mappings[key])
@@ -69,20 +70,20 @@ export class Resolver {
 		process the source to get its dependencies and resolve and register them
 		returns a promise to a map of import/reference name  -> resolved file
 	*/
-   private resolveDependencies(sourceName: string, info: ts.PreProcessedFileInfo): Promise<{ [s: string]: string; }> {
+   private resolveDependencies(sourceName: string, info: ts.PreProcessedFileInfo, options: CombinedOptions): Promise<{ [s: string]: string; }> {
       /* build the list of file resolutions */
       /* references first */
       const resolvedReferences = info.referencedFiles
-         .map((ref) => this.resolveReference(ref.fileName, sourceName));
+         .map((ref) => this.resolveReference(ref.fileName, sourceName, options));
 
       const resolvedTypes = info.typeReferenceDirectives
-         .map((typ) => this.resolveTypeReference(typ.fileName, sourceName));
+         .map((typ) => this.resolveTypeReference(typ.fileName, sourceName, options));
 
       const resolvedImports = info.importedFiles
-         .map((imp) => this.resolveImport(imp.fileName, sourceName));
+         .map((imp) => this.resolveImport(imp.fileName, sourceName, options));
 
       const resolvedExternals = info.ambientExternalModules && info.ambientExternalModules
-         .map((ext) => this.resolveImport(ext, sourceName));
+         .map((ext) => this.resolveImport(ext, sourceName, options));
 
       const refs = []
 			.concat(info.referencedFiles)
@@ -107,38 +108,39 @@ export class Resolver {
          });
    }
 
-   private resolveReference(referenceName: string, sourceName: string): Promise<string> {
-      if ((isAmbient(referenceName) && !this._host.options.resolveAmbientRefs) || (referenceName.indexOf("/") === -1))
-         referenceName = "./" + referenceName;
+   private resolveReference(referenceName: string, sourceName: string, options: CombinedOptions): Promise<string> {
+		if (isAmbient(referenceName)) {
+			referenceName = "./" + referenceName;
+		}
 
       return this._resolve(referenceName, sourceName);
    }
 
-   private resolveTypeReference(referenceName: string, sourceName: string): Promise<string> {
-		return this.lookupAtType(referenceName, sourceName)
+   private resolveTypeReference(referenceName: string, sourceName: string, options: CombinedOptions): Promise<string> {
+		return this.lookupAtType(referenceName, sourceName, options)
    }
 
-   private async resolveImport(importName: string, sourceName: string): Promise<string> {
+   private async resolveImport(importName: string, sourceName: string, options: CombinedOptions): Promise<string> {
       if (isRelative(importName) && isTypescriptDeclaration(sourceName) && !isTypescriptDeclaration(importName))
          importName = importName + ".d.ts";
 
 		const address = await this._resolve(importName, sourceName);
 
 		if (!isTypescript(address)) {
-			const atTypeAddress = await this.lookupAtType(importName, sourceName);
+			const atTypeAddress = await this.lookupAtType(importName, sourceName, options);
 			if (atTypeAddress) return atTypeAddress;
 
-			const typingAddress = await this.lookupTyping(importName, sourceName, address);
+			const typingAddress = await this.lookupTyping(importName, sourceName, address, options);
 			if (typingAddress) return typingAddress;
 		}
 
 		return address;
    }
 
-	private async lookupTyping(importName: string, sourceName: string, address: string): Promise<string> {
+	private async lookupTyping(importName: string, sourceName: string, address: string, options: CombinedOptions): Promise<string> {
 		const packageName = this.getPackageName(importName);
-		const packageTypings = this._host.options.typings[packageName];
-		const importTypings = this._host.options.typings[importName];
+		const packageTypings = options.typings[packageName];
+		const importTypings = options.typings[importName];
 
 		if (importTypings) {
 			return this.resolveTyping(importTypings, packageName, sourceName, address);
@@ -181,10 +183,10 @@ export class Resolver {
 		}
    }
 
-   private async lookupAtType(importName: string, sourceName: string): Promise<string> {
+   private async lookupAtType(importName: string, sourceName: string, options: CombinedOptions): Promise<string> {
 		const packageName = this.getPackageName(importName);
 
-		if (this._host.options.types.indexOf(packageName) < 0)
+		if (options.types.indexOf(packageName) < 0)
 			return undefined;
 
 		let resolved = await this._resolve('@types/' + packageName, sourceName);

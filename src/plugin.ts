@@ -13,7 +13,7 @@ function getFactory() {
 	const __global: any = typeof(self) !== 'undefined' ? self : global;
 	__global.tsfactory = __global.tsfactory || createFactory(System.typescriptOptions, false, _resolve, _fetch, _lookup)
       .then((output) => {
-         validateOptions(output.host.options);
+         validateOptions(output.options);
          return output;
       });
 	return __global.tsfactory;
@@ -31,14 +31,14 @@ export function translate(load: Module): Promise<any> {
 
    factory = factory || getFactory();
 
-   return factory.then(({transpiler, resolver, typeChecker, host}) => {
-      host.addFile(load.address, load.source);
+   return factory.then(({transpiler, resolver, typeChecker, host, options}) => {
+      host.addFile(load.address, load.source, options.target);
 
       // transpile
       if (isTypescriptDeclaration(load.address)) {
 			// rollup support needs null/esm to strip out the empty modules,
 			// for non-rollup & runtime use ''/cjs
-			if (loader.builder && (host.options.module == ts.ModuleKind.ES2015)) {
+			if (loader.builder && (options.module == ts.ModuleKind.ES2015)) {
 				load.source = null;
 				load.metadata.format = 'esm';
 			}
@@ -48,7 +48,7 @@ export function translate(load: Module): Promise<any> {
 			}
       }
       else {
-         const result = transpiler.transpile(load.address);
+         const result = transpiler.transpile(load.address, options);
          formatErrors(result.errors, logger);
 
          if (result.failure)
@@ -59,12 +59,12 @@ export function translate(load: Module): Promise<any> {
          if (result.sourceMap)
             load.metadata.sourceMap = JSON.parse(result.sourceMap);
 
-			if (!host.options.autoDetectModule) {
-				if (host.options.module === ts.ModuleKind.System)
+			if (!options.autoDetectModule) {
+				if (options.module === ts.ModuleKind.System)
 					load.metadata.format = 'register';
-				else if (host.options.module === ts.ModuleKind.ES2015)
+				else if (options.module === ts.ModuleKind.ES2015)
 					load.metadata.format = 'esm';
-				else if (host.options.module === ts.ModuleKind.CommonJS)
+				else if (options.module === ts.ModuleKind.CommonJS)
 					load.metadata.format = 'cjs';
 			}
       }
@@ -79,12 +79,12 @@ export function translate(load: Module): Promise<any> {
 
 // instantiate hook is only called in browser
 export function instantiate(load, systemInstantiate) {
-	return factory.then(({typeChecker, resolver, host}) => {
+	return factory.then(({typeChecker, resolver, host, options}) => {
 		return systemInstantiate(load)
 			.then(entry => {
 				return typeCheck(load).then((errors) => {
 					// at runtime the bundle hook is not called so fail the build immediately
-					if ((host.options.typeCheck === "strict") && hasError(errors))
+					if ((options.typeCheck === "strict") && hasError(errors))
 						throw new Error("Typescript compilation failed");
 
 					entry.deps = entry.deps.concat(load.metadata.deps);
@@ -95,11 +95,11 @@ export function instantiate(load, systemInstantiate) {
 }
 
 function typeCheck(load: Module): Promise<any> {
-   return factory.then(({typeChecker, resolver, host}) => {
-		if (host.options.typeCheck && isTypescript(load.address)) {
-			return resolver.resolve(load.address)
+   return factory.then(({typeChecker, resolver, host, options}) => {
+		if (options.typeCheck && isTypescript(load.address)) {
+			return resolver.resolve(load.address, options)
 				.then(deps => {
-					const errors = typeChecker.check();
+					const errors = typeChecker.check(options);
 					formatErrors(errors, logger);
 
 					const depslist = deps.list
@@ -120,12 +120,12 @@ function typeCheck(load: Module): Promise<any> {
 export function bundle() {
    if (!factory) return [];
 
-   return factory.then(({typeChecker, host}) => {
-      if (host.options.typeCheck) {
-         const errors = typeChecker.forceCheck();
+   return factory.then(({typeChecker, host, options}) => {
+      if (options.typeCheck) {
+         const errors = typeChecker.forceCheck(options);
          formatErrors(errors, logger);
 
-         if ((host.options.typeCheck === "strict") && typeChecker.hasErrors())
+         if ((options.typeCheck === "strict") && typeChecker.hasErrors())
             throw new Error("Typescript compilation failed");
       }
 

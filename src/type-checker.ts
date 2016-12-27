@@ -2,8 +2,7 @@
 import * as ts from 'typescript';
 import Logger from './logger';
 import {isTypescriptDeclaration, hasError} from './utils';
-import {CompilerHost, CombinedOptions, SourceFile} from './compiler-host';
-import {HTML_MODULE} from "./compiler-host";
+import {CompilerHost, SourceFile} from './compiler-host';
 
 const logger = new Logger({ debug: false });
 
@@ -20,27 +19,30 @@ type CandidateMap = { [s: string]: Candidate };
 
 export class TypeChecker {
    private _host: CompilerHost;
-   private _options: CombinedOptions;
 
    constructor(host: CompilerHost) {
       this._host = host;
-
-      this._options = (<any>ts).clone(this._host.options);
-      this._options.inlineSourceMap = false;
-      this._options.sourceMap = false;
-      this._options.declaration = false;
-      this._options.isolatedModules = false;
-      this._options.skipDefaultLibCheck = true; // don't check the default lib for better performance
    }
+
+	private getTypeCheckOptions(options: ts.CompilerOptions): ts.CompilerOptions {
+      const result = (<any>ts).clone(options);
+      result.inlineSourceMap = false;
+      result.sourceMap = false;
+      result.declaration = false;
+      result.isolatedModules = false;
+      result.skipDefaultLibCheck = true; // don't check the default lib for better performance
+		return result;
+	}
 
 	/*
 		returns an array of typescript errors for this file
 	*/
-   public check(): ts.Diagnostic[] {
+   public check(options: ts.CompilerOptions): ts.Diagnostic[] {
+		const typeCheckOptions = this.getTypeCheckOptions(options)
       const candidates = this.getCandidates(false);
 
       if (candidates.some(candidate => !candidate.file.checked && candidate.checkable && !isTypescriptDeclaration(candidate.name)))
-         return this.getAllDiagnostics(candidates);
+         return this.getAllDiagnostics(candidates, typeCheckOptions);
       else
          return [];
    }
@@ -48,11 +50,12 @@ export class TypeChecker {
 	/*
 		type-checks any unchecked files even if all dependencies have not been loaded
 	*/
-   public forceCheck(): ts.Diagnostic[] {
+   public forceCheck(options: ts.CompilerOptions): ts.Diagnostic[] {
+		const typeCheckOptions = this.getTypeCheckOptions(options)
       const candidates = this.getCandidates(true);
 
 		if (candidates.some(candidate => !candidate.file.checked))
-      	return this.getAllDiagnostics(candidates);
+      	return this.getAllDiagnostics(candidates, typeCheckOptions);
 		else
 			return [];
 
@@ -60,14 +63,12 @@ export class TypeChecker {
 
    public hasErrors(): boolean {
       return this._host.getAllFiles()
-         .filter(file => file.fileName != HTML_MODULE)
          .some(file => file.checked && hasError(file.errors));
    }
 
    private getCandidates(force: boolean) {
       const candidates: Candidate[] = this._host
 			.getAllFiles()
-         .filter(file => file.fileName != HTML_MODULE)
          .map(file => ({
             name: file.fileName,
             file: file,
@@ -106,10 +107,10 @@ export class TypeChecker {
 		Returns the diagnostics for this file and any files which it uses.
 		Each file is only checked once.
 	*/
-   private getAllDiagnostics(candidates: Candidate[]): ts.Diagnostic[] {
+   private getAllDiagnostics(candidates: Candidate[], typeCheckOptions: ts.CompilerOptions): ts.Diagnostic[] {
       // hack to support html imports
-      const filelist = candidates.map((dep) => dep.name).concat([HTML_MODULE]);
-      const program = ts.createProgram(filelist, this._options, this._host);
+      const filelist = candidates.map((dep) => dep.name);
+      const program = ts.createProgram(filelist, typeCheckOptions, this._host);
 
       return candidates.reduce((errors, candidate) => {
          if (candidate.checkable && !candidate.file.checked) {

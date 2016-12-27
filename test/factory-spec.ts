@@ -115,17 +115,8 @@ describe('Factory', () => {
       const config = {
          tsconfig: true
       };
-      const {host} = await createFactory(config, false, resolve, fetch, lookup);
-      host.options.noImplicitAny.should.be.true;
-   });
-
-   xit('passes builder param to host', async () => {
-      const config = {
-         module: "system",
-         target: "es2015"
-      };
-      const {host} = await createFactory(config, true, resolve, fetch, lookup);
-      host.options.module.should.equal(ts.ModuleKind.ES2015);
+      const {options} = await createFactory(config, false, resolve, fetch, lookup);
+      options.noImplicitAny.should.be.true;
    });
 
    it('SystemJS.typescriptOptions take precedence over tsconfig settings', async () => {
@@ -133,8 +124,8 @@ describe('Factory', () => {
          tsconfig: true,
          noImplicitAny: false
       };
-      const {host} = await createFactory(config, false, resolve, fetch, lookup);
-      host.options.noImplicitAny.should.be.false;
+      const {options} = await createFactory(config, false, resolve, fetch, lookup);
+      options.noImplicitAny.should.be.false;
    });
 
    it('handles tsconfig = <pathname>', async () => {
@@ -170,18 +161,6 @@ describe('Factory', () => {
       resolver._declarationFiles.should.have.length(2);
 		resolver._declarationFiles[0].should.be.equal(defaultLibEs5);
       resolver._declarationFiles[1].should.be.equal(defaultLibEs2015Promise);
-   });
-
-   it('handles targetLib option', async () => {
-      const config = {
-			targetLib: ts.ScriptTarget.ES2015,
-         typeCheck: true
-      };
-      const {resolver} = await createFactory(config, false, resolve, fetch, lookup);
-      resolver.should.be.defined;
-      resolver._declarationFiles.should.have.length(1);
-		//resolver._declarationFiles[0].should.be.equal(defaultLibEs5);
-      //resolver._declarationFiles[1].should.be.equal(defaultLibEs2015Promise);
    });
 
 });

@@ -1,3 +1,4 @@
+import * as ts from 'typescript';
 import fs = require('fs');
 import path = require('path');
 import chai = require('chai');
@@ -5,8 +6,10 @@ import chai = require('chai');
 import {Resolver} from '../src/resolver';
 import {CompilerHost} from '../src/compiler-host';
 import {formatErrors} from '../src/format-errors';
+import {parseConfig} from '../src/parse-config';
 
 const should = chai.should();
+const defaultOptions = parseConfig({});
 
 let metadata = {};
 function lookup(address: string): any {
@@ -61,29 +64,29 @@ describe('Resolver', () => {
    let host: CompilerHost;
 
    beforeEach(() => {
-      host = new CompilerHost({});
+      host = new CompilerHost();
       resolver = new Resolver(host, resolve, lookup);
    });
 
    it('resolves successfully', async () => {
-      host.addFile(ANYFILE_NAME, "export = 42;");
-      const deps = await resolver.resolve(ANYFILE_NAME);
+      host.addFile(ANYFILE_NAME, "export = 42;", defaultOptions.target);
+      const deps = await resolver.resolve(ANYFILE_NAME, defaultOptions);
       deps.list.should.have.length(0);
    });
 
    it('adds declaration files', async () => {
       resolver.registerDeclarationFile("declarations.d.ts");
-      host.addFile(ANYFILE_NAME, "export = 42;");
-      const deps = await resolver.resolve(ANYFILE_NAME);
+      host.addFile(ANYFILE_NAME, "export = 42;", defaultOptions.target);
+      const deps = await resolver.resolve(ANYFILE_NAME, defaultOptions);
       deps.list.should.have.length(1);
       deps.list[0].should.equal("declarations.d.ts");
    });
 
    it('resolves ambient imports', async () => {
       const source = 'import "ambient";'
-      host.addFile(AMBIENT_NAME, source);
+      host.addFile(AMBIENT_NAME, source, defaultOptions.target);
 
-      const deps = await resolver.resolve(AMBIENT_NAME);
+      const deps = await resolver.resolve(AMBIENT_NAME, defaultOptions);
       deps.list.should.have.length(0);
    });
 
@@ -91,42 +94,9 @@ describe('Resolver', () => {
       const source = '/// <reference path="ambient/ambient.d.ts" />';
       const expected = path.resolve(__dirname, './fixtures-es6/ambients/ambient/ambient.d.ts');
 
-      host.addFile(AMBIENT_NAME, source);
+      host.addFile(AMBIENT_NAME, source, defaultOptions.target);
 
-      const deps = await resolver.resolve(AMBIENT_NAME);
-      deps.list.should.have.length(1);
-      deps.list[0].should.equal(expected);
-   });
-
-   it('resolves ambient references when resolveAmbientRefs option is true', async () => {
-      const options = {
-         resolveAmbientRefs: true
-      };
-      host = new CompilerHost(options);
-      resolver = new Resolver(host, resolve, lookup);
-
-      const source = '/// <reference path="ambient/ambient.d.ts" />';
-      const expected = path.resolve(__dirname, './fixtures-es6/ambients/resolved/ambient/ambient.d.ts');
-
-      host.addFile(AMBIENT_NAME, source);
-
-      const deps = await resolver.resolve(AMBIENT_NAME);
-      deps.list.should.have.length(1);
-      deps.list[0].should.equal(expected);
-   });
-
-   it('ignores non ambient refs resolveAmbientRefs option is true', async () => {
-      const options = {
-         resolveAmbientRefs: true
-      };
-      host = new CompilerHost(options);
-      resolver = new Resolver(host, resolve, lookup);
-
-      const source = '/// <reference path="not-ambient.d.ts" />';
-      const expected = path.resolve(__dirname, './fixtures-es6/ambients/not-ambient.d.ts');
-      host.addFile(AMBIENT_NAME, source);
-
-      const deps = await resolver.resolve(AMBIENT_NAME);
+      const deps = await resolver.resolve(AMBIENT_NAME, defaultOptions);
       deps.list.should.have.length(1);
       deps.list[0].should.equal(expected);
    });
@@ -135,9 +105,9 @@ describe('Resolver', () => {
       const source = 'declare module "../../Observable" { interface a {} }';
       const sourceName = path.resolve(__dirname, './fixtures-es6/resolved/rxjs/add/operator/do.d.ts');
       const expected = path.resolve(__dirname, './fixtures-es6/resolved/rxjs/Observable.d.ts');
-      host.addFile(sourceName, source);
+      host.addFile(sourceName, source, defaultOptions.target);
 
-      const deps = await resolver.resolve(sourceName);
+      const deps = await resolver.resolve(sourceName, defaultOptions);
       deps.list.should.have.length(1);
       deps.list[0].should.equal(expected);
    });
@@ -149,14 +119,12 @@ describe('Resolver', () => {
 			const jsfile = path.resolve(__dirname, './fixtures-es6/attypes/resolved/reacty.js');
 			const expected = path.resolve(__dirname, './fixtures-es6/attypes/resolved/@types/reacty/index.d.ts');
 
-			const options = {
+			const options = parseConfig({
 				types: ["reacty"]
-			};
-			host = new CompilerHost(options);
-			resolver = new Resolver(host, resolve, lookup);
+			});
 
-			host.addFile(sourceName, source);
-			const deps = await resolver.resolve(sourceName);
+			host.addFile(sourceName, source, options.target);
+			const deps = await resolver.resolve(sourceName, options);
 			deps.list.should.have.length(1);
 			deps.list[0].should.equal(expected);
 		});
@@ -167,14 +135,11 @@ describe('Resolver', () => {
 			const jsfile = path.resolve(__dirname, './fixtures-es6/attypes/resolved/react.js');
 			const expected = path.resolve(__dirname, './fixtures-es6/attypes/resolved/@types/react/index.d.ts');
 
-			const options = {
+			const options = parseConfig({
 				types: ["react"]
-			};
-			host = new CompilerHost(options);
-			resolver = new Resolver(host, resolve, lookup);
-
-			host.addFile(sourceName, source);
-			const deps = await resolver.resolve(sourceName);
+			});
+			host.addFile(sourceName, source, options.target);
+			const deps = await resolver.resolve(sourceName, options);
 			deps.list.should.have.length(1);
 			deps.list[0].should.equal(expected);
 		});
@@ -185,14 +150,12 @@ describe('Resolver', () => {
 			const jsfile = path.resolve(__dirname, './fixtures-es6/attypes/resolved/lodash/map.js');
 			const expected = path.resolve(__dirname, './fixtures-es6/attypes/resolved/@types/lodash/index.d.ts');
 
-			const options = {
+			const options = parseConfig({
 				types: ["lodash"]
-			};
-			host = new CompilerHost(options);
-			resolver = new Resolver(host, resolve, lookup);
+			});
 
-			host.addFile(sourceName, source);
-			const deps = await resolver.resolve(sourceName);
+			host.addFile(sourceName, source, options.target);
+			const deps = await resolver.resolve(sourceName, options);
 			deps.list.should.have.length(1);
 			deps.list[0].should.equal(expected);
 		});
@@ -210,9 +173,9 @@ describe('Resolver', () => {
 			};
 
 			const source = 'import {bootstrap} from "angular2";';
-			host.addFile(TYPINGS_NAME, source);
+			host.addFile(TYPINGS_NAME, source, defaultOptions.target);
 
-			const deps = await resolver.resolve(TYPINGS_NAME);
+			const deps = await resolver.resolve(TYPINGS_NAME, defaultOptions);
 			deps.list.should.have.length(1);
 			deps.list[0].should.equal(expected);
 		});
@@ -227,9 +190,9 @@ describe('Resolver', () => {
 			};
 
 			const source = 'import {bootstrap} from "./js/relative-import";';
-			host.addFile(TYPINGS_NAME, source);
+			host.addFile(TYPINGS_NAME, source, defaultOptions.target);
 
-			const deps = await resolver.resolve(TYPINGS_NAME);
+			const deps = await resolver.resolve(TYPINGS_NAME, defaultOptions);
 			deps.list.should.have.length(1);
 			deps.mappings["./js/relative-import"].should.equal(expected);
 		});
@@ -244,9 +207,9 @@ describe('Resolver', () => {
 			};
 
 			const source = 'import {bootstrap} from "angular2/router";';
-			host.addFile(TYPINGS_NAME, source);
+			host.addFile(TYPINGS_NAME, source, defaultOptions.target);
 
-			const deps = await resolver.resolve(TYPINGS_NAME);
+			const deps = await resolver.resolve(TYPINGS_NAME, defaultOptions);
 			deps.list.should.have.length(1);
 			deps.mappings["angular2/router"].should.equal(expected);
 		});
@@ -261,9 +224,9 @@ describe('Resolver', () => {
 			};
 
 			const source = 'import Zone from "zone.js";';
-			host.addFile(TYPINGS_NAME, source);
+			host.addFile(TYPINGS_NAME, source, defaultOptions.target);
 
-			const deps = await resolver.resolve(TYPINGS_NAME);
+			const deps = await resolver.resolve(TYPINGS_NAME, defaultOptions);
 			deps.list.should.have.length(1);
 			deps.mappings["zone.js"].should.equal(expected);
 		});
@@ -278,9 +241,9 @@ describe('Resolver', () => {
 			};
 
 			const source = 'import {bootstrap} from "@angular/core";';
-			host.addFile(TYPINGS_NAME, source);
+			host.addFile(TYPINGS_NAME, source, defaultOptions.target);
 
-			const deps = await resolver.resolve(TYPINGS_NAME);
+			const deps = await resolver.resolve(TYPINGS_NAME, defaultOptions);
 			deps.list.should.have.length(1);
 			deps.mappings["@angular/core"].should.equal(expected);
 		});
@@ -289,18 +252,16 @@ describe('Resolver', () => {
 			const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/@angular/core/index.d.ts');
 			const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/@angular/core/bundles/index.umd.js');
 
-			const options = {
+			const options = parseConfig({
 				typings: {
 					"@angular/core": "index.d.ts"
 				}
-			};
-			host = new CompilerHost(options);
-			resolver = new Resolver(host, resolve, lookup);
+			});
 
 			const source = 'import {bootstrap} from "@angular/core";';
-			host.addFile(TYPINGS_NAME, source);
+			host.addFile(TYPINGS_NAME, source, options.target);
 
-			const deps = await resolver.resolve(TYPINGS_NAME);
+			const deps = await resolver.resolve(TYPINGS_NAME, options);
 			deps.list.should.have.length(1);
 			deps.mappings["@angular/core"].should.equal(expected);
 		});
@@ -314,18 +275,16 @@ describe('Resolver', () => {
 				typings: "some/other/file.d.ts"
 			};
 
-			const options = {
+			const options = parseConfig({
 				typings: {
 					"@angular/core": "index.d.ts"
 				}
-			};
-			host = new CompilerHost(options);
-			resolver = new Resolver(host, resolve, lookup);
+			});
 
 			const source = 'import {bootstrap} from "@angular/core";';
-			host.addFile(TYPINGS_NAME, source);
+			host.addFile(TYPINGS_NAME, source, options.target);
 
-			const deps = await resolver.resolve(TYPINGS_NAME);
+			const deps = await resolver.resolve(TYPINGS_NAME, options);
 			deps.list.should.have.length(1);
 			deps.mappings["@angular/core"].should.equal(expected);
 		});
@@ -340,9 +299,9 @@ describe('Resolver', () => {
 			};
 
 			const source = 'import {Observable} from "rxjs";';
-			host.addFile(TYPINGS_NAME, source);
+			host.addFile(TYPINGS_NAME, source, defaultOptions.target);
 
-			const deps = await resolver.resolve(TYPINGS_NAME);
+			const deps = await resolver.resolve(TYPINGS_NAME, defaultOptions);
 			deps.list.should.have.length(1);
 			deps.list[0].should.equal(expected);
 		});
@@ -372,18 +331,16 @@ describe('Resolver', () => {
 			const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/Observable.d.ts');
 			const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs.js');
 
-			const options = {
+			const options = parseConfig({
 				typings: {
 					"rxjs": "Rx.d.ts"
 				}
-			};
-			host = new CompilerHost(options);
-			resolver = new Resolver(host, resolve, lookup);
+			});
 
 			const source = 'import {Observable} from "rxjs/Observable";';
-			host.addFile(TYPINGS_NAME, source);
+			host.addFile(TYPINGS_NAME, source, options.target);
 
-			const deps = await resolver.resolve(TYPINGS_NAME);
+			const deps = await resolver.resolve(TYPINGS_NAME, options);
 			deps.list.should.have.length(1);
 			deps.list[0].should.equal(expected);
 		});
@@ -392,19 +349,17 @@ describe('Resolver', () => {
 			const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/testing/index.d.ts');
 			const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/testing.js');
 
-			const options = {
+			const options = parseConfig({
 				typings: {
 					"rxjs": "Rx.d.ts",
 					"rxjs/testing": "testing/index.d.ts",
 				}
-			};
-			host = new CompilerHost(options);
-			resolver = new Resolver(host, resolve, lookup);
+			});
 
 			const source = 'import * as Testing from "rxjs/testing";';
-			host.addFile(TYPINGS_NAME, source);
+			host.addFile(TYPINGS_NAME, source, options.target);
 
-			const deps = await resolver.resolve(TYPINGS_NAME);
+			const deps = await resolver.resolve(TYPINGS_NAME, options);
 			deps.list.should.have.length(1);
 			deps.list[0].should.equal(expected);
 		});

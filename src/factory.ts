@@ -1,7 +1,8 @@
 /* */
 import * as ts from 'typescript';
 import Logger from './logger';
-import { CompilerHost, CombinedOptions } from './compiler-host';
+import { parseConfig, CombinedOptions } from './parse-config';
+import { CompilerHost } from './compiler-host';
 import { Transpiler } from './transpiler';
 import { Resolver } from './resolver';
 import { TypeChecker } from './type-checker';
@@ -15,7 +16,7 @@ export interface FactoryOutput {
 	transpiler: Transpiler;
 	resolver: Resolver;
 	typeChecker: TypeChecker;
-	options: PluginOptions;
+	options: CombinedOptions;
 }
 
 export async function createFactory(
@@ -27,8 +28,8 @@ export async function createFactory(
 
 	const tsconfigFiles = [];
 	const typingsFiles = [];
-	const options = await loadOptions(sjsconfig, _resolve, _fetch);
-	const services = await createServices(options, builder, _resolve, _lookup);
+	const config = await loadConfig(sjsconfig, _resolve, _fetch);
+	const services = await createServices(config, builder, _resolve, _lookup);
 
 	if (services.options.typeCheck) {
 		const resolvedFiles = await resolveDeclarationFiles(services.options, _resolve);
@@ -40,7 +41,7 @@ export async function createFactory(
 	return services;
 }
 
-async function loadOptions(sjsconfig: PluginOptions, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<PluginOptions> {
+async function loadConfig(sjsconfig: PluginOptions, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<PluginOptions> {
 	if (sjsconfig.tsconfig) {
 		const tsconfig = (sjsconfig.tsconfig === true) ? "tsconfig.json" : sjsconfig.tsconfig as string;
 
@@ -71,9 +72,10 @@ function resolveDeclarationFiles(options: PluginOptions, _resolve: ResolveFuncti
 	return Promise.all<string>(declarationFiles);
 }
 
-async function createServices(options: PluginOptions, builder: boolean,
+async function createServices(config: PluginOptions, builder: boolean,
 	_resolve: ResolveFunction, _lookup: LookupFunction): Promise<FactoryOutput> {
-	const host = new CompilerHost(options, builder);
+	const options = parseConfig(config)
+	const host = new CompilerHost();
 	const transpiler = new Transpiler(host);
 
 	let resolver: Resolver = undefined;
@@ -83,8 +85,8 @@ async function createServices(options: PluginOptions, builder: boolean,
 		resolver = new Resolver(host, _resolve, _lookup);
 		typeChecker = new TypeChecker(host);
 
-		if (!host.options.noLib) {
-			const defaultLibResolutions = host.getDefaultLibFilePaths().map(libPath => _resolve(libPath));
+		if (!options.noLib) {
+			const defaultLibResolutions = host.getDefaultLibFilePaths(options).map(libPath => _resolve(libPath));
 			const defaultLibAddresses = await Promise.all(defaultLibResolutions);
 			defaultLibAddresses.forEach(defaultLibAddress => {
 				resolver.registerDeclarationFile(defaultLibAddress);
