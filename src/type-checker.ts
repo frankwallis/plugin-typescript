@@ -62,7 +62,7 @@ export class TypeChecker {
 
    public hasErrors(): boolean {
       return this._host.getAllFiles()
-         .some(file => file.checked && hasError(file.errors));
+         .some(file => file.checked && hasError(file.diags));
    }
 
    private getCandidates(force: boolean) {
@@ -111,20 +111,20 @@ export class TypeChecker {
       const filelist = candidates.map((dep) => dep.name);
       const program = ts.createProgram(filelist, typeCheckOptions, this._host);
 
-      return candidates.reduce((errors, candidate) => {
+      return candidates.reduce((diags, candidate) => {
          if (candidate.checkable && !candidate.file.checked) {
-            candidate.file.errors = [];
+            candidate.file.diags = [];
 
             if (!candidate.file.isLibFile) {
-               candidate.file.errors = program.getSyntacticDiagnostics(candidate.file)
+               candidate.file.diags = program.getSyntacticDiagnostics(candidate.file)
                   .concat(program.getSemanticDiagnostics(candidate.file));
             }
 
             candidate.file.checked = true;
-            return errors.concat(candidate.file.errors);
+            return diags.concat(candidate.file.diags);
          }
          else {
-            return errors;
+            return diags;
          }
       }, program.getGlobalDiagnostics());
    }

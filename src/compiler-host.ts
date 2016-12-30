@@ -8,7 +8,7 @@ const logger = new Logger({ debug: false });
 
 export type TranspileResult = {
    failure: boolean;
-   errors: Array<ts.Diagnostic>;
+   diags: Array<ts.Diagnostic>;
    js: string;
    sourceMap: string;
 }
@@ -17,7 +17,7 @@ export interface SourceFile extends ts.SourceFile {
    output?: TranspileResult;
    pendingDependencies?: Promise<DependencyInfo>;
    dependencies?: DependencyInfo;
-   errors?: ts.Diagnostic[];
+   diags?: ts.Diagnostic[];
    checked?: boolean;
    isLibFile?: boolean;
 }
@@ -109,7 +109,7 @@ export class CompilerHost implements ts.CompilerHost {
 
          if (file) {
             file.checked = false;
-            file.errors = [];
+            file.diags = [];
          }
 
          Object.keys(this._files)

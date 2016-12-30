@@ -30,17 +30,17 @@ describe('Transpiler', () => {
 
    it('transpiles typescript successfully', () => {
       const output = transpile('one-import.ts', oneImport);
-      formatErrors(output.errors, console as any);
+      formatErrors(output.diags, console as any);
       output.should.have.property('failure', false);
-      output.should.have.property('errors').with.lengthOf(0);
+      output.should.have.property('diags').with.lengthOf(0);
       output.should.have.property('js').with.lengthOf(407);
    });
 
    it('transpiles javascript successfully', () => {
       const output = transpile('no-import.js', "var a = 10; export default a;");
-      formatErrors(output.errors, console as any);
+      formatErrors(output.diags, console as any);
       output.should.have.property('failure', false);
-      output.should.have.property('errors').with.lengthOf(0);
+      output.should.have.property('diags').with.lengthOf(0);
       output.should.have.property('js').with.lengthOf(276);
    });
 
@@ -49,9 +49,9 @@ describe('Transpiler', () => {
 			jsx: 'preserve'
 		});
 		const output = transpile('jsx-preserve.tsx', jsxPreserve, options);
-      formatErrors(output.errors, console as any);
+      formatErrors(output.diags, console as any);
       output.should.have.property('failure', false);
-      output.should.have.property('errors').with.lengthOf(0);
+      output.should.have.property('diags').with.lengthOf(0);
       output.js.should.contain('<div>hello</div>');
    });
 
@@ -60,9 +60,9 @@ describe('Transpiler', () => {
          jsx: 'react'
 		});
       const output = transpile('jsx-preserve.tsx', jsxPreserve, options);
-      formatErrors(output.errors, console as any);
+      formatErrors(output.diags, console as any);
       output.should.have.property('failure', false);
-      output.should.have.property('errors').with.lengthOf(0);
+      output.should.have.property('diags').with.lengthOf(0);
       output.js.should.not.contain('<div>hello</div>');
 		output.js.should.contain('React.createElement');
    });
@@ -87,9 +87,9 @@ describe('Transpiler', () => {
 
    it('catches syntax errors', () => {
       const output = transpile('syntax-error.ts', syntaxError);
-      //formatErrors(output.errors, console as any);
+      //formatErrors(output.diags, console as any);
       output.should.have.property('failure', true);
-      output.should.have.property('errors').with.lengthOf(1);
+      output.should.have.property('diags').with.lengthOf(1);
    });
 
    it('catches configuation errors', () => {
@@ -98,10 +98,10 @@ describe('Transpiler', () => {
          experimentalDecorators: false
 		});
       const output = transpile('one-import.ts', oneImport, options);
-      //formatErrors(output.errors, console as any);
+      //formatErrors(output.diags, console as any);
       output.should.have.property('failure', true);
-      output.should.have.property('errors').with.lengthOf(1);
-      output.errors[0].code.should.be.equal(5052);
+      output.should.have.property('diags').with.lengthOf(1);
+      output.diags[0].code.should.be.equal(5052);
    });
 
    it('overrides invalid config options', () => {
@@ -113,17 +113,17 @@ describe('Transpiler', () => {
          noEmit: true
 		});
       const output = transpile('one-import.ts', oneImport, options);
-      formatErrors(output.errors, console as any);
+      formatErrors(output.diags, console as any);
       output.should.have.property('failure', false);
-      output.should.have.property('errors').with.lengthOf(0);
+      output.should.have.property('diags').with.lengthOf(0);
       output.js.length.should.be.greaterThan(0);
    });
 
    xit('errors on const enums', () => {
       const output = transpile('const-enums.ts', constEnums);
-      //formatErrors(output.errors, console as any);
+      //formatErrors(output.diags, console as any);
       output.should.have.property('failure', true);
-      output.should.have.property('errors').with.lengthOf(1);
+      output.should.have.property('diags').with.lengthOf(1);
    });
 
    it('uses sourceMap option', () => {

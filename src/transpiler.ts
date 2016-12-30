@@ -74,7 +74,7 @@ export class Transpiler {
 
          file.output = {
             failure: hasError(diagnostics),
-            errors: diagnostics,
+            diags: diagnostics,
             js: jstext,
             sourceMap: maptext
          };

@@ -48,6 +48,13 @@ declare type DependencyInfo = {
    mappings: { [s: string]: string; }
 }
 
+declare interface StructuredError {
+	messageText: string;
+	locationText: string;
+	errorCode: number;
+	category: number;
+}
+
 declare module Chai {
    interface Assertion {
       defined: any;

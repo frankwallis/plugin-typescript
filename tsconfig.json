@@ -15,14 +15,6 @@
 	},
 	"files": [
 		"./src/plugin.ts",
-		"./src/type-checker.ts",
-		"./src/transpiler.ts",
-		"./src/resolver.ts",
-		"./src/compiler-host.ts",
-		"./src/factory.ts",
-		"./src/format-errors.ts",
-		"./src/logger.ts",
-		"./src/utils.ts",
 		"./src/types.d.ts"
 	]
 }
