@@ -1,10 +1,13 @@
 import chai = require('chai');
+import chaiAsPromised = require("chai-as-promised");
+
 import * as ts from 'typescript';
 import SystemJS = require('systemjs');
-
+import {CombinedOptions} from '../src/parse-config'
+chai.use(chaiAsPromised);
 const should = chai.should();
 
-describe('Plugin', () => {
+describe.only('Plugin', () => {
 	let System = null;
 
 	beforeEach(() => {
@@ -25,7 +28,7 @@ describe('Plugin', () => {
 				"typeCheck": "strict",
 				"tsconfig": false,
 				"types": undefined
-			},
+			} as CombinedOptions,
 			packages: {
 				"testsrc": {
 					"main": "index.ts",
@@ -82,13 +85,7 @@ describe('Plugin', () => {
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions/bad";
 			System.config(config);
 			return System.import('testsrc')
-				.then(result => {
-					(result == undefined).should.be.true;
-				})
-				.catch(err => {
-					err.should.be.defined;
-					err.originalErr.toString().indexOf('compilation failed').should.not.be.equal(-1);
-				})
+				.should.be.rejectedWith(/compilation failed/);
       });
 
       xit('brings in elided import files when outputting to es2015', () => {
@@ -98,14 +95,7 @@ describe('Plugin', () => {
 			config.typescriptOptions.target = "es2015";
 			System.config(config);
 			return System.import('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					err.should.be.defined;
-				})
-				.then(result => {
-					// elided files are brought in, but this build still passes
-					(result == undefined).should.be.true;
-				})
+				.should.be.rejected;
       });
 
       it('brings in ambient external typings', () => {
@@ -113,13 +103,7 @@ describe('Plugin', () => {
 			config.map["testsrc"] = "test/fixtures-es6/plugin/ambient";
 			System.config(config);
 			return System.import('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
       });
 
       it('handles elided files which have exports', () => {
@@ -127,13 +111,7 @@ describe('Plugin', () => {
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions-exports";
 			System.config(config);
 			return System.import('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
       });
 
       it('only executes modules once', () => {
@@ -141,15 +119,7 @@ describe('Plugin', () => {
 			config.map["testsrc"] = "test/fixtures-es6/plugin/execute";
 			System.config(config);
 			return System.import('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-					result.counter.index.should.equal(1);
-					result.counter.imported.should.equal(1);
-				})
+				.should.become({ counter: { index: 1, imported: 1, elided: 1 }});
       });
 
       xit('does not execute elided modules', () => {
@@ -157,45 +127,44 @@ describe('Plugin', () => {
 			config.map["testsrc"] = "test/fixtures-es6/plugin/execute";
 			System.config(config);
 			return System.import('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-					result.counter.elided.should.equal(0);
-				})
+				.should.become({ counter: { index: 1, imported: 1, elided: 0 }});
       });
 	});
 
-   describe('strict mode', () => {
-      it('fails build when enabled', () => {
+   describe('typeCheck', () => {
+      it('fails build when strict', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
 			System.config(config);
 			return System.import('testsrc/fail.ts')
-				.catch(err => {
-					console.log(err.originalErr);
-					err.should.be.defined;
-				})
-				.then(result => {
-					(result == undefined).should.be.true;
-				})
+				.should.be.rejected;
       });
 
-      it('passes build when disabled', () => {
+      it('passes build when true', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
-			config.typescriptOptions.typeCheck = true as any;
+			config.typescriptOptions.typeCheck = true;
 			System.config(config);
 			return System.import('testsrc/fail.ts')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
+      });
+
+      xit('sets tserrors on metadata', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
+			config.typescriptOptions.typeCheck = true;
+			System.config(config);
+			return System.import('testsrc/fail.ts')
+				.should.be.fulfilled;
+      });
+
+      xit('does not set tserrors when false', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
+			config.typescriptOptions.typeCheck = false;
+			System.config(config);
+			return System.import('testsrc/fail.ts')
+				.should.be.fulfilled;
       });
 
       it('detects missing files', () => {
@@ -203,24 +172,25 @@ describe('Plugin', () => {
 			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
 			System.config(config);
 			return System.import('testsrc/missing.ts')
-				.catch(err => {
-					console.log(err.originalErr);
-					err.should.be.defined;
-				})
-				.then(result => {
-					(result == undefined).should.be.true;
-				})
+				.should.be.rejected;
       });
 
-		it('compile with custom lib', () => {
+		it('successfully compiles with custom lib files', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/es6";
-			config.typescriptOptions['lib'] = ["es5", "es2015.promise"];
+			config.typescriptOptions['lib'] = ['es5', 'es2015.promise'];
 			System.config(config);
 			return System.import('testsrc/promise.ts')
-				.then(result => {
-					(result == undefined).should.be.false;
-				})
+				.should.be.fulfilled;
+      });
+
+		it('fails to compile with custom lib files', () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/es6";
+			config.typescriptOptions['lib'] = ['es5'];
+			System.config(config);
+			return System.import('testsrc/promise.ts')
+				.should.be.rejected;
       });
 	});
 
@@ -235,13 +205,7 @@ describe('Plugin', () => {
 			config.typescriptOptions.types = ["reacty"];
 			System.config(config);
 			return System.import('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
       });
 	});
 
@@ -252,13 +216,7 @@ describe('Plugin', () => {
 			config.typescriptOptions.module = "commonjs";
 			System.config(config);
 			return System.import('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
       });
 
       it('compiles js files when default transpiler', () => {
@@ -269,14 +227,7 @@ describe('Plugin', () => {
 			config.typescriptOptions.module = "commonjs";
 			System.config(config);
 			return System.import('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
       });
 	});
-
 });

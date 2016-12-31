@@ -2,18 +2,11 @@
    "compilerOptions": {
       "module": "commonjs",
       "target": "es6",
-		"types": ["node", "mocha", "chai", "systemjs"],
+		"types": ["node", "mocha", "chai", "chai-as-promised", "systemjs"],
       "moduleResolution": "node"
    },
    "files": [
       "../src/types.d.ts",
-      "./compiler-host-spec.ts",
-      "./factory-spec.ts",
-      "./resolver-spec.ts",
-      "./transpiler-spec.ts",
-      "./type-checker-spec.ts",
-      "./utils-spec.ts",
-		"./plugin-spec.ts",
-		"./builder-spec.ts"
+      "./*-spec.ts"
    ]
 }
