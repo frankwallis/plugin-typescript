@@ -6,7 +6,6 @@
       "moduleResolution": "node"
    },
    "files": [
-      "../src/types.d.ts",
-      "./*-spec.ts"
+      "../src/types.d.ts"
    ]
 }

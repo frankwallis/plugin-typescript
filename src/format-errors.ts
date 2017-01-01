@@ -24,7 +24,7 @@ export function convertErrors(diags: ts.Diagnostic[]): StructuredError[] {
 		result.push({
 			messageText,
 			locationText,
-			category: ts.DiagnosticCategory[diag.category],
+			category: diag.category,
 			errorCode: diag.code
 		});
 

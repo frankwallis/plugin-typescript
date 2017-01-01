@@ -1,7 +1,10 @@
 import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+
 import * as ts from 'typescript';
 import {Builder} from 'jspm';
 
+chai.use(chaiAsPromised);
 const should = chai.should();
 
 describe('Builder', () => {
@@ -26,7 +29,7 @@ describe('Builder', () => {
 				"typeCheck": "strict",
 				"tsconfig": false,
 				"types": undefined
-			},
+			} as any,
 			packages: {
 				"testsrc": {
 					"main": "index",
@@ -83,13 +86,7 @@ describe('Builder', () => {
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions";
 			builder.config(config);
 			return builder.bundle('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
       });
 
       it('brings in elided import files when outputting to es6', () => {
@@ -99,13 +96,7 @@ describe('Builder', () => {
 			config.typescriptOptions.target = "es2015";
 			builder.config(config);
 			return builder.bundle('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
       });
 
       it('brings in ambient external typings', () => {
@@ -113,13 +104,7 @@ describe('Builder', () => {
 			config.map["testsrc"] = "test/fixtures-es6/plugin/ambient";
 			builder.config(config);
 			return builder.bundle('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
       });
 
       it('handles elided files which have exports', () => {
@@ -127,44 +112,26 @@ describe('Builder', () => {
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions-exports";
 			builder.config(config);
 			return builder.bundle('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
       });
 	});
 
-   describe('strict mode', () => {
-      it('fails build when enabled', () => {
+   describe('typeCheck', () => {
+      it('fails build when strict', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
 			builder.config(config);
 			return builder.bundle('testsrc/fail')
-				.catch(err => {
-					console.log(err.originalErr);
-					err.should.be.defined;
-				})
-				.then(result => {
-					(result == undefined).should.be.true;
-				})
+				.should.be.rejected;
       });
 
-      it('passes build when disabled', () => {
+      it('passes build when true', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
-			config.typescriptOptions.typeCheck = true as any;
+			config.typescriptOptions.typeCheck = true;
 			builder.config(config);
 			return builder.bundle('testsrc/fail')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
       });
 
       it('detects missing files', () => {
@@ -172,13 +139,32 @@ describe('Builder', () => {
 			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
 			builder.config(config);
 			return builder.bundle('testsrc/missing')
-				.catch(err => {
-					console.log(err.originalErr);
-					err.should.be.defined;
-				})
-				.then(result => {
-					(result == undefined).should.be.true;
-				})
+				.should.be.rejected;
+      });
+
+      it('sets tserrors on metadata', async () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
+			config.typescriptOptions.typeCheck = true;
+			builder.config(config);
+			const output = await builder.bundle('testsrc/fail')
+				.should.be.fulfilled;
+
+			const resolved = 'test/fixtures-es6/plugin/strict/fail.ts';
+			output.tree[resolved].metadata.tserrors.should.have.length(1);
+			output.tree[resolved].metadata.tserrors[0].errorCode.should.equal(2322);
+      });
+
+      it('does not set tserrors when false', async () => {
+			const config = defaultConfig();
+			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
+			config.typescriptOptions.typeCheck = false;
+			builder.config(config);
+			const output = await builder.bundle('testsrc/fail')
+				.should.be.fulfilled;
+
+			const resolved = 'test/fixtures-es6/plugin/strict/fail.ts';
+			(output.tree[resolved].metadata.tserrors === undefined).should.be.true;
       });
 	});
 
@@ -191,13 +177,7 @@ describe('Builder', () => {
 			config.typescriptOptions.types = ["reacty"];
 			builder.config(config);
 			return builder.bundle('testsrc')
-				.catch(err => {
-					console.log(err);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
       });
 	});
 
@@ -208,13 +188,7 @@ describe('Builder', () => {
 			config.typescriptOptions.module = "commonjs";
 			builder.config(config);
 			return builder.bundle('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
       });
 
       it('compiles js files when default transpiler', () => {
@@ -225,105 +199,73 @@ describe('Builder', () => {
 			config.typescriptOptions.module = "commonjs";
 			builder.config(config);
 			return builder.bundle('testsrc')
-				.catch(err => {
-					console.log(err.originalErr);
-					true.should.be.false;
-				})
-				.then(result => {
-					result.should.be.defined;
-				})
+				.should.be.fulfilled;
       });
 	});
 
 	describe('rollup', () => {
-      it('strips out reference files when rolled up', () => {
+      it('strips out reference files when rolled up', async () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
 			config.typescriptOptions.module = "es2015";
 			builder.config(config);
-			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
-				.catch(err => {
-					console.log(err);
-					true.should.be.false;
-				})
-				.then(result => {
-					//console.log(result.source);
-					result.source.length.should.equal(454);
-					result.source.should.not.contain('test/fixtures-es6/plugin/reference/types.d.ts');
-
-				})
+			const result = await builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
+				.should.be.fulfilled;
+			//console.log(result.source);
+			result.source.length.should.equal(454);
+			result.source.should.not.contain('test/fixtures-es6/plugin/reference/types.d.ts');
       });
 
-      it('bundles when outputting commonjs', () => {
+      it('bundles when outputting commonjs', async () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
 			config.typescriptOptions.module = "commonjs";
 			builder.config(config);
-			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
-				.catch(err => {
-					console.log(err);
-					true.should.be.false;
-				})
-				.then(result => {
-					//console.log(result.source);
-					//result.source.should.contain('test/fixtures-es6/plugin/reference/types.d.ts');
-					result.source.length.should.equal(5322);
-				})
+			const result = await builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
+				.should.be.fulfilled;
+			//console.log(result.source);
+			//result.source.should.contain('test/fixtures-es6/plugin/reference/types.d.ts');
+			result.source.length.should.equal(5322);
       });
 
-      it('bundles without rollup when not building SFX', () => {
+      it('bundles without rollup when not building SFX', async () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
 			config.typescriptOptions.module = "system";
 			builder.config(config);
-			return builder.build('testsrc', { rollup: false })
-				.catch(err => {
-					console.log(err);
-					true.should.be.false;
-				})
-				.then(result => {
-					//console.log(result.source);
-					result.source.should.contain('test/fixtures-es6/plugin/reference/types.d.ts');
-				})
+			const result = await builder.build('testsrc', { rollup: false })
+				.should.be.fulfilled;
+			//console.log(result.source);
+			result.source.should.contain('test/fixtures-es6/plugin/reference/types.d.ts');
       });
 
-      xit('automatically changes module from system -> es6 when building', () => {
+      xit('automatically changes module from system -> es6 when building', async () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
 			config.typescriptOptions.module = "system";
 			config.typescriptOptions.target = "es2015";
 			builder.config(config);
-			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
-				.catch(err => {
-					console.log(err);
-					true.should.be.false;
-				})
-				.then(result => {
-					//console.log(result.source);
-					result.source.should.contain('const aconstant = 1234;');
-					result.source.length.should.equal(482);
-				})
+			const result = await builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
+				.should.be.fulfilled;
+			//console.log(result.source);
+			result.source.should.contain('const aconstant = 1234;');
+			result.source.length.should.equal(482);
       });
 
-      it('supports es6 modules with target es5', () => {
+      it('supports es6 modules with target es5', async () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
 			config.typescriptOptions.module = "es2015";
 			config.typescriptOptions.target = "es5";
 			builder.config(config);
-			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
-				.catch(err => {
-					console.log(err);
-					true.should.be.false;
-				})
-				.then(result => {
-					//console.log(result.source);
-					result.source.should.contain('var aconstant = 1234;');
-					result.source.length.should.equal(454);
-				})
+			const result = await builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
+				.should.be.fulfilled;
+			//console.log(result.source);
+			result.source.should.contain('var aconstant = 1234;');
+			result.source.length.should.equal(454);
       });
 
-      it('supports syntheticDefaultImports when outputting es2015 modules', () => {
+      it('supports syntheticDefaultImports when outputting es2015 modules', async () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/synthetic";
 			config.map["somelib"] = "test/fixtures-es6/plugin/js/somelib.js";
@@ -331,32 +273,22 @@ describe('Builder', () => {
 			config.typescriptOptions.target = "es5";
 
 			builder.config(config);
-			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
-				.catch(err => {
-					console.log(err);
-					true.should.be.false;
-				})
-				.then(result => {
-					//console.log(result.source);
-					result.source.should.contain('module.exports = 42;');
-				})
+			const result = await builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
+				.should.be.fulfilled;
+			//console.log(result.source);
+			result.source.should.contain('module.exports = 42;');
       });
 
-      it('strips out elided modules when rolled up', () => {
+      it('strips out elided modules when rolled up', async () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/elisions";
 			config.typescriptOptions.module = "es2015";
 			config.typescriptOptions.target = "es5";
 			builder.config(config);
-			return builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
-				.catch(err => {
-					console.log(err);
-					true.should.be.false;
-				})
-				.then(result => {
-					//console.log(result.source);
-					result.source.length.should.equal(441);
-				})
+			const result = await builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
+				.should.be.fulfilled
+			//console.log(result.source);
+			result.source.length.should.equal(441);
       });
 
 	});

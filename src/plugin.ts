@@ -2,12 +2,8 @@
 import * as ts from 'typescript';
 import Logger from './logger';
 import { createFactory, FactoryOutput } from './factory';
-import { convertErrors, outputErrors, formatErrors } from './format-errors';
-import { CombinedOptions } from './parse-config';
+import { convertErrors, formatErrors } from './format-errors';
 import { CompilerHost } from './compiler-host';
-import { Transpiler } from './transpiler';
-import { Resolver } from './resolver';
-import { TypeChecker } from './type-checker';
 import { isTypescript, isTypescriptDeclaration, stripDoubleExtension, hasError } from './utils';
 
 const logger = new Logger({ debug: false });
@@ -16,7 +12,7 @@ let factory: Promise<FactoryOutput> = null;
 function getFactory() {
 	// persist factory between instantiations of the plugin and expose it to the world
 	const __global: any = typeof (self) !== 'undefined' ? self : global;
-	__global.tsfactory = __global.tsfactory || createFactory(System.typescriptOptions, false, _resolve, _fetch, _lookup)
+	__global.tsfactory = __global.tsfactory || createFactory(SystemJS.typescriptOptions, false, _resolve, _fetch, _lookup)
 		.then((output) => {
 			validateOptions(output.options);
 			return output;
@@ -39,9 +35,6 @@ export async function translate(load: Module): Promise<string> {
 	const {transpiler, resolver, typeChecker, host, options} = await factory;
 	host.addFile(load.address, load.source, options.target);
 
-	let typeErrors: StructuredError[] = [];
-	let transpileErrors: StructuredError[] = [];
-
 	// transpile
 	if (isTypescriptDeclaration(load.address)) {
 		// rollup support needs null/esm to strip out the empty modules,
@@ -54,11 +47,13 @@ export async function translate(load: Module): Promise<string> {
 			load.source = '';
 			load.metadata.format = 'cjs';
 		}
+
+		// exclude empty declaration files from the bundle
+		//load.metadata.build = false;
 	}
 	else {
 		const result = transpiler.transpile(load.address, options);
-		transpileErrors = convertErrors(result.diags);
-		outputErrors(transpileErrors, logger);
+		formatErrors(result.diags, logger);
 
 		if (result.failure)
 			throw new Error('TypeScript transpilation failed');
@@ -79,44 +74,37 @@ export async function translate(load: Module): Promise<string> {
 	}
 
 	if (options.typeCheck && isTypescript(load.address)) {
+		const deps = await resolver.resolve(load.address, options);
+		load.metadata.deps = deps.list
+			.filter(d => isTypescript(d))
+			.filter(d => d !== load.address)
+			.map(d => isTypescriptDeclaration(d) ? d + '!' + __moduleName : d);
+
+		const diags = typeChecker.check(options);
+		formatErrors(diags, logger);
+
 		// in the browser the bundle hook is not called so fail the build immediately
 		const failOnError = !loader.builder && (options.typeCheck === "strict");
-		const depslist = await resolveDependencies(load, resolver, options);
-		typeErrors = await typeCheck(load, typeChecker, options, failOnError);
-		outputErrors(typeErrors, logger);
-		load.metadata.deps = depslist;
+		if (failOnError && hasError(diags))
+			throw new Error("Typescript compilation failed");
 	}
 
-	load.metadata.tserrors = transpileErrors.concat(typeErrors);
 	return load.source;
 }
 
-async function resolveDependencies(load: Module, resolver: Resolver, options: CombinedOptions): Promise<string[]> {
-	const deps = await resolver.resolve(load.address, options);
-
-	return deps.list
-		.filter(d => isTypescript(d))
-		.filter(d => d !== load.address)
-		.map(d => isTypescriptDeclaration(d) ? d + '!' + __moduleName : d);
-}
-
-async function typeCheck(load: Module, typeChecker: TypeChecker, options: CombinedOptions, failOnError: boolean): Promise<StructuredError[]> {
-	const diags = typeChecker.check(options);
-	const errors = convertErrors(diags);
-
-	if (failOnError && hasError(diags))
-		throw new Error("Typescript compilation failed");
-
-	return errors;
-}
-
-export async function bundle(): Promise<any[]> {
+export async function bundle(loads, compileOpts, outputOpts): Promise<any[]> {
 	if (!factory) return [];
 	const {typeChecker, host, options} = await factory;
 
 	if (options.typeCheck) {
 		const diags = typeChecker.forceCheck(options);
 		formatErrors(diags, logger);
+
+		loads.forEach(load => {
+			const diags = typeChecker.getFileDiagnostics(load.address);
+			const errors = convertErrors(diags);
+			load.metadata.tserrors = errors;
+		});
 
 		if ((options.typeCheck === "strict") && typeChecker.hasErrors())
 			throw new Error("Typescript compilation failed");
@@ -126,7 +114,7 @@ export async function bundle(): Promise<any[]> {
 }
 
 function validateOptions(options) {
-   /* The only time you don't want to output in system format is when you are using rollup or babel
+   /* The only time you don't want to output in 'm format is when you are using rollup or babel
       downstream to compile es6 output (e.g. for async/await support) */
 	if ((options.module != ts.ModuleKind.System) && (options.module != ts.ModuleKind.ES2015)) {
 		logger.warn(`transpiling to ${ts.ModuleKind[options.module]}, consider setting module: "system" in typescriptOptions to transpile directly to System.register format`);
@@ -139,7 +127,7 @@ function validateOptions(options) {
 async function _resolve(dep: string, parent: string): Promise<string> {
 	if (!parent) parent = __moduleName;
 
-	let normalized = await System.normalize(dep, parent)
+	let normalized = await SystemJS.normalize(dep, parent)
 	normalized = normalized.split('!')[0];
 	normalized = stripDoubleExtension(normalized);
 
@@ -151,7 +139,7 @@ async function _resolve(dep: string, parent: string): Promise<string> {
  * called by the factory/resolver when it needs to fetch a file
  */
 async function _fetch(address: string): Promise<string> {
-	const text = await System.fetch({ name: address, address, metadata: {} });
+	const text = await SystemJS.fetch({ name: address, address, metadata: {} });
 	logger.debug(`fetched ${address}`);
 	return text;
 }
@@ -161,7 +149,7 @@ async function _fetch(address: string): Promise<string> {
  */
 async function _lookup(address: string): Promise<any> {
 	const metadata = {};
-	await System.locate({ name: address, address, metadata });
+	await SystemJS.locate({ name: address, address, metadata });
 
 	// metadata.typings, metadata.typescriptOptions etc should all now be populated correctly,
 	// respecting the composition of all global metadata, wildcard metadata and package metadata correctly

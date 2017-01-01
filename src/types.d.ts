@@ -5,10 +5,11 @@ interface Module {
 	metadata?: any;
 }
 
+// augment SystemJS
 declare namespace SystemJSLoader {
-	// augment System
 	interface System {
-		normalize(dep: string, parent: string): Promise<string>;
+		normalize(dep: string, parent?: string): Promise<string>;
+		normalizeSync(dep: string, parent?: string): string;
 		fetch(load: Module): Promise<string>;
 		locate(load: Module): Promise<string>;
 

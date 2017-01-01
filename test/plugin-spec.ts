@@ -1,13 +1,13 @@
 import chai = require('chai');
-import chaiAsPromised = require("chai-as-promised");
+import chaiAsPromised = require('chai-as-promised');
 
 import * as ts from 'typescript';
 import SystemJS = require('systemjs');
-import {CombinedOptions} from '../src/parse-config'
+
 chai.use(chaiAsPromised);
 const should = chai.should();
 
-describe.only('Plugin', () => {
+describe('Plugin', () => {
 	let System = null;
 
 	beforeEach(() => {
@@ -28,7 +28,7 @@ describe.only('Plugin', () => {
 				"typeCheck": "strict",
 				"tsconfig": false,
 				"types": undefined
-			} as CombinedOptions,
+			} as any,
 			packages: {
 				"testsrc": {
 					"main": "index.ts",
@@ -144,24 +144,6 @@ describe.only('Plugin', () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
 			config.typescriptOptions.typeCheck = true;
-			System.config(config);
-			return System.import('testsrc/fail.ts')
-				.should.be.fulfilled;
-      });
-
-      xit('sets tserrors on metadata', () => {
-			const config = defaultConfig();
-			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
-			config.typescriptOptions.typeCheck = true;
-			System.config(config);
-			return System.import('testsrc/fail.ts')
-				.should.be.fulfilled;
-      });
-
-      xit('does not set tserrors when false', () => {
-			const config = defaultConfig();
-			config.map["testsrc"] = "test/fixtures-es6/plugin/strict";
-			config.typescriptOptions.typeCheck = false;
 			System.config(config);
 			return System.import('testsrc/fail.ts')
 				.should.be.fulfilled;
