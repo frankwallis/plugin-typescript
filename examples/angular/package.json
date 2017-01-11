@@ -21,7 +21,7 @@
       "net": "npm:jspm-nodelibs-net@^0.2.0",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.8",
-      "ts": "frankwallis/plugin-typescript@^5.0.17",
+      "ts": "frankwallis/plugin-typescript@^6.0.0",
       "tty": "npm:jspm-nodelibs-tty@^0.2.0",
       "url": "npm:jspm-nodelibs-url@^0.2.0"
     },
@@ -54,7 +54,7 @@
       "github:socketio/socket.io-client@1.7.2": {
         "main": "dist/socket.io.js"
       },
-      "npm:debug@2.5.1": {
+      "npm:debug@2.6.0": {
         "main": "src/browser.js",
         "jspmNodeConversion": false,
         "format": "cjs",

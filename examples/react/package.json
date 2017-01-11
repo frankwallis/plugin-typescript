@@ -11,7 +11,7 @@
       "@types/react": "^0.14.32",
       "@types/react-dom": "^0.14.15",
       "react-dom": "^15.2.1",
-      "ts": "github:frankwallis/plugin-typescript@^5.0.17"
+      "ts": "github:frankwallis/plugin-typescript@6.0.0"
     },
     "devDependencies": {
       "clean-css": "^3.4.3",
@@ -35,7 +35,7 @@
       "os": "jspm-nodelibs-os@^0.2.0",
       "path": "jspm-nodelibs-path@^0.2.0",
       "process": "jspm-nodelibs-process@^0.2.0",
-      "react": "^15.2.1",
+      "react": "^15.4.1",
       "stream": "jspm-nodelibs-stream@^0.2.0",
       "string_decoder": "jspm-nodelibs-string_decoder@^0.2.0",
       "url": "jspm-nodelibs-url@^0.2.0",
@@ -56,7 +56,7 @@
           "_stream_transform": "readable-stream/transform"
         }
       },
-      "npm:debug@2.5.1": {
+      "npm:debug@2.5.2": {
         "main": "src/browser.js",
         "jspmNodeConversion": false,
         "format": "cjs",
