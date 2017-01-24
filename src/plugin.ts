@@ -1,5 +1,5 @@
 /* */
-import * as ts from 'typescript';
+import ts from 'typescript';
 import Logger from './logger';
 import { createFactory, FactoryOutput } from './factory';
 import { convertErrors, formatErrors } from './format-errors';

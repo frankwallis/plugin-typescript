@@ -1,7 +1,7 @@
 import fs = require('fs');
 import path = require('path');
 import chai = require('chai');
-import * as ts from 'typescript';
+import ts from 'typescript';
 
 import {createFactory} from '../src/factory';
 import {formatErrors} from '../src/format-errors';

@@ -1,11 +1,18 @@
 {
-   "compilerOptions": {
-      "module": "commonjs",
-      "target": "es6",
-		"types": ["node", "mocha", "chai", "chai-as-promised", "systemjs"],
-      "moduleResolution": "node"
-   },
-   "files": [
-      "../src/types.d.ts"
-   ]
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es6",
+		"types": [
+			"node",
+			"mocha",
+			"chai",
+			"chai-as-promised",
+			"systemjs"
+		],
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true
+	},
+	"files": [
+		"../src/types.d.ts"
+	]
 }

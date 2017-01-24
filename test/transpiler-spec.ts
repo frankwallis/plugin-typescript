@@ -1,4 +1,4 @@
-import * as ts from 'typescript';
+import ts from 'typescript';
 import fs = require('fs');
 import path = require('path');
 import chai = require('chai');

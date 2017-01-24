@@ -1,7 +1,7 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
-import * as ts from 'typescript';
+import ts from 'typescript';
 import {Builder} from 'jspm';
 
 chai.use(chaiAsPromised);

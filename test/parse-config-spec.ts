@@ -1,5 +1,5 @@
 import chai = require('chai');
-import * as ts from 'typescript';
+import ts from 'typescript';
 
 import {parseConfig} from '../src/parse-config';
 

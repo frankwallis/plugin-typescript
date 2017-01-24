@@ -1,5 +1,5 @@
 /* */
-import * as ts from 'typescript';
+import ts from 'typescript';
 import Logger from './logger';
 import { parseConfig, CombinedOptions } from './parse-config';
 import { CompilerHost } from './compiler-host';

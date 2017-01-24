@@ -9,6 +9,7 @@
 		"importHelpers": true,
 		"inlineSourceMap": false,
 		"rootDir": "./src",
+		"allowSyntheticDefaultImports": true,
 		"noImplicitReturns": true,
 		"noImplicitThis": false,
 		"noFallthroughCasesInSwitch": true

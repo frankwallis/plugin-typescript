@@ -1,5 +1,5 @@
 /* */
-import * as ts from 'typescript';
+import ts from 'typescript';
 import Logger from './logger';
 import {isHtml, isTypescriptDeclaration, getExtension} from './utils';
 import {CombinedOptions} from './parse-config'

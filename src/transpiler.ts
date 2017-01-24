@@ -1,5 +1,5 @@
 /* */
-import * as ts from 'typescript';
+import ts from 'typescript';
 import {CompilerHost, TranspileResult} from './compiler-host';
 import {isJavaScript, isJSX, isSourceMap, hasError} from './utils';
 import Logger from './logger';
