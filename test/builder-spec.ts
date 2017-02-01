@@ -181,6 +181,19 @@ describe('Builder', () => {
       });
 	});
 
+   describe('tsconfig', () => {
+      it('supports tsconfig config option', () => {
+			const config = defaultConfig() as any;
+			config.map["testsrc"] = "test/fixtures-es6/plugin/tsconfig";
+			delete config.typescriptOptions.module;
+			config.typescriptOptions.typeCheck = false;
+			config.typescriptOptions.tsconfig = "testsrc/tsconfig.json";
+			builder.config(config);
+			return builder.bundle('testsrc')
+				.should.be.rejectedWith(/transpilation failed/);
+      });
+	});
+
    describe('commonjs', () => {
       it('supports module.id when outputting commonjs', () => {
 			const config = defaultConfig();
@@ -225,7 +238,7 @@ describe('Builder', () => {
 				.should.be.fulfilled;
 			//console.log(result.source);
 			//result.source.should.contain('test/fixtures-es6/plugin/reference/types.d.ts');
-			result.source.length.should.equal(5322);
+			result.source.length.should.equal(4688);
       });
 
       it('bundles without rollup when not building SFX', async () => {

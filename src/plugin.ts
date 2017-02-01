@@ -4,7 +4,7 @@ import Logger from './logger';
 import { createFactory, FactoryOutput } from './factory';
 import { convertErrors, formatErrors } from './format-errors';
 import { CompilerHost } from './compiler-host';
-import { isTypescript, isTypescriptDeclaration, stripDoubleExtension, hasError } from './utils';
+import { isTypescript, isTypescriptDeclaration, isJson, stripDoubleExtension, hasError } from './utils';
 
 const logger = new Logger({ debug: false });
 let factory: Promise<FactoryOutput> = null;
@@ -12,7 +12,7 @@ let factory: Promise<FactoryOutput> = null;
 function getFactory() {
 	// persist factory between instantiations of the plugin and expose it to the world
 	const __global: any = typeof (self) !== 'undefined' ? self : global;
-	__global.tsfactory = __global.tsfactory || createFactory(SystemJS.typescriptOptions, false, _resolve, _fetch, _lookup)
+	__global.tsfactory = __global.tsfactory || createFactory(SystemJS.typescriptOptions, false, _resolve, _fetchJson, _lookup)
 		.then((output) => {
 			validateOptions(output.options);
 			return output;
@@ -29,6 +29,7 @@ function getFactory() {
 export async function translate(load: Module): Promise<string> {
 	const loader = this;
 	logger.debug(`systemjs translating ${load.address}`);
+	if (isJson(load.address)) return load.source;
 
 	factory = factory || getFactory();
 
@@ -92,6 +93,15 @@ export async function translate(load: Module): Promise<string> {
 	return load.source;
 }
 
+export async function instantiate(load: Module, origInstantiate: any) {
+	if (isJson(load.address)) {
+		return JSON.parse(load.source);
+	}
+	else {
+		return origInstantiate(load);
+	}
+}
+
 export async function bundle(loads, compileOpts, outputOpts): Promise<any[]> {
 	if (!factory) return [];
 	const {typeChecker, host, options} = await factory;
@@ -136,12 +146,12 @@ async function _resolve(dep: string, parent: string): Promise<string> {
 }
 
 /*
- * called by the factory/resolver when it needs to fetch a file
+ * called by the factory when it needs to fetch tsconfig.json
  */
-async function _fetch(address: string): Promise<string> {
-	const text = await SystemJS.fetch({ name: address, address, metadata: {} });
+async function _fetchJson(address: string): Promise<any> {
+	const json = await SystemJS.import(address + '!' + __moduleName);
 	logger.debug(`fetched ${address}`);
-	return text;
+	return json;
 }
 
 /*

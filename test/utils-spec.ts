@@ -12,7 +12,7 @@ import {
    tsToJs,
    tsToJsMap,
    convertToDts,
-   isHtml,
+   isJson,
    stripDoubleExtension
 } from '../src/utils';
 
@@ -147,11 +147,11 @@ describe('Utils', () => {
       });
    });
 
-   describe('isHtml', () => {
-      it('detects html files', () => {
-         isHtml('a.html').should.be.true;
-         isHtml('a.html.js').should.be.false;
-         isHtml('fixHtml').should.be.false;
+   describe('isJson', () => {
+      it('detects json files', () => {
+         isJson('a.json').should.be.true;
+         isJson('a.json.js').should.be.false;
+         isJson('fixjson').should.be.false;
       });
    });
 

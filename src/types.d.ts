@@ -23,7 +23,7 @@ declare var self: any;
 
 declare type ResolveFunction = (dep: string, parent?: string) => Promise<string>;
 declare type LookupFunction = (address: string) => Promise<any>;
-declare type FetchFunction = (address: string) => Promise<string>;
+declare type FetchJsonFunction = (address: string) => Promise<any>;
 
 interface PluginOptions {
    tsconfig?: boolean | string;

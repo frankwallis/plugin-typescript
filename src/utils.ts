@@ -46,9 +46,9 @@ export function isTypescriptDeclaration(filename: string) {
 	return declarationRegex.test(filename);
 }
 
-const htmlRegex = /\.html$/i;
-export function isHtml(filename: string) {
-	return htmlRegex.test(filename);
+const jsonRegex = /\.json$/i;
+export function isJson(filename: string) {
+	return jsonRegex.test(filename);
 }
 
 export function tsToJs(tsFile: string) {

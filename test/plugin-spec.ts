@@ -176,10 +176,23 @@ describe('Plugin', () => {
       });
 	});
 
+   describe('tsconfig', () => {
+      it('supports tsconfig config option', () => {
+			const config = defaultConfig() as any;
+			config.defaultJsExtensions = true;
+			config.map["testsrc"] = "test/fixtures-es6/plugin/tsconfig";
+			delete config.typescriptOptions.module;
+			config.typescriptOptions.typeCheck = false;
+			config.typescriptOptions.tsconfig = "testsrc/tsconfig.json";
+			System.config(config);
+			return System.import('testsrc')
+				.should.be.rejectedWith(/transpilation failed/);
+      });
+	});
+
    describe('types', () => {
       it('supports types config option', () => {
 			const config = defaultConfig() as any;
-			config.defaultJsExtensions = true;
 			config.defaultJSExtensions = true;
 			config.map["testsrc"] = "test/fixtures-es6/plugin/attypes";
 			config.packages["testsrc"].main = "index.tsx";
