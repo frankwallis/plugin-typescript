@@ -70,8 +70,7 @@ export class Transpiler {
 
          const diagnostics = emitResult.diagnostics
             .concat(program.getOptionsDiagnostics())
-				.concat(program.getSyntacticDiagnostics())
-				//.concat(program.getSemanticDiagnostics());
+				.concat(program.getSyntacticDiagnostics());
 
          file.output = {
             failure: hasError(diagnostics),

@@ -153,26 +153,6 @@ The ```typings``` compiler option tells the type-checker which packages contain 
 
 If a package contains typings for *all* js files in the package then the value should be set to ```true```, otherwise it should contain the path of the bundled typings file, relative to the root of the project.
 
-It is also possible to configure this using SystemJS metadata which can be configured in ```packages``` configuration, or in package.json overrides, or in the jspm registry.
-
-```json
-"overrides": {
-  "npm:@angular/core@2.0.0-rc.6": {
-    "meta": {
-      "bundles/core.umd.js": {
-        "typings": "index.d.ts"
-      }
-    }
-  }
-}
-```
-
-For more information on setting SystemJS metadata, see [here](https://github.com/systemjs/systemjs/blob/master/docs/config-api.md#packages)
-
-#### autoDetectModule ####
-
-If ```autoDetectModule``` is set then the plugin will allow SystemJS to detect the module system being used for individual source files. Without it is assumed that all ```.ts``` files are using the module system specified by the typescipt ```module``` setting. Set this if you are transpiling typescript files which are scripts rather than modules (ie they do not use ```import``` statements).
-
 ## Features ##
 
 #### Hot-Reload support ####

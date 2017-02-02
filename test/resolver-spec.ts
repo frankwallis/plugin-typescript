@@ -162,7 +162,7 @@ describe('Resolver', () => {
 
 	});
 
-	describe("typings", () => {
+	xdescribe("typings", () => {
 		it('resolves typings files when typings is true', async () => {
 			const jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2.js');
 			const expected = path.resolve(__dirname, './fixtures-es6/typings/resolved/angular2.d.ts');

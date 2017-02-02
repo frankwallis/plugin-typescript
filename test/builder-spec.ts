@@ -70,12 +70,12 @@ describe('Builder', () => {
 				}
 			},
 			map: {
-				"testsrc": "test/fixtures-es6/plugin/elisions/",
-				"external": "test/fixtures-es6/plugin/external/",
-				"plugin": "lib/",
-				"typescript": "node_modules/typescript/",
-				"reacty": "test/fixtures-es6/plugin/attypes/reacty/",
-				"@types/reacty": "test/fixtures-es6/plugin/attypes/@types/reacty/"
+				"testsrc": "test/fixtures-es6/plugin/elisions",
+				"external": "test/fixtures-es6/plugin/external",
+				"plugin": "lib",
+				"typescript": "node_modules/typescript",
+				"reacty": "test/fixtures-es6/plugin/attypes/reacty",
+				"@types/reacty": "test/fixtures-es6/plugin/attypes/@types/reacty"
 			}
 		};
    }
@@ -225,11 +225,11 @@ describe('Builder', () => {
 			const result = await builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
 				.should.be.fulfilled;
 			//console.log(result.source);
-			result.source.length.should.equal(454);
-			result.source.should.not.contain('test/fixtures-es6/plugin/reference/types.d.ts');
+			result.source.length.should.equal(492);
+			result.source.indexOf('(function (global, factory').should.equal(0);
       });
 
-      it('bundles when outputting commonjs', async () => {
+      it('bundles without rollup when outputting commonjs', async () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
 			config.typescriptOptions.module = "commonjs";
@@ -237,19 +237,20 @@ describe('Builder', () => {
 			const result = await builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
 				.should.be.fulfilled;
 			//console.log(result.source);
-			//result.source.should.contain('test/fixtures-es6/plugin/reference/types.d.ts');
-			result.source.length.should.equal(4688);
+			result.source.length.should.equal(4401);
+			result.source.indexOf('(function (global, factory').should.not.equal(0);
       });
 
-      it('bundles without rollup when not building SFX', async () => {
+      it('does not use rollup when bundling', async () => {
 			const config = defaultConfig();
 			config.map["testsrc"] = "test/fixtures-es6/plugin/reference";
 			config.typescriptOptions.module = "system";
 			builder.config(config);
-			const result = await builder.build('testsrc', { rollup: false })
+			const result = await builder.bundle('testsrc', { rollup: false })
 				.should.be.fulfilled;
 			//console.log(result.source);
-			result.source.should.contain('test/fixtures-es6/plugin/reference/types.d.ts');
+			result.source.length.should.equal(420);
+			result.source.indexOf('(function (global, factory').should.not.equal(0);
       });
 
       xit('automatically changes module from system -> es6 when building', async () => {
@@ -275,7 +276,8 @@ describe('Builder', () => {
 				.should.be.fulfilled;
 			//console.log(result.source);
 			result.source.should.contain('var aconstant = 1234;');
-			result.source.length.should.equal(454);
+			result.source.length.should.equal(492);
+			result.source.indexOf('(function (global, factory').should.equal(0);
       });
 
       it('supports syntheticDefaultImports when outputting es2015 modules', async () => {
@@ -302,6 +304,7 @@ describe('Builder', () => {
 				.should.be.fulfilled
 			//console.log(result.source);
 			result.source.length.should.equal(441);
+			result.source.indexOf('(function (global, factory').should.equal(0);
       });
 
 	});

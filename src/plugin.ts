@@ -63,23 +63,17 @@ export async function translate(load: Module): Promise<string> {
 
 		if (result.sourceMap)
 			load.metadata.sourceMap = JSON.parse(result.sourceMap);
-
-		if (!options.autoDetectModule) {
-			if (options.module === ts.ModuleKind.System)
-				load.metadata.format = 'register';
-			else if (options.module === ts.ModuleKind.ES2015)
-				load.metadata.format = 'esm';
-			else if (options.module === ts.ModuleKind.CommonJS)
-				load.metadata.format = 'cjs';
-		}
 	}
 
 	if (options.typeCheck && isTypescript(load.address)) {
 		const deps = await resolver.resolve(load.address, options);
-		load.metadata.deps = deps.list
+
+		await Promise.all(deps.list
 			.filter(d => isTypescript(d))
-			.filter(d => d !== load.address)
-			.map(d => isTypescriptDeclaration(d) ? d + '!' + __moduleName : d);
+			.filter(d => !host.fileExists(d))
+			//.filter(d => d !== load.address)
+			.map(d => isTypescriptDeclaration(d) ? d + '!' + __moduleName : d)
+			.map(d => System.import(d, load.address)));
 
 		const diags = typeChecker.check(options);
 		formatErrors(diags, logger);
@@ -94,8 +88,14 @@ export async function translate(load: Module): Promise<string> {
 }
 
 export async function instantiate(load: Module, origInstantiate: any) {
+	const loader = this;
+	logger.debug(`systemjs instantiating ${load.address}`);
+
 	if (isJson(load.address)) {
 		return JSON.parse(load.source);
+	}
+	else if (isTypescriptDeclaration(load.address)) {
+		return loader.registry && loader.registry.get('@empty');
 	}
 	else {
 		return origInstantiate(load);

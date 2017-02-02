@@ -130,8 +130,8 @@ export class Resolver {
 			const atTypeAddress = await this.lookupAtType(importName, sourceName, options);
 			if (atTypeAddress) return atTypeAddress;
 
-			const typingAddress = await this.lookupTyping(importName, sourceName, address, options);
-			if (typingAddress) return typingAddress;
+			//const typingAddress = await this.lookupTyping(importName, sourceName, address, options);
+			//if (typingAddress) return typingAddress;
 		}
 
 		return address;

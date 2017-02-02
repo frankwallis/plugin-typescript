@@ -293,7 +293,7 @@ describe('TypeChecker', () => {
       typeChecker.hasErrors().should.be.false;
    });
 
-	describe("Typings", () => {
+	xdescribe("Typings", () => {
 		it('resolve typings files when typings meta is present', async () => {
 			let jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/@angular2/core/core.js');
 			jsfile = (ts as any).normalizePath(jsfile);
@@ -376,7 +376,7 @@ describe('TypeChecker', () => {
 			typeChecker.hasErrors().should.be.false;
 		});
 
-		it('handles external augmentation', async () => {
+		xit('handles external augmentation', async () => {
 			let  jsfile = path.resolve(__dirname, './fixtures-es6/augmentation/resolved/somelib/somelib.js');
 			jsfile = (ts as any).normalizePath(jsfile);
 
