@@ -1,5 +1,5 @@
-import * as React from 'react';
-import {CalculatorStore} from "./calculator-store";
+import React from 'react';
+import {CalculatorStore} from './calculator-store';
 
 export class Calculator extends React.Component<any, any> {
    constructor(props) {
