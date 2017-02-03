@@ -38,19 +38,7 @@ export async function translate(load: Module): Promise<string> {
 
 	// transpile
 	if (isTypescriptDeclaration(load.address)) {
-		// rollup support needs null/esm to strip out the empty modules,
-		// for non-rollup & runtime use ''/cjs
-		if (loader.builder && (options.module == ts.ModuleKind.ES2015)) {
-			load.source = null;
-			load.metadata.format = 'esm';
-		}
-		else {
-			load.source = '';
-			load.metadata.format = 'cjs';
-		}
-
-		// exclude empty declaration files from the bundle
-		//load.metadata.build = false;
+		load.source = '';
 	}
 	else {
 		const result = transpiler.transpile(load.address, options);
@@ -94,8 +82,11 @@ export async function instantiate(load: Module, origInstantiate: any) {
 	if (isJson(load.address)) {
 		return JSON.parse(load.source);
 	}
+	else if (loader.build && isTypescript(load.address)) {
+		return loader._loader.modules['@empty'];
+	}
 	else if (isTypescriptDeclaration(load.address)) {
-		return loader.registry && loader.registry.get('@empty');
+		return loader.registry.get('@empty');
 	}
 	else {
 		return origInstantiate(load);

@@ -1,5 +1,5 @@
-import angular from "angular";
-import "./index.css";
+import angular from 'angular';
+import './index.css';
 
 import exampleTemplate from './example-template.html';
 import {ExampleService} from './example-service';
