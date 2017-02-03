@@ -15,10 +15,10 @@
 	<script src="jspm.browser.js"></script>
 	<script src="jspm.config.js"></script>
 	<script>
-      System.trace = true
-      System.import('systemjs-hot-reloader').then(function(HotReloader){
-         new HotReloader.default('http://localhost:8080')  // chokidar-socket-emitter port
-      });
+      // System.trace = true
+      // System.import('systemjs-hot-reloader').then(function(HotReloader){
+      //    new HotReloader.default('http://localhost:8080')  // chokidar-socket-emitter port
+      // });
 		System.import('src')
 			.then(function() {
 				return System.import('angular');

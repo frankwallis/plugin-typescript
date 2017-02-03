@@ -13,31 +13,28 @@
       "angular": "angular/bower-angular@^1.5.8"
     },
     "devDependencies": {
+      "assert": "npm:jspm-nodelibs-assert@^0.2.0",
+      "buffer": "npm:jspm-nodelibs-buffer@^0.2.0",
+      "child_process": "npm:jspm-nodelibs-child_process@^0.2.0",
       "clean-css": "npm:clean-css@^3.4.3",
+      "constants": "npm:jspm-nodelibs-constants@^0.2.0",
+      "crypto": "npm:jspm-nodelibs-crypto@^0.2.0",
       "css": "frankwallis/plugin-css@master",
+      "events": "npm:jspm-nodelibs-events@^0.2.0",
+      "fs": "npm:jspm-nodelibs-fs@^0.2.0",
       "http": "npm:jspm-nodelibs-http@^0.2.0",
       "https": "npm:jspm-nodelibs-https@^0.2.0",
       "module": "npm:jspm-nodelibs-module@^0.2.0",
       "net": "npm:jspm-nodelibs-net@^0.2.0",
-      "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
-      "text": "systemjs/plugin-text@^0.0.8",
-      "ts": "frankwallis/plugin-typescript@^6.0.0",
-      "tty": "npm:jspm-nodelibs-tty@^0.2.0",
-      "url": "npm:jspm-nodelibs-url@^0.2.0"
-    },
-    "peerDependencies": {
-      "assert": "npm:jspm-nodelibs-assert@^0.2.0",
-      "buffer": "npm:jspm-nodelibs-buffer@^0.2.0",
-      "child_process": "npm:jspm-nodelibs-child_process@^0.2.0",
-      "constants": "npm:jspm-nodelibs-constants@^0.2.0",
-      "crypto": "npm:jspm-nodelibs-crypto@^0.2.0",
-      "events": "npm:jspm-nodelibs-events@^0.2.0",
-      "fs": "npm:jspm-nodelibs-fs@^0.2.0",
       "os": "npm:jspm-nodelibs-os@^0.2.0",
       "path": "npm:jspm-nodelibs-path@^0.2.0",
       "process": "npm:jspm-nodelibs-process@^0.2.0",
       "stream": "npm:jspm-nodelibs-stream@^0.2.0",
       "string_decoder": "npm:jspm-nodelibs-string_decoder@^0.2.0",
+      "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
+      "text": "systemjs/plugin-text@^0.0.8",
+      "ts": "frankwallis/plugin-typescript@^6.0.4",
+      "url": "npm:jspm-nodelibs-url@^0.2.0",
       "util": "npm:jspm-nodelibs-util@^0.2.0",
       "vm": "npm:jspm-nodelibs-vm@^0.2.0"
     },
@@ -59,10 +56,16 @@
         "jspmNodeConversion": false,
         "format": "cjs",
         "map": {
-          "fs": "@empty",
-          "net": "@empty",
-          "tty": "@empty",
-          "util": "@empty"
+          "./src/browser.js": {
+            "node": "./src/node.js"
+          },
+          "./node.js": {
+            "browser": "./src/browser.js"
+          },
+          "fs": "@node/fs",
+          "net": "@node/net",
+          "tty": "@node/tty",
+          "util": "@node/util"
         }
       },
       "npm:inherits@2.0.3": {
@@ -74,7 +77,7 @@
         "jspmNodeConversion": false,
         "format": "cjs"
       },
-      "npm:typescript@2.1.4": {
+      "npm:typescript@2.2.0": {
         "browser": {},
         "map": {
           "buffer": "@empty",
