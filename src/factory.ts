@@ -23,13 +23,12 @@ export async function createFactory(
 	sjsconfig: PluginOptions = {},
 	builder: boolean,
 	_resolve: ResolveFunction,
-	_fetchJson: FetchJsonFunction,
-	_lookup: LookupFunction): Promise<FactoryOutput> {
+	_fetch: FetchFunction): Promise<FactoryOutput> {
 
 	const tsconfigFiles = [];
 	const typingsFiles = [];
-	const config = await loadConfig(sjsconfig, _resolve, _fetchJson);
-	const services = await createServices(config, builder, _resolve, _lookup);
+	const config = await loadConfig(sjsconfig, _resolve, _fetch);
+	const services = await createServices(config, builder, _resolve);
 
 	if (services.options.typeCheck) {
 		const resolvedFiles = await resolveDeclarationFiles(services.options, _resolve);
@@ -41,13 +40,13 @@ export async function createFactory(
 	return services;
 }
 
-async function loadConfig(sjsconfig: PluginOptions, _resolve: ResolveFunction, _fetchJson: FetchJsonFunction): Promise<PluginOptions> {
+async function loadConfig(sjsconfig: PluginOptions, _resolve: ResolveFunction, _fetch: FetchFunction): Promise<PluginOptions> {
 	if (sjsconfig.tsconfig) {
 		const tsconfig = (sjsconfig.tsconfig === true) ? "tsconfig.json" : sjsconfig.tsconfig as string;
 
 		const tsconfigAddress = await _resolve(tsconfig);
-		const tsconfigObj = await _fetchJson(tsconfigAddress);
-		const result = ts.parseConfigFileTextToJson(tsconfigAddress, JSON.stringify(tsconfigObj));
+		const tsconfigText = await _fetch(tsconfigAddress);
+		const result = ts.parseConfigFileTextToJson(tsconfigAddress, tsconfigText);
 
 		if (result.error) {
 			formatErrors([result.error], logger);
@@ -73,7 +72,7 @@ function resolveDeclarationFiles(options: PluginOptions, _resolve: ResolveFuncti
 }
 
 async function createServices(config: PluginOptions, builder: boolean,
-	_resolve: ResolveFunction, _lookup: LookupFunction): Promise<FactoryOutput> {
+	_resolve: ResolveFunction): Promise<FactoryOutput> {
 
 	const options = parseConfig(config)
 	const host = new CompilerHost();
@@ -83,7 +82,7 @@ async function createServices(config: PluginOptions, builder: boolean,
 	let typeChecker: TypeChecker = undefined;
 
 	if (options.typeCheck) {
-		resolver = new Resolver(host, _resolve, _lookup);
+		resolver = new Resolver(host, _resolve);
 		typeChecker = new TypeChecker(host);
 
 		if (!options.noLib) {

@@ -41,11 +41,6 @@ const augAmbient = require.resolve('./fixtures-es6/augmentation/ambient.ts');
 const augAmbientGlobal = require.resolve('./fixtures-es6/augmentation/ambient-global.ts');
 const augExternal = require.resolve('./fixtures-es6/augmentation/external.ts');
 
-let metadata = {};
-function lookup(address: string): any {
-   return Promise.resolve(metadata[address] || {});
-}
-
 function resolve(dep, parent) {
    //console.log("resolving " + parent + " -> " + dep);
    let result = "";
@@ -122,7 +117,7 @@ describe('TypeChecker', () => {
    beforeEach(() => {
       host = new CompilerHost();
       typeChecker = new TypeChecker(host);
-      resolver = new Resolver(host, resolve, lookup);
+      resolver = new Resolver(host, resolve);
    });
 
    it('compiles successfully', async () => {
@@ -294,23 +289,19 @@ describe('TypeChecker', () => {
    });
 
 	xdescribe("Typings", () => {
-		it('resolve typings files when typings meta is present', async () => {
-			let jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/@angular2/core/core.js');
-			jsfile = (ts as any).normalizePath(jsfile);
+		it('resolve typings files when typings setting is present', async () => {
+	      const options = parseConfig({
+				typings: {
+					'@angular/core': true
+				}
+			});
 
-			metadata = {};
-			metadata[jsfile] = {
-				typings: true
-			};
-
-			const diags = await typecheckAll(angular2Typings, defaultOptions);
+			const diags = await typecheckAll(angular2Typings, options);
 			formatErrors(diags, console as any);
 			diags.should.have.length(0);
 		});
 
 		xit('doesnt resolve typings files when typings meta not present', async () => {
-			metadata = {};
-
 			const diags = await typecheckAll(angular2Typings, defaultOptions);
 			//formatErrors(diags, console as any);
 			diags.should.have.length(1);
@@ -318,15 +309,13 @@ describe('TypeChecker', () => {
 		});
 
 		it('resolves typings when typings is non-relative path', async () => {
-			let  jsfile = path.resolve(__dirname, './fixtures-es6/typings/resolved/rxjs/rxjs.js');
-			jsfile = (ts as any).normalizePath(jsfile);
+	      const options = parseConfig({
+				typings: {
+					'rxjs': 'Rx.d.ts'
+				}
+			});
 
-			metadata = {};
-			metadata[jsfile] = {
-				typings: "Rx.d.ts"
-			};
-
-			const diags = await typecheckAll(rxjsTypings, defaultOptions);
+			const diags = await typecheckAll(rxjsTypings, options);
 			formatErrors(diags, console as any);
 			diags.should.have.length(0);
 		});
@@ -376,19 +365,19 @@ describe('TypeChecker', () => {
 			typeChecker.hasErrors().should.be.false;
 		});
 
-		xit('handles external augmentation', async () => {
-			let  jsfile = path.resolve(__dirname, './fixtures-es6/augmentation/resolved/somelib/somelib.js');
-			jsfile = (ts as any).normalizePath(jsfile);
+		// xit('handles external augmentation', async () => {
+		// 	let  jsfile = path.resolve(__dirname, './fixtures-es6/augmentation/resolved/somelib/somelib.js');
+		// 	jsfile = (ts as any).normalizePath(jsfile);
 
-			metadata = {};
-			metadata[jsfile] = {
-				typings: "somelib.d.ts"
-			};
+		// 	metadata = {};
+		// 	metadata[jsfile] = {
+		// 		typings: "somelib.d.ts"
+		// 	};
 
-			const diags = await typecheckAll(augExternal, defaultOptions);
-			formatErrors(diags, console as any);
-			diags.should.have.length(0);
-			typeChecker.hasErrors().should.be.false;
-		});
+		// 	const diags = await typecheckAll(augExternal, defaultOptions);
+		// 	formatErrors(diags, console as any);
+		// 	diags.should.have.length(0);
+		// 	typeChecker.hasErrors().should.be.false;
+		// });
 	})
 });

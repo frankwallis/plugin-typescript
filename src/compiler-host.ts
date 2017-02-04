@@ -2,7 +2,7 @@
 import ts from 'typescript';
 import Logger from './logger';
 import {isTypescriptDeclaration, getExtension} from './utils';
-import {CombinedOptions} from './parse-config'
+import {CombinedOptions} from './parse-config';
 
 const logger = new Logger({ debug: false });
 

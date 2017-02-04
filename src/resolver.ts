@@ -7,20 +7,18 @@ import {
    isJavaScript, isRelative,
    isAmbient, convertToDts
 } from './utils';
-import {CombinedOptions} from './parse-config'
+import {CombinedOptions} from './parse-config';
 
 const logger = new Logger({ debug: false });
 
 export class Resolver {
    private _host: CompilerHost;
    private _resolve: ResolveFunction;
-   private _lookup: LookupFunction;
    private _declarationFiles: string[];
 
-   constructor(host: CompilerHost, resolve: ResolveFunction, lookup: LookupFunction) {
+   constructor(host: CompilerHost, resolve: ResolveFunction) {
       this._host = host;
       this._resolve = resolve;
-      this._lookup = lookup;
 
       // list of all registered declaration files
       this._declarationFiles = [];
@@ -130,8 +128,8 @@ export class Resolver {
 			const atTypeAddress = await this.lookupAtType(importName, sourceName, options);
 			if (atTypeAddress) return atTypeAddress;
 
-			//const typingAddress = await this.lookupTyping(importName, sourceName, address, options);
-			//if (typingAddress) return typingAddress;
+			const typingAddress = await this.lookupTyping(importName, sourceName, address, options);
+			if (typingAddress) return typingAddress;
 		}
 
 		return address;
@@ -152,8 +150,7 @@ export class Resolver {
 			return this.resolveTyping(true, packageName, sourceName, address);
 		}
 		else {
-			const metadata = await this._lookup(address);
-   	   return this.resolveTyping(metadata.typings, packageName, sourceName, address);
+			return undefined;
 		}
 	}
 
@@ -192,8 +189,8 @@ export class Resolver {
 		let resolved = await this._resolve('@types/' + packageName, sourceName);
 
 		// needed for jspm@0.16
-		if (isJavaScript(resolved))
-			resolved = resolved.slice(0, -3);
+		// if (isJavaScript(resolved))
+		// 	resolved = resolved.slice(0, -3);
 
 		if (!isTypescriptDeclaration(resolved))
 			resolved = resolved + '/index.d.ts';

@@ -21,7 +21,7 @@ function fetch(filename): Promise<any> {
 	//console.log("fetching " + filename);
 	filelist.push(filename);
 	try {
-		return Promise.resolve(JSON.parse(fs.readFileSync(filename, 'utf8')));
+		return Promise.resolve(fs.readFileSync(filename, 'utf8'));
 	}
 	catch (err) {
 		return Promise.reject(err);
@@ -53,10 +53,6 @@ function resolve(dep, parent) {
 	}
 }
 
-function lookup(address: string): any {
-	return {};
-}
-
 describe('Factory', () => {
 
 	beforeEach(function () {
@@ -65,7 +61,7 @@ describe('Factory', () => {
 
 	it('handles sjsconfig = undefined', async () => {
 		const config = undefined;
-		const {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch, lookup);
+		const {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
 		transpiler.should.be.defined;
 		should.not.exist(typeChecker);
 		filelist.should.have.length(0);
@@ -73,7 +69,7 @@ describe('Factory', () => {
 
 	it('handles tsconfig = undefined', async () => {
 		const config = {};
-		const {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch, lookup);
+		const {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
 		transpiler.should.be.defined;
 		should.not.exist(typeChecker);
 		filelist.should.have.length(0);
@@ -83,7 +79,7 @@ describe('Factory', () => {
 		const config = {
 			typeCheck: true
 		};
-		const {transpiler, typeChecker, resolver} = await createFactory(config, false, resolve, fetch, lookup);
+		const {transpiler, typeChecker, resolver} = await createFactory(config, false, resolve, fetch);
 		transpiler.should.be.defined;
 		typeChecker.should.be.defined;
 		resolver.should.be.defined;
@@ -94,7 +90,7 @@ describe('Factory', () => {
 			tsconfig: declarationFile,
 			typeCheck: false
 		};
-		const {transpiler, typeChecker, resolver} = await createFactory(config, false, resolve, fetch, lookup);
+		const {transpiler, typeChecker, resolver} = await createFactory(config, false, resolve, fetch);
 		transpiler.should.be.defined;
 		should.not.exist(typeChecker);
 		should.not.exist(resolver);
@@ -104,7 +100,7 @@ describe('Factory', () => {
 		const config = {
 			tsconfig: true
 		};
-		const {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch, lookup);
+		const {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
 		transpiler.should.be.defined;
 		should.not.exist(typeChecker);
 		filelist.should.have.length(1);
@@ -115,7 +111,7 @@ describe('Factory', () => {
 		const config = {
 			tsconfig: true
 		};
-		const {options} = await createFactory(config, false, resolve, fetch, lookup);
+		const {options} = await createFactory(config, false, resolve, fetch);
 		options.noImplicitAny.should.be.true;
 	});
 
@@ -124,7 +120,7 @@ describe('Factory', () => {
 			tsconfig: true,
 			noImplicitAny: false
 		};
-		const {options} = await createFactory(config, false, resolve, fetch, lookup);
+		const {options} = await createFactory(config, false, resolve, fetch);
 		options.noImplicitAny.should.be.false;
 	});
 
@@ -132,7 +128,7 @@ describe('Factory', () => {
 		const config = {
 			tsconfig: alternateFile
 		};
-		const {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch, lookup);
+		const {transpiler, typeChecker} = await createFactory(config, false, resolve, fetch);
 		transpiler.should.be.defined;
 		should.not.exist(typeChecker);
 		filelist.should.have.length(1);
@@ -144,7 +140,7 @@ describe('Factory', () => {
 			tsconfig: declarationFile,
 			typeCheck: true
 		};
-		const {resolver} = await createFactory(config, false, resolve, fetch, lookup);
+		const {resolver} = await createFactory(config, false, resolve, fetch);
 		resolver.should.be.defined;
 		resolver._declarationFiles.should.have.length(2);
 		resolver._declarationFiles[0].should.be.equal(defaultLib);
@@ -156,11 +152,10 @@ describe('Factory', () => {
 			lib: ['es5', 'es2015.promise'],
 			typeCheck: true
 		};
-		const {resolver} = await createFactory(config, false, resolve, fetch, lookup);
+		const {resolver} = await createFactory(config, false, resolve, fetch);
 		resolver.should.be.defined;
 		resolver._declarationFiles.should.have.length(2);
 		resolver._declarationFiles[0].should.be.equal(defaultLibEs5);
 		resolver._declarationFiles[1].should.be.equal(defaultLibEs2015Promise);
 	});
-
 });

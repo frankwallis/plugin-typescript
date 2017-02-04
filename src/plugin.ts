@@ -12,7 +12,7 @@ let factory: Promise<FactoryOutput> = null;
 function getFactory() {
 	// persist factory between instantiations of the plugin and expose it to the world
 	const __global: any = typeof (self) !== 'undefined' ? self : global;
-	__global.tsfactory = __global.tsfactory || createFactory(SystemJS.typescriptOptions, false, _resolve, _fetchJson, _lookup)
+	__global.tsfactory = __global.tsfactory || createFactory(SystemJS.typescriptOptions, false, _resolve, _fetch)
 		.then((output) => {
 			validateOptions(output.options);
 			return output;
@@ -139,21 +139,8 @@ async function _resolve(dep: string, parent: string): Promise<string> {
 /*
  * called by the factory when it needs to fetch tsconfig.json
  */
-async function _fetchJson(address: string): Promise<any> {
+async function _fetch(address: string): Promise<string> {
 	const json = await SystemJS.import(address + '!' + __moduleName);
 	logger.debug(`fetched ${address}`);
-	return json;
-}
-
-/*
- * called by the resolver when it needs to get metadata for a file
- */
-async function _lookup(address: string): Promise<any> {
-	const metadata = {};
-	await SystemJS.locate({ name: address, address, metadata });
-
-	// metadata.typings, metadata.typescriptOptions etc should all now be populated correctly,
-	// respecting the composition of all global metadata, wildcard metadata and package metadata correctly
-	logger.debug(`located ${address}`);
-	return metadata;
+	return JSON.stringify(json);
 }

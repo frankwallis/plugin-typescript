@@ -10,10 +10,8 @@ declare namespace SystemJSLoader {
 	interface System {
 		normalize(dep: string, parent?: string): Promise<string>;
 		normalizeSync(dep: string, parent?: string): string;
-		fetch(load: Module): Promise<string>;
-		locate(load: Module): Promise<string>;
 
-		builder?: boolean;
+		build?: boolean;
 		typescriptOptions?: PluginOptions;
 	}
 }
@@ -22,14 +20,12 @@ declare var __moduleName: string;
 declare var self: any;
 
 declare type ResolveFunction = (dep: string, parent?: string) => Promise<string>;
-declare type LookupFunction = (address: string) => Promise<any>;
-declare type FetchJsonFunction = (address: string) => Promise<any>;
+declare type FetchFunction = (address: string) => Promise<string>;
 
 interface PluginOptions {
    tsconfig?: boolean | string;
    typeCheck?: boolean | "strict";
 	typings?: { [importName: string]: boolean | string };
-	autoDetectModule?: boolean;
 
    /* private */
    files?: string[];
