@@ -9,9 +9,7 @@ interface Module {
 declare namespace SystemJSLoader {
 	interface System {
 		normalize(dep: string, parent?: string): Promise<string>;
-		normalizeSync(dep: string, parent?: string): string;
-
-		build?: boolean;
+		resolve(dep: string, parent?: string): Promise<string>;
 		typescriptOptions?: PluginOptions;
 	}
 }

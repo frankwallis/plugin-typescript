@@ -67,7 +67,7 @@ export async function translate(load: Module): Promise<string> {
 		formatErrors(diags, logger);
 
 		// in the browser the bundle hook is not called so fail the build immediately
-		const failOnError = !loader.builder && (options.typeCheck === "strict");
+		const failOnError = !loader.build && (options.typeCheck === "strict");
 		if (failOnError && hasError(diags))
 			throw new Error("Typescript compilation failed");
 	}
