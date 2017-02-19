@@ -1,7 +1,7 @@
 /* */
 import ts from 'typescript'
 import Logger from './logger'
-import { formatErrors } from './format-errors'
+import { convertErrors, outputErrors } from './format-errors'
 import { CompilerHost } from './compiler-host'
 import { resolveOptions } from './resolve-options'
 import { transpile } from './transpiler'
@@ -50,7 +50,9 @@ export async function translate(load: Module): Promise<string> {
 	else {
 		/* transpile the source */
 		const result = transpile(load.address, options, host)
-		formatErrors(result.diags, logger)
+
+		load.metadata.tserrors = convertErrors(result.diags)
+		outputErrors(load.metadata.tserrors, logger);
 
 		if (result.failure)
 			throw new Error('TypeScript transpilation failed')

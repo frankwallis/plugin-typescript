@@ -1,8 +1,6 @@
 /* */
 import ts from 'typescript'
 import Logger from './logger'
-import { isTypescriptDeclaration, getExtension } from './utils'
-import { CombinedOptions } from './resolve-options'
 
 const logger = new Logger({ debug: false })
 
@@ -24,14 +22,11 @@ export class CompilerHost implements ts.CompilerHost {
 		this._files = {}
 	}
 
-	public getDefaultLibFileName(options: CombinedOptions): string {
+	public getDefaultLibFileName(options: ts.CompilerOptions): string {
 		return this.getDefaultLibFilePaths(options)[0]
 	}
 
-	/**
-	 * Based on the compiler options returns the lib files that should be included.
-	 */
-	public getDefaultLibFilePaths(options: CombinedOptions): string[] {
+	public getDefaultLibFilePaths(options: ts.CompilerOptions): string[] {
 		return options.lib.map(libName => `typescript/lib/lib.${libName}.d.ts`)
 	}
 
