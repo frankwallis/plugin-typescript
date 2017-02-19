@@ -1,6 +1,6 @@
 {
   "name": "plugin-typescript",
-  "version": "7.0.3",
+  "version": "7.0.4",
   "description": "TypeScript loader for SystemJS",
   "main": "lib/plugin.js",
   "homepage": "https://github.com/frankwallis/plugin-typescript",
@@ -41,6 +41,7 @@
     "jspm": "^0.17.0-beta.40",
     "mocha": "^3.0.2",
     "open": "^0.0.5",
+    "rollup": "^0.41.4",
     "rollup-plugin-includepaths": "^0.2.1",
     "sinon": "^1.17.7",
     "ts-node": "^2.0.0",

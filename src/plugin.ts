@@ -52,7 +52,7 @@ export async function translate(load: Module): Promise<string> {
 		const result = transpile(load.address, options, host)
 
 		load.metadata.tserrors = convertErrors(result.diags)
-		outputErrors(load.metadata.tserrors, logger);
+		outputErrors(load.metadata.tserrors, logger)
 
 		if (result.failure)
 			throw new Error('TypeScript transpilation failed')
@@ -63,7 +63,7 @@ export async function translate(load: Module): Promise<string> {
 			if (options.module === ts.ModuleKind.System)
 				load.metadata.format = 'register'
 			else if (options.module === ts.ModuleKind.ES2015)
-				load.metadata.format = 'esm';
+				load.metadata.format = 'esm'
 			else if (options.module === ts.ModuleKind.CommonJS)
 				load.metadata.format = 'cjs'
 			else if (options.module === ts.ModuleKind.AMD)
