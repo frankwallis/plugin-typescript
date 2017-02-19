@@ -11,7 +11,7 @@ A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you 
 
 Starting with JSPM 0.17.0 (currently in beta) this plugin will be the officially supported mechanism for transpiling TypeScript. It provides the ability to transpile TypeScript and ES2015+ files on the fly when then are loaded by SystemJS.
 
-For SystemJS @0.19 use plugin-typescript 5.3.3
+plugin-typescript supports TypeScript 2.0.0 and higher
 For TypeScript 1.8.1 use plugin-typescript 4.0.16  
 For TypeScript 1.7.5 and below use plugin-typescript 2.x.x  
 
