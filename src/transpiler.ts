@@ -1,85 +1,84 @@
-/* */
-import ts from 'typescript';
-import {CompilerHost, TranspileResult} from './compiler-host';
-import {isJavaScript, isJSX, isSourceMap, hasError} from './utils';
-import Logger from './logger';
+import ts from 'typescript'
+import { CompilerHost, TranspileResult } from './compiler-host'
+import { isJavaScript, isJSX, isSourceMap, hasError } from './utils'
+import Logger from './logger'
 
-const logger = new Logger({ debug: false });
+const logger = new Logger({ debug: false })
 
-export class Transpiler {
-	constructor(private _host: CompilerHost) { }
+export function transpile(
+	sourceName: string,
+	options: ts.CompilerOptions,
+	host: CompilerHost): TranspileResult {
 
-	getTranspileOptions(options: ts.CompilerOptions): ts.CompilerOptions {
-      const result = (<any>ts).clone(options);
+	logger.debug(`transpiling ${sourceName}`)
 
-      result.isolatedModules = true;
+	const file = host.getSourceFile(sourceName)
+	if (!file) throw new Error(`file [${sourceName}] has not been added`)
 
-      /* arrange for an external source map */
-      if (result.sourceMap === undefined)
-         result.sourceMap = result.inlineSourceMap;
+	if (!file.output) {
+		const transpileOptions = getTranspileOptions(options)
+		const program = ts.createProgram([sourceName], transpileOptions, host)
 
-      if (result.sourceMap === undefined)
-         result.sourceMap = true;
+		let jstext: string = undefined
+		let maptext: string = undefined
 
-      result.inlineSourceMap = false;
+		// Emit
+		const emitResult = program.emit(undefined, (outputName, output) => {
+			if (isJavaScript(outputName) || isJSX(outputName))
+				jstext = output.slice(0, output.lastIndexOf("//#")) // remove sourceMappingURL
+			else if (isSourceMap(outputName))
+				maptext = output
+			else
+				throw new Error(`unexpected ouput file ${outputName}`)
+		})
 
-      /* these options are incompatible with isolatedModules */
-      result.declaration = false;
-      result.noEmitOnError = false;
-      result.out = undefined;
-      result.outFile = undefined;
+		const diagnostics = emitResult.diagnostics
+			.concat(program.getOptionsDiagnostics())
+			.concat(program.getSyntacticDiagnostics())
 
-		/* without this we get a 'lib.d.ts not found' error */
- 		result.noLib = true;
-		result.lib = undefined; // incompatible with noLib
+		file.output = {
+			failure: hasError(diagnostics),
+			diags: diagnostics,
+			js: jstext,
+			sourceMap: maptext
+		}
+	}
 
-		/* without this we get a 'cannot find type-reference' error */
- 		result.types = [];
+	return file.output
+}
 
-      /* without this we get 'cannot overwrite existing file' when transpiling js files */
-      result.suppressOutputPathCheck = true;
+function getTranspileOptions(options: ts.CompilerOptions): ts.CompilerOptions {
+	const result = (<any>ts).clone(options)
 
-      /* with this we don't get any files */
-      result.noEmit = false;
+	result.isolatedModules = true
 
-		return result;
-   }
+	/* arrange for an external source map */
+	if (result.sourceMap === undefined)
+		result.sourceMap = result.inlineSourceMap
 
-   public transpile(sourceName: string, options: ts.CompilerOptions): TranspileResult {
-      logger.debug(`transpiling ${sourceName}`);
+	if (result.sourceMap === undefined)
+		result.sourceMap = true
 
-      const file = this._host.getSourceFile(sourceName);
-      if (!file) throw new Error(`file [${sourceName}] has not been added`);
+	result.inlineSourceMap = false
 
-      if (!file.output) {
-			const transpileOptions = this.getTranspileOptions(options);
-         const program = ts.createProgram([sourceName], transpileOptions, this._host);
+	/* these options are incompatible with isolatedModules */
+	result.declaration = false
+	result.noEmitOnError = false
+	result.out = undefined
+	result.outFile = undefined
 
-         let jstext: string = undefined;
-         let maptext: string = undefined;
+	/* without this we get a 'lib.d.ts not found' error */
+	result.noLib = true
+	result.lib = undefined // incompatible with noLib
 
-         // Emit
-         const emitResult = program.emit(undefined, (outputName, output) => {
-            if (isJavaScript(outputName) || isJSX(outputName))
-               jstext = output.slice(0, output.lastIndexOf("//#")); // remove sourceMappingURL
-            else if (isSourceMap(outputName))
-               maptext = output;
-            else
-               throw new Error(`unexpected ouput file ${outputName}`)
-         });
+	/* without this we get a 'cannot find type-reference' error */
+	result.types = []
 
-         const diagnostics = emitResult.diagnostics
-            .concat(program.getOptionsDiagnostics())
-				.concat(program.getSyntacticDiagnostics());
+	/* without this we get 'cannot overwrite existing file' when transpiling js files */
+	result.suppressOutputPathCheck = true
 
-         file.output = {
-            failure: hasError(diagnostics),
-            diags: diagnostics,
-            js: jstext,
-            sourceMap: maptext
-         };
-      }
+	/* with this we don't get any files */
+	result.noEmit = false
 
-      return file.output;
-   }
+	return result
 }

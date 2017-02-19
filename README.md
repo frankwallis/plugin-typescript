@@ -7,12 +7,11 @@ TypeScript loader for SystemJS
 
 ## Overview ##
 
-A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to ```System.import``` TypeScript files directly. The files are compiled in the browser and compilation errors written to the console.
+A plugin for [SystemJS](https://github.com/systemjs/systemjs) which enables you to ```System.import``` TypeScript files directly. The files are transpiled in the browser and compilation errors written to the console.
 
-Starting with JSPM 0.17.0 (currently in beta) this plugin will be the officially supported mechanism for transpiling TypeScript. It provides the ability to type-check files while loading them, which is not currently possible with the built-in SystemJS TypeScript transpiler.
+Starting with JSPM 0.17.0 (currently in beta) this plugin will be the officially supported mechanism for transpiling TypeScript. It provides the ability to transpile TypeScript and ES2015+ files on the fly when then are loaded by SystemJS.
 
-plugin-typescript uses TypeScript ^2.1.0
-For TypeScript 2.0.x use plugin-typescript 5.2.9  
+For SystemJS @0.19 use plugin-typescript 5.3.3
 For TypeScript 1.8.1 use plugin-typescript 4.0.16  
 For TypeScript 1.7.5 and below use plugin-typescript 2.x.x  
 
@@ -70,13 +69,11 @@ System.config({
 });
 ```
 
-This will tell SystemJS to transpile all modules (.js and .ts) using plugin-typescript.
-
-#### Plus: for full type-checking add ```packages``` configuration ####
+This will tell SystemJS to transpile all modules (.js and .ts) using plugin-typescript. It is also possible to configure plugin-typescript to load specific files, using ```packages``` configuration
 
 ```js
 System.config({
-  transpiler: "ts",
+  transpiler: "babel",
   packages: {
     "src": {
       "defaultExtension": "ts",
@@ -103,55 +100,34 @@ System.config({
   typescriptOptions: {
     module: "system",
     noImplicitAny: true,
-    typeCheck: true,				// also accepts "strict"
     tsconfig: true                  // also accepts a path
+  }
+});
+```
+
+It is also possible to override the default configuration for specific files, using ```packages``` configuration:
+
+```js
+System.config({
+  transpiler: "babel",
+  packages: {
+    "src": {
+      "defaultExtension": "ts",
+		"typescriptOptions": {
+			"noImplicitAny": true
+		}
+    }
   }
 });
 ```
 
 All the usual TypeScript compiler options are supported, as well as these additional ones:
 
-#### typeCheck ####
-
-A boolean flag which controls whether the files are type-checked or simply transpiled. Type-checking does add some overhead to the build process as typings need to be loaded and the compiler has more work to do.
-
-By default compiler errors are written to the console but the build is allowed to continue. To change this behaviour you can use ```typeCheck: "strict"``` in which case the build will be failed when compiler errors are encountered.
-
 #### tsconfig ####
 
 A boolean flag which instructs the plugin to load configuration from "tsconfig.json". To override the location of the file set this option to the path of the configuration file, which will be resolved using normal SystemJS resolution.
 
 Compiler options which do not conflict with those required by plugin-typescript will be loaded from the ```compilerOptions``` section of the file. Any declaration files contained in the ```files``` array will also be loaded if type-checking is enabled.
-
-#### types ####
-
-The ```types``` compiler option tells the type-checker which packages have typings available under the *@types* scoped package. As an example if you have installed typings at ```@types/react``` then add ```react``` to the array of strings:
-```json
-{
-  "typescriptOptions": {
-    "types": ["react"]
-  }
-}
-```
-To install typings from @types using jspm:
-```sh
-jspm install npm:@types/react
-```
-
-#### typings ####
-
-The ```typings``` compiler option tells the type-checker which packages contain their own typings and where they are located, it is an object map:
-
-```js
-"typescriptOptions": {
-  "typings": {
-    "rxjs": "Rx.d.ts",				// relative to root of package
-    "myownpackage": true			// all js files have typings with the same name
-  }
-}
-```
-
-If a package contains typings for *all* js files in the package then the value should be set to ```true```, otherwise it should contain the path of the bundled typings file, relative to the root of the project.
 
 ## Features ##
 
@@ -167,10 +143,6 @@ Rollup is supported when transpiling with ```module: "es6"```. It can help to re
 #### Link to source from compiler errors ####
 
 When compiling in the browser, compiler errors contain a link to the exact location of the error in the source. This is particularly helpful if you are using Chrome DevTools as your IDE.
-
-#### Type-checking over multiple packages ####
-
-The type-checker runs across multiple packages if the imported file resolves to a typescript file. This means that if you do ```import "mypackage/index"``` and that resolves to a typescript file then that import will be properly type-checked. You no longer have to handcraft an external declaration file for 'mypackage'.
 
 #### Override TypeScript version ####
 

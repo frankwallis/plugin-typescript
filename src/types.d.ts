@@ -1,61 +1,45 @@
 interface Module {
-	name: string;
-	address: string;
-	source?: string;
-	metadata?: any;
+	name: string
+	address: string
+	source?: string
+	metadata?: any
 }
 
 // augment SystemJS
 declare namespace SystemJSLoader {
 	interface System {
-		normalize(dep: string, parent?: string): Promise<string>;
-		resolve(dep: string, parent?: string): Promise<string>;
-		typescriptOptions?: PluginOptions;
+		normalize(dep: string, parent?: string): Promise<string>
+		resolve(dep: string, parent?: string): Promise<string>
+		typescriptOptions?: PluginOptions
 	}
 }
 
-declare var __moduleName: string;
-declare var self: any;
+declare var __moduleName: string
+declare var self: any
 
-declare type ResolveFunction = (dep: string, parent?: string) => Promise<string>;
-declare type FetchFunction = (address: string) => Promise<string>;
+declare type FetchFunction = (fileName: string, parentAddress: string) => Promise<string>
 
 interface PluginOptions {
-   tsconfig?: boolean | string;
-   typeCheck?: boolean | "strict";
-	typings?: { [importName: string]: boolean | string };
+	tsconfig?: boolean | string
 
-   /* private */
-   files?: string[];
-   tsconfigAddress?: string;
-
-   /* reveal some hidden typescript options */
-   suppressOutputPathCheck?: boolean;
-	allowNonTsExtensions?: boolean;
-}
-
-declare type DependencyInfo = {
-   /* list of all typescript files required to compile this one */
-   list: string[];
-
-   /* map of imports/references used by this file to their resolved locations.
-		These will include any redirections to a typings file if one is present. */
-   mappings: { [s: string]: string; }
+	/* reveal some hidden typescript options */
+	suppressOutputPathCheck?: boolean
+	allowNonTsExtensions?: boolean
 }
 
 declare interface StructuredError {
-	messageText: string;
-	locationText: string;
-	errorCode: number;
-	category: number;
+	messageText: string
+	locationText: string
+	errorCode: number
+	category: number
 }
 
 declare module Chai {
-   interface Assertion {
-      defined: any;
-   }
+	interface Assertion {
+		defined: any
+	}
 }
 
 declare module "jspm" {
-	export const Builder: any;
+	export const Builder: any
 }

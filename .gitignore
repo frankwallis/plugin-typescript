@@ -5,3 +5,5 @@ build/
 components/
 coverage/
 tmp/
+oldsrc/
+oldtest/
