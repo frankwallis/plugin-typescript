@@ -31,15 +31,16 @@
       "process": "npm:jspm-nodelibs-process@^0.2.0",
       "stream": "npm:jspm-nodelibs-stream@^0.2.0",
       "string_decoder": "npm:jspm-nodelibs-string_decoder@^0.2.0",
-      "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
+      "systemjs-hot-reloader": "alexisvincent/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.8",
-      "ts": "frankwallis/plugin-typescript@^7.0.1",
+      "ts": "frankwallis/plugin-typescript@^7.0.2",
+      "typescript": "npm:typescript@^2.0.0",
       "url": "npm:jspm-nodelibs-url@^0.2.0",
       "util": "npm:jspm-nodelibs-util@^0.2.0",
       "vm": "npm:jspm-nodelibs-vm@^0.2.0"
     },
     "overrides": {
-      "github:angular/bower-angular@1.6.1": {
+      "github:angular/bower-angular@1.6.2": {
         "main": "angular",
         "meta": {
           "angular.js": {
@@ -51,7 +52,7 @@
       "github:socketio/socket.io-client@1.7.2": {
         "main": "dist/socket.io.js"
       },
-      "npm:debug@2.6.0": {
+      "npm:debug@2.6.1": {
         "main": "src/browser.js",
         "jspmNodeConversion": false,
         "format": "cjs",

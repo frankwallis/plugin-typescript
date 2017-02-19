@@ -16,7 +16,7 @@
       "readline": "npm:jspm-nodelibs-readline@^0.2.0",
       "systemjs-hot-reloader": "alexisvincent/systemjs-hot-reloader@^0.6.0",
       "text": "systemjs/plugin-text@^0.0.9",
-      "ts": "frankwallis/plugin-typescript@^7.0.1",
+      "ts": "frankwallis/plugin-typescript@^7.0.2",
       "typescript": "npm:typescript@next"
     },
     "peerDependencies": {

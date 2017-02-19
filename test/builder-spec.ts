@@ -167,7 +167,7 @@ describe('Builder', () => {
 			const result = await builder.bundle('testsrc', { rollup: false })
 				.should.be.fulfilled
 			//console.log(result.source)
-			result.source.length.should.equal(732)
+			result.source.length.should.equal(420)
 			result.source.indexOf('(function (global, factory').should.not.equal(0)
 		})
 

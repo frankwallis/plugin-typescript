@@ -11,13 +11,92 @@
       "@types/react": "^0.14.32",
       "@types/react-dom": "^0.14.15",
       "react-dom": "^15.2.1",
-      "ts": "github:frankwallis/plugin-typescript@^7.0.1"
+      "ts": "github:frankwallis/plugin-typescript@^7.0.2"
     },
     "devDependencies": {
       "clean-css": "^3.4.3",
+      "constants": "jspm-nodelibs-constants@^0.2.0",
       "css": "github:frankwallis/plugin-css@master",
-      "systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@^0.5.3",
-      "tty": "jspm-nodelibs-tty@^0.2.0"
+      "systemjs-hot-reloader": "github:alexisvincent/systemjs-hot-reloader@^0.5.3",
+      "tty": "jspm-nodelibs-tty@^0.2.0",
+      "vm": "jspm-nodelibs-vm@^0.2.0"
+    },
+    "peerDependencies": {
+      "assert": "jspm-nodelibs-assert@^0.2.0",
+      "buffer": "jspm-nodelibs-buffer@^0.2.0",
+      "child_process": "jspm-nodelibs-child_process@^0.2.0",
+      "crypto": "jspm-nodelibs-crypto@^0.2.0",
+      "domain": "jspm-nodelibs-domain@^0.2.0",
+      "events": "jspm-nodelibs-events@^0.2.0",
+      "fs": "jspm-nodelibs-fs@^0.2.0",
+      "http": "jspm-nodelibs-http@^0.2.0",
+      "https": "jspm-nodelibs-https@^0.2.0",
+      "module": "jspm-nodelibs-module@^0.2.0",
+      "net": "jspm-nodelibs-net@^0.2.0",
+      "os": "jspm-nodelibs-os@^0.2.0",
+      "path": "jspm-nodelibs-path@^0.2.0",
+      "process": "jspm-nodelibs-process@^0.2.0",
+      "react": "^15.4.2",
+      "stream": "jspm-nodelibs-stream@^0.2.0",
+      "string_decoder": "jspm-nodelibs-string_decoder@^0.2.0",
+      "typescript": "^2.0.0",
+      "url": "jspm-nodelibs-url@^0.2.0",
+      "util": "jspm-nodelibs-util@^0.2.0",
+      "zlib": "jspm-nodelibs-zlib@^0.2.0"
+    },
+    "overrides": {
+      "github:socketio/socket.io-client@1.7.2": {
+        "main": "dist/socket.io.js"
+      },
+      "npm:browserify-zlib@0.1.4": {
+        "dependencies": {
+          "readable-stream": "^2.0.2",
+          "pako": "~0.2.0"
+        },
+        "map": {
+          "_stream_transform": "readable-stream/transform"
+        }
+      },
+      "npm:debug@2.6.1": {
+        "main": "src/browser.js",
+        "jspmNodeConversion": false,
+        "format": "cjs",
+        "map": {
+          "./src/browser.js": {
+            "node": "./src/node.js"
+          },
+          "./node.js": {
+            "browser": "./src/browser.js"
+          },
+          "fs": "@node/fs",
+          "net": "@node/net",
+          "tty": "@node/tty",
+          "util": "@node/util"
+        }
+      },
+      "npm:inherits@2.0.3": {
+        "ignore": [
+          "test.js"
+        ]
+      },
+      "npm:ms@0.7.2": {
+        "jspmNodeConversion": false,
+        "format": "cjs"
+      },
+      "npm:typescript@2.2.0": {
+        "browser": {},
+        "map": {
+          "buffer": "@empty",
+          "child_process": "@empty",
+          "fs": "@empty",
+          "path": "@empty",
+          "process": "@empty",
+          "readline": "@empty"
+        },
+        "dependencies": {
+          "source-map-support": "*"
+        }
+      }
     }
   }
 }

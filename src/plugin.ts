@@ -1,11 +1,11 @@
 /* */
 import ts from 'typescript'
 import Logger from './logger'
-import { convertErrors, formatErrors } from './format-errors'
+import { formatErrors } from './format-errors'
 import { CompilerHost } from './compiler-host'
 import { resolveOptions } from './resolve-options'
 import { transpile } from './transpiler'
-import { isTypescript, isTypescriptDeclaration, isJson, hasError } from './utils'
+import { isTypescript, isTypescriptDeclaration, isJson } from './utils'
 
 const logger = new Logger({ debug: false })
 const host = getHost()
@@ -56,6 +56,17 @@ export async function translate(load: Module): Promise<string> {
 			throw new Error('TypeScript transpilation failed')
 
 		load.source = result.js
+
+		if (isTypescript(load.address)) {
+			if (options.module === ts.ModuleKind.System)
+				load.metadata.format = 'register'
+			else if (options.module === ts.ModuleKind.ES2015)
+				load.metadata.format = 'esm';
+			else if (options.module === ts.ModuleKind.CommonJS)
+				load.metadata.format = 'cjs'
+			else if (options.module === ts.ModuleKind.AMD)
+				load.metadata.format = 'amd'
+		}
 
 		if (result.sourceMap)
 			load.metadata.sourceMap = JSON.parse(result.sourceMap)
