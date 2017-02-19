@@ -33,7 +33,7 @@
       "string_decoder": "npm:jspm-nodelibs-string_decoder@^0.2.0",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.3",
       "text": "systemjs/plugin-text@^0.0.8",
-      "ts": "frankwallis/plugin-typescript@^6.0.4",
+      "ts": "frankwallis/plugin-typescript@^7.0.1",
       "url": "npm:jspm-nodelibs-url@^0.2.0",
       "util": "npm:jspm-nodelibs-util@^0.2.0",
       "vm": "npm:jspm-nodelibs-vm@^0.2.0"

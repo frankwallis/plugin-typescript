@@ -3,12 +3,7 @@ SystemJS.config({
   typescriptOptions: {
     "module": "system",
     "noImplicitAny": false,
-    "typeCheck": true,
-    "tsconfig": true,
-    "types": [
-      "react",
-      "react-dom"
-    ]
+    "tsconfig": true
   },
   packages: {
     "src": {
@@ -17,9 +12,6 @@ SystemJS.config({
       "meta": {
         "*.css": {
           "loader": "css"
-        },
-        "*.tsx": {
-          "loader": "ts"
         }
       }
     }

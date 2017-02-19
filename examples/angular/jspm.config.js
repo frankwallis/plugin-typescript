@@ -3,21 +3,13 @@ SystemJS.config({
   typescriptOptions: {
     "module": "system",
     "noImplicitAny": false,
-    "typeCheck": true,
-    "tsconfig": "src/another-tsconfig.json",
-    "types": [
-      "angular",
-      "jquery"
-    ]
+    "tsconfig": "src/another-tsconfig.json"
   },
   packages: {
     "src": {
       "main": "index",
       "defaultExtension": "ts",
       "meta": {
-        "*.ts": {
-          "loader": "ts"
-        },
         "*.css": {
           "loader": "css"
         },

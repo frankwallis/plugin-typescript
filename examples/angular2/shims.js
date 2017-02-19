@@ -1,2 +1,2 @@
-import 'reflect-metadata';
-import 'zone.js';
+import 'reflect-metadata'
+import 'zone.js'

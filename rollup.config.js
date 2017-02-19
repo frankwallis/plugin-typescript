@@ -6,7 +6,7 @@ let includePathOptions = {
 	},
 	paths: [],
 	external: ['typescript'],
-	extensions: ['.js']
+	extensions: ['.js'],
 }
 
 export default {
