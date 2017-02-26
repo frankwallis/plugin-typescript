@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" ng-strict-di>
+
 <head>
-	<meta charset="utf-8"/>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<meta name="apple-mobile-web-app-capable" content="YES"/>
-	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="apple-mobile-web-app-capable" content="YES" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="fragment" content="!" />
 
 	<title>plugin-typescript angular example</title>
@@ -15,20 +16,20 @@
 	<script src="jspm.browser.js"></script>
 	<script src="jspm.config.js"></script>
 	<script>
-      // System.trace = true
-      // System.import('systemjs-hot-reloader').then(function(HotReloader){
-      //    new HotReloader.default('http://localhost:8080')  // chokidar-socket-emitter port
-      // });
-		System.import('src')
-			.then(function() {
+		System.import('systemjs-hot-reloader')
+			.then(function (connect) {
+				connect({ host: '//localhost:8080' }); // chokidar-socket-emitter port
+				return System.import('src');
+			})
+			.then(function () {
 				return System.import('angular');
 			})
-			.then(function(angular) {
+			.then(function (angular) {
 				console.log('running');
 				angular.bootstrap(document, ['example']);
 				console.log(JSON.stringify(System.typescriptOptions));
 			})
-			.catch(function(err) {
+			.catch(function (err) {
 				console.log(err);
 				console.log(err.originalErr);
 			});

@@ -1,37 +1,38 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-   <meta charset="utf-8"/>
-   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-   <meta name="apple-mobile-web-app-capable" content="YES"/>
-   <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-   <meta name="fragment" content="!" />
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="apple-mobile-web-app-capable" content="YES" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="fragment" content="!" />
 
 	<title>plugin-typescript react example</title>
-   <base href="/">
+	<base href="/">
 
-   <script src="jspm_packages/system.src.js"></script>
+	<script src="jspm_packages/system.src.js"></script>
 	<script src="jspm.browser.js"></script>
 	<script src="jspm.config.js"></script>
 </head>
-<body>
-   <div id="body"></div>
-   <script>
-      //System.trace = true
-      // System.import('systemjs-hot-reloader').then(function(HotReloader){
-      //    new HotReloader.default('http://localhost:8080')  // chokidar-socket-emitter port
-      // });
 
-		System.import('src')
-			.then(function() {
+<body>
+	<div id="body"></div>
+	<script>
+		System.import('systemjs-hot-reloader')
+			.then(function (connect) {
+				connect({ host: '//localhost:8080' }); // chokidar-socket-emitter port
+				return System.import('src');
+			})
+			.then(function () {
 				console.log('running');
 			})
-			.catch(function(err) {
+			.catch(function (err) {
 				console.log(err);
 				console.log(err.originalErr);
 			});
-   </script>
+	</script>
 </body>
-</html>
 
+</html>

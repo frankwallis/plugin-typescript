@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="utf-8"/>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<meta name="apple-mobile-web-app-capable" content="YES"/>
-	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="apple-mobile-web-app-capable" content="YES" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="fragment" content="!" />
 
 	<title>plugin-typescript angular2 example</title>
 	<base href="/">
 
 	<script src="jspm_packages/system.src.js"></script>
-	<script>System.packageWithIndex = true;</script>
 	<script src="jspm.browser.js"></script>
 	<script src="jspm.config.js"></script>
 </head>
@@ -21,16 +21,15 @@
 	<calculator-component></calculator-component>
 
 	<script>
-      // System.trace = true
-      // System.import('systemjs-hot-reloader').then(function(HotReloader){
-      //    new HotReloader.default('http://localhost:8080')  // chokidar-socket-emitter port
-      // });
-
-      System.import("src")
-			.then(function() {
+		System.import('systemjs-hot-reloader')
+			.then(function (connect) {
+				connect({ host: '//localhost:8080' }); // chokidar-socket-emitter port
+				return System.import('src');
+			})
+			.then(function () {
 				console.log('running');
 			})
-			.catch(function(err) {
+			.catch(function (err) {
 				console.log(err);
 				console.log(err.originalErr);
 			});
