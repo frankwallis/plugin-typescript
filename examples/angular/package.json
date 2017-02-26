@@ -19,7 +19,7 @@
       "clean-css": "npm:clean-css@^3.4.3",
       "constants": "npm:jspm-nodelibs-constants@^0.2.0",
       "crypto": "npm:jspm-nodelibs-crypto@^0.2.0",
-      "css": "frankwallis/plugin-css@master",
+      "css": "systemjs/plugin-css@^0.1.32",
       "events": "npm:jspm-nodelibs-events@^0.2.0",
       "fs": "npm:jspm-nodelibs-fs@^0.2.0",
       "http": "npm:jspm-nodelibs-http@^0.2.0",

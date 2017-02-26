@@ -10,13 +10,13 @@
     "dependencies": {
       "@types/react": "^0.14.32",
       "@types/react-dom": "^0.14.15",
-      "react-dom": "^15.2.1",
-      "ts": "github:frankwallis/plugin-typescript@^7.0.2"
+      "react-dom": "^15.2.1"
     },
     "devDependencies": {
       "clean-css": "^3.4.3",
-      "css": "github:frankwallis/plugin-css@master",
+      "css": "github:systemjs/plugin-css@^0.1.32",
       "systemjs-hot-reloader": "github:alexisvincent/systemjs-hot-reloader@^1.0.0",
+      "ts": "github:frankwallis/plugin-typescript@^7.0.2",
       "tty": "jspm-nodelibs-tty@^0.2.0"
     },
     "peerDependencies": {
