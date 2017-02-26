@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"outDir": "tmp/es6",
-    	"lib": ["es6"],
+    	"lib": ["es5", "es2015.promise"],
 		"target": "es5",
 		"module": "es2015",
 		"removeComments": true,
