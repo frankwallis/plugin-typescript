@@ -1,9 +1,9 @@
 import ts from 'typescript'
 import Logger from './logger'
 import { formatErrors } from './format-errors'
+import { __assign } from 'tslib'
 
 const logger = new Logger({ debug: false })
-
 export type CombinedOptions = PluginOptions & ts.CompilerOptions
 
 export async function resolveOptions(
@@ -14,7 +14,7 @@ export async function resolveOptions(
 
 	const globalTsconfigOptions = await loadTsconfigOptions(globalOptions, '', fetchJson)
 	const fileTsconfigOptions = await loadTsconfigOptions(fileOptions, fileAddress, fetchJson)
-	const mergedOptions = (ts as any).assign({},
+	const mergedOptions = __assign({},
 		globalTsconfigOptions, globalOptions, fileTsconfigOptions, fileOptions)
 
 	const finalOptions = parseOptions(mergedOptions)
