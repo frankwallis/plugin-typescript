@@ -35,7 +35,7 @@ Add SystemJS map configuration for plugin-typescript and typescript:
 SystemJS.config({
   packages: {
     "ts": {
-      "main": "plugin.js"
+      "main": "lib/plugin.js"
     },
     "typescript": {
       "main": "lib/typescript.js",
@@ -47,7 +47,7 @@ SystemJS.config({
     }
   },
   map: {
-    "ts": "path/to/plugin-typescript/lib",
+    "ts": "path/to/plugin-typescript",
     "typescript": "path/to/typescript"
   },
   transpiler: 'ts'
@@ -131,22 +131,21 @@ All the usual TypeScript compiler options are supported, as well as these additi
 
 A boolean flag which instructs the plugin to load configuration from "tsconfig.json". To override the location of the file set this option to the path of the configuration file, which will be resolved using normal SystemJS resolution.
 
-Compiler options which do not conflict with those required by plugin-typescript will be loaded from the ```compilerOptions``` section of the file. Any declaration files contained in the ```files``` array will also be loaded if type-checking is enabled.
+The file location will be resolved using normal SystemJS resolution, and compiler options which do not conflict with those required by plugin-typescript will be loaded from the ```compilerOptions``` section of the file.
 
 ## Features ##
 
 #### Hot-Reload support ####
 
-This plugin provides incremental type-checking when using [systemjs-hot-reloader](https://github.com/capaj/systemjs-hot-reloader)
-See any of the example projects for a working hot-reloading setup.
+The example projects show how to use plugin-typescript in conjuntion with [systemjs-hot-reloader](https://github.com/capaj/systemjs-hot-reloader)
 
 #### Rollup support ####
 
 Rollup is supported when transpiling with ```module: "es6"```. It can help to reduce the size of your bundles by stripping out unused modules. For more information see [here](https://github.com/rollup/rollup)
 
-#### Link to source from compiler errors ####
+#### Link to source from transpiler errors ####
 
-When compiling in the browser, compiler errors contain a link to the exact location of the error in the source. This is particularly helpful if you are using Chrome DevTools as your IDE.
+When compiling in the browser, transpiler errors contain a link to the exact location of the error in the source. This is particularly helpful if you are using Chrome DevTools as your IDE.
 
 #### Override TypeScript version ####
 
