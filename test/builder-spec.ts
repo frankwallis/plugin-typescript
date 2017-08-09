@@ -234,13 +234,24 @@ describe('Builder', () => {
 		})
 	})
 
-	it('supports dynamic import when outputting esnext modules', async () => {
+	it('supports dynamic import when bundling to esnext modules', async () => {
 		const config = defaultConfig()
 		config.map["testsrc"] = "test/fixtures-es6/plugin/dynamic"
 		config.typescriptOptions.module = "esnext"
-		config.typescriptOptions.target = "esnext"
+		config.typescriptOptions.target = "es5"
 		builder.config(config)
-		const result = await builder.buildStatic('testsrc', {}) as {source: string}
+		const result = await builder.bundle('testsrc', {})
+		console.log(result.source)
+		result.source.should.contain('_context.import(\'')
+	})
+
+	it('supports dynamic import when building to esnext modules', async () => {
+		const config = defaultConfig()
+		config.map["testsrc"] = "test/fixtures-es6/plugin/dynamic"
+		config.typescriptOptions.module = "esnext"
+		config.typescriptOptions.target = "es5"
+		builder.config(config)
+		const result = await builder.buildStatic('testsrc', {})
 		console.log(result.source)
 		result.source.should.contain('_context.import(\'')
 	})
