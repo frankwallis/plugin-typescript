@@ -228,7 +228,7 @@ describe('Builder', () => {
 			builder.config(config)
 			const result = await builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
 				.should.be.fulfilled
-			console.log(result.source)
+			//console.log(result.source)
 			result.source.indexOf('counter.imported += 1').should.be.above(-1);
 			result.source.indexOf('counter.elided += 1').should.be.equal(-1);
 		})
@@ -241,7 +241,7 @@ describe('Builder', () => {
 		config.typescriptOptions.target = "es5"
 		builder.config(config)
 		const result = await builder.bundle('testsrc', {})
-		console.log(result.source)
+		//console.log(result.source)
 		result.source.should.contain('_context.import(\'')
 	})
 
