@@ -1,3 +1,4 @@
+import os = require('os')
 import chai = require('chai')
 import chaiAsPromised = require('chai-as-promised')
 import * as ts from 'typescript'
@@ -113,7 +114,7 @@ describe('Plugin', () => {
 			System.config(config)
 			const mod = await System.import('testsrc')
 				.should.be.fulfilled
-			mod.default.should.equal('<div>hello</div>\n')
+			mod.default.should.equal('<div>hello</div>' + os.EOL)
 		})
 
 		it('compiles js commonjs files', async () => {

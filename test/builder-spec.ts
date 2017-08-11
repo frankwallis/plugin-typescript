@@ -7,7 +7,15 @@ chai.use(chaiAsPromised)
 const should = chai.should()
 
 describe('Builder', () => {
-	let builder = null
+	interface Builder {
+		builderStatic(build: string, options?: object): Promise<{source: string}>
+		reset(): void
+		bundle(bundleSpec: string, options?: object): Promise<{source: string}>
+		buildStatic(bundleSpec: string, options?: object): Promise<{source: string}>
+		config<T extends SystemJSLoader.Config | {transpiler}>(config?: T): void
+	}
+
+	let builder: Builder = null
 
 	beforeEach(() => {
 		global['tsHost'] = undefined
@@ -26,7 +34,7 @@ describe('Builder', () => {
 				"jsx": "react",
 				"noImplicitAny": false,
 				"tsconfig": false
-			} as any,
+			},
 			packages: {
 				"testsrc": {
 					"main": "index",
@@ -224,5 +232,27 @@ describe('Builder', () => {
 			result.source.indexOf('counter.imported += 1').should.be.above(-1);
 			result.source.indexOf('counter.elided += 1').should.be.equal(-1);
 		})
+	})
+
+	it('supports dynamic import when bundling to esnext modules', async () => {
+		const config = defaultConfig()
+		config.map["testsrc"] = "test/fixtures-es6/plugin/dynamic"
+		config.typescriptOptions.module = "esnext"
+		config.typescriptOptions.target = "es5"
+		builder.config(config)
+		const result = await builder.bundle('testsrc', {})
+		console.log(result.source)
+		result.source.should.contain('_context.import(\'')
+	})
+
+	it('supports dynamic import when building to esnext modules', async () => {
+		const config = defaultConfig()
+		config.map["testsrc"] = "test/fixtures-es6/plugin/dynamic"
+		config.typescriptOptions.module = "esnext"
+		config.typescriptOptions.target = "es5"
+		builder.config(config)
+		const result = await builder.buildStatic('testsrc', {})
+		console.log(result.source)
+		result.source.should.contain('_context.import(\'')
 	})
 })

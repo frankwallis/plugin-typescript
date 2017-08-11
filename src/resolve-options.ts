@@ -90,7 +90,7 @@ function getEnum(enumValue: any, enumType: any, defaultValue: number): number {
 function validateOptions(options: CombinedOptions) {
    /* The only time you don't want to output in 'm format is when you are using rollup or babel
       downstream to compile es6 output (e.g. for async/await support) */
-	if ((options.module != ts.ModuleKind.System) && (options.module != ts.ModuleKind.ES2015)) {
+	if ((options.module !== ts.ModuleKind.System) && (options.module !== ts.ModuleKind.ES2015) && (options.module !== ts.ModuleKind.ESNext)) {
 		logger.warn(`transpiling to ${ts.ModuleKind[options.module]}, consider setting module: "system" in typescriptOptions to transpile directly to System.register format`)
 	}
 

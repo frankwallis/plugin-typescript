@@ -25,7 +25,7 @@
     "url": "https://github.com/frankwallis/plugin-typescript.git"
   },
   "peerDependencies": {
-    "typescript": "^2.0.0"
+    "typescript": "^2.4.0"
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",
@@ -44,9 +44,9 @@
     "rollup": "^0.41.4",
     "rollup-plugin-includepaths": "^0.2.1",
     "sinon": "^1.17.7",
-    "ts-node": "^2.0.0",
+    "ts-node": "^3.0.0",
     "tslib": "^1.4.0",
-    "typescript": "^2.2.0"
+    "typescript": "^2.4.0"
   },
   "scripts": {
     "bundle": "tsc && rollup -c && tsc ./tmp/plugin.js -m system -lib es6 -allowJs -allowUnreachableCode -removeComments -outDir ./lib",
@@ -62,7 +62,7 @@
     "registry": "github",
     "name": "frankwallis/plugin-typescript",
     "peerDependencies": {
-      "typescript": "npm:typescript@^2.0.0"
+      "typescript": "npm:typescript@^2.4.0"
     },
     "directories": {
       "lib": "lib",
