@@ -252,7 +252,7 @@ describe('Builder', () => {
 		config.typescriptOptions.target = "es5"
 		builder.config(config)
 		const result = await builder.buildStatic('testsrc', {})
-		console.log(result.source)
+		//console.log(result.source)
 		result.source.should.contain('_context.import(\'')
 	})
 })

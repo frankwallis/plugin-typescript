@@ -27,7 +27,7 @@ export class CompilerHost implements ts.CompilerHost {
 	}
 
 	public getDefaultLibFilePaths(options: ts.CompilerOptions): string[] {
-		return options.lib.map(libName => `typescript/lib/lib.${libName}.d.ts`)
+		return options.lib ? options.lib.map(libName => `typescript/lib/lib.${libName}.d.ts`) : ['typescript/lib/lib.d.ts'];
 	}
 
 	public useCaseSensitiveFileNames(): boolean {
