@@ -14,7 +14,6 @@ declare namespace SystemJSLoader {
 	}
 }
 
-declare var __moduleName: string
 declare var self: any
 
 declare type FetchFunction = (fileName: string, parentAddress: string) => Promise<string>
