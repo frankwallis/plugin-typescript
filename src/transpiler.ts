@@ -48,7 +48,7 @@ export function transpile(
 }
 
 function getTranspileOptions(options: ts.CompilerOptions): ts.CompilerOptions {
-	const result = (<any>ts).clone(options)
+	const result = (<any>ts).clone(options) as ts.CompilerOptions;
 
 	result.isolatedModules = true
 

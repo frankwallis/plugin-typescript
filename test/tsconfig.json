@@ -12,7 +12,5 @@
 		"moduleResolution": "node",
 		"allowSyntheticDefaultImports": true
 	},
-	"files": [
-		"../src/types.d.ts"
-	]
+	"include": ["./*.ts", "../src/types.d.ts"]
 }

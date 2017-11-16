@@ -2,6 +2,7 @@ import chai = require('chai')
 import chaiAsPromised = require('chai-as-promised')
 import ts from 'typescript'
 import { Builder } from 'jspm'
+import { Config } from 'systemjs'
 
 chai.use(chaiAsPromised)
 const should = chai.should()
@@ -12,7 +13,7 @@ describe('Builder', () => {
 		reset(): void
 		bundle(bundleSpec: string, options?: object): Promise<{source: string}>
 		buildStatic(bundleSpec: string, options?: object): Promise<{source: string}>
-		config<T extends SystemJSLoader.Config | {transpiler}>(config?: T): void
+		config<T extends Config | {transpiler}>(config?: T): void
 	}
 
 	let builder: Builder = null

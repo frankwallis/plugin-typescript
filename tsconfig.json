@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"outDir": "tmp/es6",
-    	"lib": ["es5", "es2015.promise", "es2015.collection"],
+    	"lib": ["es5", "es2015.promise", "es2015.collection", "dom"],
 		"target": "es5",
 		"module": "es2015",
 		"removeComments": true,
@@ -14,8 +14,5 @@
 		"noImplicitThis": false,
 		"noFallthroughCasesInSwitch": true
 	},
-	"files": [
-		"./src/plugin.ts",
-		"./src/types.d.ts"
-	]
+	"include": ["./src"]
 }
