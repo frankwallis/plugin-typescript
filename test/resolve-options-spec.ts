@@ -44,13 +44,13 @@ describe('Options', () => {
 		})
 
 		it('loads the compiler options from tsconfig', async () => {
-			const globalConfig = {tsconfig: true}
+			const globalConfig = { tsconfig: true }
 			const finalOptions = await resolveOptions(globalConfig, undefined, 'file1.ts', fetchJson)
 			finalOptions.target.should.equal(ts.ScriptTarget.ES2016)
 		})
 
 		it('handles tsconfig = <pathname>', async () => {
-			const globalConfig = {tsconfig: 'anothertsconfig.json'}
+			const globalConfig = { tsconfig: 'anothertsconfig.json' }
 			const fetchSpy = sinon.spy(fetchJson)
 			const finalOptions = await resolveOptions(globalConfig, undefined, 'file1.ts', fetchSpy)
 			fetchSpy.calledOnce.should.be.true
@@ -76,7 +76,7 @@ describe('Options', () => {
 		})
 
 		it('specified configuration takes precedence over tsconfig configuration', async () => {
-			const globalConfig = {tsconfig: true, target: 'es2017'}
+			const globalConfig = { tsconfig: true, target: 'es2017' }
 			const finalOptions = await resolveOptions(globalConfig, undefined, 'file1.ts', fetchJson)
 			finalOptions.target.should.equal(ts.ScriptTarget.ES2017)
 		})
