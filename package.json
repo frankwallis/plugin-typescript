@@ -33,7 +33,7 @@
     "@types/mocha": "^2.2.39",
     "@types/node": "^8.0.20",
     "@types/sinon": "^2.3.3",
-    "@types/systemjs": "^0.20.0",
+    "@types/systemjs": "^0.20.6",
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
     "chokidar-socket-emitter": "^0.6.0",
