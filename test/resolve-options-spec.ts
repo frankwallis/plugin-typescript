@@ -58,21 +58,150 @@ describe('Options', () => {
 			fetchSpy.firstCall.args[1].should.equal('')
 		})
 
-		it('handles tsconfig.extends, fetching transitively', async () => {
+		it('fileConfig handles extends, fetching transitively', async () => {
 			const fileConfig = { tsconfig: true }
-			let call =1;
-			const stubFetch =(fileName, parentAddress)=> fileName === './fixtures-es6/tsconfig/extended.json' ?  Promise.resolve(JSON.stringify({
-				"extends": "./fixtures-es6/tsconfig/extended.json",
-				"compilerOptions": {
-					"target": "es2017"
-				}
-			})): Promise.resolve(JSON.stringify({
-				"compilerOptions": {
-					"downlevelIteration": true
-				}
-			}));
-			const finalOptions = await resolveOptions(undefined, fileConfig, 'file1.ts', stubFetch as any)
+
+			const fetchJson = (fileName, parentAddress) =>
+				parentAddress !== 'tsconfig.extended.json'
+					? Promise.resolve(JSON.stringify({
+						extends: 'tsconfig.extended.json',
+						compilerOptions: {
+							target: 'es2017'
+						}
+					}))
+					: Promise.resolve(JSON.stringify({
+						compilerOptions: {
+							downlevelIteration: true
+						}
+					}))
+
+			const finalOptions = await resolveOptions(undefined, fileConfig, 'file1.ts', fetchJson)
 			finalOptions.downlevelIteration.should.be.true
+			finalOptions.target.should.equal(ts.ScriptTarget.ES2017)
+		})
+
+		it('fileConfig handles extends, traversing multiple files', async () => {
+			const fileConfig = { tsconfig: true }
+
+			const fetchJson = (fileName, parentAddress) =>
+				parentAddress === 'tsconfig.extended.json'
+					? Promise.resolve(JSON.stringify({
+						extends: 'tsconfig.another-extended.json',
+						compilerOptions: {
+							target: 'es2017'
+						}
+					}))
+					: parentAddress === 'tsconfig.another-extended.json'
+						? Promise.resolve(JSON.stringify({
+							compilerOptions: {
+								downlevelIteration: true
+							}
+						}))
+						: Promise.resolve(JSON.stringify({
+							extends: 'tsconfig.extended.json',
+							compilerOptions: {
+								module: 'esnext'
+							}
+						}))
+
+			const finalOptions = await resolveOptions(undefined, fileConfig, 'file1.ts', fetchJson)
+			finalOptions.downlevelIteration.should.be.true
+			finalOptions.target.should.equal(ts.ScriptTarget.ES2017)
+			finalOptions.module.should.equal(ts.ModuleKind.ESNext)
+		})
+
+		it('fileConfig handles extends, giving precedence to extending file', async () => {
+			const fileConfig = { tsconfig: true }
+
+			const fetchJson = (fileName, parentAddress) =>
+				parentAddress !== 'tsconfig.extended.json'
+					? Promise.resolve(JSON.stringify({
+						extends: 'tsconfig.extended.json',
+						compilerOptions: {
+							target: 'es2017'
+						}
+					}))
+					: Promise.resolve(JSON.stringify({
+						compilerOptions: {
+							target: 'es5'
+						}
+					}))
+
+			const finalOptions = await resolveOptions(undefined, fileConfig, 'file1.ts', fetchJson)
+			finalOptions.target.should.equal(ts.ScriptTarget.ES2017)
+		})
+
+		it('globalConfig handles extends, fetching transitively', async () => {
+			const globalConfig = { tsconfig: true }
+
+			const fetchJson = (fileName, parentAddress) =>
+				parentAddress !== 'tsconfig.extended.json'
+					? Promise.resolve(JSON.stringify({
+						extends: 'tsconfig.extended.json',
+						compilerOptions: {
+							target: 'es2017'
+						}
+					}))
+					: Promise.resolve(JSON.stringify({
+						compilerOptions: {
+							downlevelIteration: true
+						}
+					}))
+
+			const finalOptions = await resolveOptions(globalConfig, undefined, 'file1.ts', fetchJson)
+			finalOptions.downlevelIteration.should.be.true
+			finalOptions.target.should.equal(ts.ScriptTarget.ES2017)
+		})
+
+		it('globalConfig handles tsconfig.extends, traversing multiple files', async () => {
+			const globalConfig = { tsconfig: true }
+
+			const fetchJson = (fileName, parentAddress) =>
+				parentAddress === 'tsconfig.extended.json'
+					? Promise.resolve(JSON.stringify({
+						extends: 'tsconfig.another-extended.json',
+						compilerOptions: {
+							target: 'es2017'
+						}
+					}))
+					: parentAddress === 'tsconfig.another-extended.json'
+						? Promise.resolve(JSON.stringify({
+							compilerOptions: {
+								downlevelIteration: true
+							}
+						}))
+						: Promise.resolve(JSON.stringify({
+							extends: 'tsconfig.extended.json',
+							compilerOptions: {
+								module: 'esnext'
+							}
+						}))
+
+			const finalOptions = await resolveOptions(globalConfig, undefined, 'file1.ts', fetchJson)
+			finalOptions.downlevelIteration.should.be.true
+			finalOptions.target.should.equal(ts.ScriptTarget.ES2017)
+			finalOptions.module.should.equal(ts.ModuleKind.ESNext)
+		})
+
+		it('globalConfig handles extends, giving precedence to extending file', async () => {
+			const globalConfig = { tsconfig: true }
+
+			const fetchJson = (fileName, parentAddress) =>
+				parentAddress !== 'tsconfig.extended.json'
+					? Promise.resolve(JSON.stringify({
+						extends: 'tsconfig.extended.json',
+						compilerOptions: {
+							target: 'es2017'
+						}
+					}))
+					: Promise.resolve(JSON.stringify({
+						compilerOptions: {
+							target: 'es5'
+						}
+					}))
+
+			const finalOptions = await resolveOptions(globalConfig, undefined, 'file1.ts', fetchJson)
+			finalOptions.target.should.equal(ts.ScriptTarget.ES2017)
 		})
 
 		it('specified configuration takes precedence over tsconfig configuration', async () => {
