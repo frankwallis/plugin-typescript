@@ -35,25 +35,33 @@ async function loadTsconfigOptions(
 	if (tsconfigName === true) tsconfigName = 'tsconfig.json'
 
 	if (tsconfigName) {
-		const tsconfigText = await fetchJson(tsconfigName, parentAddress)
-		const result = ts.parseConfigFileTextToJson(tsconfigName, tsconfigText)
-
-		if (result.error) {
-			formatErrors([result.error], logger)
-			throw new Error(`failed to load tsconfig from ${tsconfigName}`)
-		}
-		else {
-			const extendedTsconfig = result.config.extends
-				? await loadTsconfigOptions(options, result.config.extends, fetchJson)
-				: undefined
-			return {
-				...extendedTsconfig,
-				...result.config.compilerOptions
-			}
-		}
+		return loadTsconfigFile(tsconfigName, parentAddress, fetchJson);
 	}
 	else {
-		return undefined
+		return undefined;
+	}
+}
+
+async function loadTsconfigFile(
+	filename: string,
+	parentAddress: string,
+	fetchJson: FetchFunction): Promise<ts.CompilerOptions> {
+
+	const tsconfigText = await fetchJson(filename, parentAddress)
+	const result = ts.parseConfigFileTextToJson(filename, tsconfigText)
+
+	if (result.error) {
+		formatErrors([result.error], logger)
+		throw new Error(`failed to load tsconfig from ${filename}`)
+	}
+	else {
+		const extendedTsconfig = result.config.extends
+			? await loadTsconfigFile(result.config.extends, filename, fetchJson)
+			: undefined
+		return {
+			...extendedTsconfig,
+			...result.config.compilerOptions
+		}
 	}
 }
 

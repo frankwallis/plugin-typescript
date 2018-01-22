@@ -5,7 +5,7 @@ import { convertErrors, outputErrors } from './format-errors'
 import { CompilerHost } from './compiler-host'
 import { resolveOptions } from './resolve-options'
 import { transpile } from './transpiler'
-import { isTypescript, isTypescriptDeclaration, isJson } from './utils'
+import { isTypescript, isTypescriptDeclaration, isJson, stripDoubleExtension } from './utils'
 
 const logger = new Logger({ debug: false })
 const host = getHost()
@@ -35,8 +35,8 @@ export async function translate(load: Module): Promise<string> {
 
 	/* resolve the typescript options for this file, this may involve loading tsconfig.json */
 	const options = await resolveOptions(
-		load.metadata.typescriptOptions,
 		SystemJS.typescriptOptions,
+		load.metadata.typescriptOptions,
 		load.address,
 		_fetchJson)
 
@@ -93,7 +93,8 @@ export function instantiate(load: Module, origInstantiate: any) {
  * called by resolveOptions when it needs to fetch tsconfig.json
  */
 async function _fetchJson(fileName: string, parentAddress: string): Promise<string> {
-	const json = await SystemJS.import(fileName + '!' + __moduleName, parentAddress)
+	const address = await SystemJS.normalize(fileName, parentAddress);
+	const json = await SystemJS.import(stripDoubleExtension(address) + '!' + __moduleName, parentAddress)
 	logger.debug(`fetched ${fileName}`)
 	return JSON.stringify(json)
 }

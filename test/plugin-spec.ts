@@ -22,9 +22,7 @@ describe('Plugin', () => {
 			transpiler: "plugin",
 			typescriptOptions: {
 				"module": "system",
-				"target": "es5",
 				"jsx": "react",
-				"noImplicitAny": false,
 				"tsconfig": false
 			} as any,
 			packages: {
@@ -44,9 +42,9 @@ describe('Plugin', () => {
 					"main": "plugin-text.js"
 				},
 				"typescript": {
-					"main": "lib/typescript.js",
+					"main": "typescript.js",
 					"meta": {
-						"lib/typescript.js": {
+						"typescript.js": {
 							"exports": "ts"
 						}
 					}
@@ -56,7 +54,9 @@ describe('Plugin', () => {
 				"testsrc": "test/fixtures-es6/plugin/elisions",
 				"plugin": "lib",
 				"plugin-text": "test/fixtures-es6",
-				"typescript": "node_modules/typescript"
+				"typescript": "node_modules/typescript/lib",
+				"extend1": "test/fixtures-es6/plugin/tsconfig/extend1",
+				"extend2": "test/fixtures-es6/plugin/tsconfig/extend2"
 			}
 		}
 	}
@@ -129,28 +129,58 @@ describe('Plugin', () => {
 	})
 
 	describe('tsconfig', () => {
-		it('does not load tsconfig when not configured', () => {
+		it('does not load tsconfig when not configured', async () => {
 			const config = defaultConfig() as any
 			config.map["testsrc"] = "test/fixtures-es6/plugin/tsconfig"
+			config.packages["testsrc"].main = "good"
 			System.config(config)
-			return System.import('testsrc')
+			await System.import('testsrc')
 				.should.be.fulfilled
+
+			const config2 = defaultConfig() as any
+			config2.map["testsrc"] = "test/fixtures-es6/plugin/tsconfig"
+			System.config(config2)
+			await System.import('testsrc')
+				.should.be.rejectedWith(/Octal literals are not allowed in strict mode/)
 		})
 
-		it('supports global tsconfig config option', () => {
+		xit('supports tsconfig config option true', async () => {
 			const config = defaultConfig() as any
 			config.map["testsrc"] = "test/fixtures-es6/plugin/tsconfig"
-			delete config.typescriptOptions.module
-			config.typescriptOptions.tsconfig = "testsrc/tsconfig.json"
+			config.typescriptOptions.tsconfig = true;
 			System.config(config)
-			return System.import('testsrc')
-				.should.be.rejectedWith(/transpilation failed/)
+			await System.import('testsrc').should.be.fulfilled
 		})
 
-		it('supports file tsconfig config option', () => {
+		it('tsconfig file "extends" supports relative path', async () => {
 			const config = defaultConfig() as any
 			config.map["testsrc"] = "test/fixtures-es6/plugin/tsconfig"
-			delete config.typescriptOptions.module
+			config.typescriptOptions.tsconfig = "test/fixtures-es6/plugin/tsconfig/extends-relative.json"
+			System.config(config)
+			await System.import('testsrc').should.be.fulfilled
+		})
+
+		it('tsconfig file "extends" supports package path', async () => {
+			const config = defaultConfig() as any
+			config.map["testsrc"] = "test/fixtures-es6/plugin/tsconfig"
+			config.typescriptOptions.tsconfig = "test/fixtures-es6/plugin/tsconfig/extends-package.json"
+			System.config(config)
+
+			await System.import('testsrc').should.be.fulfilled
+		})
+
+		it('tsconfig file extends supports transitive package path', async () => {
+			const config = defaultConfig() as any
+			config.map["testsrc"] = "test/fixtures-es6/plugin/tsconfig"
+			config.typescriptOptions.tsconfig = "test/fixtures-es6/plugin/tsconfig/extends-transitive.json"
+			System.config(config)
+
+			await System.import('testsrc').should.be.fulfilled
+		})
+
+		it('supports file meta tsconfig config option', async () => {
+			const config = defaultConfig() as any
+			config.map["testsrc"] = "test/fixtures-es6/plugin/tsconfig"
 
 			const meta = {
 				"*.ts": {
@@ -161,29 +191,24 @@ describe('Plugin', () => {
 			}
 			config.packages.testsrc.meta = meta
 			System.config(config)
-
-			return System.import('testsrc')
-				.should.be.rejectedWith(/transpilation failed/)
+			await System.import('testsrc').should.be.fulfilled
 		})
 
-		it('file option overrides file tsconfig option', () => {
+		it('file meta option overrides global tsconfig option', async () => {
 			const config = defaultConfig() as any
 			config.map["testsrc"] = "test/fixtures-es6/plugin/tsconfig"
-			delete config.typescriptOptions.module
+			config.typescriptOptions.noImplicitUseStrict = false;
 
 			const meta = {
 				"*.ts": {
 					"typescriptOptions": {
-						"tsconfig": "testsrc/tsconfig.json",
-						"module": "system"
+						"noImplicitUseStrict": true
 					}
 				}
 			}
 			config.packages.testsrc.meta = meta
 			System.config(config)
-
-			return System.import('testsrc')
-				.should.be.fulfilled
+			await System.import('testsrc').should.be.fulfilled
 		})
 	})
 
