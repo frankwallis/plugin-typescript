@@ -60,7 +60,7 @@ SystemJS.config({
 
 ```js
 System.config({
-  transpiler: "ts"
+  transpiler: "ts",
   packages: {
     "app": {
       "defaultExtension": "ts",
