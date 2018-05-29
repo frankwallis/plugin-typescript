@@ -178,7 +178,7 @@ describe('Builder', () => {
 			const result = await builder.buildStatic('testsrc', { rollup: true, globalName: 'testsrc' })
 				.should.be.fulfilled
 			//console.log(result.source)
-			result.source.length.should.equal(492)
+			result.source.length.should.equal(476)
 			result.source.indexOf('(function (global, factory').should.equal(0)
 		})
 
@@ -229,7 +229,7 @@ describe('Builder', () => {
 				.should.be.fulfilled
 			//console.log(result.source)
 			result.source.should.contain('var aconstant = 1234')
-			result.source.length.should.equal(492)
+			result.source.length.should.equal(476)
 			result.source.indexOf('(function (global, factory').should.equal(0)
 		})
 
