@@ -40,7 +40,7 @@
     "http-server": "^0.10.0",
     "jspm": "^0.17.0-beta.42",
     "mocha": "^3.0.2",
-    "open": "^0.0.5",
+    "open": "^7.0.0",
     "rollup": "^0.46.1",
     "rollup-plugin-includepaths": "^0.2.1",
     "sinon": "^3.2.0",
